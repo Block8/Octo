@@ -2,6 +2,7 @@
 
 namespace Octo\Block;
 
+use b8\Config;
 use Octo\Template;
 use Octo\Block;
 use Octo\Model\File;
@@ -10,7 +11,8 @@ class Text extends Block
 {
     public static function getInfo()
     {
-        return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/backoffice/js/block/text.js']];
+        $config = Config::getInstance();
+        return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/text.js']];
     }
 
     public function renderNow()

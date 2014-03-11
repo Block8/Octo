@@ -120,9 +120,9 @@ class CategoriesController extends Controller
 
                     $this->successMessage($category->getName() . ' was added successfully.', true);
                     if ($useBase) {
-                        header('Location: /backoffice/categories/manage/' . $scope . '/base');
+                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope . '/base');
                     } else {
-                        header('Location: /backoffice/categories/manage/' . $scope);
+                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
                     }
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error adding the category. Please try again.');
@@ -180,9 +180,9 @@ class CategoriesController extends Controller
 
                     $this->successMessage($category->getName() . ' was edited successfully.', true);
                     if ($useBase) {
-                        header('Location: /backoffice/categories/manage/' . $scope . '/base');
+                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope . '/base');
                     } else {
-                        header('Location: /backoffice/categories/manage/' . $scope);
+                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
                     }
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the category. Please try again.');
@@ -205,9 +205,9 @@ class CategoriesController extends Controller
         $this->successMessage($category->getName() . ' was deleted successfully.', true);
 
         if ($useBase) {
-            header('Location: /backoffice/categories/manage/' . $scope . '/base');
+            header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope . '/base');
         } else {
-            header('Location: /backoffice/categories/manage/' . $scope);
+            header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
         }
     }
 
@@ -224,9 +224,9 @@ class CategoriesController extends Controller
         }
 
         if ($type == 'add') {
-            $form->setAction('/backoffice/categories/add/' . $scope . $base);
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/categories/add/' . $scope . $base);
         } else {
-            $form->setAction('/backoffice/categories/edit/' . $scope . '/' . $values['id'] . $base);
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/categories/edit/' . $scope . '/' . $values['id'] . $base);
         }
 
         $form->setClass('smart-form');

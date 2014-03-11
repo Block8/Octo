@@ -147,7 +147,7 @@ class MediaController extends Controller
                     $file = $this->fileStore->save($file);
                     $this->successMessage($file->getTitle() . ' was edited successfully.', true);
 
-                    header('Location: /backoffice/media/manage/' . $scope);
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the file. Please try again.');
                 }
@@ -169,7 +169,7 @@ class MediaController extends Controller
         $form = new FormElement();
         $form->setMethod('POST');
 
-        $form->setAction('/backoffice/media/edit/' . $scope . '/' . $values['id']);
+        $form->setAction('/' . $this->config->get('site.admin_uri') . '/media/edit/' . $scope . '/' . $values['id']);
 
         $form->setClass('smart-form');
 
@@ -242,7 +242,7 @@ class MediaController extends Controller
         $this->fileStore->delete($file);
 
         $this->successMessage($file->getTitle() . ' was deleted successfully.', true);
-        header('Location: /backoffice/media/manage/' . $scope);
+        header('Location: /' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
     }
 
     /**

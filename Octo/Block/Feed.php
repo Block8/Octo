@@ -3,6 +3,7 @@
 namespace Octo\Block;
 
 use b8\Cache;
+use b8\Config;
 use Octo\Block;
 use Octo\Model\Page;
 use Octo\Store;
@@ -16,7 +17,8 @@ class Feed extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Feed', 'editor' => true, 'js' => ['/assets/backoffice/js/block/feed.js']];
+        $config = Config::getInstance();
+        return ['title' => 'Feed', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/feed.js']];
     }
 
     public function init()

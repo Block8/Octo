@@ -20,7 +20,7 @@
         <td>{@value.created_date.formatted}</td>
         <td>
             {if (can_access uri: "/form/view-submission")}
-            <a class="btn btn-default btn-sm" href="/backoffice/form/submission/{@value.id}">View</a>
+            <a class="btn btn-default btn-sm" href="/{@adminUri}/form/submission/{@value.id}">View</a>
             {/if}
         </td>
     </tr>

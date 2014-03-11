@@ -11,11 +11,11 @@
 
                 <div class="widget-body no-padding">
                     {if form.id}
-                    <form style="border: 0" action="/backoffice/form/edit/{@form.id}" method="POST" class="smart-form">
+                    <form style="border: 0" action="/{@adminUri}/form/edit/{@form.id}" method="POST" class="smart-form">
                     {/if}
 
                     {ifnot form.id}
-                    <form style="border: 0" action="/backoffice/form/add" method="POST" class="smart-form">
+                    <form style="border: 0" action="/{@adminUri}/form/add" method="POST" class="smart-form">
                     {/ifnot}
 
                         <input type="hidden" id="form-definition" name="definition" value="{@form.definition}">

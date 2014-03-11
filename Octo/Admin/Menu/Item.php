@@ -2,6 +2,7 @@
 
 namespace Octo\Admin\Menu;
 
+use b8\Config;
 use b8\Http\Request;
 use Octo\Admin\Menu;
 
@@ -123,7 +124,8 @@ class Item
         $link = $this->link;
 
         if ($forDisplay) {
-            $link = '/backoffice' . $link;
+            $config = Config::getInstance();
+            $link = '/' . $config->get('site.admin_uri') . $link;
         }
 
         return $link;
@@ -171,7 +173,8 @@ class Item
 
     public function isActive()
     {
-        $parts = explode('/backoffice/', $_SERVER['REQUEST_URI']);
+        $config = Config::getInstance();
+        $parts = explode('/'.$config->get('site.admin_uri').'/', $_SERVER['REQUEST_URI']);
 
         if (count($parts) < 2) {
             return;

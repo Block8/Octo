@@ -32,7 +32,7 @@ class SessionController extends Controller
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
                 $_SESSION['user_id'] = $user->getId();
 
-                $url = '/backoffice';
+                $url = '/'.$this->config->get('site.admin_uri');
 
                 if (isset($_SESSION['previous_url'])) {
                     $url = $_SESSION['previous_url'];
@@ -53,7 +53,7 @@ class SessionController extends Controller
     {
         $_SESSION = array();
         session_destroy();
-        header('Location: /backoffice');
+        header('Location: /' . $this->config->get('site.admin_uri'));
         die;
     }
 }

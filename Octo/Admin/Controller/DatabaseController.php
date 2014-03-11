@@ -18,7 +18,7 @@ class DatabaseController extends Controller
     public function init()
     {
         if (!$_SESSION['user']->getIsAdmin()) {
-            $this->response->setHeader('Location', '/backoffice');
+            $this->response->setHeader('Location', '/' . $this->config->get('site.admin_uri'));
         }
     }
 
@@ -59,6 +59,6 @@ class DatabaseController extends Controller
         }
 
         $this->response = new \b8\Http\Response\RedirectResponse();
-        $this->response->setHeader('Location', '/backoffice/database');
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/database');
     }
 }

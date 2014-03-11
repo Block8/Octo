@@ -1,6 +1,6 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-user "></i> Manage Users</h1>
-    <a class="btn-default btn pull-right" href="/backoffice/user/add"><i class="fa fa-plus"></i> Add User</a>
+    <a class="btn-default btn pull-right" href="/{@adminUri}/user/add"><i class="fa fa-plus"></i> Add User</a>
 </div>
 
 <table class="table table-bordered table-striped">
@@ -18,18 +18,18 @@
 			<td>{@item.email}</td>
 			<td>
                 <div class="btn-group">
-					<a class="btn btn-default btn-sm" href="/backoffice/user/edit/{@item.id}">Edit</a>
+					<a class="btn btn-default btn-sm" href="/{@adminUri}/user/edit/{@item.id}">Edit</a>
 					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="/backoffice/user/edit/{@item.id}">Edit</a>
+							<a href="/{@adminUri}/user/edit/{@item.id}">Edit</a>
 						</li>
 						<li>
-							<a href="/backoffice/user/permissions/{@item.id}">Manage Permissions</a>
+							<a href="/{@adminUri}/user/permissions/{@item.id}">Manage Permissions</a>
 						</li>
 						<li class="divider"></li>
 						<li>
-							<a href="/backoffice/user/delete/{@item.id}">Delete</a>
+							<a href="/{@adminUri}/user/delete/{@item.id}">Delete</a>
 						</li>
 					</ul>
 				</div>

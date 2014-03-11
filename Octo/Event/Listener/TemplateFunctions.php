@@ -45,6 +45,9 @@ class TemplateFunctions extends Listener
 
     public function globalTemplateFunctions(Template &$template)
     {
-        $template->set('config', Config::getInstance());
+        $config = Config::getInstance();
+
+        $template->set('adminUri', $config->get('site.admin_uri'));
+        $template->set('config', $config);
     }
 }

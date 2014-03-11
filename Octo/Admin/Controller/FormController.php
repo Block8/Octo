@@ -85,7 +85,7 @@ class FormController extends Controller
             $this->successMessage('Form saved successfully!', true);
 
             $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/backoffice/form');
+            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
             return;
         }
     }
@@ -103,7 +103,7 @@ class FormController extends Controller
             $this->successMessage('Form saved successfully!', true);
 
             $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/backoffice/form');
+            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
             return;
         }
 
@@ -178,7 +178,7 @@ class FormController extends Controller
         $this->formStore->delete($form);
 
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/backoffice/form');
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
     }
 
     public function blockContact($submissionId)
@@ -191,7 +191,7 @@ class FormController extends Controller
         $this->contactStore->save($contact);
 
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/backoffice/form/submission/'.$submissionId);
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form/submission/'.$submissionId);
     }
 
     public function unblockContact($submissionId)
@@ -204,6 +204,6 @@ class FormController extends Controller
         $this->contactStore->save($contact);
 
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/backoffice/form/submission/'.$submissionId);
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form/submission/'.$submissionId);
     }
 }

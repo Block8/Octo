@@ -1,6 +1,6 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-picture-o"></i> {@scope_name}</h1>
-    <a class="btn-default btn pull-right" href="/backoffice/media/add"><i class="fa fa-plus"></i> Upload</a>
+    <a class="btn-default btn pull-right" href="/{@adminUri}/media/add"><i class="fa fa-plus"></i> Upload</a>
 </div>
 
 {if gallery}
@@ -20,8 +20,8 @@
                     <!-- <p class="superbox-img-description"></p> -->
                     <p>
                         <a href="/media/render/{@item.id}/2000/auto" class="btn btn-default btn-sm">View Large</a>&nbsp;&nbsp;
-                        <a href="/backoffice/media/edit/{@scope}/{@item.id}" class="btn btn-primary btn-sm">Edit</a>&nbsp;&nbsp;
-                        <a href="/backoffice/media/delete/{@scope}/{@item.id}" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="/{@adminUri}/media/edit/{@scope}/{@item.id}" class="btn btn-primary btn-sm">Edit</a>&nbsp;&nbsp;
+                        <a href="/{@adminUri}/media/delete/{@scope}/{@item.id}" class="btn btn-danger btn-sm">Delete</a>
                    </p>
                 </span>
             </div>
@@ -71,15 +71,15 @@ $(document).ready( function() {
             <td>{date_format date: item.created_date}</td>
 			<td>
                 <div class="btn-group">
-					<a class="btn btn-default btn-sm" href="/backoffice/media/edit/{@scope}/{@item.id}">Edit</a>
+					<a class="btn btn-default btn-sm" href="/{@adminUri}/media/edit/{@scope}/{@item.id}">Edit</a>
 					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="/backoffice/media/edit/{@scope}/{@item.id}">Edit</a>
+							<a href="/{@adminUri}/media/edit/{@scope}/{@item.id}">Edit</a>
 						</li>
 						<li class="divider"></li>
 						<li>
-							<a href="/backoffice/media/delete/{@scope}/{@item.id}">Delete</a>
+							<a href="/{@adminUri}/media/delete/{@scope}/{@item.id}">Delete</a>
 						</li>
 					</ul>
 				</div>

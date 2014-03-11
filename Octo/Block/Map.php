@@ -2,15 +2,15 @@
 
 namespace Octo\Block;
 
-use Octo\Template;
+use b8\Config;
 use Octo\Block;
-use Octo\Model\File;
 
 class Map extends Block
 {
     public static function getInfo()
     {
-        return ['title' => 'Map', 'editor' => true, 'js' => ['/assets/backoffice/js/block/map.js']];
+        $config = Config::getInstance();
+        return ['title' => 'Map', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/map.js']];
     }
 
     public function renderNow()

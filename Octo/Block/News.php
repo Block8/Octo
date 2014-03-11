@@ -2,6 +2,7 @@
 
 namespace Octo\Block;
 
+use b8\Config;
 use Octo\Block;
 use Octo\Store;
 use Octo\Template;
@@ -10,7 +11,8 @@ class News extends Block
 {
     public static function getInfo()
     {
-        return ['title' => 'News Archive', 'editor' => true, 'js' => ['/assets/backoffice/js/block/news.js']];
+        $config = Config::getInstance();
+        return ['title' => 'News Archive', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/news.js']];
     }
 
     public function renderNow()

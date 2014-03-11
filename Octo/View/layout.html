@@ -21,6 +21,8 @@
     <!-- GOOGLE FONT -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 
+    <script>window.adminUri = '{@adminUri}';</script>
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script> if (!window.jQuery) { document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');} </script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -61,7 +63,7 @@
         </div>
 
         <div class="btn-header transparent pull-right">
-            <span> <a href="/backoffice/session/logout/" title="Sign Out"><i class="fa fa-sign-out"></i></a></span>
+            <span> <a href="/{@adminUri}/session/logout/" title="Sign Out"><i class="fa fa-sign-out"></i></a></span>
         </div>
 
         <div id="search-mobile" class="btn-header transparent pull-right">
@@ -101,12 +103,12 @@
 
         <ol class="breadcrumb">
             <li>
-                <a href="/backoffice">{@siteName}</a>
+                <a href="/{@adminUri}">{@siteName}</a>
             </li>
 
             {for breadcrumb}
             <li>
-                {if item.link}<a href="/backoffice{@item.link}">{/if}{@item.title}{if item.link}</a>{/if}
+                {if item.link}<a href="/{@adminUri}{@item.link}">{/if}{@item.title}{if item.link}</a>{/if}
             </li>
             {/for}
         </ol>

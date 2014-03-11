@@ -10,7 +10,7 @@ window.blockEditors.NewsArchive = PageBlock.extend({
         self.category.css('width', '100%');
         self.category.append($('<option value="0">All categories</option>'));
 
-        $.getJSON('/backoffice/categories/category-list/news', function (data) {
+        $.getJSON('/'+window.adminUri+'/categories/category-list/news', function (data) {
             for (var i in data) {
                 var option = $('<option></option>').attr('value', i).text(data[i]);
 

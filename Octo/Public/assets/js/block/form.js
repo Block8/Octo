@@ -8,7 +8,7 @@ window.blockEditors.Form = PageBlock.extend({
         select.css('width', '100%');
         select.append($('<option>Please wait...</option>'));
 
-        $.getJSON('/backoffice/form', function (data) {
+        $.getJSON('/'+window.adminUri+'/form', function (data) {
             select.find('option').remove();
 
             for (var i in data) {

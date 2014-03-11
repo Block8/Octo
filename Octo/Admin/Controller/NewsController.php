@@ -99,7 +99,7 @@ class NewsController extends Controller
                     $article = $this->articleStore->save($article);
 
                     $this->successMessage($article->getTitle() . ' was added successfully.', true);
-                    header('Location: /backoffice/' . $this->scope);
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/' . $this->scope);
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the ' . $this->lowerArticleType . '. Please try again.'
@@ -154,7 +154,7 @@ class NewsController extends Controller
                     $article = $this->articleStore->save($article);
 
                     $this->successMessage($article->getTitle() . ' was edited successfully.', true);
-                    header('Location: /backoffice/' . $this->scope);
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/' . $this->scope);
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error editing the ' . $this->lowerArticleType . '. Please try again.'
@@ -180,7 +180,7 @@ class NewsController extends Controller
         $article = $this->articleStore->getById($newsId);
         $this->articleStore->delete($article);
         $this->successMessage($article->getTitle() . ' was deleted successfully.', true);
-        header('Location: /backoffice/news/');
+        header('Location: /' . $this->config->get('site.admin_uri') . '/news/');
     }
 
     public function newsForm($values = [], $type = 'add')
@@ -189,9 +189,9 @@ class NewsController extends Controller
         $form->setMethod('POST');
 
         if ($type == 'add') {
-            $form->setAction('/backoffice/' . $this->scope . '/add');
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/' . $this->scope . '/add');
         } else {
-            $form->setAction('/backoffice/' . $this->scope . '/edit/' . $values['id']);
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/' . $this->scope . '/edit/' . $values['id']);
         }
 
         $form->setClass('smart-form');

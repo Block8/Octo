@@ -14,11 +14,11 @@
                 {if (can_access uri: "/form/block-contact")}
                 <div class="widget-toolbar" role="menu">
                     {if submission.Contact.is_blocked}
-                    <a href="/backoffice/form/unblock-contact/{@submission.id}" class="btn btn-success">Unblock</a>
+                    <a href="/{@adminUri}/form/unblock-contact/{@submission.id}" class="btn btn-success">Unblock</a>
                     {/if}
 
                     {ifnot submission.Contact.is_blocked}
-                    <a href="/backoffice/form/block-contact/{@submission.id}" class="btn btn-danger">Block</a>
+                    <a href="/{@adminUri}/form/block-contact/{@submission.id}" class="btn btn-danger">Block</a>
                     {/ifnot}
                 </div>
                 {/if}

@@ -26,7 +26,7 @@ class Application extends \b8\Application
         $this->router->register('/', ['controller' => 'Page', 'action' => 'View']);
         $this->router->register('/:controller/:action', ['namespace' => 'Controller', 'action' => 'index']);
 
-        $route = '/backoffice/:controller/:action';
+        $route = '/'.$this->config->get('site.admin_uri').'/:controller/:action';
         $defaults = ['namespace' => 'Admin\\Controller', 'controller' => 'Dashboard', 'action' => 'index'];
         $request =& $this->request;
 
@@ -74,7 +74,7 @@ class Application extends \b8\Application
                 } else {
                     $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
                     $response = new RedirectResponse($this->response);
-                    $response->setHeader('Location', '/backoffice/session/login');
+                    $response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/session/login');
                 }
 
                 return false;
@@ -125,6 +125,6 @@ class Application extends \b8\Application
         $log->save();
 
         $response = new RedirectResponse();
-        $response->setHeader('Location', '/backoffice/');
+        $response->setHeader('Location', '/'.$this->config->get('site.admin_uri'));
     }
 }

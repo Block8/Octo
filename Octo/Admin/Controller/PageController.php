@@ -66,7 +66,7 @@ class PageController extends Controller
                 $this->successMessage('Create your first page using the form below.', true);
 
                 $this->response = new RedirectResponse();
-                $this->response->setHeader('Location', '/backoffice/page/add');
+                $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page/add');
                 return;
             }
 
@@ -92,7 +92,7 @@ class PageController extends Controller
 
         $form = new FormElement();
         $form->setMethod('POST');
-        $form->setAction('/backoffice/page/add');
+        $form->setAction('/' . $this->config->get('site.admin_uri') . '/page/add');
         $form->setClass('smart-form');
 
         $fieldset = new Form\FieldSet('fieldset');
@@ -112,7 +112,7 @@ class PageController extends Controller
             $this->errorMessage('You cannot create pages until you have created at least one page template.', true);
 
             $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/backoffice/');
+            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri'));
             return;
         }
 
@@ -181,7 +181,7 @@ class PageController extends Controller
         $this->pageStore->save($page);
 
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/backoffice/page/edit/' . $page->getId());
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page/edit/' . $page->getId());
     }
 
     public function edit($pageId)
@@ -332,7 +332,7 @@ class PageController extends Controller
 
         $this->successMessage($latest->getTitle() . ' has been published!', true);
         $this->response = new \b8\Http\Response\RedirectResponse($this->response);
-        $this->response->setHeader('Location', '/backoffice/page');
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
     }
 
     public function delete($pageId)
@@ -343,6 +343,6 @@ class PageController extends Controller
         $this->pageStore->delete($page);
 
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/backoffice/page');
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
     }
 }

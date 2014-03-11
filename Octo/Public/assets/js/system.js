@@ -67,7 +67,7 @@ window.pageEditor = Class.extend({
     saveContent: function () {
         $('.pace').removeClass('hide');
 
-        $.post('/backoffice/page/save/' + this.id, {content: JSON.stringify(this.content)}, function () {
+        $.post('/'+window.adminUri+'/page/save/' + this.id, {content: JSON.stringify(this.content)}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
             $('.pace').addClass('hide');
         });
@@ -76,7 +76,7 @@ window.pageEditor = Class.extend({
     saveMetaData: function() {
         $('.pace').removeClass('hide');
 
-        $.post('/backoffice/page/save/' + this.id, {page: this.page}, function () {
+        $.post('/'+window.adminUri+'/page/save/' + this.id, {page: this.page}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
             $('.pace').addClass('hide');
         });
@@ -147,7 +147,7 @@ function imagePicker(id, label, value)
         placeholder: "Search for an image",
         minimumInputLength: 1,
         ajax: {
-            url: '/backoffice/media/autocomplete/images',
+            url: '/'+window.adminUri+'/media/autocomplete/images',
             dataType: 'json',
             data: function(term) {
                 return {

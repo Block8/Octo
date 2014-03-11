@@ -17,20 +17,20 @@
         <td>
             <div class="btn-group">
                 {if (can_access uri: "/form/edit")}
-                <a class="btn btn-default btn-sm" href="/backoffice/form/edit/{@value.id}">Edit</a>
+                <a class="btn btn-default btn-sm" href="/{@adminUri}/form/edit/{@value.id}">Edit</a>
                 {/if}
 
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     {if (can_access uri: "/form/submissions")}
                     <li>
-                        <a href="/backoffice/form/submissions/{@value.id}">View Submissions</a>
+                        <a href="/{@adminUri}/form/submissions/{@value.id}">View Submissions</a>
                     </li>
                     {/if}
 
                     {if (can_access uri: "/form/delete")}
                     <li>
-                        <a href="/backoffice/form/delete/{@value.id}">Delete</a>
+                        <a href="/{@adminUri}/form/delete/{@value.id}">Delete</a>
                     </li>
                     {/if}
 
