@@ -7,7 +7,7 @@ $queries[] = 'CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `template_tag` (`template_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
-$queries[] 'CREATE TABLE `menu_item` (
+$queries[] = 'CREATE TABLE `menu_item` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `menu_id` int(11) unsigned DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
