@@ -23,6 +23,100 @@
 </div>
 
 <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" role="widget" style="">
+    <!-- widget options:
+    usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+    data-widget-colorbutton="false"
+    data-widget-editbutton="false"
+    data-widget-togglebutton="false"
+    data-widget-deletebutton="false"
+    data-widget-fullscreenbutton="false"
+    data-widget-custombutton="false"
+    data-widget-collapsed="true"
+    data-widget-sortable="false"
+
+    -->
+    <header role="heading">
+        <span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+        <h2>Statistics</h2>
+
+        <ul class="nav nav-tabs pull-right in" id="myTab">
+            <li class="active">
+                <a data-toggle="tab" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet">Visitors</span></a>
+            </li>
+
+            <!--<li>
+                <a data-toggle="tab" href="#s2"><i class="fa fa-facebook"></i> <span class="hidden-mobile hidden-tablet">Social Network</span></a>
+            </li>-->
+        </ul>
+
+        <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
+
+    <div class="no-padding" role="content">
+        <div class="jarviswidget-editbox">
+        </div>
+
+        <div class="widget-body" style="margin: 0; padding: 0;">
+            <!-- content -->
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in padding-10 no-padding-bottom" id="s1">
+                    <div class="row no-space">
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                            <div id="pageviews-chart" class="chart-large txt-color-blue" style="padding: 0px; position: relative; height: 210px; width: 99%;">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 show-stats">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <span class="text"> Home Page <span class="pull-right">435423 views</span> </span>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-color-blueDark" style="width: 65%;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <span class="text"> Page 2 <span class="pull-right">3453 views</span></span>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-color-blue" style="width: 34%;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <span class="text"> Page 3<span class="pull-right">1000 views</span> </span>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-color-blue" style="width: 77%;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <span class="text"> Page 4<span class="pull-right">12 views</span> </span>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-color-greenLight" style="width: 84%;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <span class="text"> Page 5<span class="pull-right">3 views</span> </span>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-color-greenLight" style="width: 84%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    </div>
+
+</div>
+
+<div class="row">
 
     {if (can_access uri: "/forms")}
     <div class="col-lg-6">

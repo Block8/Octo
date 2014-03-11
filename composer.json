@@ -21,7 +21,8 @@
     "require": {
         "block8/b8framework": "dev-master",
         "symfony/console": "2.*",
-        "dg/twitter-php": "3.*"
+        "dg/twitter-php": "3.*",
+        "google/apiclient": "1.*"
     },
 
     "autoload": {
