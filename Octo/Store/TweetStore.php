@@ -46,11 +46,15 @@ class TweetStore extends TweetStoreBase
      * Retrieve all tweets for a particular scope
      *
      * @param $scope
+     * @param $limit
      * @return Tweet|null
      */
-    public function getAllForScope($scope)
+    public function getAllForScope($scope, $limit)
     {
         $query = 'SELECT tweet.* FROM tweet WHERE scope = :scope';
+        if (isset($limit)) {
+            $query .= ' LIMIT ' . $limit;
+        }
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);
 
