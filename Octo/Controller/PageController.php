@@ -112,9 +112,8 @@ class PageController extends Controller
             $value = $view->getVariable($value);
         }
 
-        $blockId = $args['id'];
         $type = $args['type'];
-        $name = $args['name'];
+        $blockId = isset($args['id']) ? $args['id'] : null;
 
         try {
             $content = [];
