@@ -38,7 +38,7 @@ class MenuItemBase extends Model
         'title' => null,
         'page_id' => null,
         'url' => null,
-        'order' => null,
+        'position' => null,
 );
 
 /**
@@ -51,7 +51,7 @@ protected $getters = array(
 'title' => 'getTitle',
 'page_id' => 'getPageId',
 'url' => 'getUrl',
-'order' => 'getOrder',
+'position' => 'getPosition',
 
 // Foreign key getters:
 'Menu' => 'getMenu',
@@ -68,7 +68,7 @@ protected $setters = array(
 'title' => 'setTitle',
 'page_id' => 'setPageId',
 'url' => 'setUrl',
-'order' => 'setOrder',
+'position' => 'setPosition',
 
 // Foreign key setters:
 'Menu' => 'setMenu',
@@ -110,7 +110,7 @@ public $columns = array(
 'nullable' => true,
 'default' => null,
 ),
-'order' => array(
+'position' => array(
 'type' => 'int',
 'length' => 11,
 'nullable' => true,
@@ -208,13 +208,13 @@ return $rtn;
 }
 
 /**
-* Get the value of Order / order.
+* Get the value of Position / position.
 *
 * @return int
 */
-public function getOrder()
+public function getPosition()
 {
-$rtn    = $this->data['order'];
+$rtn    = $this->data['position'];
 
 return $rtn;
 }
@@ -312,21 +312,21 @@ $this->setModified('url');
 }
 
 /**
-* Set the value of Order / order.
+* Set the value of Position / position.
 *
 * @param $value int
 */
-public function setOrder($value)
+public function setPosition($value)
 {
-$this->validateInt('Order', $value);
+$this->validateInt('Position', $value);
 
-if ($this->data['order'] === $value) {
+if ($this->data['position'] === $value) {
 return;
 }
 
-$this->data['order'] = $value;
+$this->data['position'] = $value;
 
-$this->setModified('order');
+$this->setModified('position');
 }
 
 /**
@@ -442,19 +442,6 @@ public function setPageObject(\Octo\Model\Page $value)
 {
 return $this->setPageId($value->getId());
 }
-
-/**
-* Get Menu models by Id for this MenuItem.
-*
-* @uses \Octo\Store\MenuStore::getById()
-* @uses \Octo\Model\Menu
-* @return \Octo\Model\Menu[]
-*/
-public function getMenus()
-{
-return Factory::getStore('Menu', 'Octo')->getById($this->getMenuId());
-}
-
 
 
 public static function getByPrimaryKey($value, $useConnection = 'read')

@@ -268,19 +268,6 @@ $this->data['thankyou_message'] = $value;
 $this->setModified('thankyou_message');
 }
 
-/**
-* Get Submission models by FormId for this Form.
-*
-* @uses \Octo\Store\SubmissionStore::getByFormId()
-* @uses \Octo\Model\Submission
-* @return \Octo\Model\Submission[]
-*/
-public function getFormSubmissions()
-{
-return Factory::getStore('Submission', 'Octo')->getByFormId($this->getId());
-}
-
-
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

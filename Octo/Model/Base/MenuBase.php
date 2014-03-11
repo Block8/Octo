@@ -48,7 +48,6 @@ protected $getters = array(
 'template_tag' => 'getTemplateTag',
 
 // Foreign key getters:
-'' => 'get',
 );
 
 /**
@@ -61,7 +60,6 @@ protected $setters = array(
 'template_tag' => 'setTemplateTag',
 
 // Foreign key setters:
-'' => 'set',
 );
 
 /**
@@ -101,13 +99,6 @@ public $indexes = array(
 * @var array
 */
 public $foreignKeys = array(
-'menu_ibfk_1' => array(
-'local_col' => 'id',
-'update' => 'CASCADE',
-'delete' => 'CASCADE',
-'table' => 'menu_item',
-'col' => 'menu_id'
-),
 );
 
 /**
@@ -201,76 +192,6 @@ $this->data['template_tag'] = $value;
 
 $this->setModified('template_tag');
 }
-
-/**
-* Get the MenuItem model for this Menu by MenuId.
-*
-* @uses \Octo\Store\MenuItemStore::getByMenuId()
-* @uses \Octo\Model\MenuItem
-* @return \Octo\Model\MenuItem
-*/
-public function get()
-{
-$key = $this->getId();
-
-if (empty($key)) {
-return null;
-}
-
-$cacheKey   = 'Cache.MenuItem.' . $key;
-$rtn        = $this->cache->get($cacheKey, null);
-
-if (empty($rtn)) {
-$rtn    = Factory::getStore('MenuItem', 'Octo')->getByMenuId($key);
-$this->cache->set($cacheKey, $rtn);
-}
-
-return $rtn;
-}
-
-/**
-* Set  - Accepts an ID, an array representing a MenuItem or a MenuItem model.
-*
-* @param $value mixed
-*/
-public function set($value)
-{
-// Is this an instance of MenuItem?
-if ($value instanceof \Octo\Model\MenuItem) {
-return $this->setObject($value);
-}
-
-// Is this an array representing a MenuItem item?
-if (is_array($value) && !empty($value['menu_id'])) {
-return $this->setId($value['menu_id']);
-}
-
-// Is this a scalar value representing the ID of this foreign key?
-return $this->setId($value);
-}
-
-/**
-* Set  - Accepts a MenuItem model.
-*
-* @param $value \Octo\Model\MenuItem
-*/
-public function setObject(\Octo\Model\MenuItem $value)
-{
-return $this->setId($value->getMenuId());
-}
-
-/**
-* Get MenuItem models by MenuId for this Menu.
-*
-* @uses \Octo\Store\MenuItemStore::getByMenuId()
-* @uses \Octo\Model\MenuItem
-* @return \Octo\Model\MenuItem[]
-*/
-public function getMenuMenuItems()
-{
-return Factory::getStore('MenuItem', 'Octo')->getByMenuId($this->getId());
-}
-
 
 
 public static function getByPrimaryKey($value, $useConnection = 'read')

@@ -151,31 +151,6 @@ $this->data['content'] = $value;
 $this->setModified('content');
 }
 
-/**
-* Get Article models by ContentItemId for this ContentItem.
-*
-* @uses \Octo\Store\ArticleStore::getByContentItemId()
-* @uses \Octo\Model\Article
-* @return \Octo\Model\Article[]
-*/
-public function getContentItemArticles()
-{
-return Factory::getStore('Article', 'Octo')->getByContentItemId($this->getId());
-}
-
-/**
-* Get PageVersion models by ContentItemId for this ContentItem.
-*
-* @uses \Octo\Store\PageVersionStore::getByContentItemId()
-* @uses \Octo\Model\PageVersion
-* @return \Octo\Model\PageVersion[]
-*/
-public function getContentItemPageVersions()
-{
-return Factory::getStore('PageVersion', 'Octo')->getByContentItemId($this->getId());
-}
-
-
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

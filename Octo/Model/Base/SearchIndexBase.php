@@ -103,7 +103,7 @@ public $columns = array(
 */
 public $indexes = array(
 'PRIMARY' => array('unique' => true, 'columns' => 'id'),
-'idx_search' => array('columns' => 'word, instances, model, content_id'),
+'idx_search_2' => array('columns' => 'word, instances, model, content_id'),
 );
 
 /**
@@ -271,7 +271,6 @@ $this->data['instances'] = $value;
 
 $this->setModified('instances');
 }
-
 
 
 public static function getByPrimaryKey($value, $useConnection = 'read')

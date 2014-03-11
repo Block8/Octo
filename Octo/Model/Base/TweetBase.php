@@ -396,7 +396,6 @@ $this->setModified('scope');
 }
 
 
-
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
 return Factory::getStore('Tweet', 'Octo')->getByPrimaryKey($value, $useConnection);

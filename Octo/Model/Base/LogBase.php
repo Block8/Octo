@@ -461,7 +461,6 @@ return $this->setUserId($value->getId());
 }
 
 
-
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
 return Factory::getStore('Log', 'Octo')->getByPrimaryKey($value, $useConnection);

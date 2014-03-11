@@ -741,7 +741,6 @@ return $this->setContentItemId($value->getId());
 }
 
 
-
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
 return Factory::getStore('Article', 'Octo')->getByPrimaryKey($value, $useConnection);

@@ -584,19 +584,6 @@ $this->data['is_blocked'] = $value;
 $this->setModified('is_blocked');
 }
 
-/**
-* Get Submission models by ContactId for this Contact.
-*
-* @uses \Octo\Store\SubmissionStore::getByContactId()
-* @uses \Octo\Model\Submission
-* @return \Octo\Model\Submission[]
-*/
-public function getContactSubmissions()
-{
-return Factory::getStore('Submission', 'Octo')->getByContactId($this->getId());
-}
-
-
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

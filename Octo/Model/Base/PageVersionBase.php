@@ -816,19 +816,6 @@ public function setImageObject(\Octo\Model\File $value)
 return $this->setImageId($value->getId());
 }
 
-/**
-* Get Page models by CurrentVersionId for this PageVersion.
-*
-* @uses \Octo\Store\PageStore::getByCurrentVersionId()
-* @uses \Octo\Model\Page
-* @return \Octo\Model\Page[]
-*/
-public function getCurrentVersionPages()
-{
-return Factory::getStore('Page', 'Octo')->getByCurrentVersionId($this->getId());
-}
-
-
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

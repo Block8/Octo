@@ -271,7 +271,6 @@ $this->setModified('hidden');
 }
 
 
-
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
 return Factory::getStore('Setting', 'Octo')->getByPrimaryKey($value, $useConnection);
