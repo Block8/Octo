@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $this->view->contacts = Store::get('Contact')->getTotal();
         $this->view->submissions = Store::get('Submission')->getTotal();
 
-        $this->view->latestSubmissions = Store::get('Submission')->getAll(0, 10);
-        $this->view->latestPages = Store::get('Page')->getLatest(10);
+        $this->view->latestSubmissions = Store::get('Submission')->getAll(0, 5);
+        $this->view->latestPages = Store::get('Page')->getLatest(5);
     }
 }
