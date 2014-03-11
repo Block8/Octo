@@ -215,7 +215,11 @@ class PageController extends Controller
             }
 
             if (!array_key_exists('editable', $block)) {
-                $block['editable'] = !empty($block['type']) ? $blockTypes[$block['type']]['editor'] : true;
+                $block['editable'] = false;
+
+                if (isset($blockTypes[$block['type']]['editor']) && $blockTypes[$block['type']]['editor']) {
+                    $block['editable'] = true;
+                }
             }
         }
 
