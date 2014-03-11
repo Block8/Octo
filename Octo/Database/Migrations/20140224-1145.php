@@ -14,7 +14,7 @@ $queries = [
 
     "INSERT INTO `user` (`id`, `email`, `hash`, `name`, `is_admin`, `is_hidden`)
         VALUES
-            (1, 'admin@re-systems.co.uk', '\$2y\$10\$ugFF9bOdEoFTDH05VoLRgeK/djl56hmk8hBU0N7PRTUGV6oNF6Deq', 'RE:SYSTEMS', 1, 1);",
+            (1, 'admin', '$2y$10$2Qf/2vM0VRJP4pEvjco.CO7TKpBXsWtIjYQS9ekrRyvV3XSD994pK', 'Admin', 1, 1);",
 
     "CREATE TABLE `content_item` (
       `id` char(32) NOT NULL DEFAULT '',
