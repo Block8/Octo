@@ -4,3 +4,4 @@
 vendor/
 .vagrant
 siteconfig.php
+composer.lock
