@@ -1,7 +1,7 @@
 
 <ul>
 {for items}
-    <li>
+    <li class="{if value.active}active{/if}">
         <a href="{@value.uri}">{@value.title}</a>
 
         {if value.children}
