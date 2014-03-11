@@ -1,0 +1,101 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-home "></i> My Dashboard</h1>
+    </div>
+
+    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+        <ul id="sparks" class="">
+            {if (can_access uri: "/forms")}
+            <li class="sparks-info">
+                <h5> Contacts <span class="txt-color-blue"><i class="fa fa-user"></i>&nbsp;{@contacts}</span></h5>
+            </li>
+
+            <li class="sparks-info">
+                <h5> Submissions <span class="txt-color-purple"><i class="fa fa-envelope"></i>&nbsp;{@submissions}</span></h5>
+            </li>
+            {/if}
+
+            <li class="sparks-info">
+                <h5> Total Pages <span class="txt-color-greenDark"><i class="fa fa-sitemap"></i>&nbsp;{@pages}</span></h5>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+
+    {if (can_access uri: "/forms")}
+    <div class="col-lg-6">
+        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+            <header role="heading">
+                <h2>Latest Form Submissions</h2>
+            </header>
+
+            <div role="content">
+                <div class="widget-body no-padding">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th width="20%">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {for latestSubmissions.items}
+                        <tr>
+                            <td>{@value.Contact.first_name} {@value.Contact.last_name}</td>
+                            <td>{@value.Contact.email}</td>
+                            <td>{@value.created_date.formatted}</td>
+                            <td>
+                                {if (can_access uri: "/form/view-submission")}
+                                <a class="btn btn-default btn-sm" href="/backoffice/form/submission/{@value.id}">View</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/for}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+
+    <div class="col-lg-6">
+        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+            <header role="heading">
+                <h2>Recently Edited Pages</h2>
+            </header>
+
+            <div role="content">
+                <div class="widget-body no-padding">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Last Editor</th>
+                            <th>Last Update</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {for latestPages.items}
+                        <tr>
+                            <td>
+                                {if (can_access uri: "/page/edit")}
+                                <a href="/backoffice/page/edit/{@item.id}">{@item.CurrentVersion.title}</a>
+                                {/if}
+                                {ifnot (can_access uri: "/page/edit")}{@item.CurrentVersion.title}{/ifnot}
+                            </td>
+                            <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
+                            <td>{date_format date: item.CurrentVersion.updated_date}</td>
+                        </tr>
+                        {/for}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

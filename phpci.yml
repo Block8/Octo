@@ -1,0 +1,21 @@
+build_settings:
+    verbose: false
+    ignore:
+        - "vendor"
+        - "Octo/Command" # PHPMD complains about un-used parameters, but they are required.
+        - "Octo/Model/Base" # PHPMD really does not like the auto-generated base models when they have many fields.
+        - "Octo/Store/Base" # PHPMD really does not like the auto-generated base stores when they have many fields.
+        - "Octo/Public/assets"
+        - "Octo/Database/Migrations"
+        - "bootstrap.php"
+
+test:
+    php_mess_detector:
+    php_code_sniffer:
+        standard: "PSR2"
+    php_loc:
+
+failure:
+    email:
+        committer: true
+        cc: ["dan@block8.co.uk", "james@jamesinman.co.uk"]

@@ -1,0 +1,18 @@
+<div class="control-group {@ccss}">
+    {if label}
+    <label class="control-label" for="{@id}">{@label}</label>
+    {/if}
+
+    <div class="controls">
+        <select id="{@id}" class="{@css}" name="{@name}">
+
+            {for options}
+            <option value="{@key}"{if key == current_value} selected="selected"{/if}>{@value}</option>
+            {/for}
+        </select>
+
+        {if error}
+        <span class="help-block">{@error}</span>
+        {/if}
+    </div>
+</div>

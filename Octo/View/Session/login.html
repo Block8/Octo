@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/smartadmin-production.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/smartadmin-skins.css">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="/assets/backoffice/images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/backoffice/images/favicon/favicon.ico" type="image/x-icon">
+
+    <!-- GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+</head>
+<body id="login" class="animated fadeInDown">
+<header id="header">
+    <div id="logo-group">
+        <span id="logo"> <img src="/assets/backoffice/img/logo.png" alt=""> </span>
+    </div>
+</header>
+
+<div id="main" role="main">
+
+    {if errorMessage}
+    <div class="alert alert-danger fade in" style="margin-top: -20px;">
+    	<i class="fa-fw fa fa-times"></i>
+    	<strong>Error:</strong> {@errorMessage}
+    </div>
+    {/if}
+
+    <!-- MAIN CONTENT -->
+    <div id="content" class="container">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 hidden-xs hidden-sm">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                <div class="well no-padding">
+                    <form action="/backoffice/session/login" method="POST" id="login-form" class="smart-form client-form">
+                        <header>
+                            Login
+                        </header>
+
+                        <fieldset>
+
+                            <section>
+                                <label class="label">Email Address</label>
+                                <label class="input"> <i class="icon-append fa fa-user"></i>
+                                    <input type="text" name="email" value="" id="email" required>
+                            </section>
+
+                            <section>
+                                <label class="label">Password</label>
+                                <label class="input"> <i class="icon-append fa fa-lock"></i>
+                                    <input type="password" name="password" value="" id="password" required>
+                                    <!--<div class="note">
+                                        <a href="javascript:void(0)">Forgot password?</a>
+                                    </div>-->
+                            </section>
+
+                            <!--<section>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="remember" checked="">
+                                    <i></i>Stay signed in</label>
+                            </section>-->
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Login
+                            </button>
+                        </footer>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script> if (!window.jQuery) { document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');} </script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script> if (!window.jQuery.ui) { document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');} </script>
+
+<script src="/assets/backoffice/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/backoffice/js/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/backoffice/js/notification/SmartNotification.min.js"></script>
+<script src="/assets/backoffice/js/smartwidgets/jarvis.widget.min.js"></script>
+<script src="/assets/backoffice/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+<script src="/assets/backoffice/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+<script src="/assets/backoffice/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+<script src="/assets/backoffice/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+<script src="/assets/backoffice/js/plugin/select2/select2.min.js"></script>
+<script src="/assets/backoffice/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+<script src="/assets/backoffice/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+<script src="/assets/backoffice/js/plugin/smartclick/smartclick.js"></script>
+
+<!--[if lte IE 7]>
+    <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+<![endif]-->
+
+<script type="text/javascript">
+    runAllForms();
+
+    $(function() {
+        // Validation
+        $("#login-form").validate({
+            // Rules for form validation
+            rules : {
+                username : {
+                    required : true
+                },
+                password : {
+                    required : true,
+                    minlength : 3,
+                    maxlength : 20
+                }
+            },
+
+            // Messages for form validation
+            messages : {
+                username : {
+                    required : 'Please enter your username.'
+                },
+                password : {
+                    required : 'Please enter your password.'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement : function(error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script> if (!window.jQuery) { document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');} </script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script> if (!window.jQuery.ui) { document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');} </script>
+
+<script src="/assets/backoffice/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/backoffice/js/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/backoffice/js/notification/SmartNotification.min.js"></script>
+<script src="/assets/backoffice/js/smartwidgets/jarvis.widget.min.js"></script>
+<script src="/assets/backoffice/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+<script src="/assets/backoffice/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+<script src="/assets/backoffice/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+<script src="/assets/backoffice/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+<script src="/assets/backoffice/js/plugin/select2/select2.min.js"></script>
+<script src="/assets/backoffice/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+<script src="/assets/backoffice/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+<script src="/assets/backoffice/js/plugin/smartclick/smartclick.js"></script>
+<script src="/assets/backoffice/js/smartadmin.js"></script>
+
+</body>
+
+</html>

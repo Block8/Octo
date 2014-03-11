@@ -1,0 +1,19 @@
+<section class="control-group <?php print $ccss; ?> <?php print (isset($error) ? 'error' : ''); ?>">
+    <?php if($label): ?><label class="label"><?php print $label; ?></label><?php endif; ?>
+
+    <?php if(isset($imageId)) { ?>
+        <div class="image_form_container">
+            <p><img src="/media/render/<?php print $imageId; ?>/200/auto"></p>
+            <label for="remove_<?php print $name; ?>"><input type="checkbox" value="1" name="remove_<?php print $name; ?>" id="remove_<?php print $name; ?>"> Remove current image</label>
+        </div>
+    <?php } ?>
+
+    <label class="input <?php if(isset($error)): ?>state-error<?php endif; ?>">
+        <input id="<?php print $id; ?>" type="<?php print $type; ?>" class="<?php print $css; ?> <?php if(isset($error)): ?>invalid<?php endif; ?>" name="<?php print $name; ?>" <?php print isset($value) ? ' value="' . $value . '"' : '' ?> <?php print isset($pattern) ? ' pattern="' . $pattern . '"' : '' ?> <?php print $required ? ' required' : '' ?>>
+    </label>
+
+    <?php if(isset($error)): ?>
+        <em for="<?php print $name; ?>" class="invalid"><?php print $error; ?></em>
+    <?php endif; ?>
+</section>
+

@@ -1,0 +1,91 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-picture-o"></i> {@scope_name}</h1>
+    <a class="btn-default btn pull-right" href="/backoffice/media/add"><i class="fa fa-plus"></i> Upload</a>
+</div>
+
+{if gallery}
+<div class="row">
+	<div class="superbox col-sm-12">
+        {loop files.items}
+		<div class="superbox-list">
+			<img src="/media/render/{@item.id}/" alt="{@item.title}" title="{@item.title}" class="superbox-img">
+		</div>
+
+        <div class="superbox-show" style="display: none;">
+            <img src="/media/render/{@item.id}/" class="superbox-current-img">
+            <div id="imgInfoBox" class="superbox-imageinfo inline-block">
+                <h1>{@item.title}</h1>
+                <span>
+                    <p><em>{@item.filename}</em></p>
+                    <!-- <p class="superbox-img-description"></p> -->
+                    <p>
+                        <a href="/media/render/{@item.id}/2000/auto" class="btn btn-default btn-sm">View Large</a>&nbsp;&nbsp;
+                        <a href="/backoffice/media/edit/{@scope}/{@item.id}" class="btn btn-primary btn-sm">Edit</a>&nbsp;&nbsp;
+                        <a href="/backoffice/media/delete/{@scope}/{@item.id}" class="btn btn-danger btn-sm">Delete</a>
+                   </p>
+                </span>
+            </div>
+            <div class="superbox-close txt-color-white"><i class="fa fa-times fa-lg"></i></div>
+        </div>
+        {/loop}
+		<div class="superbox-float"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready( function() {
+    $('div.superbox-list img').on('click', function(e) {
+        var ourBox = $(this).parent().next('div.superbox-show');
+        if(!ourBox.is(':visible')) {
+            $('div.superbox-show').hide();
+            ourBox.show();
+        } else {
+            $('div.superbox-show').hide();
+        }
+    });
+
+    $('div.superbox-close').on('click', function() {
+        $(this).parent().hide();
+    });
+});
+</script>
+{/if}
+
+{ifnot gallery}
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Filename</th>
+			<th>Uploaded By</th>
+			<th>Uploaded On</th>
+			<th width="20%">Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+        {loop files.items}
+        <tbody>
+            <td>{@item.title}</td>
+            <td><a href="{@item.url}">{@item.filename}</a></td>
+            <td>{@item.User.name}</td>
+            <td>{date_format date: item.created_date}</td>
+			<td>
+                <div class="btn-group">
+					<a class="btn btn-default btn-sm" href="/backoffice/media/edit/{@scope}/{@item.id}">Edit</a>
+					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="/backoffice/media/edit/{@scope}/{@item.id}">Edit</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="/backoffice/media/delete/{@scope}/{@item.id}">Delete</a>
+						</li>
+					</ul>
+				</div>
+			</td>
+        </tbody>
+        {/loop}
+	</tbody>
+</table>
+{/if}

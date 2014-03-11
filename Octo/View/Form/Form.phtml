@@ -1,0 +1,9 @@
+<form id="<?php print $id; ?>" class="<?php print $css; ?>" action="<?php print $action; ?>" method="<?php print $method; ?>" enctype="multipart/form-data">
+
+<?php if($label): ?><header><?php print $label; ?></header><?php endif; ?>
+
+<?php foreach($children as $field): ?>
+	<?php print $field; ?>
+<?php endforeach; ?>
+
+</form>

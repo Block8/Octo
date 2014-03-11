@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+define('APP_PATH', getcwd() . '/');
+define('CMS_BASE_PATH', dirname(__FILE__) . '/');
+define('CMS_PATH', CMS_BASE_PATH . 'Octo/');
+define('IS_CONSOLE', true);
+
+require_once(CMS_PATH . 'bootstrap.php');
+
+use Octo\Command\GenerateCommand;
+use Octo\Command\MigrationCommand;
+use Octo\Command\GitPullCommand;
+use Octo\Command\GitPushCommand;
+use Octo\Command\GetUserTweetsCommand;
+use Octo\Command\GetStreamTweetsCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+$application->add(new GenerateCommand());
+$application->add(new MigrationCommand());
+$application->add(new GitPullCommand());
+$application->add(new GitPushCommand());
+$application->add(new GetUserTweetsCommand());
+$application->add(new GetStreamTweetsCommand());
+$application->run();

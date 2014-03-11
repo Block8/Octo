@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-check-square"></i> Permissions</h1>
+    </div>
+</div>
+
+{ifnot user.is_admin}
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+            <header role="heading">
+                <h2>Permissions for {@user.name}</h2>
+            </header>
+
+            <div role="content">
+                <div class="widget-body">
+                    <form action="/backoffice/user/permissions/{@user.id}" method="POST">
+                    <div class="tree smart-form">
+                        <ul role="tree">
+                            {@Permissions:render}
+                        </ul>
+                    </div>
+                        <br><br>
+                        <input class="btn btn-success" type="submit" value="Update Permissions">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('input').on('change', function () {
+        var el = $(this);
+
+        if (window.noCascade) {
+            return;
+        }
+
+        window.noCascade = true;
+
+        if (el.hasClass('parent-check')) {
+
+            var group = el.parent().parent().parent();
+            var checks = group.find('input');
+
+            checks.prop('checked', el.prop('checked'));
+        }
+
+        if (el.prop('checked')) {
+            var parent = el.parents('.parent_li');
+            parent.find('> span label input').prop('checked', true);
+        }
+        window.noCascade = false;
+
+    });
+
+</script>
+{/ifnot}
+
+{if user.is_admin}
+    <div class="alert alert-danger">
+        This user is a system administrator, and has permission to access all areas of the system.
+    </div>
+{/if}

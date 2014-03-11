@@ -1,0 +1,10 @@
+<section class="control-group <?php print $ccss; ?> <?php print (isset($error) ? 'error' : ''); ?>">
+    <?php if($label): ?><label class="label"><?php print $label; ?></label><?php endif; ?>
+	<label class="textarea <?php if(isset($error)): ?>state-error<?php endif; ?>"> 
+		<textarea rows="<?php print $rows; ?>" id="<?php print $id; ?>" class="<?php print $css; ?>" name="<?php print $name; ?>" <?php print $required ? ' required' : '' ?>><?php print isset($value) ? $value : '' ?></textarea>
+    </label>
+
+	<?php if(isset($error)): ?>
+    <em for="<?php print $name; ?>" class="invalid"><?php print $error; ?></em>
+	<?php endif; ?>
+</section>

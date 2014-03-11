@@ -1,0 +1,12 @@
+
+<ul>
+{for items}
+    <li>
+        <a href="{@value.uri}">{@value.title}</a>
+
+        {if value.children}
+            {include template: "Block/Navigation"; variables: value.children => items}
+        {/if}
+    </li>
+{/for}
+</ul>

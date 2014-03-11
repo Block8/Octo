@@ -1,0 +1,99 @@
+<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-picture-o"></i> Upload</h1>
+</div>
+
+<div class="span12" style="margin-top: 60px;">
+	<div id="upload-container" style="padding: 100px 50px; background: #f0f0f0; border: 4px dashed #ccc; text-align: center">
+		Drop your files here or <button class="btn" id="select-files">Select Files</button>
+	</div>
+
+	<div id="progress-bar" class="progress progress-striped active" style="display: none; width: 100%">
+		<div class="progress-bar bg-color-blue" style="width: 0%;"></div>
+	</div>
+</div>
+
+<table class="table table-bordered table-striped hide" id="uploaded_files">
+    <thead>
+        <tr>
+            <th colspan="2">Uploaded files</th>
+        </tr>
+    </thead>
+	<tbody>
+    </tbody>
+</table>
+
+<script>
+function fileSizeSI(a,b,c,d,e){
+ return (b=Math,c=b.log,d=1e3,e=c(a)/c(d)|0,a/b.pow(d,e)).toFixed(2) +' '+(e?'kMGTPEZY'[--e]+'B':'Bytes')
+}
+
+$(document).ready(function()
+{
+	var uploader = new plupload.Uploader({
+		runtimes : 'html5,flash,gears,silverlight,browserplus',
+		browse_button : 'select-files',
+		drop_element : 'upload-container',
+		max_file_size : '10mb',
+		url : '/backoffice/media/add',
+		flash_swf_url : '/assets/backoffice/js/plupload/plupload.flash.swf',
+		silverlight_xap_url : '/assets/backoffice/js/plupload/plupload.silverlight.xap',
+		filters : []
+	});
+
+	uploader.bind('Init', function(up, params) {
+	});
+	uploader.init();
+
+	uploader.bind('QueueChanged', function(up, files) {
+		$('#progress-bar .progress-bar').css('width', 0);
+		$('#progress-bar').show();
+		$('#upload-container').hide();
+		up.start();
+	});
+
+	uploader.bind('UploadProgress', function(up, file) {
+		$('#progress-bar .progress-bar').css('width', uploader.total.percent + '%');
+	});
+
+    uploader.bind('UploadComplete', function(up, file) {
+        $('#progress-bar').hide();
+    });
+
+    uploader.bind("FileUploaded", function(up, file, response) {
+        try {
+            f = JSON.parse(response.response);
+
+            if(f.extension == 'jpg' || f.extension == 'gif' || f.extension == 'png') {
+                insert = '<div style="display: block; width: 200px;"><img style="max-width:100%; max-height:100%;" src="' + f.url + '"></div>';
+            } else {
+                insert = f.title;
+            }
+
+            str = '<tr id="' + f.id + '"><td width="100">' + insert + '</td><td>';
+            str += 'Type: ' + (f.scope.charAt(0).toUpperCase() + f.scope.slice(1)).replace(/s+$/, "") + '<br />';
+            str += 'Filename: ' + f.filename + '<br />';
+            str += 'Size: ' + fileSizeSI(f.size);
+            str += '</td></tr>';
+            $('table#uploaded_files tbody').append(str);
+            $('table#uploaded_files').removeClass('hide');
+        } catch(e) {
+            str = '<tr><td width="100">' + file.name + '</td><td><div class="alert alert-danger">There was an error uploading this file.</div></td></tr>';
+            $('table#uploaded_files tbody').append(str);
+            $('table#uploaded_files').removeClass('hide');
+        }
+    });
+
+
+    uploader.bind("Error", function(up, file, response) {
+        if(file.status == 413) {
+            str = '<tr><td width="100">' + file.file.name + '</td><td><div class="alert alert-danger">The file was too large to upload.</div></td></tr>';
+            $('table#uploaded_files tbody').append(str);
+            $('table#uploaded_files').removeClass('hide');
+        } else {
+            console.log(file.status);
+        }
+    });
+
+});
+
+</script>

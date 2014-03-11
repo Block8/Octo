@@ -1,0 +1,10 @@
+<section class="control-group <?php print $ccss; ?> <?php print (isset($error) ? 'error' : ''); ?>">
+    <?php if($label): ?><label class="label"><?php print $label; ?></label><?php endif; ?>
+	<label class="input <?php if(isset($error)): ?>state-error<?php endif; ?>"> 
+		<input id="<?php print $id; ?>" type="<?php print $type; ?>" class="<?php print $css; ?> <?php if(isset($error)): ?>invalid<?php endif; ?>" name="<?php print $name; ?>" <?php print isset($value) ? ' value="' . $value . '"' : '' ?> <?php print isset($pattern) ? ' pattern="' . $pattern . '"' : '' ?> <?php print $required ? ' required' : '' ?>>
+    </label>
+
+	<?php if(isset($error)): ?>
+    <em for="<?php print $name; ?>" class="invalid"><?php print $error; ?></em>
+	<?php endif; ?>
+</section>

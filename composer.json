@@ -1,0 +1,34 @@
+{
+    "name": "block8/octo",
+    "description": "Octo CMS",
+    "minimum-stability": "dev",
+
+    "authors": [
+        {
+            "name": "Dan Cryer",
+            "email": "dan@block8.co.uk"
+        },
+        {
+            "name": "James Inman",
+            "email": "james@jamesinman.co.uk"
+        },
+        {
+            "name": "Eric Harth",
+            "email": "ericharth@gmail.com"
+        }
+    ],
+
+    "require": {
+        "block8/b8framework": "dev-master",
+        "symfony/console": "2.*",
+        "dg/twitter-php": "3.*"
+    },
+
+    "autoload": {
+        "psr-0": { "Octo": "" }
+    },
+
+    "bin": [
+        "octocmd"
+    ]
+}

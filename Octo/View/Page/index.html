@@ -1,0 +1,41 @@
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Link</th>
+        <th>Last Editor</th>
+        <th>Last Update</th>
+        <th width="20%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {for pages.items}
+    <tr>
+        <td>{if item.id != parentId}<i class="fa fa-chevron-right"></i> {/if}
+            {if item.hasChildren}{if item.id != parentId}<a href="/backoffice/page?parent={@item.id}">{/if}{/if}
+            {@item.CurrentVersion.title}
+            {if item.hasChildren}{if item.id != parentId}</a>{/if}{/if}
+        </td>
+        <td><a href="{@item.uri}">{@item.uri}</a></td>
+        <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
+        <td>{date_format date: item.CurrentVersion.updated_date}</td>
+        <td>
+            <div class="btn-group">
+                {if (can_access uri: "/page/edit")}
+                <a class="btn btn-default btn-sm" href="/backoffice/page/edit/{@item.id}">Edit</a>
+                {/if}
+
+                {if (can_access uri: "/page/delete")}
+                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/backoffice/page/delete/{@item.id}">Delete</a>
+                    </li>
+                </ul>
+                {/if}
+            </div>
+        </td>
+    </tr>
+    {/for}
+    </tbody>
+</table>
