@@ -1,0 +1,13 @@
+
+<ol class="breadcrumb">
+{for items}
+    <li class="{if value.active}active{/if}">
+        {if value.active}
+        {@value.title}
+        {/if}
+        {ifnot value.active}
+        <a href="{@value.uri}">{@value.title}</a>
+        {/ifnot}
+    </li>
+{/for}
+</ol>
