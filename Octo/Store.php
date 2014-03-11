@@ -8,7 +8,7 @@ use b8\Store\Factory;
 abstract class Store extends \b8\Store
 {
     /**
-     * @param $store Name of the store you want to load.
+     * @param string $store Name of the store you want to load.
      * @return \b8\Store
      */
     public static function get($store)
