@@ -47,7 +47,12 @@ class Navigation extends Block
 
         if (isset($this->ancestors[$start - 1])) {
             $items = $this->buildTree($this->ancestors[$start - 1], 0, $maxDepth);
-            $this->view->items = $items['children'];
+
+            if (isset($items['children'])) {
+                $this->view->items = $items['children'];
+            } else {
+                $this->view->items = [];
+            }
         }
     }
 
