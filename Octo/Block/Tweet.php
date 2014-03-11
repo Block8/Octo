@@ -19,7 +19,10 @@ class Tweet extends Block
 
     public function renderTweets()
     {
-        $tweets = Store::get('Tweet')->getAllForScope('user');
+        if (isset($this->templateParams['count'])) {
+            $limit = intval($this->templateParams['count']);
+        }
+        $tweets = Store::get('Tweet')->getAllForScope('user', $limit);
         $this->view->tweets = $tweets;
     }
 }
