@@ -20,6 +20,6 @@ $queries[] = 'CREATE TABLE `menu_item` (
   KEY `page_id` (`page_id`),
   CONSTRAINT `menu_item_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `menu_item_ibfk_2` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
 $queries[] = "ALTER TABLE `menu` ADD UNIQUE INDEX (`template_tag`);";

@@ -33,4 +33,4 @@ $queries[] = "INSERT INTO `setting` (`id`, `key`, `value`, `scope`, `hidden`)
 VALUES
 	(NULL, 'ga_email', NULL, 'analytics', 0),
 	(NULL, 'ga_password', NULL, 'analytics', 0),
-	(NULL, 'ga_profile_id', NULL, 'analytics', 0);"
+	(NULL, 'ga_profile_id', NULL, 'analytics', 0);";
