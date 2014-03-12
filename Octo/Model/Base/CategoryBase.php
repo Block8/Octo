@@ -338,6 +338,115 @@ public function setParentObject(\Octo\Model\Category $value)
 return $this->setParentId($value->getId());
 }
 
+/**
+* Get Article models by CategoryId for this Category.
+*
+* @uses \Octo\Store\ArticleStore::getByCategoryId()
+* @uses \Octo\Model\Article
+* @return \Octo\Model\Article[]
+*/
+public function getCategoryArticles()
+{
+return Factory::getStore('Article', 'Octo')->getByCategoryId($this->getId());
+}
+
+/**
+* Get Category models by ParentId for this Category.
+*
+* @uses \Octo\Store\CategoryStore::getByParentId()
+* @uses \Octo\Model\Category
+* @return \Octo\Model\Category[]
+*/
+public function getParentCategorys()
+{
+return Factory::getStore('Category', 'Octo')->getByParentId($this->getId());
+}
+
+/**
+* Get Event models by Topic for this Category.
+*
+* @uses \Octo\Store\EventStore::getByTopic()
+* @uses \Octo\Model\Event
+* @return \Octo\Model\Event[]
+*/
+public function getEventEvents()
+{
+return Factory::getStore('Event', 'Octo')->getByTopic($this->getId());
+}
+
+/**
+* Get Event models by LocationId for this Category.
+*
+* @uses \Octo\Store\EventStore::getByLocationId()
+* @uses \Octo\Model\Event
+* @return \Octo\Model\Event[]
+*/
+public function getLocationEvents()
+{
+return Factory::getStore('Event', 'Octo')->getByLocationId($this->getId());
+}
+
+/**
+* Get Faq models by CategoryId for this Category.
+*
+* @uses \Octo\Store\FaqStore::getByCategoryId()
+* @uses \Octo\Model\Faq
+* @return \Octo\Model\Faq[]
+*/
+public function getCategoryFaqs()
+{
+return Factory::getStore('Faq', 'Octo')->getByCategoryId($this->getId());
+}
+
+/**
+* Get File models by CategoryId for this Category.
+*
+* @uses \Octo\Store\FileStore::getByCategoryId()
+* @uses \Octo\Model\File
+* @return \Octo\Model\File[]
+*/
+public function getCategoryFiles()
+{
+return Factory::getStore('File', 'Octo')->getByCategoryId($this->getId());
+}
+
+/**
+* Get Network models by BusinessTypeId for this Category.
+*
+* @uses \Octo\Store\NetworkStore::getByBusinessTypeId()
+* @uses \Octo\Model\Network
+* @return \Octo\Model\Network[]
+*/
+public function getBusinessTypeNetworks()
+{
+return Factory::getStore('Network', 'Octo')->getByBusinessTypeId($this->getId());
+}
+
+/**
+* Get Network models by LocationId for this Category.
+*
+* @uses \Octo\Store\NetworkStore::getByLocationId()
+* @uses \Octo\Model\Network
+* @return \Octo\Model\Network[]
+*/
+public function getLocationNetworks()
+{
+return Factory::getStore('Network', 'Octo')->getByLocationId($this->getId());
+}
+
+/**
+* Get NetworkContact models by BusinessTypeId for this Category.
+*
+* @uses \Octo\Store\NetworkContactStore::getByBusinessTypeId()
+* @uses \Octo\Model\NetworkContact
+* @return \Octo\Model\NetworkContact[]
+*/
+public function getBusinessTypeNetworkContacts()
+{
+return Factory::getStore('NetworkContact', 'Octo')->getByBusinessTypeId($this->getId());
+}
+
+
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

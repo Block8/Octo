@@ -300,6 +300,7 @@ return $this->setUserId($value->getId());
 }
 
 
+
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
 return Factory::getStore('Permission', 'Octo')->getByPrimaryKey($value, $useConnection);

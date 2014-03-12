@@ -193,6 +193,19 @@ $this->data['template_tag'] = $value;
 $this->setModified('template_tag');
 }
 
+/**
+* Get MenuItem models by MenuId for this Menu.
+*
+* @uses \Octo\Store\MenuItemStore::getByMenuId()
+* @uses \Octo\Model\MenuItem
+* @return \Octo\Model\MenuItem[]
+*/
+public function getMenuMenuItems()
+{
+return Factory::getStore('MenuItem', 'Octo')->getByMenuId($this->getId());
+}
+
+
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

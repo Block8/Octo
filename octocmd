@@ -13,6 +13,7 @@ use Octo\Command\GitPullCommand;
 use Octo\Command\GitPushCommand;
 use Octo\Command\GetUserTweetsCommand;
 use Octo\Command\GetStreamTweetsCommand;
+use \Octo\Command\UpdateAnalyticsCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
@@ -22,4 +23,5 @@ $application->add(new GitPullCommand());
 $application->add(new GitPushCommand());
 $application->add(new GetUserTweetsCommand());
 $application->add(new GetStreamTweetsCommand());
+$application->add(new UpdateAnalyticsCommand());
 $application->run();

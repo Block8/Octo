@@ -263,6 +263,7 @@ return $this->setFileId($value->getId());
 }
 
 
+
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
 return Factory::getStore('FileDownload', 'Octo')->getByPrimaryKey($value, $useConnection);

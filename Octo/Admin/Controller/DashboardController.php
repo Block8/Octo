@@ -2,9 +2,10 @@
 
 namespace Octo\Admin\Controller;
 
+use b8\Config;
 use Octo\Admin\Controller;
 use Octo\Store;
-use b8\Config;
+use Octo\Model\Setting;
 
 class DashboardController extends Controller
 {
@@ -19,5 +20,10 @@ class DashboardController extends Controller
 
         $this->view->latestSubmissions = Store::get('Submission')->getAll(0, 5);
         $this->view->latestPages = Store::get('Page')->getLatest(5);
+
+        $this->view->showAnalytics = false;
+        if(Setting::get('analytics', 'ga_email') != '') {
+            $this->view->showAnalytics = true;
+        }
     }
 }

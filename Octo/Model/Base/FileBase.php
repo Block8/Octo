@@ -642,6 +642,67 @@ public function setUserObject(\Octo\Model\User $value)
 return $this->setUserId($value->getId());
 }
 
+/**
+* Get Event models by MapImage for this File.
+*
+* @uses \Octo\Store\EventStore::getByMapImage()
+* @uses \Octo\Model\Event
+* @return \Octo\Model\Event[]
+*/
+public function getMapEvents()
+{
+return Factory::getStore('Event', 'Octo')->getByMapImage($this->getId());
+}
+
+/**
+* Get FileDownload models by FileId for this File.
+*
+* @uses \Octo\Store\FileDownloadStore::getByFileId()
+* @uses \Octo\Model\FileDownload
+* @return \Octo\Model\FileDownload[]
+*/
+public function getFileFileDownloads()
+{
+return Factory::getStore('FileDownload', 'Octo')->getByFileId($this->getId());
+}
+
+/**
+* Get Network models by MapImage for this File.
+*
+* @uses \Octo\Store\NetworkStore::getByMapImage()
+* @uses \Octo\Model\Network
+* @return \Octo\Model\Network[]
+*/
+public function getMapNetworks()
+{
+return Factory::getStore('Network', 'Octo')->getByMapImage($this->getId());
+}
+
+/**
+* Get NetworkContact models by MapImage for this File.
+*
+* @uses \Octo\Store\NetworkContactStore::getByMapImage()
+* @uses \Octo\Model\NetworkContact
+* @return \Octo\Model\NetworkContact[]
+*/
+public function getMapNetworkContacts()
+{
+return Factory::getStore('NetworkContact', 'Octo')->getByMapImage($this->getId());
+}
+
+/**
+* Get PageVersion models by ImageId for this File.
+*
+* @uses \Octo\Store\PageVersionStore::getByImageId()
+* @uses \Octo\Model\PageVersion
+* @return \Octo\Model\PageVersion[]
+*/
+public function getImagePageVersions()
+{
+return Factory::getStore('PageVersion', 'Octo')->getByImageId($this->getId());
+}
+
+
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {

@@ -364,6 +364,55 @@ public function setParentObject(\Octo\Model\Page $value)
 return $this->setParentId($value->getId());
 }
 
+/**
+* Get GaTopPage models by PageId for this Page.
+*
+* @uses \Octo\Store\GaTopPageStore::getByPageId()
+* @uses \Octo\Model\GaTopPage
+* @return \Octo\Model\GaTopPage[]
+*/
+public function getPageGaTopPages()
+{
+return Factory::getStore('GaTopPage', 'Octo')->getByPageId($this->getId());
+}
+
+/**
+* Get MenuItem models by PageId for this Page.
+*
+* @uses \Octo\Store\MenuItemStore::getByPageId()
+* @uses \Octo\Model\MenuItem
+* @return \Octo\Model\MenuItem[]
+*/
+public function getPageMenuItems()
+{
+return Factory::getStore('MenuItem', 'Octo')->getByPageId($this->getId());
+}
+
+/**
+* Get Page models by ParentId for this Page.
+*
+* @uses \Octo\Store\PageStore::getByParentId()
+* @uses \Octo\Model\Page
+* @return \Octo\Model\Page[]
+*/
+public function getParentPages()
+{
+return Factory::getStore('Page', 'Octo')->getByParentId($this->getId());
+}
+
+/**
+* Get PageVersion models by PageId for this Page.
+*
+* @uses \Octo\Store\PageVersionStore::getByPageId()
+* @uses \Octo\Model\PageVersion
+* @return \Octo\Model\PageVersion[]
+*/
+public function getPagePageVersions()
+{
+return Factory::getStore('PageVersion', 'Octo')->getByPageId($this->getId());
+}
+
+
 
 public static function getByPrimaryKey($value, $useConnection = 'read')
 {
