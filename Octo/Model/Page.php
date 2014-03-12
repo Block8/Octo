@@ -6,6 +6,7 @@
 
 namespace Octo\Model;
 
+use Octo\Store;
 use Octo\Model\Base\PageBase;
 use Octo\Utilities\StringUtilities;
 
@@ -21,13 +22,11 @@ class Page extends PageBase
         $this->getters['hasChildren'] = 'hasChildren';
     }
 
-    /**
-     * @todo Improve the implementation on this.
-     */
     public function hasChildren()
     {
-        $pages = $this->getParentPages();
-        return $pages['count'] ? true : false;
+        $store = Store::get('Page');
+        $count = $store->getChildrenCount($this);
+        return $count ? true : false;
     }
 
 

@@ -56,6 +56,27 @@ class PageStore extends PageStoreBase
     }
 
     /**
+     * Get the number of child pages for a given page.
+     * @param Page $page
+     * @param string $useConnection
+     * @return int
+     */
+    public function getChildrenCount(Page $page, $useConnection = 'read')
+    {
+        $query = 'SELECT COUNT(*) AS cnt FROM page WHERE parent_id = :parent';
+        $stmt = Database::getConnection($useConnection)->prepare($query);
+        $stmt->bindValue(':parent', $page->getId());
+
+        if ($stmt->execute()) {
+            if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                return $data['cnt'];
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Get the latest version of a given page from the database.
      * @param Page $page
      * @param string $useConnection

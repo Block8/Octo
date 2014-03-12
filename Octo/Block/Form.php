@@ -43,7 +43,7 @@ class Form extends Block
     public static function getInfo()
     {
         $config = Config::getInstance();
-        return ['title' => 'Form', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/form.js']];
+        return ['title' => 'Form', 'editor' => true, 'js' => ['/assets/backoffice/js/block/form.js']];
     }
 
     protected function init()

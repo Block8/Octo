@@ -30,7 +30,8 @@
     },
 
     "bin": [
-        "octocmd"
+        "octocmd",
+        "Octo/Public/assets"
     ],
 
     "scripts": {

@@ -12,7 +12,7 @@ class Text extends Block
     public static function getInfo()
     {
         $config = Config::getInstance();
-        return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/text.js']];
+        return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/backoffice/js/block/text.js']];
     }
 
     public function renderNow()

@@ -27,6 +27,10 @@ class Navigation extends Block
 
     public function renderNow()
     {
+        if (array_key_exists('template', $this->templateParams)) {
+            $this->view = Template::getPublicTemplate('Block/Navigation/' . $this->templateParams['template']);
+        }
+
         $this->ancestors = $this->getAncestors();
 
         $this->allChildren = false;
@@ -88,6 +92,10 @@ class Navigation extends Block
         $rtn['uri'] = $item->getUri();
         $rtn['title'] = $item->getCurrentVersion()->getShortTitle();
         $rtn['active'] = $isAncestor;
+
+        if ($item->getId() == $this->page->getId()) {
+            $rtn['current'] = true;
+        }
 
         if ($depth == $maxDepth || (!$this->allChildren && !$isAncestor)) {
             return $rtn;

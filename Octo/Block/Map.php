@@ -10,7 +10,7 @@ class Map extends Block
     public static function getInfo()
     {
         $config = Config::getInstance();
-        return ['title' => 'Map', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/map.js']];
+        return ['title' => 'Map', 'editor' => true, 'js' => ['/assets/backoffice/js/block/map.js']];
     }
 
     public function renderNow()

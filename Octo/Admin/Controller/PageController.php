@@ -250,6 +250,10 @@ class PageController extends Controller
                 continue;
             }
 
+            if ($item->getExtension() !== 'html') {
+                continue;
+            }
+
             $rtn[$item->getBasename('.html')] = 1;
         }
 

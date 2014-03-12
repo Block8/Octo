@@ -1,10 +1,8 @@
-window.blockEditors.NewsArchive = PageBlock.extend({
+window.blockEditors.News = PageBlock.extend({
     category: null,
     perPage: null,
 
     edit: function (modalBody, blockContent) {
-        console.log('Hello');
-
         self.category = $('<select></select>');
         self.category.addClass('select2');
         self.category.css('width', '100%');

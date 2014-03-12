@@ -12,7 +12,7 @@ class News extends Block
     public static function getInfo()
     {
         $config = Config::getInstance();
-        return ['title' => 'News Archive', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/news.js']];
+        return ['title' => 'News Archive', 'editor' => true, 'js' => ['/assets/backoffice/js/block/news.js']];
     }
 
     public function renderNow()
@@ -28,14 +28,13 @@ class News extends Block
     public function renderNewsList()
     {
         if (!empty($this->templateParams['listTemplate'])) {
-            $this->view = Template::getPublicTemplate('Block/News_' . $this->templateParams['listTemplate']);
+            $this->view = Template::getPublicTemplate('Block/News/' . $this->templateParams['listTemplate']);
         }
 
         $limit = !empty($this->content['perPage']) ? $this->content['perPage'] : 1000;
         $category = !empty($this->content['category']) ? $this->content['category'] : null;
 
         $news = Store::get('Article')->getRecent($category, $limit);
-
         $base = $this->request->getPath();
 
         if ($base == '/') {
@@ -62,9 +61,9 @@ class News extends Block
         $content = $content['content'];
 
         if (!empty($this->templateParams['itemTemplate'])) {
-            $this->view = Template::getPublicTemplate('Block/News_' . $this->templateParams['itemTemplate']);
+            $this->view = Template::getPublicTemplate('Block/News/' . $this->templateParams['itemTemplate']);
         } else {
-            $this->view = Template::getPublicTemplate('Block/News_Item');
+            $this->view = Template::getPublicTemplate('Block/News/Item');
         }
 
         $this->view->item = $item;

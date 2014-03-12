@@ -64,7 +64,7 @@ class ArticleStore extends ArticleStoreBase
         $stmt = Database::getConnection('read')->prepare($query);
 
         if (!is_null($categoryId)) {
-            $stmt->bindValue(':catId', $categoryId);
+            $stmt->bindValue(':catId', (int)$categoryId, Database::PARAM_INT);
         }
 
         $stmt->execute();
@@ -76,10 +76,10 @@ class ArticleStore extends ArticleStoreBase
         $stmt = Database::getConnection('read')->prepare($query);
 
         if (!is_null($categoryId)) {
-            $stmt->bindValue(':catId', $categoryId);
+            $stmt->bindValue(':catId', (int)$categoryId, Database::PARAM_INT);
         }
 
-        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int)$limit, Database::PARAM_INT);
 
         if ($stmt->execute()) {
             $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);

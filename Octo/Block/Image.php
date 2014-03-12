@@ -10,7 +10,7 @@ class Image extends Block
     public static function getInfo()
     {
         $config = Config::getInstance();
-        return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/'.$config->get('site.admin_uri').'/js/block/image.js']];
+        return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/backoffice/js/block/image.js']];
     }
 
     public function renderNow()
