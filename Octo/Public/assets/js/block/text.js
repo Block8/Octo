@@ -4,7 +4,7 @@ window.blockEditors.Text = PageBlock.extend({
     edit: function (modalBody, blockContent) {
         var element = $('<textarea></textarea>');
 
-        if (blockContent) {
+        if (blockContent && blockContent.content) {
             element.text(blockContent.content);
         }
 
