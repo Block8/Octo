@@ -23,7 +23,7 @@ function renderTable(div, metric) {
     var colors = ['greenDark', 'magenta', 'blue', 'orange', 'pink'];
 
     $.ajax({
-        url: "http://businesslincolnshire.dev.resystems.net/backoffice/analytics/" + metric,
+        url: '/' + window.adminUri + '/analytics/' + metric
     }).done(function(data) {
         console.log(data);
         data = JSON.parse(data);
@@ -49,7 +49,7 @@ function renderChart(chart, metric) {
     var data = [], totalPoints = 30, $UpdatingChartColors = chart.css('color');
 
     $.ajax({
-        url: "http://businesslincolnshire.dev.resystems.net/backoffice/analytics/metric/" + metric,
+        url: '/' + window.adminUri + '/analytics/metric/' + metric
     }).done(function(data) {
         data = JSON.parse(data);
         var meta = data.shift();
@@ -102,7 +102,7 @@ function renderResponsivePie(chart) {
     var colors = ['#496949', '#6E3671', '#57889C'];
 
     $.ajax({
-        url: "http://businesslincolnshire.dev.resystems.net/backoffice/analytics/responsive",
+        url: '/' + window.adminUri + '/analytics/responsive'
     }).done(function(data) {
         data = JSON.parse(data);
         for(var i = 0; i < data.length; i++) {
