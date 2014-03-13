@@ -123,7 +123,7 @@
                         <tr>
                             <td>
                                 {if (can_access uri: "/page/edit")}
-                                <a href="/backoffice/page/edit/{@item.id}">{@item.CurrentVersion.title}</a>
+                                <a href="/{@adminUri}/page/edit/{@item.id}">{@item.CurrentVersion.title}</a>
                                 {/if}
                                 {ifnot (can_access uri: "/page/edit")}{@item.CurrentVersion.title}{/ifnot}
                             </td>
