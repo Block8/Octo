@@ -1,21 +1,23 @@
 $(document).ready(function(e) {
-    renderChart($('#pageviews-chart'), 'pageviews');
-    renderTable($('#pageviews-list'), 'top-pages');
-    $('#pageviews').show();
+    if($('#pageviews-chart').length > 0) {;
+        renderChart($('#pageviews-chart'), 'pageviews');
+        renderTable($('#pageviews-list'), 'top-pages');
+        $('#pageviews').show();
 
-    renderChart($('#uniquePageviews-chart'), 'uniquePageviews');
-    renderTable($('#uniquePageviews-list'), 'top-unique-pages');
+        renderChart($('#uniquePageviews-chart'), 'uniquePageviews');
+        renderTable($('#uniquePageviews-list'), 'top-unique-pages');
 
-    renderChart($('#visitors-chart'), 'visitors');
-    renderResponsivePie($('#responsive-chart'));
+        renderChart($('#visitors-chart'), 'visitors');
+        renderResponsivePie($('#responsive-chart'));
 
-    if($('ul.nav-tabs#analytics').length > 0) {
-        $('ul.nav-tabs#analytics li a').on('click', function(e) {
-            e.preventDefault();
-            var id = $(this).attr('href').replace('#', '');
-            $('#analytics_container div.widget-body').hide();
-            $('#' + id).fadeIn('slow');
-        });
+        if($('ul.nav-tabs#analytics').length > 0) {
+            $('ul.nav-tabs#analytics li a').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).attr('href').replace('#', '');
+                $('#analytics_container div.widget-body').hide();
+                $('#' + id).fadeIn('slow');
+            });
+        }
     }
 });
 
@@ -25,7 +27,6 @@ function renderTable(div, metric) {
     $.ajax({
         url: '/' + window.adminUri + '/analytics/' + metric
     }).done(function(data) {
-        console.log(data);
         data = JSON.parse(data);
 
         for(var i in data) {
@@ -42,10 +43,6 @@ function renderTable(div, metric) {
 }
 
 function renderChart(chart, metric) {
-    if(chart.html().length > 50) {
-        return true;
-    }
-
     var data = [], totalPoints = 30, $UpdatingChartColors = chart.css('color');
 
     $.ajax({

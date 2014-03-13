@@ -125,8 +125,8 @@ function selectElement(id, label, options, value)
 function imagePicker(id, label, value)
 {
     var section = $('<section></section>').addClass('control-group');
-    var label1 = $('<label></label>').addClass('label').text(label);
-    section.append(label1);
+//    var label1 = $('<label></label>').addClass('label').text(label);
+//    section.append(label1);
 
     var label2 = $('<label></label>').addClass('input');
     var input = $('<input>').attr('id', id).attr('type', 'text');
@@ -140,12 +140,14 @@ function imagePicker(id, label, value)
         img.attr('src', '/media/render/' + value + '/160/90');
     }
 
+    label2.append('<br /><br />');
     label2.append(input);
-
+    input.css('width', '100%');
 
     input.select2({
         placeholder: "Search for an image",
         minimumInputLength: 1,
+        width: '560px',
         ajax: {
             url: '/'+window.adminUri+'/media/autocomplete/images',
             dataType: 'json',
