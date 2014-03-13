@@ -308,6 +308,11 @@ class PageController extends Controller
         $pageData = $this->getParam('page', null);
 
         if (!is_null($pageData)) {
+
+            if (empty($pageData['image_id'])) {
+                unset($pageData['image_id']);
+            }
+
             $page = $this->pageStore->getById($pageId);
             $latest = $this->pageStore->getLatestVersion($page);
             $latest->setValues($pageData);
