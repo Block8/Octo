@@ -9,7 +9,6 @@ class Image extends Block
 {
     public static function getInfo()
     {
-        $config = Config::getInstance();
         return ['title' => 'Text', 'editor' => true, 'js' => ['/assets/backoffice/js/block/image.js']];
     }
 
