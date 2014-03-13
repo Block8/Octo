@@ -116,7 +116,7 @@ function selectElement(id, label, options, value)
 
     section.append(label2);
     label2.append(input);
-
+    input.css('width', '100%');
     input.select2();
 
     return section;
