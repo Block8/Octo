@@ -6,8 +6,11 @@
 
 namespace Octo\Store\Base;
 
+use PDOException;
 use b8\Database;
-use b8\Exception\HttpException;
+use b8\Database\Query;
+use b8\Database\Query\Criteria;
+use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Model\Page;
 
@@ -20,128 +23,172 @@ class PageStoreBase extends Store
     protected $modelName   = '\Octo\Model\Page';
     protected $primaryKey  = 'id';
 
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Page
+    */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
         return $this->getById($value, $useConnection);
-}
+    }
 
-public function getById($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
 
-$query = 'SELECT * FROM `page` WHERE `id` = :id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':id', $value);
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Page
+    */
+    public function getById($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new Page($data);
-}
-}
+        $query = new Query('Octo\Model\Page', $useConnection);
+        $query->select('*')->from('page')->limit(1);
+        $query->where('`id` = :id');
+        $query->bind(':id', $value);
 
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Page by Page', 0, $ex);
+        }
+    }
 
-public function getByParentId($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForParentId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Page', $useConnection);
+        $query->from('page')->where('`parent_id` = :parent_id');
+        $query->bind(':parent_id', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `page` WHERE `parent_id` = :parent_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':parent_id', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Page by ParentId', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Page[]
+     */
+    public function getByParentId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `page` WHERE `parent_id` = :parent_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':parent_id', $value);
+        $query = new Query('Octo\Model\Page', $useConnection);
+        $query->from('page')->where('`parent_id` = :parent_id');
+        $query->bind(':parent_id', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Page($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Page by ParentId', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 
-public function getByCurrentVersionId($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForCurrentVersionId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Page', $useConnection);
+        $query->from('page')->where('`current_version_id` = :current_version_id');
+        $query->bind(':current_version_id', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `page` WHERE `current_version_id` = :current_version_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':current_version_id', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Page by CurrentVersionId', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Page[]
+     */
+    public function getByCurrentVersionId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `page` WHERE `current_version_id` = :current_version_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':current_version_id', $value);
+        $query = new Query('Octo\Model\Page', $useConnection);
+        $query->from('page')->where('`current_version_id` = :current_version_id');
+        $query->bind(':current_version_id', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Page($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Page by CurrentVersionId', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Page
+    */
+    public function getByUri($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-public function getByUri($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $query = new Query('Octo\Model\Page', $useConnection);
+        $query->select('*')->from('page')->limit(1);
+        $query->where('`uri` = :uri');
+        $query->bind(':uri', $value);
 
-$query = 'SELECT * FROM `page` WHERE `uri` = :uri LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':uri', $value);
-
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new Page($data);
-}
-}
-
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Page by Page', 0, $ex);
+        }
+    }
 }

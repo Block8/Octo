@@ -82,7 +82,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {for latestSubmissions.items}
+                        {for latestSubmissions}
                         <tr>
                             <td>{@value.Contact.first_name} {@value.Contact.last_name}</td>
                             <td>{@value.Contact.email}</td>
@@ -119,7 +119,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {for latestPages.items}
+                        {for latestPages}
                         <tr>
                             <td>
                                 {if (can_access uri: "/page/edit")}

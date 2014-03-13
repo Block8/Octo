@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    {for pages.items}
+    {for pages}
     <tr>
         <td>{if item.id != parentId}<i class="fa fa-chevron-right"></i> {/if}
             {if item.hasChildren}{if item.id != parentId}<a href="/{@adminUri}/page?parent={@item.id}">{/if}{/if}

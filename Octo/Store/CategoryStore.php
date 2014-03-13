@@ -43,9 +43,9 @@ ORDER BY ' . $order;
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn, 'count' => $count);
+            return $rtn;
         } else {
-            return array('items' => array(), 'count' => 0);
+            return [];
         }
     }
     /**
@@ -71,9 +71,9 @@ ORDER BY ' . $order;
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn, 'count' => $count);
+            return $rtn;
         } else {
-            return array('items' => array(), 'count' => 0);
+            return [];
         }
     }
 

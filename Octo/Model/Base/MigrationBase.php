@@ -17,7 +17,7 @@ class MigrationBase extends Model
     /**
     * @var array
     */
-    public static $sleepable = array();
+    public static $sleepable = [];
 
     /**
     * @var string
@@ -32,140 +32,124 @@ class MigrationBase extends Model
     /**
     * @var array
     */
-    protected $data = array(
+    protected $data = [
         'id' => null,
         'date_run' => null,
-);
+    ];
 
-/**
-* @var array
-*/
-protected $getters = array(
-// Direct property getters:
-'id' => 'getId',
-'date_run' => 'getDateRun',
+    /**
+    * @var array
+    */
+    protected $getters = [
+        // Direct property getters:
+        'id' => 'getId',
+        'date_run' => 'getDateRun',
 
-// Foreign key getters:
-);
+        // Foreign key getters:
+    ];
 
-/**
-* @var array
-*/
-protected $setters = array(
-// Direct property setters:
-'id' => 'setId',
-'date_run' => 'setDateRun',
+    /**
+    * @var array
+    */
+    protected $setters = [
+        // Direct property setters:
+        'id' => 'setId',
+        'date_run' => 'setDateRun',
 
-// Foreign key setters:
-);
+        // Foreign key setters:
+    ];
 
-/**
-* @var array
-*/
-public $columns = array(
-'id' => array(
-'type' => 'varchar',
-'length' => 50,
-'primary_key' => true,
-),
-'date_run' => array(
-'type' => 'datetime',
-'nullable' => true,
-'default' => null,
-),
-);
+    /**
+    * @var array
+    */
+    public $columns = [
+        'id' => [
+            'type' => 'varchar',
+            'length' => 50,
+            'primary_key' => true,
+        ],
+        'date_run' => [
+            'type' => 'datetime',
+            'nullable' => true,
+            'default' => null,
+        ],
+    ];
 
-/**
-* @var array
-*/
-public $indexes = array(
-'PRIMARY' => array('unique' => true, 'columns' => 'id'),
-);
+    /**
+    * @var array
+    */
+    public $indexes = [
+        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
+    ];
 
-/**
-* @var array
-*/
-public $foreignKeys = array(
-);
+    /**
+    * @var array
+    */
+    public $foreignKeys = [
+    ];
 
-/**
-* Get the value of Id / id.
-*
-* @return string
-*/
-public function getId()
-{
-$rtn    = $this->data['id'];
+    /**
+    * Get the value of Id / id.
+    *
+    * @return string
+    */
+    public function getId()
+    {
+        $rtn = $this->data['id'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of DateRun / date_run.
-*
-* @return \DateTime
-*/
-public function getDateRun()
-{
-$rtn    = $this->data['date_run'];
+    /**
+    * Get the value of DateRun / date_run.
+    *
+    * @return \DateTime
+    */
+    public function getDateRun()
+    {
+        $rtn = $this->data['date_run'];
 
-if (!empty($rtn)) {
-$rtn    = new \DateTime($rtn);
-}
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Set the value of Id / id.
-*
-* Must not be null.
-* @param $value string
-*/
-public function setId($value)
-{
-$this->validateNotNull('Id', $value);
-$this->validateString('Id', $value);
+    /**
+    * Set the value of Id / id.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setId($value)
+    {
+        $this->validateNotNull('Id', $value);
+        $this->validateString('Id', $value);
 
-if ($this->data['id'] === $value) {
-return;
-}
+        if ($this->data['id'] === $value) {
+            return;
+        }
 
-$this->data['id'] = $value;
+        $this->data['id'] = $value;
+        $this->setModified('id');
+    }
 
-$this->setModified('id');
-}
+    /**
+    * Set the value of DateRun / date_run.
+    *
+    * @param $value \DateTime
+    */
+    public function setDateRun($value)
+    {
+        $this->validateDate('DateRun', $value);
 
-/**
-* Set the value of DateRun / date_run.
-*
-* @param $value \DateTime
-*/
-public function setDateRun($value)
-{
-$this->validateDate('DateRun', $value);
+        if ($this->data['date_run'] === $value) {
+            return;
+        }
 
-if ($this->data['date_run'] === $value) {
-return;
-}
-
-$this->data['date_run'] = $value;
-
-$this->setModified('date_run');
-}
-
-
-
-public static function getByPrimaryKey($value, $useConnection = 'read')
-{
-return Factory::getStore('Migration', 'Octo')->getByPrimaryKey($value, $useConnection);
-}
-
-
-public static function getById($value, $useConnection = 'read')
-{
-return Factory::getStore('Migration', 'Octo')->getById($value, $useConnection);
-}
-
+        $this->data['date_run'] = $value;
+        $this->setModified('date_run');
+    }
 
 }

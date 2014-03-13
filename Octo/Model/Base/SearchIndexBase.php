@@ -17,7 +17,7 @@ class SearchIndexBase extends Model
     /**
     * @var array
     */
-    public static $sleepable = array();
+    public static $sleepable = [];
 
     /**
     * @var string
@@ -32,263 +32,238 @@ class SearchIndexBase extends Model
     /**
     * @var array
     */
-    protected $data = array(
+    protected $data = [
         'id' => null,
         'word' => null,
         'model' => null,
         'content_id' => null,
         'instances' => null,
-);
+    ];
 
-/**
-* @var array
-*/
-protected $getters = array(
-// Direct property getters:
-'id' => 'getId',
-'word' => 'getWord',
-'model' => 'getModel',
-'content_id' => 'getContentId',
-'instances' => 'getInstances',
+    /**
+    * @var array
+    */
+    protected $getters = [
+        // Direct property getters:
+        'id' => 'getId',
+        'word' => 'getWord',
+        'model' => 'getModel',
+        'content_id' => 'getContentId',
+        'instances' => 'getInstances',
 
-// Foreign key getters:
-);
+        // Foreign key getters:
+    ];
 
-/**
-* @var array
-*/
-protected $setters = array(
-// Direct property setters:
-'id' => 'setId',
-'word' => 'setWord',
-'model' => 'setModel',
-'content_id' => 'setContentId',
-'instances' => 'setInstances',
+    /**
+    * @var array
+    */
+    protected $setters = [
+        // Direct property setters:
+        'id' => 'setId',
+        'word' => 'setWord',
+        'model' => 'setModel',
+        'content_id' => 'setContentId',
+        'instances' => 'setInstances',
 
-// Foreign key setters:
-);
+        // Foreign key setters:
+    ];
 
-/**
-* @var array
-*/
-public $columns = array(
-'id' => array(
-'type' => 'int',
-'length' => 11,
-'primary_key' => true,
-'auto_increment' => true,
-'default' => null,
-),
-'word' => array(
-'type' => 'varchar',
-'length' => 50,
-),
-'model' => array(
-'type' => 'varchar',
-'length' => 50,
-),
-'content_id' => array(
-'type' => 'varchar',
-'length' => 32,
-),
-'instances' => array(
-'type' => 'int',
-'length' => 11,
-'default' => 1,
-),
-);
+    /**
+    * @var array
+    */
+    public $columns = [
+        'id' => [
+            'type' => 'int',
+            'length' => 11,
+            'primary_key' => true,
+            'auto_increment' => true,
+            'default' => null,
+        ],
+        'word' => [
+            'type' => 'varchar',
+            'length' => 50,
+        ],
+        'model' => [
+            'type' => 'varchar',
+            'length' => 50,
+        ],
+        'content_id' => [
+            'type' => 'varchar',
+            'length' => 32,
+        ],
+        'instances' => [
+            'type' => 'int',
+            'length' => 11,
+            'default' => 1,        ],
+    ];
 
-/**
-* @var array
-*/
-public $indexes = array(
-'PRIMARY' => array('unique' => true, 'columns' => 'id'),
-'idx_search' => array('columns' => 'word, instances, model, content_id'),
-);
+    /**
+    * @var array
+    */
+    public $indexes = [
+        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
+        'idx_search_2' => ['columns' => 'word, instances, model, content_id'],
+    ];
 
-/**
-* @var array
-*/
-public $foreignKeys = array(
-);
+    /**
+    * @var array
+    */
+    public $foreignKeys = [
+    ];
 
-/**
-* Get the value of Id / id.
-*
-* @return int
-*/
-public function getId()
-{
-$rtn    = $this->data['id'];
+    /**
+    * Get the value of Id / id.
+    *
+    * @return int
+    */
+    public function getId()
+    {
+        $rtn = $this->data['id'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Word / word.
-*
-* @return string
-*/
-public function getWord()
-{
-$rtn    = $this->data['word'];
+    /**
+    * Get the value of Word / word.
+    *
+    * @return string
+    */
+    public function getWord()
+    {
+        $rtn = $this->data['word'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Model / model.
-*
-* @return string
-*/
-public function getModel()
-{
-$rtn    = $this->data['model'];
+    /**
+    * Get the value of Model / model.
+    *
+    * @return string
+    */
+    public function getModel()
+    {
+        $rtn = $this->data['model'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of ContentId / content_id.
-*
-* @return string
-*/
-public function getContentId()
-{
-$rtn    = $this->data['content_id'];
+    /**
+    * Get the value of ContentId / content_id.
+    *
+    * @return string
+    */
+    public function getContentId()
+    {
+        $rtn = $this->data['content_id'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Instances / instances.
-*
-* @return int
-*/
-public function getInstances()
-{
-$rtn    = $this->data['instances'];
+    /**
+    * Get the value of Instances / instances.
+    *
+    * @return int
+    */
+    public function getInstances()
+    {
+        $rtn = $this->data['instances'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Set the value of Id / id.
-*
-* Must not be null.
-* @param $value int
-*/
-public function setId($value)
-{
-$this->validateNotNull('Id', $value);
-$this->validateInt('Id', $value);
+    /**
+    * Set the value of Id / id.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setId($value)
+    {
+        $this->validateNotNull('Id', $value);
+        $this->validateInt('Id', $value);
 
-if ($this->data['id'] === $value) {
-return;
-}
+        if ($this->data['id'] === $value) {
+            return;
+        }
 
-$this->data['id'] = $value;
+        $this->data['id'] = $value;
+        $this->setModified('id');
+    }
 
-$this->setModified('id');
-}
+    /**
+    * Set the value of Word / word.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setWord($value)
+    {
+        $this->validateNotNull('Word', $value);
+        $this->validateString('Word', $value);
 
-/**
-* Set the value of Word / word.
-*
-* Must not be null.
-* @param $value string
-*/
-public function setWord($value)
-{
-$this->validateNotNull('Word', $value);
-$this->validateString('Word', $value);
+        if ($this->data['word'] === $value) {
+            return;
+        }
 
-if ($this->data['word'] === $value) {
-return;
-}
+        $this->data['word'] = $value;
+        $this->setModified('word');
+    }
 
-$this->data['word'] = $value;
+    /**
+    * Set the value of Model / model.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setModel($value)
+    {
+        $this->validateNotNull('Model', $value);
+        $this->validateString('Model', $value);
 
-$this->setModified('word');
-}
+        if ($this->data['model'] === $value) {
+            return;
+        }
 
-/**
-* Set the value of Model / model.
-*
-* Must not be null.
-* @param $value string
-*/
-public function setModel($value)
-{
-$this->validateNotNull('Model', $value);
-$this->validateString('Model', $value);
+        $this->data['model'] = $value;
+        $this->setModified('model');
+    }
 
-if ($this->data['model'] === $value) {
-return;
-}
+    /**
+    * Set the value of ContentId / content_id.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setContentId($value)
+    {
+        $this->validateNotNull('ContentId', $value);
+        $this->validateString('ContentId', $value);
 
-$this->data['model'] = $value;
+        if ($this->data['content_id'] === $value) {
+            return;
+        }
 
-$this->setModified('model');
-}
+        $this->data['content_id'] = $value;
+        $this->setModified('content_id');
+    }
 
-/**
-* Set the value of ContentId / content_id.
-*
-* Must not be null.
-* @param $value string
-*/
-public function setContentId($value)
-{
-$this->validateNotNull('ContentId', $value);
-$this->validateString('ContentId', $value);
+    /**
+    * Set the value of Instances / instances.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setInstances($value)
+    {
+        $this->validateNotNull('Instances', $value);
+        $this->validateInt('Instances', $value);
 
-if ($this->data['content_id'] === $value) {
-return;
-}
+        if ($this->data['instances'] === $value) {
+            return;
+        }
 
-$this->data['content_id'] = $value;
-
-$this->setModified('content_id');
-}
-
-/**
-* Set the value of Instances / instances.
-*
-* Must not be null.
-* @param $value int
-*/
-public function setInstances($value)
-{
-$this->validateNotNull('Instances', $value);
-$this->validateInt('Instances', $value);
-
-if ($this->data['instances'] === $value) {
-return;
-}
-
-$this->data['instances'] = $value;
-
-$this->setModified('instances');
-}
-
-
-
-public static function getByPrimaryKey($value, $useConnection = 'read')
-{
-return Factory::getStore('SearchIndex', 'Octo')->getByPrimaryKey($value, $useConnection);
-}
-
-
-public static function getById($value, $useConnection = 'read')
-{
-return Factory::getStore('SearchIndex', 'Octo')->getById($value, $useConnection);
-}
-
-public static function getByWord($value, $limit = null, $useConnection = 'read')
-{
-return Factory::getStore('SearchIndex', 'Octo')->getByWord($value, $limit, $useConnection);
-}
-
+        $this->data['instances'] = $value;
+        $this->setModified('instances');
+    }
 
 }

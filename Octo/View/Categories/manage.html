@@ -13,7 +13,7 @@
 		</tr>
 	</thead>
 	<tbody>
-        {loop categories.items}
+        {loop categories}
 		<tr>
 			<td>
                 {if item.has_children}<a href="?parent={@item.id}">{@item.name}</a>{/if}

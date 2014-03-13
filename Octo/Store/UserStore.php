@@ -31,9 +31,9 @@ class UserStore extends UserStoreBase
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn, 'count' => $count);
+            return $rtn;
         } else {
-            return array('items' => array(), 'count' => 0);
+            return [];
         }
     }
     

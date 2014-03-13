@@ -6,8 +6,11 @@
 
 namespace Octo\Store\Base;
 
+use PDOException;
 use b8\Database;
-use b8\Exception\HttpException;
+use b8\Database\Query;
+use b8\Database\Query\Criteria;
+use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Model\Log;
 
@@ -20,150 +23,202 @@ class LogStoreBase extends Store
     protected $modelName   = '\Octo\Model\Log';
     protected $primaryKey  = 'id';
 
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Log
+    */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
         return $this->getById($value, $useConnection);
-}
+    }
 
-public function getById($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
 
-$query = 'SELECT * FROM `log` WHERE `id` = :id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':id', $value);
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Log
+    */
+    public function getById($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new Log($data);
-}
-}
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->select('*')->from('log')->limit(1);
+        $query->where('`id` = :id');
+        $query->bind(':id', $value);
 
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Log by Log', 0, $ex);
+        }
+    }
 
-public function getByType($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForType($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->from('log')->where('`type` = :type');
+        $query->bind(':type', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `log` WHERE `type` = :type' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':type', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Log by Type', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Log[]
+     */
+    public function getByType($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `log` WHERE `type` = :type' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':type', $value);
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->from('log')->where('`type` = :type');
+        $query->bind(':type', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Log($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Log by Type', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 
-public function getByScope($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForScope($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->from('log')->where('`scope` = :scope');
+        $query->bind(':scope', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `log` WHERE `scope` = :scope' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':scope', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Log by Scope', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Log[]
+     */
+    public function getByScope($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `log` WHERE `scope` = :scope' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':scope', $value);
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->from('log')->where('`scope` = :scope');
+        $query->bind(':scope', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Log($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Log by Scope', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 
-public function getByUserId($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForUserId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->from('log')->where('`user_id` = :user_id');
+        $query->bind(':user_id', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `log` WHERE `user_id` = :user_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':user_id', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Log by UserId', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Log[]
+     */
+    public function getByUserId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `log` WHERE `user_id` = :user_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':user_id', $value);
+        $query = new Query('Octo\Model\Log', $useConnection);
+        $query->from('log')->where('`user_id` = :user_id');
+        $query->bind(':user_id', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Log($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Log by UserId', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 }

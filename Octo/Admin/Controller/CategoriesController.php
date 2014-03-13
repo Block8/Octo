@@ -34,7 +34,7 @@ class CategoriesController extends Controller
         $categories = $this->categoryStore->getAllForScope($scope);
 
         $rtn = [];
-        foreach ($categories['items'] as $category) {
+        foreach ($categories as $category) {
             $rtn[$category->getId()] = $category->getName();
         }
 

@@ -6,8 +6,11 @@
 
 namespace Octo\Store\Base;
 
+use PDOException;
 use b8\Database;
-use b8\Exception\HttpException;
+use b8\Database\Query;
+use b8\Database\Query\Criteria;
+use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Model\User;
 
@@ -20,46 +23,64 @@ class UserStoreBase extends Store
     protected $modelName   = '\Octo\Model\User';
     protected $primaryKey  = 'id';
 
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return User
+    */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
         return $this->getById($value, $useConnection);
-}
+    }
 
-public function getById($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
 
-$query = 'SELECT * FROM `user` WHERE `id` = :id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':id', $value);
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return User
+    */
+    public function getById($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new User($data);
-}
-}
+        $query = new Query('Octo\Model\User', $useConnection);
+        $query->select('*')->from('user')->limit(1);
+        $query->where('`id` = :id');
+        $query->bind(':id', $value);
 
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get User by User', 0, $ex);
+        }
+    }
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return User
+    */
+    public function getByEmail($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-public function getByEmail($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $query = new Query('Octo\Model\User', $useConnection);
+        $query->select('*')->from('user')->limit(1);
+        $query->where('`email` = :email');
+        $query->bind(':email', $value);
 
-$query = 'SELECT * FROM `user` WHERE `email` = :email LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':email', $value);
-
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new User($data);
-}
-}
-
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get User by User', 0, $ex);
+        }
+    }
 }

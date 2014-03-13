@@ -39,7 +39,7 @@ class AnalyticsController extends Controller
         $return = [];
         $total = 0;
 
-        foreach ($data['items'] as $item) {
+        foreach ($data as $item) {
             $return[] = ['percentage' => 0, 'count' => $item->getValue()];
             $total += $item->getValue();
         }
@@ -59,7 +59,7 @@ class AnalyticsController extends Controller
         $data = [];
         $maxValue = $this->gaPageViewStore->getLastMonthTotal('pageviews');
 
-        foreach ($pages['items'] as $item) {
+        foreach ($pages as $item) {
             $page = $item->getPage();
             if (isset($page)) {
                 $pageName = $page->getCurrentVersion()->getTitle();
@@ -86,7 +86,7 @@ class AnalyticsController extends Controller
         $data = [];
         $maxValue = $this->gaPageViewStore->getLastMonthTotal('uniquePageviews');
 
-        foreach ($pages['items'] as $item) {
+        foreach ($pages as $item) {
             $page = $item->getPage();
             if (isset($page)) {
                 $pageName = $page->getCurrentVersion()->getTitle();
@@ -127,7 +127,7 @@ class AnalyticsController extends Controller
         $tickCount = 0;
         $maxValue = 0;
         $return = [];
-        foreach ($data['items'] as $day) {
+        foreach ($data as $day) {
             $value = $day->getValue();
             $return[] = ['date' => $day->getDate()->format('d-m-Y'), 'value' => $value];
 

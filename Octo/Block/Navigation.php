@@ -77,8 +77,8 @@ class Navigation extends Block
     {
         $children = $this->pageStore->getByParentId($page->getId());
 
-        if (count($children['items'])) {
-            return $children['items'];
+        if (count($children)) {
+            return $children;
         }
 
         return null;

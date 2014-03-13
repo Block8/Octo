@@ -17,7 +17,7 @@ class UserBase extends Model
     /**
     * @var array
     */
-    public static $sleepable = array();
+    public static $sleepable = [];
 
     /**
     * @var string
@@ -32,375 +32,278 @@ class UserBase extends Model
     /**
     * @var array
     */
-    protected $data = array(
+    protected $data = [
         'id' => null,
         'email' => null,
         'hash' => null,
         'name' => null,
         'is_admin' => null,
         'is_hidden' => null,
-);
+    ];
 
-/**
-* @var array
-*/
-protected $getters = array(
-// Direct property getters:
-'id' => 'getId',
-'email' => 'getEmail',
-'hash' => 'getHash',
-'name' => 'getName',
-'is_admin' => 'getIsAdmin',
-'is_hidden' => 'getIsHidden',
+    /**
+    * @var array
+    */
+    protected $getters = [
+        // Direct property getters:
+        'id' => 'getId',
+        'email' => 'getEmail',
+        'hash' => 'getHash',
+        'name' => 'getName',
+        'is_admin' => 'getIsAdmin',
+        'is_hidden' => 'getIsHidden',
 
-// Foreign key getters:
-);
+        // Foreign key getters:
+    ];
 
-/**
-* @var array
-*/
-protected $setters = array(
-// Direct property setters:
-'id' => 'setId',
-'email' => 'setEmail',
-'hash' => 'setHash',
-'name' => 'setName',
-'is_admin' => 'setIsAdmin',
-'is_hidden' => 'setIsHidden',
+    /**
+    * @var array
+    */
+    protected $setters = [
+        // Direct property setters:
+        'id' => 'setId',
+        'email' => 'setEmail',
+        'hash' => 'setHash',
+        'name' => 'setName',
+        'is_admin' => 'setIsAdmin',
+        'is_hidden' => 'setIsHidden',
 
-// Foreign key setters:
-);
+        // Foreign key setters:
+    ];
 
-/**
-* @var array
-*/
-public $columns = array(
-'id' => array(
-'type' => 'int',
-'length' => 11,
-'primary_key' => true,
-'auto_increment' => true,
-'default' => null,
-),
-'email' => array(
-'type' => 'varchar',
-'length' => 250,
-'default' => null,
-),
-'hash' => array(
-'type' => 'varchar',
-'length' => 250,
-'default' => null,
-),
-'name' => array(
-'type' => 'varchar',
-'length' => 250,
-'nullable' => true,
-'default' => null,
-),
-'is_admin' => array(
-'type' => 'tinyint',
-'length' => 1,
-),
-'is_hidden' => array(
-'type' => 'tinyint',
-'length' => 1,
-),
-);
+    /**
+    * @var array
+    */
+    public $columns = [
+        'id' => [
+            'type' => 'int',
+            'length' => 11,
+            'primary_key' => true,
+            'auto_increment' => true,
+            'default' => null,
+        ],
+        'email' => [
+            'type' => 'varchar',
+            'length' => 250,
+            'default' => null,
+        ],
+        'hash' => [
+            'type' => 'varchar',
+            'length' => 250,
+            'default' => null,
+        ],
+        'name' => [
+            'type' => 'varchar',
+            'length' => 250,
+            'nullable' => true,
+            'default' => null,
+        ],
+        'is_admin' => [
+            'type' => 'tinyint',
+            'length' => 1,
+        ],
+        'is_hidden' => [
+            'type' => 'tinyint',
+            'length' => 1,
+        ],
+    ];
 
-/**
-* @var array
-*/
-public $indexes = array(
-'PRIMARY' => array('unique' => true, 'columns' => 'id'),
-'idx_email' => array('unique' => true, 'columns' => 'email'),
-);
+    /**
+    * @var array
+    */
+    public $indexes = [
+        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
+        'idx_email' => ['unique' => true, 'columns' => 'email'],
+    ];
 
-/**
-* @var array
-*/
-public $foreignKeys = array(
-);
+    /**
+    * @var array
+    */
+    public $foreignKeys = [
+    ];
 
-/**
-* Get the value of Id / id.
-*
-* @return int
-*/
-public function getId()
-{
-$rtn    = $this->data['id'];
+    /**
+    * Get the value of Id / id.
+    *
+    * @return int
+    */
+    public function getId()
+    {
+        $rtn = $this->data['id'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Email / email.
-*
-* @return string
-*/
-public function getEmail()
-{
-$rtn    = $this->data['email'];
+    /**
+    * Get the value of Email / email.
+    *
+    * @return string
+    */
+    public function getEmail()
+    {
+        $rtn = $this->data['email'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Hash / hash.
-*
-* @return string
-*/
-public function getHash()
-{
-$rtn    = $this->data['hash'];
+    /**
+    * Get the value of Hash / hash.
+    *
+    * @return string
+    */
+    public function getHash()
+    {
+        $rtn = $this->data['hash'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Name / name.
-*
-* @return string
-*/
-public function getName()
-{
-$rtn    = $this->data['name'];
+    /**
+    * Get the value of Name / name.
+    *
+    * @return string
+    */
+    public function getName()
+    {
+        $rtn = $this->data['name'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of IsAdmin / is_admin.
-*
-* @return int
-*/
-public function getIsAdmin()
-{
-$rtn    = $this->data['is_admin'];
+    /**
+    * Get the value of IsAdmin / is_admin.
+    *
+    * @return int
+    */
+    public function getIsAdmin()
+    {
+        $rtn = $this->data['is_admin'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of IsHidden / is_hidden.
-*
-* @return int
-*/
-public function getIsHidden()
-{
-$rtn    = $this->data['is_hidden'];
+    /**
+    * Get the value of IsHidden / is_hidden.
+    *
+    * @return int
+    */
+    public function getIsHidden()
+    {
+        $rtn = $this->data['is_hidden'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Set the value of Id / id.
-*
-* Must not be null.
-* @param $value int
-*/
-public function setId($value)
-{
-$this->validateNotNull('Id', $value);
-$this->validateInt('Id', $value);
+    /**
+    * Set the value of Id / id.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setId($value)
+    {
+        $this->validateNotNull('Id', $value);
+        $this->validateInt('Id', $value);
 
-if ($this->data['id'] === $value) {
-return;
-}
+        if ($this->data['id'] === $value) {
+            return;
+        }
 
-$this->data['id'] = $value;
+        $this->data['id'] = $value;
+        $this->setModified('id');
+    }
 
-$this->setModified('id');
-}
+    /**
+    * Set the value of Email / email.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setEmail($value)
+    {
+        $this->validateNotNull('Email', $value);
+        $this->validateString('Email', $value);
 
-/**
-* Set the value of Email / email.
-*
-* Must not be null.
-* @param $value string
-*/
-public function setEmail($value)
-{
-$this->validateNotNull('Email', $value);
-$this->validateString('Email', $value);
+        if ($this->data['email'] === $value) {
+            return;
+        }
 
-if ($this->data['email'] === $value) {
-return;
-}
+        $this->data['email'] = $value;
+        $this->setModified('email');
+    }
 
-$this->data['email'] = $value;
+    /**
+    * Set the value of Hash / hash.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setHash($value)
+    {
+        $this->validateNotNull('Hash', $value);
+        $this->validateString('Hash', $value);
 
-$this->setModified('email');
-}
+        if ($this->data['hash'] === $value) {
+            return;
+        }
 
-/**
-* Set the value of Hash / hash.
-*
-* Must not be null.
-* @param $value string
-*/
-public function setHash($value)
-{
-$this->validateNotNull('Hash', $value);
-$this->validateString('Hash', $value);
+        $this->data['hash'] = $value;
+        $this->setModified('hash');
+    }
 
-if ($this->data['hash'] === $value) {
-return;
-}
+    /**
+    * Set the value of Name / name.
+    *
+    * @param $value string
+    */
+    public function setName($value)
+    {
+        $this->validateString('Name', $value);
 
-$this->data['hash'] = $value;
+        if ($this->data['name'] === $value) {
+            return;
+        }
 
-$this->setModified('hash');
-}
+        $this->data['name'] = $value;
+        $this->setModified('name');
+    }
 
-/**
-* Set the value of Name / name.
-*
-* @param $value string
-*/
-public function setName($value)
-{
-$this->validateString('Name', $value);
+    /**
+    * Set the value of IsAdmin / is_admin.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setIsAdmin($value)
+    {
+        $this->validateNotNull('IsAdmin', $value);
+        $this->validateInt('IsAdmin', $value);
 
-if ($this->data['name'] === $value) {
-return;
-}
+        if ($this->data['is_admin'] === $value) {
+            return;
+        }
 
-$this->data['name'] = $value;
+        $this->data['is_admin'] = $value;
+        $this->setModified('is_admin');
+    }
 
-$this->setModified('name');
-}
+    /**
+    * Set the value of IsHidden / is_hidden.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setIsHidden($value)
+    {
+        $this->validateNotNull('IsHidden', $value);
+        $this->validateInt('IsHidden', $value);
 
-/**
-* Set the value of IsAdmin / is_admin.
-*
-* Must not be null.
-* @param $value int
-*/
-public function setIsAdmin($value)
-{
-$this->validateNotNull('IsAdmin', $value);
-$this->validateInt('IsAdmin', $value);
+        if ($this->data['is_hidden'] === $value) {
+            return;
+        }
 
-if ($this->data['is_admin'] === $value) {
-return;
-}
-
-$this->data['is_admin'] = $value;
-
-$this->setModified('is_admin');
-}
-
-/**
-* Set the value of IsHidden / is_hidden.
-*
-* Must not be null.
-* @param $value int
-*/
-public function setIsHidden($value)
-{
-$this->validateNotNull('IsHidden', $value);
-$this->validateInt('IsHidden', $value);
-
-if ($this->data['is_hidden'] === $value) {
-return;
-}
-
-$this->data['is_hidden'] = $value;
-
-$this->setModified('is_hidden');
-}
-
-/**
-* Get Article models by UserId for this User.
-*
-* @uses \Octo\Store\ArticleStore::getByUserId()
-* @uses \Octo\Model\Article
-* @return \Octo\Model\Article[]
-*/
-public function getUserArticles()
-{
-return Factory::getStore('Article', 'Octo')->getByUserId($this->getId());
-}
-
-/**
-* Get Article models by AuthorId for this User.
-*
-* @uses \Octo\Store\ArticleStore::getByAuthorId()
-* @uses \Octo\Model\Article
-* @return \Octo\Model\Article[]
-*/
-public function getAuthorArticles()
-{
-return Factory::getStore('Article', 'Octo')->getByAuthorId($this->getId());
-}
-
-/**
-* Get File models by UserId for this User.
-*
-* @uses \Octo\Store\FileStore::getByUserId()
-* @uses \Octo\Model\File
-* @return \Octo\Model\File[]
-*/
-public function getUserFiles()
-{
-return Factory::getStore('File', 'Octo')->getByUserId($this->getId());
-}
-
-/**
-* Get Log models by UserId for this User.
-*
-* @uses \Octo\Store\LogStore::getByUserId()
-* @uses \Octo\Model\Log
-* @return \Octo\Model\Log[]
-*/
-public function getUserLogs()
-{
-return Factory::getStore('Log', 'Octo')->getByUserId($this->getId());
-}
-
-/**
-* Get PageVersion models by UserId for this User.
-*
-* @uses \Octo\Store\PageVersionStore::getByUserId()
-* @uses \Octo\Model\PageVersion
-* @return \Octo\Model\PageVersion[]
-*/
-public function getUserPageVersions()
-{
-return Factory::getStore('PageVersion', 'Octo')->getByUserId($this->getId());
-}
-
-/**
-* Get Permission models by UserId for this User.
-*
-* @uses \Octo\Store\PermissionStore::getByUserId()
-* @uses \Octo\Model\Permission
-* @return \Octo\Model\Permission[]
-*/
-public function getUserPermissions()
-{
-return Factory::getStore('Permission', 'Octo')->getByUserId($this->getId());
-}
-
-
-
-public static function getByPrimaryKey($value, $useConnection = 'read')
-{
-return Factory::getStore('User', 'Octo')->getByPrimaryKey($value, $useConnection);
-}
-
-
-public static function getById($value, $useConnection = 'read')
-{
-return Factory::getStore('User', 'Octo')->getById($value, $useConnection);
-}
-
-public static function getByEmail($value, $useConnection = 'read')
-{
-return Factory::getStore('User', 'Octo')->getByEmail($value, $useConnection);
-}
-
+        $this->data['is_hidden'] = $value;
+        $this->setModified('is_hidden');
+    }
 
 }

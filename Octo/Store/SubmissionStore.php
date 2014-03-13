@@ -50,9 +50,9 @@ class SubmissionStore extends SubmissionStoreBase
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn);
+            return $rtn;
         } else {
-            return array('items' => array());
+            return [];
         }
     }
 
@@ -72,9 +72,9 @@ class SubmissionStore extends SubmissionStoreBase
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn);
+            return $rtn;
         } else {
-            return array('items' => array());
+            return [];
         }
     }
 }

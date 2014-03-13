@@ -224,7 +224,7 @@ class MediaController extends Controller
 
         $rtn = ['results' => [], 'more' => false];
 
-        foreach ($files['items'] as $file) {
+        foreach ($files as $file) {
             $rtn['results'][] = ['id' => $file->getId(), 'text' => $file->getTitle()];
         }
 
@@ -276,13 +276,13 @@ class MediaController extends Controller
     {
         $files = $this->fileStore->getAllForScope($scope);
         File::$sleepable = array('id', 'url', 'title');
-        foreach ($files['items'] as &$item) {
+        foreach ($files as &$item) {
             $imageData = getimagesize($item->getPath());
             $item = $item->toArray(1);
             $item['width'] = $imageData[0];
             $item['height'] = $imageData[1];
         }
-        print json_encode($files['items']);
+        print json_encode($files);
         exit;
     }
 }

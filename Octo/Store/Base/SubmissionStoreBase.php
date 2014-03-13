@@ -6,8 +6,11 @@
 
 namespace Octo\Store\Base;
 
+use PDOException;
 use b8\Database;
-use b8\Exception\HttpException;
+use b8\Database\Query;
+use b8\Database\Query\Criteria;
+use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Model\Submission;
 
@@ -20,109 +23,148 @@ class SubmissionStoreBase extends Store
     protected $modelName   = '\Octo\Model\Submission';
     protected $primaryKey  = 'id';
 
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Submission
+    */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
         return $this->getById($value, $useConnection);
-}
+    }
 
-public function getById($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
 
-$query = 'SELECT * FROM `submission` WHERE `id` = :id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':id', $value);
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Submission
+    */
+    public function getById($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new Submission($data);
-}
-}
+        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query->select('*')->from('submission')->limit(1);
+        $query->where('`id` = :id');
+        $query->bind(':id', $value);
 
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Submission by Submission', 0, $ex);
+        }
+    }
 
-public function getByFormId($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForFormId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query->from('submission')->where('`form_id` = :form_id');
+        $query->bind(':form_id', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `submission` WHERE `form_id` = :form_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':form_id', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Submission by FormId', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Submission[]
+     */
+    public function getByFormId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `submission` WHERE `form_id` = :form_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':form_id', $value);
+        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query->from('submission')->where('`form_id` = :form_id');
+        $query->bind(':form_id', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Submission($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Submission by FormId', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 
-public function getByContactId($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForContactId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$add = '';
+        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query->from('submission')->where('`contact_id` = :contact_id');
+        $query->bind(':contact_id', $value);
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT COUNT(*) AS cnt FROM `submission` WHERE `contact_id` = :contact_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':contact_id', $value);
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Submission by ContactId', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Submission[]
+     */
+    public function getByContactId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT * FROM `submission` WHERE `contact_id` = :contact_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':contact_id', $value);
+        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query->from('submission')->where('`contact_id` = :contact_id');
+        $query->bind(':contact_id', $value);
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->handleQueryOptions($query, $options);
 
-$map = function ($item) {
-return new Submission($item);
-};
-$rtn = array_map($map, $res);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Submission by ContactId', 0, $ex);
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 }

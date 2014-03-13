@@ -219,7 +219,7 @@ class UserController extends Controller
     protected function preparePermissionsTree($user, $tree, $permissions)
     {
         $perms = [];
-        foreach ($permissions['items'] as $perm) {
+        foreach ($permissions as $perm) {
             $perms[$perm->getUri()] = (bool)$perm->getCanAccess();
         }
 

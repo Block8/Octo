@@ -17,7 +17,7 @@ class FileDownloadBase extends Model
     /**
     * @var array
     */
-    public static $sleepable = array();
+    public static $sleepable = [];
 
     /**
     * @var string
@@ -32,253 +32,222 @@ class FileDownloadBase extends Model
     /**
     * @var array
     */
-    protected $data = array(
+    protected $data = [
         'id' => null,
         'file_id' => null,
         'downloaded' => null,
-);
+    ];
 
-/**
-* @var array
-*/
-protected $getters = array(
-// Direct property getters:
-'id' => 'getId',
-'file_id' => 'getFileId',
-'downloaded' => 'getDownloaded',
+    /**
+    * @var array
+    */
+    protected $getters = [
+        // Direct property getters:
+        'id' => 'getId',
+        'file_id' => 'getFileId',
+        'downloaded' => 'getDownloaded',
 
-// Foreign key getters:
-'File' => 'getFile',
-);
+        // Foreign key getters:
+        'File' => 'getFile',
+    ];
 
-/**
-* @var array
-*/
-protected $setters = array(
-// Direct property setters:
-'id' => 'setId',
-'file_id' => 'setFileId',
-'downloaded' => 'setDownloaded',
+    /**
+    * @var array
+    */
+    protected $setters = [
+        // Direct property setters:
+        'id' => 'setId',
+        'file_id' => 'setFileId',
+        'downloaded' => 'setDownloaded',
 
-// Foreign key setters:
-'File' => 'setFile',
-);
+        // Foreign key setters:
+        'File' => 'setFile',
+    ];
 
-/**
-* @var array
-*/
-public $columns = array(
-'id' => array(
-'type' => 'int',
-'length' => 11,
-'primary_key' => true,
-'auto_increment' => true,
-'default' => null,
-),
-'file_id' => array(
-'type' => 'char',
-'length' => 32,
-'nullable' => true,
-'default' => null,
-),
-'downloaded' => array(
-'type' => 'datetime',
-'nullable' => true,
-'default' => null,
-),
-);
+    /**
+    * @var array
+    */
+    public $columns = [
+        'id' => [
+            'type' => 'int',
+            'length' => 11,
+            'primary_key' => true,
+            'auto_increment' => true,
+            'default' => null,
+        ],
+        'file_id' => [
+            'type' => 'char',
+            'length' => 32,
+            'nullable' => true,
+            'default' => null,
+        ],
+        'downloaded' => [
+            'type' => 'datetime',
+            'nullable' => true,
+            'default' => null,
+        ],
+    ];
 
-/**
-* @var array
-*/
-public $indexes = array(
-'PRIMARY' => array('unique' => true, 'columns' => 'id'),
-'file_id' => array('columns' => 'file_id'),
-);
+    /**
+    * @var array
+    */
+    public $indexes = [
+        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
+        'file_id' => ['columns' => 'file_id'],
+    ];
 
-/**
-* @var array
-*/
-public $foreignKeys = array(
-'file_download_ibfk_1' => array(
-'local_col' => 'file_id',
-'update' => 'CASCADE',
-'delete' => 'CASCADE',
-'table' => 'file',
-'col' => 'id'
-),
-);
+    /**
+    * @var array
+    */
+    public $foreignKeys = [
+        'file_download_ibfk_1' => [
+            'local_col' => 'file_id',
+            'update' => 'CASCADE',
+            'delete' => 'CASCADE',
+            'table' => 'file',
+            'col' => 'id'
+        ],
+    ];
 
-/**
-* Get the value of Id / id.
-*
-* @return int
-*/
-public function getId()
-{
-$rtn    = $this->data['id'];
+    /**
+    * Get the value of Id / id.
+    *
+    * @return int
+    */
+    public function getId()
+    {
+        $rtn = $this->data['id'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of FileId / file_id.
-*
-* @return string
-*/
-public function getFileId()
-{
-$rtn    = $this->data['file_id'];
+    /**
+    * Get the value of FileId / file_id.
+    *
+    * @return string
+    */
+    public function getFileId()
+    {
+        $rtn = $this->data['file_id'];
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Get the value of Downloaded / downloaded.
-*
-* @return \DateTime
-*/
-public function getDownloaded()
-{
-$rtn    = $this->data['downloaded'];
+    /**
+    * Get the value of Downloaded / downloaded.
+    *
+    * @return \DateTime
+    */
+    public function getDownloaded()
+    {
+        $rtn = $this->data['downloaded'];
 
-if (!empty($rtn)) {
-$rtn    = new \DateTime($rtn);
-}
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
 
-return $rtn;
-}
+        return $rtn;
+    }
 
-/**
-* Set the value of Id / id.
-*
-* Must not be null.
-* @param $value int
-*/
-public function setId($value)
-{
-$this->validateNotNull('Id', $value);
-$this->validateInt('Id', $value);
+    /**
+    * Set the value of Id / id.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setId($value)
+    {
+        $this->validateNotNull('Id', $value);
+        $this->validateInt('Id', $value);
 
-if ($this->data['id'] === $value) {
-return;
-}
+        if ($this->data['id'] === $value) {
+            return;
+        }
 
-$this->data['id'] = $value;
+        $this->data['id'] = $value;
+        $this->setModified('id');
+    }
 
-$this->setModified('id');
-}
+    /**
+    * Set the value of FileId / file_id.
+    *
+    * @param $value string
+    */
+    public function setFileId($value)
+    {
+        $this->validateString('FileId', $value);
 
-/**
-* Set the value of FileId / file_id.
-*
-* @param $value string
-*/
-public function setFileId($value)
-{
-$this->validateString('FileId', $value);
+        if ($this->data['file_id'] === $value) {
+            return;
+        }
 
-if ($this->data['file_id'] === $value) {
-return;
-}
+        $this->data['file_id'] = $value;
+        $this->setModified('file_id');
+    }
 
-$this->data['file_id'] = $value;
+    /**
+    * Set the value of Downloaded / downloaded.
+    *
+    * @param $value \DateTime
+    */
+    public function setDownloaded($value)
+    {
+        $this->validateDate('Downloaded', $value);
 
-$this->setModified('file_id');
-}
+        if ($this->data['downloaded'] === $value) {
+            return;
+        }
 
-/**
-* Set the value of Downloaded / downloaded.
-*
-* @param $value \DateTime
-*/
-public function setDownloaded($value)
-{
-$this->validateDate('Downloaded', $value);
+        $this->data['downloaded'] = $value;
+        $this->setModified('downloaded');
+    }
 
-if ($this->data['downloaded'] === $value) {
-return;
-}
+    /**
+    * Get the File model for this FileDownload by Id.
+    *
+    * @uses \Octo\Store\FileStore::getById()
+    * @uses \Octo\Model\File
+    * @return \Octo\Model\File
+    */
+    public function getFile()
+    {
+        $key = $this->getFileId();
 
-$this->data['downloaded'] = $value;
+        if (empty($key)) {
+            return null;
+        }
 
-$this->setModified('downloaded');
-}
+        return Factory::getStore('File', 'Octo')->getById($key);
+    }
 
-/**
-* Get the File model for this FileDownload by Id.
-*
-* @uses \Octo\Store\FileStore::getById()
-* @uses \Octo\Model\File
-* @return \Octo\Model\File
-*/
-public function getFile()
-{
-$key = $this->getFileId();
+    /**
+    * Set File - Accepts an ID, an array representing a File or a File model.
+    *
+    * @param $value mixed
+    */
+    public function setFile($value)
+    {
+        // Is this an instance of File?
+        if ($value instanceof \Octo\Model\File) {
+            return $this->setFileObject($value);
+        }
 
-if (empty($key)) {
-return null;
-}
+        // Is this an array representing a File item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setFileId($value['id']);
+        }
 
-$cacheKey   = 'Cache.File.' . $key;
-$rtn        = $this->cache->get($cacheKey, null);
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setFileId($value);
+    }
 
-if (empty($rtn)) {
-$rtn    = Factory::getStore('File', 'Octo')->getById($key);
-$this->cache->set($cacheKey, $rtn);
-}
-
-return $rtn;
-}
-
-/**
-* Set File - Accepts an ID, an array representing a File or a File model.
-*
-* @param $value mixed
-*/
-public function setFile($value)
-{
-// Is this an instance of File?
-if ($value instanceof \Octo\Model\File) {
-return $this->setFileObject($value);
-}
-
-// Is this an array representing a File item?
-if (is_array($value) && !empty($value['id'])) {
-return $this->setFileId($value['id']);
-}
-
-// Is this a scalar value representing the ID of this foreign key?
-return $this->setFileId($value);
-}
-
-/**
-* Set File - Accepts a File model.
-*
-* @param $value \Octo\Model\File
-*/
-public function setFileObject(\Octo\Model\File $value)
-{
-return $this->setFileId($value->getId());
-}
-
-
-
-public static function getByPrimaryKey($value, $useConnection = 'read')
-{
-return Factory::getStore('FileDownload', 'Octo')->getByPrimaryKey($value, $useConnection);
-}
-
-
-public static function getById($value, $useConnection = 'read')
-{
-return Factory::getStore('FileDownload', 'Octo')->getById($value, $useConnection);
-}
-
-public static function getByFileId($value, $limit = null, $useConnection = 'read')
-{
-return Factory::getStore('FileDownload', 'Octo')->getByFileId($value, $limit, $useConnection);
-}
-
-
+    /**
+    * Set File - Accepts a File model.
+    *
+    * @param $value \Octo\Model\File
+    */
+    public function setFileObject(\Octo\Model\File $value)
+    {
+        return $this->setFileId($value->getId());
+    }
 }

@@ -6,7 +6,7 @@
 {if gallery}
 <div class="row">
 	<div class="superbox col-sm-12">
-        {loop files.items}
+        {loop files}
 		<div class="superbox-list">
 			<img src="/media/render/{@item.id}/" alt="{@item.title}" title="{@item.title}" class="superbox-img">
 		</div>
@@ -63,7 +63,7 @@ $(document).ready( function() {
 		</tr>
 	</thead>
 	<tbody>
-        {loop files.items}
+        {loop files}
         <tbody>
             <td>{@item.title}</td>
             <td><a href="{@item.url}">{@item.filename}</a></td>

@@ -6,6 +6,7 @@
 
 namespace Octo\Model;
 
+use b8\Cache;
 use Octo\Store;
 use Octo\Model\Base\PageBase;
 use Octo\Utilities\StringUtilities;
@@ -20,6 +21,7 @@ class Page extends PageBase
     {
         parent::__construct($initialData);
         $this->getters['hasChildren'] = 'hasChildren';
+        $this->cache = Cache::getCache(Cache::TYPE_APC);
     }
 
     public function hasChildren()

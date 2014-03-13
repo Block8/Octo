@@ -63,7 +63,7 @@ class FormController extends Controller
         if ($this->request->isAjax()) {
             $rtn = [];
 
-            foreach ($forms['items'] as $form) {
+            foreach ($forms as $form) {
                 $rtn[$form->getId()] = $form->getTitle();
             }
 

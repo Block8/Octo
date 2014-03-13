@@ -6,8 +6,11 @@
 
 namespace Octo\Store\Base;
 
+use PDOException;
 use b8\Database;
-use b8\Exception\HttpException;
+use b8\Database\Query;
+use b8\Database\Query\Criteria;
+use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Model\GaTopPage;
 
@@ -20,87 +23,118 @@ class GaTopPageStoreBase extends Store
     protected $modelName   = '\Octo\Model\GaTopPage';
     protected $primaryKey  = 'id';
 
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return GaTopPage
+    */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
         return $this->getById($value, $useConnection);
-}
+    }
 
-public function getById($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
 
-$query = 'SELECT * FROM `ga_top_page` WHERE `id` = :id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':id', $value);
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return GaTopPage
+    */
+    public function getById($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new GaTopPage($data);
-}
-}
+        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query->select('*')->from('ga_top_page')->limit(1);
+        $query->where('`id` = :id');
+        $query->bind(':id', $value);
 
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get GaTopPage by GaTopPage', 0, $ex);
+        }
+    }
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return GaTopPage
+    */
+    public function getByUri($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-public function getByUri($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query->select('*')->from('ga_top_page')->limit(1);
+        $query->where('`uri` = :uri');
+        $query->bind(':uri', $value);
 
-$query = 'SELECT * FROM `ga_top_page` WHERE `uri` = :uri LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':uri', $value);
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get GaTopPage by GaTopPage', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new GaTopPage($data);
-}
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForPageId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-return null;
-}
+        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query->from('ga_top_page')->where('`page_id` = :page_id');
+        $query->bind(':page_id', $value);
 
-public function getByPageId($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $this->handleQueryOptions($query, $options);
 
-$add = '';
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of GaTopPage by PageId', 0, $ex);
+        }
+    }
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return GaTopPage[]
+     */
+    public function getByPageId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT COUNT(*) AS cnt FROM `ga_top_page` WHERE `page_id` = :page_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':page_id', $value);
+        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query->from('ga_top_page')->where('`page_id` = :page_id');
+        $query->bind(':page_id', $value);
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT * FROM `ga_top_page` WHERE `page_id` = :page_id' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':page_id', $value);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get GaTopPage by PageId', 0, $ex);
+        }
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-$map = function ($item) {
-return new GaTopPage($item);
-};
-$rtn = array_map($map, $res);
-
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 }

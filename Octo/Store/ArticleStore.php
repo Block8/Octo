@@ -7,6 +7,7 @@
 namespace Octo\Store;
 
 use b8\Database;
+use b8\Database\Query;
 use Octo\Store\Base\ArticleStoreBase;
 use Octo\Model\Article;
 
@@ -23,27 +24,15 @@ class ArticleStore extends ArticleStoreBase
      * @param string $order
      * @return array
      */
-    public function getAllForCategoryScope($scope, $order = 'name ASC')
+    public function getAllForCategoryScope($scope, $order = 'name', $direction = 'ASC')
     {
-        $query = 'SELECT article.* FROM article
-                    LEFT JOIN category ON category.id = article.category_id
-                    WHERE category.scope = :scope
-                    ORDER BY ' . $order;
-        $stmt = Database::getConnection('read')->prepare($query);
-        $stmt->bindParam(':scope', $scope);
+        $query = new Query('Octo\Model\Article');
+        $query->select('a.*')->from('article', 'a')->join('category', 'c', 'c.id = a.category_id');
+        $query->where('c.scope = :scope');
+        $query->order($order, $direction);
+        $query->bind(':scope', $scope);
 
-        if ($stmt->execute()) {
-            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            $map = function ($item) {
-                return new Article($item);
-            };
-            $rtn = array_map($map, $res);
-
-            return array('items' => $rtn);
-        } else {
-            return array('items' => array());
-        }
+        return $query->execute()->fetchAll();
     }
 
     /**
@@ -89,9 +78,9 @@ class ArticleStore extends ArticleStoreBase
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn, 'count' => $count);
+            return $rtn;
         }
 
-        return array('items' => array(), 'count' => $count);
+        return [];
     }
 }

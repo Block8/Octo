@@ -28,9 +28,9 @@ class GaTopPageStore extends GaTopPageStoreBase
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn);
+            return $rtn;
         } else {
-            return array('items' => array());
+            return [];
         }
     }
 }

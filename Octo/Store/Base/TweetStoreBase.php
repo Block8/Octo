@@ -6,8 +6,11 @@
 
 namespace Octo\Store\Base;
 
+use PDOException;
 use b8\Database;
-use b8\Exception\HttpException;
+use b8\Database\Query;
+use b8\Database\Query\Criteria;
+use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Model\Tweet;
 
@@ -20,128 +23,172 @@ class TweetStoreBase extends Store
     protected $modelName   = '\Octo\Model\Tweet';
     protected $primaryKey  = 'id';
 
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Tweet
+    */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
         return $this->getById($value, $useConnection);
-}
+    }
 
-public function getById($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
 
-$query = 'SELECT * FROM `tweet` WHERE `id` = :id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':id', $value);
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Tweet
+    */
+    public function getById($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new Tweet($data);
-}
-}
+        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query->select('*')->from('tweet')->limit(1);
+        $query->where('`id` = :id');
+        $query->bind(':id', $value);
 
-return null;
-}
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Tweet by Tweet', 0, $ex);
+        }
+    }
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Tweet
+    */
+    public function getByTwitterId($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-public function getByTwitterId($value, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query->select('*')->from('tweet')->limit(1);
+        $query->where('`twitter_id` = :twitter_id');
+        $query->bind(':twitter_id', $value);
 
-$query = 'SELECT * FROM `tweet` WHERE `twitter_id` = :twitter_id LIMIT 1';
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':twitter_id', $value);
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Tweet by Tweet', 0, $ex);
+        }
+    }
 
-if ($stmt->execute()) {
-if ($data = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-return new Tweet($data);
-}
-}
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForScreenname($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-return null;
-}
+        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query->from('tweet')->where('`screenname` = :screenname');
+        $query->bind(':screenname', $value);
 
-public function getByScreenname($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $this->handleQueryOptions($query, $options);
 
-$add = '';
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Tweet by Screenname', 0, $ex);
+        }
+    }
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Tweet[]
+     */
+    public function getByScreenname($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT COUNT(*) AS cnt FROM `tweet` WHERE `screenname` = :screenname' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':screenname', $value);
+        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query->from('tweet')->where('`screenname` = :screenname');
+        $query->bind(':screenname', $value);
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT * FROM `tweet` WHERE `screenname` = :screenname' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':screenname', $value);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Tweet by Screenname', 0, $ex);
+        }
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
-$map = function ($item) {
-return new Tweet($item);
-};
-$rtn = array_map($map, $res);
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForScope($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query->from('tweet')->where('`scope` = :scope');
+        $query->bind(':scope', $value);
 
-public function getByScope($value, $limit = null, $useConnection = 'read')
-{
-if (is_null($value)) {
-throw new HttpException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-}
+        $this->handleQueryOptions($query, $options);
 
-$add = '';
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Tweet by Scope', 0, $ex);
+        }
+    }
 
-if ($limit) {
-$add .= ' LIMIT ' . $limit;
-}
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Tweet[]
+     */
+    public function getByScope($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
 
-$query = 'SELECT COUNT(*) AS cnt FROM `tweet` WHERE `scope` = :scope' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':scope', $value);
+        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query->from('tweet')->where('`scope` = :scope');
+        $query->bind(':scope', $value);
 
-if ($stmt->execute()) {
-$res    = $stmt->fetch(\PDO::FETCH_ASSOC);
-$count  = (int)$res['cnt'];
-} else {
-$count = 0;
-}
+        $this->handleQueryOptions($query, $options);
 
-$query = 'SELECT * FROM `tweet` WHERE `scope` = :scope' . $add;
-$stmt = Database::getConnection($useConnection)->prepare($query);
-$stmt->bindValue(':scope', $value);
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Tweet by Scope', 0, $ex);
+        }
 
-if ($stmt->execute()) {
-$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-$map = function ($item) {
-return new Tweet($item);
-};
-$rtn = array_map($map, $res);
-
-return array('items' => $rtn, 'count' => $count);
-} else {
-return array('items' => array(), 'count' => 0);
-}
-}
+    }
 }

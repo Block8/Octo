@@ -110,7 +110,7 @@ class PageStore extends PageStoreBase
         }
 
         $children = $this->getByParentId($parent->getId());
-        foreach ($children['items'] as $page) {
+        foreach ($children as $page) {
             $options[$page->getId()] = $prefix  . $page->getCurrentVersion()->getTitle();
             $options = $this->getParentPageOptions($options, $page, '--' . $prefix);
         }
@@ -132,9 +132,9 @@ class PageStore extends PageStoreBase
             };
             $rtn = array_map($map, $res);
 
-            return array('items' => $rtn);
+            return $rtn;
         } else {
-            return array('items' => array());
+            return [];
         }
     }
 }

@@ -76,8 +76,7 @@ class PageController extends Controller
         $pages = $this->pageStore->getByParentId($parentId);
 
         if (isset($parent)) {
-            array_unshift($pages['items'], $parent);
-            $pages['count']++;
+            array_unshift($pages, $parent);
         }
 
         $this->view->pages = $pages;
