@@ -104,7 +104,7 @@ class PageController extends Controller
 
         $templates = [];
         foreach ($this->getTemplates() as $template) {
-            $templates[$template] = $template;
+            $templates[$template] = ucwords($template);
         }
 
         if (!count($templates)) {

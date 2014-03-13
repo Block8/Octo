@@ -1,11 +1,13 @@
 <?php
 namespace Octo\Admin\Controller;
 
+use DateTime;
 use b8\Form;
 use Octo\Store;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
+use Octo\Event;
 use Octo\Model\Article;
 use Octo\Model\ContentItem;
 
@@ -96,6 +98,9 @@ class NewsController extends Controller
                     $article->setUpdatedDate(new \DateTime());
                     $article->setSummary($article->generateSummary());
                     $article->setSlug($article->generateSlug());
+
+                    Event::trigger('before' . $this->articleType . 'Save', $article);
+
                     $article = $this->articleStore->save($article);
 
                     $this->successMessage($article->getTitle() . ' was added successfully.', true);
@@ -151,6 +156,9 @@ class NewsController extends Controller
                     }
 
                     $article->setSlug($article->generateSlug());
+
+                    Event::trigger('before' . $this->articleType . 'Save', $article);
+
                     $article = $this->articleStore->save($article);
 
                     $this->successMessage($article->getTitle() . ' was edited successfully.', true);
@@ -235,10 +243,24 @@ class NewsController extends Controller
         $field->setClass('select2');
         $fieldset->addField($field);
 
+        $field = new Form\Element\Text('publish_date');
+        $field->setLabel('Published Date');
+
+        if (!isset($values['publish_date'])) {
+            $values['publish_date'] = (new DateTime())->format('l j F Y');
+        } else {
+            $values['publish_date'] = (new DateTime($values['publish_date']))->format('l j F Y');
+        }
+
+        $field->setClass('sa-datepicker');
+        $fieldset->addField($field);
+
+        Event::trigger($this->scope . 'Form', $form);
+
         $field = new Form\Element\Submit();
         $field->setValue('Save ' . $this->articleType);
         $field->setClass('btn-success');
-        $fieldset->addField($field);
+        $form->addField($field);
 
         $form->setValues($values);
         return $form;

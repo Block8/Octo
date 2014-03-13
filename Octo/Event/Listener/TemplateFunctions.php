@@ -25,6 +25,8 @@ class TemplateFunctions extends Listener
                 $format = 'jS F Y, g:ia';
             } elseif ($args['format'] == 'short') {
                 $format = 'd/m/Y g:ia';
+            } elseif ($args['format'] == 'long_date') {
+                $format = 'jS F Y';
             } elseif ($args['format'] == 'date') {
                 $format = 'd/m/Y';
             } elseif ($args['format'] == 'time') {
