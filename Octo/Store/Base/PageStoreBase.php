@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Page;
 /**
  * Page Base Store
  */
-class PageStoreBase extends Store
+trait PageStoreBase
 {
-    protected $tableName   = 'page';
-    protected $modelName   = '\Octo\Model\Page';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'page';
+        $this->modelName = '\Octo\Model\Page';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

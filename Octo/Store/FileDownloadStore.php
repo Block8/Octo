@@ -6,13 +6,13 @@
 
 namespace Octo\Store;
 
-use Octo\Store\Base\FileDownloadStoreBase;
+use Octo;
 
 /**
  * FileDownload Store
  * @uses Octo\Store\Base\FileDownloadStoreBase
  */
-class FileDownloadStore extends FileDownloadStoreBase
+class FileDownloadStore extends Octo\Store
 {
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    use Base\FileDownloadStoreBase;
 }

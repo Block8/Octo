@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Menu;
 /**
  * Menu Base Store
  */
-class MenuStoreBase extends Store
+trait MenuStoreBase
 {
-    protected $tableName   = 'menu';
-    protected $modelName   = '\Octo\Model\Menu';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'menu';
+        $this->modelName = '\Octo\Model\Menu';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

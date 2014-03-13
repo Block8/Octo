@@ -7,14 +7,16 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\SearchIndexStoreBase;
+use Octo;
 
 /**
  * SearchIndex Store
  * @uses Octo\Store\Base\SearchIndexStoreBase
  */
-class SearchIndexStore extends SearchIndexStoreBase
+class SearchIndexStore extends Octo\Store
 {
+    use Base\SearchIndexStoreBase;
+
     public function search($string)
     {
         $database = Database::getConnection('read');

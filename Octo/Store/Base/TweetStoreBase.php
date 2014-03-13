@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Tweet;
 /**
  * Tweet Base Store
  */
-class TweetStoreBase extends Store
+trait TweetStoreBase
 {
-    protected $tableName   = 'tweet';
-    protected $modelName   = '\Octo\Model\Tweet';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'tweet';
+        $this->modelName = '\Octo\Model\Tweet';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

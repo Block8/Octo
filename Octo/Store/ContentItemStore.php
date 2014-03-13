@@ -6,13 +6,13 @@
 
 namespace Octo\Store;
 
-use Octo\Store\Base\ContentItemStoreBase;
+use Octo;
 
 /**
  * ContentItem Store
  * @uses Octo\Store\Base\ContentItemStoreBase
  */
-class ContentItemStore extends ContentItemStoreBase
+class ContentItemStore extends Octo\Store
 {
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    use Base\ContentItemStoreBase;
 }

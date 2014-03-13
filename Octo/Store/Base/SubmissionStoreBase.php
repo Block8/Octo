@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Submission;
 /**
  * Submission Base Store
  */
-class SubmissionStoreBase extends Store
+trait SubmissionStoreBase
 {
-    protected $tableName   = 'submission';
-    protected $modelName   = '\Octo\Model\Submission';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'submission';
+        $this->modelName = '\Octo\Model\Submission';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

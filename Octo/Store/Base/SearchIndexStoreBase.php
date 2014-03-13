@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\SearchIndex;
 /**
  * SearchIndex Base Store
  */
-class SearchIndexStoreBase extends Store
+trait SearchIndexStoreBase
 {
-    protected $tableName   = 'search_index';
-    protected $modelName   = '\Octo\Model\SearchIndex';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'search_index';
+        $this->modelName = '\Octo\Model\SearchIndex';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

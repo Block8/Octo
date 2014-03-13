@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\GaTopPage;
 /**
  * GaTopPage Base Store
  */
-class GaTopPageStoreBase extends Store
+trait GaTopPageStoreBase
 {
-    protected $tableName   = 'ga_top_page';
-    protected $modelName   = '\Octo\Model\GaTopPage';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'ga_top_page';
+        $this->modelName = '\Octo\Model\GaTopPage';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

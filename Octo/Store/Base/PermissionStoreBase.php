@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Permission;
 /**
  * Permission Base Store
  */
-class PermissionStoreBase extends Store
+trait PermissionStoreBase
 {
-    protected $tableName   = 'permission';
-    protected $modelName   = '\Octo\Model\Permission';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'permission';
+        $this->modelName = '\Octo\Model\Permission';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

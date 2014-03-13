@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Form;
 /**
  * Form Base Store
  */
-class FormStoreBase extends Store
+trait FormStoreBase
 {
-    protected $tableName   = 'form';
-    protected $modelName   = '\Octo\Model\Form';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'form';
+        $this->modelName = '\Octo\Model\Form';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
+use Octo;
 use Octo\Model\User;
-use Octo\Store\Base\PermissionStoreBase;
 
 /**
  * Permission Store
  * @uses Octo\Store\Base\PermissionStoreBase
  */
-class PermissionStore extends PermissionStoreBase
+class PermissionStore extends Octo\Store
 {
+    use Base\PermissionStoreBase;
+
     public function updatePermissions($userId, $perms)
     {
         $pdo = Database::getConnection('write');

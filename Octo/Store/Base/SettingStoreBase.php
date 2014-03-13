@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Setting;
 /**
  * Setting Base Store
  */
-class SettingStoreBase extends Store
+trait SettingStoreBase
 {
-    protected $tableName   = 'setting';
-    protected $modelName   = '\Octo\Model\Setting';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'setting';
+        $this->modelName = '\Octo\Model\Setting';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

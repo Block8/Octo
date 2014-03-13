@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\File;
 /**
  * File Base Store
  */
-class FileStoreBase extends Store
+trait FileStoreBase
 {
-    protected $tableName   = 'file';
-    protected $modelName   = '\Octo\Model\File';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'file';
+        $this->modelName = '\Octo\Model\File';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

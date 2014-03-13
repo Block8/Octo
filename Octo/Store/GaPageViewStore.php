@@ -8,15 +8,17 @@ namespace Octo\Store;
 
 use DateTime;
 use b8\Database;
-use Octo\Store\Base\GaPageViewStoreBase;
+use Octo;
 use Octo\Model\GaPageView;
 
 /**
  * GaPageView Store
  * @uses Octo\Store\Base\GaPageViewStoreBase
  */
-class GaPageViewStore extends GaPageViewStoreBase
+class GaPageViewStore extends Octo\Store
 {
+    use Base\GaPageViewStoreBase;
+
     /**
      * Get the results for the given metric between the given dates
      *

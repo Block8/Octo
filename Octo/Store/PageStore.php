@@ -6,17 +6,19 @@
 
 namespace Octo\Store;
 
+use Octo;
 use b8\Database;
 use Octo\Model\Page;
 use Octo\Model\PageVersion;
-use Octo\Store\Base\PageStoreBase;
 
 /**
  * Page Store
  * @uses Octo\Store\Base\PageStoreBase
  */
-class PageStore extends PageStoreBase
+class PageStore extends Octo\Store
 {
+    use Base\PageStoreBase;
+
     /**
      * Get the homepage for the current site.
      * @param string $useConnection

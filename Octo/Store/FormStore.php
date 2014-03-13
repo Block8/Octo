@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
+use Octo;
 use Octo\Model\Form;
-use Octo\Store\Base\FormStoreBase;
 
 /**
  * Form Store
  * @uses Octo\Store\Base\FormStoreBase
  */
-class FormStore extends FormStoreBase
+class FormStore extends Octo\Store
 {
+    use Base\FormStoreBase;
+
     public function getAll($start = 0, $limit = 25)
     {
         $query = 'SELECT * FROM form ORDER BY title ASC LIMIT :start, :limit';

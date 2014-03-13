@@ -7,14 +7,16 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\MigrationStoreBase;
+use Octo;
 
 /**
  * Migration Store
  * @uses Octo\Store\Base\MigrationStoreBase
  */
-class MigrationStore extends MigrationStoreBase
+class MigrationStore extends Octo\Store
 {
+    use Base\MigrationStoreBase;
+
     public function runMigration(array $migration)
     {
         $pdo = Database::getConnection('write');

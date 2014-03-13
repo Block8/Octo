@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\TweetStoreBase;
+use Octo;
 use Octo\Model\Tweet;
 
 /**
  * Tweet Store
  * @uses Octo\Store\Base\TweetStoreBase
  */
-class TweetStore extends TweetStoreBase
+class TweetStore extends Octo\Store
 {
+    use Base\TweetStoreBase;
+
     /**
      * Retrieve a tweet by a Twitter ID for a particular scope
      *

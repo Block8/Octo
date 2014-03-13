@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\SettingStoreBase;
+use Octo;
 use Octo\Model\Setting;
 
 /**
  * Setting Store
  * @uses Octo\Store\Base\SettingStoreBase
  */
-class SettingStore extends SettingStoreBase
+class SettingStore extends Octo\Store
 {
+    use Base\SettingStoreBase;
+
     public function getSettingValue($scope, $key)
     {
         $query = 'SELECT setting.* FROM setting WHERE scope = :scope AND `key` = :key LIMIT 1';

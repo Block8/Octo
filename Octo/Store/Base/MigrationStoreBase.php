@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Migration;
 /**
  * Migration Base Store
  */
-class MigrationStoreBase extends Store
+trait MigrationStoreBase
 {
-    protected $tableName   = 'migration';
-    protected $modelName   = '\Octo\Model\Migration';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'migration';
+        $this->modelName = '\Octo\Model\Migration';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

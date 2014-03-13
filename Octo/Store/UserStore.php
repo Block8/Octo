@@ -7,15 +7,16 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\UserStoreBase;
 use Octo\Model\User;
 
 /**
  * User Store
  * @uses Octo\Store\Base\UserStoreBase
  */
-class UserStore extends UserStoreBase
+class UserStore
 {
+    use Base\UserStoreBase;
+
     public function getAll($order = 'name ASC')
     {
         $count = null;

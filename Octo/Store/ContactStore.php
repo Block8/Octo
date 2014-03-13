@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
+use Octo;
 use Octo\Model\Contact;
-use Octo\Store\Base\ContactStoreBase;
 
 /**
  * Contact Store
  * @uses Octo\Store\Base\ContactStoreBase
  */
-class ContactStore extends ContactStoreBase
+class ContactStore extends Octo\Store
 {
+    use Base\ContactStoreBase;
+
     /**
      * Get the total number of submissions in the system.
      * @param string $useConnection

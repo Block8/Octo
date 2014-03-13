@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\CategoryStoreBase;
+use Octo;
 use Octo\Model\Category;
 
 /**
  * Category Store
  * @uses Octo\Store\Base\CategoryStoreBase
  */
-class CategoryStore extends CategoryStoreBase
+class CategoryStore extends Octo\Store
 {
+    use Base\CategoryStoreBase;
+
     /**
      * Return all categories for a particular scope
      *

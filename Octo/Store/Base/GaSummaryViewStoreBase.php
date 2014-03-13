@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\GaSummaryView;
 /**
  * GaSummaryView Base Store
  */
-class GaSummaryViewStoreBase extends Store
+trait GaSummaryViewStoreBase
 {
-    protected $tableName   = 'ga_summary_view';
-    protected $modelName   = '\Octo\Model\GaSummaryView';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'ga_summary_view';
+        $this->modelName = '\Octo\Model\GaSummaryView';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

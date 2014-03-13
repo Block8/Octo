@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\ContentItem;
 /**
  * ContentItem Base Store
  */
-class ContentItemStoreBase extends Store
+trait ContentItemStoreBase
 {
-    protected $tableName   = 'content_item';
-    protected $modelName   = '\Octo\Model\ContentItem';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'content_item';
+        $this->modelName = '\Octo\Model\ContentItem';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

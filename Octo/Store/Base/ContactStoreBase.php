@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\Contact;
 /**
  * Contact Base Store
  */
-class ContactStoreBase extends Store
+trait ContactStoreBase
 {
-    protected $tableName   = 'contact';
-    protected $modelName   = '\Octo\Model\Contact';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'contact';
+        $this->modelName = '\Octo\Model\Contact';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.

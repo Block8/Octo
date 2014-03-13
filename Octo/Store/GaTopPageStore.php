@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\GaTopPageStoreBase;
+use Octo;
 use Octo\Model\GaTopPage;
 
 /**
  * GaTopPage Store
  * @uses Octo\Store\Base\GaTopPageStoreBase
  */
-class GaTopPageStore extends GaTopPageStoreBase
+class GaTopPageStore extends Octo\Store
 {
+    use Base\GaTopPageStoreBase;
+
     public function getPages($limit = 5, $order = 'pageviews') {
         $query = "SELECT * FROM ga_top_page ORDER BY $order DESC LIMIT $limit";
         $stmt = Database::getConnection('read')->prepare($query);

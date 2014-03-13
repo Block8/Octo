@@ -7,15 +7,16 @@
 namespace Octo\Store;
 
 use b8\Database;
-use Octo\Store\Base\FileStoreBase;
+use Octo;
 use Octo\Model\File;
 
 /**
  * File Store
  * @uses Octo\Store\Base\FileStoreBase
  */
-class FileStore extends FileStoreBase
+class FileStore extends Octo\Store
 {
+    use Base\FileStoreBase;
 
     /**
      * @param $scope

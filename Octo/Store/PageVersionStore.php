@@ -6,12 +6,13 @@
 
 namespace Octo\Store;
 
-use Octo\Store\Base\PageVersionStoreBase;
+use Octo;
 
 /**
  * PageVersion Store
  * @uses Octo\Store\Base\PageVersionStoreBase
  */
-class PageVersionStore extends PageVersionStoreBase
+class PageVersionStore extends Octo\Store
 {
+    use Base\PageVersionStoreBase;
 }

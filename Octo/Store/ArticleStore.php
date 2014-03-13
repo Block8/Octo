@@ -8,15 +8,17 @@ namespace Octo\Store;
 
 use b8\Database;
 use b8\Database\Query;
-use Octo\Store\Base\ArticleStoreBase;
+use Octo;
 use Octo\Model\Article;
 
 /**
  * Article Store
  * @uses Octo\Store\Base\ArticleStoreBase
  */
-class ArticleStore extends ArticleStoreBase
+class ArticleStore extends Octo\Store
 {
+    use Base\ArticleStoreBase;
+
     /**
      * Return all articles for a particular category scope
      *

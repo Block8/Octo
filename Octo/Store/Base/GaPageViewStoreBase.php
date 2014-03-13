@@ -7,6 +7,7 @@
 namespace Octo\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
@@ -17,12 +18,14 @@ use Octo\Model\GaPageView;
 /**
  * GaPageView Base Store
  */
-class GaPageViewStoreBase extends Store
+trait GaPageViewStoreBase
 {
-    protected $tableName   = 'ga_page_view';
-    protected $modelName   = '\Octo\Model\GaPageView';
-    protected $primaryKey  = 'id';
-
+    protected function init()
+    {
+        $this->tableName = 'ga_page_view';
+        $this->modelName = '\Octo\Model\GaPageView';
+        $this->primaryKey = 'id';
+    }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.
