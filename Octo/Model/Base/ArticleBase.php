@@ -13,192 +13,53 @@ use b8\Store\Factory;
  */
 trait ArticleBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'article';
+        $this->modelName = 'Article';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'article';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['title'] = null;
+        $this->getters['title'] = 'getTitle';
+        $this->setters['title'] = 'setTitle';
+        $this->data['summary'] = null;
+        $this->getters['summary'] = 'getSummary';
+        $this->setters['summary'] = 'setSummary';
+        $this->data['user_id'] = null;
+        $this->getters['user_id'] = 'getUserId';
+        $this->setters['user_id'] = 'setUserId';
+        $this->data['category_id'] = null;
+        $this->getters['category_id'] = 'getCategoryId';
+        $this->setters['category_id'] = 'setCategoryId';
+        $this->data['author_id'] = null;
+        $this->getters['author_id'] = 'getAuthorId';
+        $this->setters['author_id'] = 'setAuthorId';
+        $this->data['content_item_id'] = null;
+        $this->getters['content_item_id'] = 'getContentItemId';
+        $this->setters['content_item_id'] = 'setContentItemId';
+        $this->data['created_date'] = null;
+        $this->getters['created_date'] = 'getCreatedDate';
+        $this->setters['created_date'] = 'setCreatedDate';
+        $this->data['updated_date'] = null;
+        $this->getters['updated_date'] = 'getUpdatedDate';
+        $this->setters['updated_date'] = 'setUpdatedDate';
+        $this->data['slug'] = null;
+        $this->getters['slug'] = 'getSlug';
+        $this->setters['slug'] = 'setSlug';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Article';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'title' => null,
-        'summary' => null,
-        'user_id' => null,
-        'category_id' => null,
-        'author_id' => null,
-        'content_item_id' => null,
-        'created_date' => null,
-        'updated_date' => null,
-        'slug' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'title' => 'getTitle',
-        'summary' => 'getSummary',
-        'user_id' => 'getUserId',
-        'category_id' => 'getCategoryId',
-        'author_id' => 'getAuthorId',
-        'content_item_id' => 'getContentItemId',
-        'created_date' => 'getCreatedDate',
-        'updated_date' => 'getUpdatedDate',
-        'slug' => 'getSlug',
-
-        // Foreign key getters:
-        'User' => 'getUser',
-        'Category' => 'getCategory',
-        'Author' => 'getAuthor',
-        'ContentItem' => 'getContentItem',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'title' => 'setTitle',
-        'summary' => 'setSummary',
-        'user_id' => 'setUserId',
-        'category_id' => 'setCategoryId',
-        'author_id' => 'setAuthorId',
-        'content_item_id' => 'setContentItemId',
-        'created_date' => 'setCreatedDate',
-        'updated_date' => 'setUpdatedDate',
-        'slug' => 'setSlug',
-
-        // Foreign key setters:
-        'User' => 'setUser',
-        'Category' => 'setCategory',
-        'Author' => 'setAuthor',
-        'ContentItem' => 'setContentItem',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'title' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'summary' => [
-            'type' => 'text',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'user_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'category_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'author_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'content_item_id' => [
-            'type' => 'char',
-            'length' => 32,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'created_date' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'updated_date' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'slug' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'slug' => ['unique' => true, 'columns' => 'slug'],
-        'user_id' => ['columns' => 'user_id'],
-        'category_id' => ['columns' => 'category_id'],
-        'author_id' => ['columns' => 'author_id'],
-        'content_item_id' => ['columns' => 'content_item_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'article_ibfk_1' => [
-            'local_col' => 'user_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'user',
-            'col' => 'id'
-        ],
-        'article_ibfk_2' => [
-            'local_col' => 'category_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'category',
-            'col' => 'id'
-        ],
-        'article_ibfk_3' => [
-            'local_col' => 'author_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'user',
-            'col' => 'id'
-        ],
-        'article_ibfk_4' => [
-            'local_col' => 'content_item_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'content_item',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['User'] = 'getUser';
+        $this->setters['User'] = 'setUser';
+        $this->getters['Category'] = 'getCategory';
+        $this->setters['Category'] = 'setCategory';
+        $this->getters['Author'] = 'getAuthor';
+        $this->setters['Author'] = 'setAuthor';
+        $this->getters['ContentItem'] = 'getContentItem';
+        $this->setters['ContentItem'] = 'setContentItem';
+    }
     /**
     * Get the value of Id / id.
     *

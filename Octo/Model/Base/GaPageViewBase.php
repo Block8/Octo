@@ -13,109 +13,30 @@ use b8\Store\Factory;
  */
 trait GaPageViewBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'ga_page_view';
+        $this->modelName = 'GaPageView';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'ga_page_view';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['date'] = null;
+        $this->getters['date'] = 'getDate';
+        $this->setters['date'] = 'setDate';
+        $this->data['updated'] = null;
+        $this->getters['updated'] = 'getUpdated';
+        $this->setters['updated'] = 'setUpdated';
+        $this->data['value'] = null;
+        $this->getters['value'] = 'getValue';
+        $this->setters['value'] = 'setValue';
+        $this->data['metric'] = null;
+        $this->getters['metric'] = 'getMetric';
+        $this->setters['metric'] = 'setMetric';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'GaPageView';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'date' => null,
-        'updated' => null,
-        'value' => null,
-        'metric' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'date' => 'getDate',
-        'updated' => 'getUpdated',
-        'value' => 'getValue',
-        'metric' => 'getMetric',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'date' => 'setDate',
-        'updated' => 'setUpdated',
-        'value' => 'setValue',
-        'metric' => 'setMetric',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'date' => [
-            'type' => 'date',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'updated' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'value' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'metric' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'metric' => ['unique' => true, 'columns' => 'metric, date'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

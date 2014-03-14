@@ -13,133 +13,37 @@ use b8\Store\Factory;
  */
 trait SubmissionBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'submission';
+        $this->modelName = 'Submission';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'submission';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['form_id'] = null;
+        $this->getters['form_id'] = 'getFormId';
+        $this->setters['form_id'] = 'setFormId';
+        $this->data['created_date'] = null;
+        $this->getters['created_date'] = 'getCreatedDate';
+        $this->setters['created_date'] = 'setCreatedDate';
+        $this->data['contact_id'] = null;
+        $this->getters['contact_id'] = 'getContactId';
+        $this->setters['contact_id'] = 'setContactId';
+        $this->data['extra'] = null;
+        $this->getters['extra'] = 'getExtra';
+        $this->setters['extra'] = 'setExtra';
+        $this->data['message'] = null;
+        $this->getters['message'] = 'getMessage';
+        $this->setters['message'] = 'setMessage';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Submission';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'form_id' => null,
-        'created_date' => null,
-        'contact_id' => null,
-        'extra' => null,
-        'message' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'form_id' => 'getFormId',
-        'created_date' => 'getCreatedDate',
-        'contact_id' => 'getContactId',
-        'extra' => 'getExtra',
-        'message' => 'getMessage',
-
-        // Foreign key getters:
-        'Form' => 'getForm',
-        'Contact' => 'getContact',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'form_id' => 'setFormId',
-        'created_date' => 'setCreatedDate',
-        'contact_id' => 'setContactId',
-        'extra' => 'setExtra',
-        'message' => 'setMessage',
-
-        // Foreign key setters:
-        'Form' => 'setForm',
-        'Contact' => 'setContact',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'form_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'default' => null,
-        ],
-        'created_date' => [
-            'type' => 'datetime',
-            'default' => null,
-        ],
-        'contact_id' => [
-            'type' => 'int',
-            'length' => 10,
-            'default' => null,
-        ],
-        'extra' => [
-            'type' => 'mediumtext',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'message' => [
-            'type' => 'mediumtext',
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'form_id' => ['columns' => 'form_id'],
-        'contact_id' => ['columns' => 'contact_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'submission_ibfk_1' => [
-            'local_col' => 'form_id',
-            'update' => 'CASCADE',
-            'delete' => 'CASCADE',
-            'table' => 'form',
-            'col' => 'id'
-        ],
-        'submission_ibfk_2' => [
-            'local_col' => 'contact_id',
-            'update' => 'CASCADE',
-            'delete' => 'CASCADE',
-            'table' => 'contact',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['Form'] = 'getForm';
+        $this->setters['Form'] = 'setForm';
+        $this->getters['Contact'] = 'getContact';
+        $this->setters['Contact'] = 'setContact';
+    }
     /**
     * Get the value of Id / id.
     *

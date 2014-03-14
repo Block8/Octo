@@ -13,101 +13,26 @@ use b8\Store\Factory;
  */
 trait FileDownloadBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'file_download';
+        $this->modelName = 'FileDownload';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'file_download';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['file_id'] = null;
+        $this->getters['file_id'] = 'getFileId';
+        $this->setters['file_id'] = 'setFileId';
+        $this->data['downloaded'] = null;
+        $this->getters['downloaded'] = 'getDownloaded';
+        $this->setters['downloaded'] = 'setDownloaded';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'FileDownload';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'file_id' => null,
-        'downloaded' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'file_id' => 'getFileId',
-        'downloaded' => 'getDownloaded',
-
-        // Foreign key getters:
-        'File' => 'getFile',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'file_id' => 'setFileId',
-        'downloaded' => 'setDownloaded',
-
-        // Foreign key setters:
-        'File' => 'setFile',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'file_id' => [
-            'type' => 'char',
-            'length' => 32,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'downloaded' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'file_id' => ['columns' => 'file_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'file_download_ibfk_1' => [
-            'local_col' => 'file_id',
-            'update' => 'CASCADE',
-            'delete' => 'CASCADE',
-            'table' => 'file',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['File'] = 'getFile';
+        $this->setters['File'] = 'setFile';
+    }
     /**
     * Get the value of Id / id.
     *

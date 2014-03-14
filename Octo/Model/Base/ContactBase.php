@@ -13,174 +13,54 @@ use b8\Store\Factory;
  */
 trait ContactBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'contact';
+        $this->modelName = 'Contact';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'contact';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['email'] = null;
+        $this->getters['email'] = 'getEmail';
+        $this->setters['email'] = 'setEmail';
+        $this->data['phone'] = null;
+        $this->getters['phone'] = 'getPhone';
+        $this->setters['phone'] = 'setPhone';
+        $this->data['title'] = null;
+        $this->getters['title'] = 'getTitle';
+        $this->setters['title'] = 'setTitle';
+        $this->data['gender'] = null;
+        $this->getters['gender'] = 'getGender';
+        $this->setters['gender'] = 'setGender';
+        $this->data['first_name'] = null;
+        $this->getters['first_name'] = 'getFirstName';
+        $this->setters['first_name'] = 'setFirstName';
+        $this->data['last_name'] = null;
+        $this->getters['last_name'] = 'getLastName';
+        $this->setters['last_name'] = 'setLastName';
+        $this->data['address'] = null;
+        $this->getters['address'] = 'getAddress';
+        $this->setters['address'] = 'setAddress';
+        $this->data['postcode'] = null;
+        $this->getters['postcode'] = 'getPostcode';
+        $this->setters['postcode'] = 'setPostcode';
+        $this->data['date_of_birth'] = null;
+        $this->getters['date_of_birth'] = 'getDateOfBirth';
+        $this->setters['date_of_birth'] = 'setDateOfBirth';
+        $this->data['company'] = null;
+        $this->getters['company'] = 'getCompany';
+        $this->setters['company'] = 'setCompany';
+        $this->data['marketing_optin'] = null;
+        $this->getters['marketing_optin'] = 'getMarketingOptin';
+        $this->setters['marketing_optin'] = 'setMarketingOptin';
+        $this->data['is_blocked'] = null;
+        $this->getters['is_blocked'] = 'getIsBlocked';
+        $this->setters['is_blocked'] = 'setIsBlocked';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Contact';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'email' => null,
-        'phone' => null,
-        'title' => null,
-        'gender' => null,
-        'first_name' => null,
-        'last_name' => null,
-        'address' => null,
-        'postcode' => null,
-        'date_of_birth' => null,
-        'company' => null,
-        'marketing_optin' => null,
-        'is_blocked' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'email' => 'getEmail',
-        'phone' => 'getPhone',
-        'title' => 'getTitle',
-        'gender' => 'getGender',
-        'first_name' => 'getFirstName',
-        'last_name' => 'getLastName',
-        'address' => 'getAddress',
-        'postcode' => 'getPostcode',
-        'date_of_birth' => 'getDateOfBirth',
-        'company' => 'getCompany',
-        'marketing_optin' => 'getMarketingOptin',
-        'is_blocked' => 'getIsBlocked',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'email' => 'setEmail',
-        'phone' => 'setPhone',
-        'title' => 'setTitle',
-        'gender' => 'setGender',
-        'first_name' => 'setFirstName',
-        'last_name' => 'setLastName',
-        'address' => 'setAddress',
-        'postcode' => 'setPostcode',
-        'date_of_birth' => 'setDateOfBirth',
-        'company' => 'setCompany',
-        'marketing_optin' => 'setMarketingOptin',
-        'is_blocked' => 'setIsBlocked',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'email' => [
-            'type' => 'varchar',
-            'length' => 250,
-        ],
-        'phone' => [
-            'type' => 'varchar',
-            'length' => 100,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'title' => [
-            'type' => 'varchar',
-            'length' => 25,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'gender' => [
-            'type' => 'varchar',
-            'length' => 25,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'first_name' => [
-            'type' => 'varchar',
-            'length' => 100,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'last_name' => [
-            'type' => 'varchar',
-            'length' => 100,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'address' => [
-            'type' => 'text',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'postcode' => [
-            'type' => 'varchar',
-            'length' => 10,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'date_of_birth' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'company' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'marketing_optin' => [
-            'type' => 'tinyint',
-            'length' => 1,
-        ],
-        'is_blocked' => [
-            'type' => 'tinyint',
-            'length' => 1,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

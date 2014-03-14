@@ -13,118 +13,31 @@ use b8\Store\Factory;
  */
 trait PageBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'page';
+        $this->modelName = 'Page';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'page';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['parent_id'] = null;
+        $this->getters['parent_id'] = 'getParentId';
+        $this->setters['parent_id'] = 'setParentId';
+        $this->data['current_version_id'] = null;
+        $this->getters['current_version_id'] = 'getCurrentVersionId';
+        $this->setters['current_version_id'] = 'setCurrentVersionId';
+        $this->data['uri'] = null;
+        $this->getters['uri'] = 'getUri';
+        $this->setters['uri'] = 'setUri';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Page';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'parent_id' => null,
-        'current_version_id' => null,
-        'uri' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'parent_id' => 'getParentId',
-        'current_version_id' => 'getCurrentVersionId',
-        'uri' => 'getUri',
-
-        // Foreign key getters:
-        'CurrentVersion' => 'getCurrentVersion',
-        'Parent' => 'getParent',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'parent_id' => 'setParentId',
-        'current_version_id' => 'setCurrentVersionId',
-        'uri' => 'setUri',
-
-        // Foreign key setters:
-        'CurrentVersion' => 'setCurrentVersion',
-        'Parent' => 'setParent',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'char',
-            'length' => 5,
-            'primary_key' => true,
-        ],
-        'parent_id' => [
-            'type' => 'char',
-            'length' => 5,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'current_version_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'uri' => [
-            'type' => 'varchar',
-            'length' => 500,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'uniq_page_uri' => ['unique' => true, 'columns' => 'uri'],
-        'fk_page_parent' => ['columns' => 'parent_id'],
-        'fk_page_current_version' => ['columns' => 'current_version_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'fk_page_current_version' => [
-            'local_col' => 'current_version_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'page_version',
-            'col' => 'id'
-        ],
-        'fk_page_parent' => [
-            'local_col' => 'parent_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'page',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['CurrentVersion'] = 'getCurrentVersion';
+        $this->setters['CurrentVersion'] = 'setCurrentVersion';
+        $this->getters['Parent'] = 'getParent';
+        $this->setters['Parent'] = 'setParent';
+    }
     /**
     * Get the value of Id / id.
     *

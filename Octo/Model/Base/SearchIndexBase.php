@@ -13,103 +13,30 @@ use b8\Store\Factory;
  */
 trait SearchIndexBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'search_index';
+        $this->modelName = 'SearchIndex';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'search_index';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['word'] = null;
+        $this->getters['word'] = 'getWord';
+        $this->setters['word'] = 'setWord';
+        $this->data['model'] = null;
+        $this->getters['model'] = 'getModel';
+        $this->setters['model'] = 'setModel';
+        $this->data['content_id'] = null;
+        $this->getters['content_id'] = 'getContentId';
+        $this->setters['content_id'] = 'setContentId';
+        $this->data['instances'] = null;
+        $this->getters['instances'] = 'getInstances';
+        $this->setters['instances'] = 'setInstances';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'SearchIndex';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'word' => null,
-        'model' => null,
-        'content_id' => null,
-        'instances' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'word' => 'getWord',
-        'model' => 'getModel',
-        'content_id' => 'getContentId',
-        'instances' => 'getInstances',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'word' => 'setWord',
-        'model' => 'setModel',
-        'content_id' => 'setContentId',
-        'instances' => 'setInstances',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'word' => [
-            'type' => 'varchar',
-            'length' => 50,
-        ],
-        'model' => [
-            'type' => 'varchar',
-            'length' => 50,
-        ],
-        'content_id' => [
-            'type' => 'varchar',
-            'length' => 32,
-        ],
-        'instances' => [
-            'type' => 'int',
-            'length' => 11,
-            'default' => 1,        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'idx_search' => ['columns' => 'word, instances, model, content_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

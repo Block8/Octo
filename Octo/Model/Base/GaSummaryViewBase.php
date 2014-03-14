@@ -13,101 +13,27 @@ use b8\Store\Factory;
  */
 trait GaSummaryViewBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'ga_summary_view';
+        $this->modelName = 'GaSummaryView';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'ga_summary_view';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['updated'] = null;
+        $this->getters['updated'] = 'getUpdated';
+        $this->setters['updated'] = 'setUpdated';
+        $this->data['value'] = null;
+        $this->getters['value'] = 'getValue';
+        $this->setters['value'] = 'setValue';
+        $this->data['metric'] = null;
+        $this->getters['metric'] = 'getMetric';
+        $this->setters['metric'] = 'setMetric';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'GaSummaryView';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'updated' => null,
-        'value' => null,
-        'metric' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'updated' => 'getUpdated',
-        'value' => 'getValue',
-        'metric' => 'getMetric',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'updated' => 'setUpdated',
-        'value' => 'setValue',
-        'metric' => 'setMetric',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'updated' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'value' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'metric' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'metric' => ['unique' => true, 'columns' => 'metric'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

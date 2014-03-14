@@ -13,104 +13,30 @@ use b8\Store\Factory;
  */
 trait FormBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'form';
+        $this->modelName = 'Form';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'form';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['title'] = null;
+        $this->getters['title'] = 'getTitle';
+        $this->setters['title'] = 'setTitle';
+        $this->data['recipients'] = null;
+        $this->getters['recipients'] = 'getRecipients';
+        $this->setters['recipients'] = 'setRecipients';
+        $this->data['definition'] = null;
+        $this->getters['definition'] = 'getDefinition';
+        $this->setters['definition'] = 'setDefinition';
+        $this->data['thankyou_message'] = null;
+        $this->getters['thankyou_message'] = 'getThankyouMessage';
+        $this->setters['thankyou_message'] = 'setThankyouMessage';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Form';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'title' => null,
-        'recipients' => null,
-        'definition' => null,
-        'thankyou_message' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'title' => 'getTitle',
-        'recipients' => 'getRecipients',
-        'definition' => 'getDefinition',
-        'thankyou_message' => 'getThankyouMessage',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'title' => 'setTitle',
-        'recipients' => 'setRecipients',
-        'definition' => 'setDefinition',
-        'thankyou_message' => 'setThankyouMessage',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'title' => [
-            'type' => 'varchar',
-            'length' => 250,
-        ],
-        'recipients' => [
-            'type' => 'text',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'definition' => [
-            'type' => 'mediumtext',
-            'default' => null,
-        ],
-        'thankyou_message' => [
-            'type' => 'mediumtext',
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

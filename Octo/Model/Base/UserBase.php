@@ -13,114 +13,33 @@ use b8\Store\Factory;
  */
 trait UserBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'user';
+        $this->modelName = 'User';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'user';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['email'] = null;
+        $this->getters['email'] = 'getEmail';
+        $this->setters['email'] = 'setEmail';
+        $this->data['hash'] = null;
+        $this->getters['hash'] = 'getHash';
+        $this->setters['hash'] = 'setHash';
+        $this->data['name'] = null;
+        $this->getters['name'] = 'getName';
+        $this->setters['name'] = 'setName';
+        $this->data['is_admin'] = null;
+        $this->getters['is_admin'] = 'getIsAdmin';
+        $this->setters['is_admin'] = 'setIsAdmin';
+        $this->data['is_hidden'] = null;
+        $this->getters['is_hidden'] = 'getIsHidden';
+        $this->setters['is_hidden'] = 'setIsHidden';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'User';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'email' => null,
-        'hash' => null,
-        'name' => null,
-        'is_admin' => null,
-        'is_hidden' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'email' => 'getEmail',
-        'hash' => 'getHash',
-        'name' => 'getName',
-        'is_admin' => 'getIsAdmin',
-        'is_hidden' => 'getIsHidden',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'email' => 'setEmail',
-        'hash' => 'setHash',
-        'name' => 'setName',
-        'is_admin' => 'setIsAdmin',
-        'is_hidden' => 'setIsHidden',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'email' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'default' => null,
-        ],
-        'hash' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'default' => null,
-        ],
-        'name' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'is_admin' => [
-            'type' => 'tinyint',
-            'length' => 1,
-        ],
-        'is_hidden' => [
-            'type' => 'tinyint',
-            'length' => 1,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'idx_email' => ['unique' => true, 'columns' => 'email'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

@@ -13,205 +13,59 @@ use b8\Store\Factory;
  */
 trait PageVersionBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'page_version';
+        $this->modelName = 'PageVersion';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'page_version';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['page_id'] = null;
+        $this->getters['page_id'] = 'getPageId';
+        $this->setters['page_id'] = 'setPageId';
+        $this->data['version'] = null;
+        $this->getters['version'] = 'getVersion';
+        $this->setters['version'] = 'setVersion';
+        $this->data['title'] = null;
+        $this->getters['title'] = 'getTitle';
+        $this->setters['title'] = 'setTitle';
+        $this->data['short_title'] = null;
+        $this->getters['short_title'] = 'getShortTitle';
+        $this->setters['short_title'] = 'setShortTitle';
+        $this->data['description'] = null;
+        $this->getters['description'] = 'getDescription';
+        $this->setters['description'] = 'setDescription';
+        $this->data['meta_description'] = null;
+        $this->getters['meta_description'] = 'getMetaDescription';
+        $this->setters['meta_description'] = 'setMetaDescription';
+        $this->data['content_item_id'] = null;
+        $this->getters['content_item_id'] = 'getContentItemId';
+        $this->setters['content_item_id'] = 'setContentItemId';
+        $this->data['user_id'] = null;
+        $this->getters['user_id'] = 'getUserId';
+        $this->setters['user_id'] = 'setUserId';
+        $this->data['updated_date'] = null;
+        $this->getters['updated_date'] = 'getUpdatedDate';
+        $this->setters['updated_date'] = 'setUpdatedDate';
+        $this->data['template'] = null;
+        $this->getters['template'] = 'getTemplate';
+        $this->setters['template'] = 'setTemplate';
+        $this->data['image_id'] = null;
+        $this->getters['image_id'] = 'getImageId';
+        $this->setters['image_id'] = 'setImageId';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'PageVersion';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'page_id' => null,
-        'version' => null,
-        'title' => null,
-        'short_title' => null,
-        'description' => null,
-        'meta_description' => null,
-        'content_item_id' => null,
-        'user_id' => null,
-        'updated_date' => null,
-        'template' => null,
-        'image_id' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'page_id' => 'getPageId',
-        'version' => 'getVersion',
-        'title' => 'getTitle',
-        'short_title' => 'getShortTitle',
-        'description' => 'getDescription',
-        'meta_description' => 'getMetaDescription',
-        'content_item_id' => 'getContentItemId',
-        'user_id' => 'getUserId',
-        'updated_date' => 'getUpdatedDate',
-        'template' => 'getTemplate',
-        'image_id' => 'getImageId',
-
-        // Foreign key getters:
-        'ContentItem' => 'getContentItem',
-        'Page' => 'getPage',
-        'User' => 'getUser',
-        'Image' => 'getImage',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'page_id' => 'setPageId',
-        'version' => 'setVersion',
-        'title' => 'setTitle',
-        'short_title' => 'setShortTitle',
-        'description' => 'setDescription',
-        'meta_description' => 'setMetaDescription',
-        'content_item_id' => 'setContentItemId',
-        'user_id' => 'setUserId',
-        'updated_date' => 'setUpdatedDate',
-        'template' => 'setTemplate',
-        'image_id' => 'setImageId',
-
-        // Foreign key setters:
-        'ContentItem' => 'setContentItem',
-        'Page' => 'setPage',
-        'User' => 'setUser',
-        'Image' => 'setImage',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'page_id' => [
-            'type' => 'char',
-            'length' => 5,
-        ],
-        'version' => [
-            'type' => 'int',
-            'length' => 11,
-        ],
-        'title' => [
-            'type' => 'varchar',
-            'length' => 150,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'short_title' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'description' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'meta_description' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'content_item_id' => [
-            'type' => 'char',
-            'length' => 32,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'user_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'updated_date' => [
-            'type' => 'datetime',
-            'default' => null,
-        ],
-        'template' => [
-            'type' => 'varchar',
-            'length' => 250,
-            'default' => 'default',        ],
-        'image_id' => [
-            'type' => 'char',
-            'length' => 32,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'fk_page_version_page' => ['columns' => 'page_id'],
-        'fk_page_version_user' => ['columns' => 'user_id'],
-        'fk_page_version_content_item' => ['columns' => 'content_item_id'],
-        'image_id' => ['columns' => 'image_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'fk_page_version_content_item' => [
-            'local_col' => 'content_item_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'content_item',
-            'col' => 'id'
-        ],
-        'fk_page_version_page' => [
-            'local_col' => 'page_id',
-            'update' => 'CASCADE',
-            'delete' => 'CASCADE',
-            'table' => 'page',
-            'col' => 'id'
-        ],
-        'fk_page_version_user' => [
-            'local_col' => 'user_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'user',
-            'col' => 'id'
-        ],
-        'page_version_ibfk_1' => [
-            'local_col' => 'image_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'file',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['ContentItem'] = 'getContentItem';
+        $this->setters['ContentItem'] = 'setContentItem';
+        $this->getters['Page'] = 'getPage';
+        $this->setters['Page'] = 'setPage';
+        $this->getters['User'] = 'getUser';
+        $this->setters['User'] = 'setUser';
+        $this->getters['Image'] = 'getImage';
+        $this->setters['Image'] = 'setImage';
+    }
     /**
     * Get the value of Id / id.
     *

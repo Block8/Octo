@@ -13,106 +13,29 @@ use b8\Store\Factory;
  */
 trait PermissionBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'permission';
+        $this->modelName = 'Permission';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'permission';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['user_id'] = null;
+        $this->getters['user_id'] = 'getUserId';
+        $this->setters['user_id'] = 'setUserId';
+        $this->data['uri'] = null;
+        $this->getters['uri'] = 'getUri';
+        $this->setters['uri'] = 'setUri';
+        $this->data['can_access'] = null;
+        $this->getters['can_access'] = 'getCanAccess';
+        $this->setters['can_access'] = 'setCanAccess';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Permission';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'user_id' => null,
-        'uri' => null,
-        'can_access' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'user_id' => 'getUserId',
-        'uri' => 'getUri',
-        'can_access' => 'getCanAccess',
-
-        // Foreign key getters:
-        'User' => 'getUser',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'user_id' => 'setUserId',
-        'uri' => 'setUri',
-        'can_access' => 'setCanAccess',
-
-        // Foreign key setters:
-        'User' => 'setUser',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'user_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'default' => null,
-        ],
-        'uri' => [
-            'type' => 'varchar',
-            'length' => 500,
-        ],
-        'can_access' => [
-            'type' => 'tinyint',
-            'length' => 1,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'idx_quick_check' => ['columns' => 'user_id, uri, can_access'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'permission_ibfk_1' => [
-            'local_col' => 'user_id',
-            'update' => 'CASCADE',
-            'delete' => 'CASCADE',
-            'table' => 'user',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['User'] = 'getUser';
+        $this->setters['User'] = 'setUser';
+    }
     /**
     * Get the value of Id / id.
     *

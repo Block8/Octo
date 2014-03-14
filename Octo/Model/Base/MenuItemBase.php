@@ -13,139 +13,37 @@ use b8\Store\Factory;
  */
 trait MenuItemBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'menu_item';
+        $this->modelName = 'MenuItem';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'menu_item';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['menu_id'] = null;
+        $this->getters['menu_id'] = 'getMenuId';
+        $this->setters['menu_id'] = 'setMenuId';
+        $this->data['title'] = null;
+        $this->getters['title'] = 'getTitle';
+        $this->setters['title'] = 'setTitle';
+        $this->data['page_id'] = null;
+        $this->getters['page_id'] = 'getPageId';
+        $this->setters['page_id'] = 'setPageId';
+        $this->data['url'] = null;
+        $this->getters['url'] = 'getUrl';
+        $this->setters['url'] = 'setUrl';
+        $this->data['position'] = null;
+        $this->getters['position'] = 'getPosition';
+        $this->setters['position'] = 'setPosition';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'MenuItem';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'menu_id' => null,
-        'title' => null,
-        'page_id' => null,
-        'url' => null,
-        'position' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'menu_id' => 'getMenuId',
-        'title' => 'getTitle',
-        'page_id' => 'getPageId',
-        'url' => 'getUrl',
-        'position' => 'getPosition',
-
-        // Foreign key getters:
-        'Menu' => 'getMenu',
-        'Page' => 'getPage',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'menu_id' => 'setMenuId',
-        'title' => 'setTitle',
-        'page_id' => 'setPageId',
-        'url' => 'setUrl',
-        'position' => 'setPosition',
-
-        // Foreign key setters:
-        'Menu' => 'setMenu',
-        'Page' => 'setPage',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'menu_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'title' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'page_id' => [
-            'type' => 'char',
-            'length' => 32,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'url' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'position' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'menu_id' => ['columns' => 'menu_id'],
-        'page_id' => ['columns' => 'page_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'menu_item_ibfk_1' => [
-            'local_col' => 'menu_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'menu',
-            'col' => 'id'
-        ],
-        'menu_item_ibfk_2' => [
-            'local_col' => 'page_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'page',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['Menu'] = 'getMenu';
+        $this->setters['Menu'] = 'setMenu';
+        $this->getters['Page'] = 'getPage';
+        $this->setters['Page'] = 'setPage';
+    }
     /**
     * Get the value of Id / id.
     *

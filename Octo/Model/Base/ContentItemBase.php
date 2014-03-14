@@ -13,79 +13,21 @@ use b8\Store\Factory;
  */
 trait ContentItemBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'content_item';
+        $this->modelName = 'ContentItem';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'content_item';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['content'] = null;
+        $this->getters['content'] = 'getContent';
+        $this->setters['content'] = 'setContent';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'ContentItem';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'content' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'content' => 'getContent',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'content' => 'setContent',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'char',
-            'length' => 32,
-            'primary_key' => true,
-        ],
-        'content' => [
-            'type' => 'longtext',
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

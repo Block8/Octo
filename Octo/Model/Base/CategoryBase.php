@@ -13,121 +13,32 @@ use b8\Store\Factory;
  */
 trait CategoryBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'category';
+        $this->modelName = 'Category';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'category';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['name'] = null;
+        $this->getters['name'] = 'getName';
+        $this->setters['name'] = 'setName';
+        $this->data['slug'] = null;
+        $this->getters['slug'] = 'getSlug';
+        $this->setters['slug'] = 'setSlug';
+        $this->data['scope'] = null;
+        $this->getters['scope'] = 'getScope';
+        $this->setters['scope'] = 'setScope';
+        $this->data['parent_id'] = null;
+        $this->getters['parent_id'] = 'getParentId';
+        $this->setters['parent_id'] = 'setParentId';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Category';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'name' => null,
-        'slug' => null,
-        'scope' => null,
-        'parent_id' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'name' => 'getName',
-        'slug' => 'getSlug',
-        'scope' => 'getScope',
-        'parent_id' => 'getParentId',
-
-        // Foreign key getters:
-        'Parent' => 'getParent',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'name' => 'setName',
-        'slug' => 'setSlug',
-        'scope' => 'setScope',
-        'parent_id' => 'setParentId',
-
-        // Foreign key setters:
-        'Parent' => 'setParent',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'name' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'slug' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'scope' => [
-            'type' => 'varchar',
-            'length' => 100,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'parent_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'parent_id' => ['columns' => 'parent_id'],
-        'scope' => ['columns' => 'scope'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'category_ibfk_1' => [
-            'local_col' => 'parent_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'category',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['Parent'] = 'getParent';
+        $this->setters['Parent'] = 'setParent';
+    }
     /**
     * Get the value of Id / id.
     *

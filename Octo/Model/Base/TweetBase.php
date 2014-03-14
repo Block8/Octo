@@ -13,137 +13,39 @@ use b8\Store\Factory;
  */
 trait TweetBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'tweet';
+        $this->modelName = 'Tweet';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'tweet';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['twitter_id'] = null;
+        $this->getters['twitter_id'] = 'getTwitterId';
+        $this->setters['twitter_id'] = 'setTwitterId';
+        $this->data['text'] = null;
+        $this->getters['text'] = 'getText';
+        $this->setters['text'] = 'setText';
+        $this->data['html_text'] = null;
+        $this->getters['html_text'] = 'getHtmlText';
+        $this->setters['html_text'] = 'setHtmlText';
+        $this->data['screenname'] = null;
+        $this->getters['screenname'] = 'getScreenname';
+        $this->setters['screenname'] = 'setScreenname';
+        $this->data['posted'] = null;
+        $this->getters['posted'] = 'getPosted';
+        $this->setters['posted'] = 'setPosted';
+        $this->data['created_date'] = null;
+        $this->getters['created_date'] = 'getCreatedDate';
+        $this->setters['created_date'] = 'setCreatedDate';
+        $this->data['scope'] = null;
+        $this->getters['scope'] = 'getScope';
+        $this->setters['scope'] = 'setScope';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Tweet';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'twitter_id' => null,
-        'text' => null,
-        'html_text' => null,
-        'screenname' => null,
-        'posted' => null,
-        'created_date' => null,
-        'scope' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'twitter_id' => 'getTwitterId',
-        'text' => 'getText',
-        'html_text' => 'getHtmlText',
-        'screenname' => 'getScreenname',
-        'posted' => 'getPosted',
-        'created_date' => 'getCreatedDate',
-        'scope' => 'getScope',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'twitter_id' => 'setTwitterId',
-        'text' => 'setText',
-        'html_text' => 'setHtmlText',
-        'screenname' => 'setScreenname',
-        'posted' => 'setPosted',
-        'created_date' => 'setCreatedDate',
-        'scope' => 'setScope',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'twitter_id' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'text' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'html_text' => [
-            'type' => 'text',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'screenname' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'posted' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'created_date' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'scope' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'twitter_id' => ['unique' => true, 'columns' => 'twitter_id'],
-        'screenname' => ['columns' => 'screenname'],
-        'scope' => ['columns' => 'scope'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

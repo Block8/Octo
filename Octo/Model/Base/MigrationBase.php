@@ -13,80 +13,21 @@ use b8\Store\Factory;
  */
 trait MigrationBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'migration';
+        $this->modelName = 'Migration';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'migration';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['date_run'] = null;
+        $this->getters['date_run'] = 'getDateRun';
+        $this->setters['date_run'] = 'setDateRun';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Migration';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'date_run' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'date_run' => 'getDateRun',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'date_run' => 'setDateRun',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'primary_key' => true,
-        ],
-        'date_run' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

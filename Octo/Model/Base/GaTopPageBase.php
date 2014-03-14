@@ -13,129 +13,35 @@ use b8\Store\Factory;
  */
 trait GaTopPageBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'ga_top_page';
+        $this->modelName = 'GaTopPage';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'ga_top_page';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['updated'] = null;
+        $this->getters['updated'] = 'getUpdated';
+        $this->setters['updated'] = 'setUpdated';
+        $this->data['pageviews'] = null;
+        $this->getters['pageviews'] = 'getPageviews';
+        $this->setters['pageviews'] = 'setPageviews';
+        $this->data['unique_pageviews'] = null;
+        $this->getters['unique_pageviews'] = 'getUniquePageviews';
+        $this->setters['unique_pageviews'] = 'setUniquePageviews';
+        $this->data['uri'] = null;
+        $this->getters['uri'] = 'getUri';
+        $this->setters['uri'] = 'setUri';
+        $this->data['page_id'] = null;
+        $this->getters['page_id'] = 'getPageId';
+        $this->setters['page_id'] = 'setPageId';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'GaTopPage';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'updated' => null,
-        'pageviews' => null,
-        'unique_pageviews' => null,
-        'uri' => null,
-        'page_id' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'updated' => 'getUpdated',
-        'pageviews' => 'getPageviews',
-        'unique_pageviews' => 'getUniquePageviews',
-        'uri' => 'getUri',
-        'page_id' => 'getPageId',
-
-        // Foreign key getters:
-        'Page' => 'getPage',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'updated' => 'setUpdated',
-        'pageviews' => 'setPageviews',
-        'unique_pageviews' => 'setUniquePageviews',
-        'uri' => 'setUri',
-        'page_id' => 'setPageId',
-
-        // Foreign key setters:
-        'Page' => 'setPage',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'updated' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'pageviews' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'unique_pageviews' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'uri' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'page_id' => [
-            'type' => 'char',
-            'length' => 5,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'uri' => ['unique' => true, 'columns' => 'uri'],
-        'page_id' => ['columns' => 'page_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'ga_top_page_ibfk_1' => [
-            'local_col' => 'page_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'page',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['Page'] = 'getPage';
+        $this->setters['Page'] = 'setPage';
+    }
     /**
     * Get the value of Id / id.
     *

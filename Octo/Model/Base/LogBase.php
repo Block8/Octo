@@ -13,143 +13,41 @@ use b8\Store\Factory;
  */
 trait LogBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'log';
+        $this->modelName = 'Log';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'log';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['type'] = null;
+        $this->getters['type'] = 'getType';
+        $this->setters['type'] = 'setType';
+        $this->data['scope'] = null;
+        $this->getters['scope'] = 'getScope';
+        $this->setters['scope'] = 'setScope';
+        $this->data['scope_id'] = null;
+        $this->getters['scope_id'] = 'getScopeId';
+        $this->setters['scope_id'] = 'setScopeId';
+        $this->data['user_id'] = null;
+        $this->getters['user_id'] = 'getUserId';
+        $this->setters['user_id'] = 'setUserId';
+        $this->data['message'] = null;
+        $this->getters['message'] = 'getMessage';
+        $this->setters['message'] = 'setMessage';
+        $this->data['log_date'] = null;
+        $this->getters['log_date'] = 'getLogDate';
+        $this->setters['log_date'] = 'setLogDate';
+        $this->data['link'] = null;
+        $this->getters['link'] = 'getLink';
+        $this->setters['link'] = 'setLink';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Log';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'type' => null,
-        'scope' => null,
-        'scope_id' => null,
-        'user_id' => null,
-        'message' => null,
-        'log_date' => null,
-        'link' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'type' => 'getType',
-        'scope' => 'getScope',
-        'scope_id' => 'getScopeId',
-        'user_id' => 'getUserId',
-        'message' => 'getMessage',
-        'log_date' => 'getLogDate',
-        'link' => 'getLink',
-
-        // Foreign key getters:
-        'User' => 'getUser',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'type' => 'setType',
-        'scope' => 'setScope',
-        'scope_id' => 'setScopeId',
-        'user_id' => 'setUserId',
-        'message' => 'setMessage',
-        'log_date' => 'setLogDate',
-        'link' => 'setLink',
-
-        // Foreign key setters:
-        'User' => 'setUser',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'type' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'scope' => [
-            'type' => 'varchar',
-            'length' => 32,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'scope_id' => [
-            'type' => 'varchar',
-            'length' => 32,
-        ],
-        'user_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'message' => [
-            'type' => 'varchar',
-            'length' => 500,
-        ],
-        'log_date' => [
-            'type' => 'datetime',
-            'default' => null,
-        ],
-        'link' => [
-            'type' => 'varchar',
-            'length' => 500,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'scope' => ['columns' => 'scope'],
-        'type' => ['columns' => 'type'],
-        'user_id' => ['columns' => 'user_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'log_ibfk_1' => [
-            'local_col' => 'user_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'user',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['User'] = 'getUser';
+        $this->setters['User'] = 'setUser';
+    }
     /**
     * Get the value of Id / id.
     *

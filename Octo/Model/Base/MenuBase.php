@@ -13,93 +13,24 @@ use b8\Store\Factory;
  */
 trait MenuBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'menu';
+        $this->modelName = 'Menu';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'menu';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['name'] = null;
+        $this->getters['name'] = 'getName';
+        $this->setters['name'] = 'setName';
+        $this->data['template_tag'] = null;
+        $this->getters['template_tag'] = 'getTemplateTag';
+        $this->setters['template_tag'] = 'setTemplateTag';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'Menu';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'name' => null,
-        'template_tag' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'name' => 'getName',
-        'template_tag' => 'getTemplateTag',
-
-        // Foreign key getters:
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'name' => 'setName',
-        'template_tag' => 'setTemplateTag',
-
-        // Foreign key setters:
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'int',
-            'length' => 11,
-            'primary_key' => true,
-            'auto_increment' => true,
-            'default' => null,
-        ],
-        'name' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'template_tag' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'template_tag' => ['unique' => true, 'columns' => 'template_tag'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-    ];
-
+        // Foreign keys:
+    }
     /**
     * Get the value of Id / id.
     *

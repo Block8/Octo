@@ -13,180 +13,52 @@ use b8\Store\Factory;
  */
 trait FileBase
 {
-    /**
-    * @var array
-    */
-    public static $sleepable = [];
+    protected function init()
+    {
+        $this->tableName = 'file';
+        $this->modelName = 'File';
 
-    /**
-    * @var string
-    */
-    protected $tableName = 'file';
+        // Columns:
+        $this->data['id'] = null;
+        $this->getters['id'] = 'getId';
+        $this->setters['id'] = 'setId';
+        $this->data['scope'] = null;
+        $this->getters['scope'] = 'getScope';
+        $this->setters['scope'] = 'setScope';
+        $this->data['category_id'] = null;
+        $this->getters['category_id'] = 'getCategoryId';
+        $this->setters['category_id'] = 'setCategoryId';
+        $this->data['filename'] = null;
+        $this->getters['filename'] = 'getFilename';
+        $this->setters['filename'] = 'setFilename';
+        $this->data['title'] = null;
+        $this->getters['title'] = 'getTitle';
+        $this->setters['title'] = 'setTitle';
+        $this->data['mime_type'] = null;
+        $this->getters['mime_type'] = 'getMimeType';
+        $this->setters['mime_type'] = 'setMimeType';
+        $this->data['extension'] = null;
+        $this->getters['extension'] = 'getExtension';
+        $this->setters['extension'] = 'setExtension';
+        $this->data['created_date'] = null;
+        $this->getters['created_date'] = 'getCreatedDate';
+        $this->setters['created_date'] = 'setCreatedDate';
+        $this->data['updated_date'] = null;
+        $this->getters['updated_date'] = 'getUpdatedDate';
+        $this->setters['updated_date'] = 'setUpdatedDate';
+        $this->data['user_id'] = null;
+        $this->getters['user_id'] = 'getUserId';
+        $this->setters['user_id'] = 'setUserId';
+        $this->data['size'] = null;
+        $this->getters['size'] = 'getSize';
+        $this->setters['size'] = 'setSize';
 
-    /**
-    * @var string
-    */
-    protected $modelName = 'File';
-
-    /**
-    * @var array
-    */
-    protected $data = [
-        'id' => null,
-        'scope' => null,
-        'category_id' => null,
-        'filename' => null,
-        'title' => null,
-        'mime_type' => null,
-        'extension' => null,
-        'created_date' => null,
-        'updated_date' => null,
-        'user_id' => null,
-        'size' => null,
-    ];
-
-    /**
-    * @var array
-    */
-    protected $getters = [
-        // Direct property getters:
-        'id' => 'getId',
-        'scope' => 'getScope',
-        'category_id' => 'getCategoryId',
-        'filename' => 'getFilename',
-        'title' => 'getTitle',
-        'mime_type' => 'getMimeType',
-        'extension' => 'getExtension',
-        'created_date' => 'getCreatedDate',
-        'updated_date' => 'getUpdatedDate',
-        'user_id' => 'getUserId',
-        'size' => 'getSize',
-
-        // Foreign key getters:
-        'Category' => 'getCategory',
-        'User' => 'getUser',
-    ];
-
-    /**
-    * @var array
-    */
-    protected $setters = [
-        // Direct property setters:
-        'id' => 'setId',
-        'scope' => 'setScope',
-        'category_id' => 'setCategoryId',
-        'filename' => 'setFilename',
-        'title' => 'setTitle',
-        'mime_type' => 'setMimeType',
-        'extension' => 'setExtension',
-        'created_date' => 'setCreatedDate',
-        'updated_date' => 'setUpdatedDate',
-        'user_id' => 'setUserId',
-        'size' => 'setSize',
-
-        // Foreign key setters:
-        'Category' => 'setCategory',
-        'User' => 'setUser',
-    ];
-
-    /**
-    * @var array
-    */
-    public $columns = [
-        'id' => [
-            'type' => 'char',
-            'length' => 32,
-            'primary_key' => true,
-        ],
-        'scope' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'category_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'filename' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'title' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'mime_type' => [
-            'type' => 'varchar',
-            'length' => 50,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'extension' => [
-            'type' => 'varchar',
-            'length' => 10,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'created_date' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'updated_date' => [
-            'type' => 'datetime',
-            'nullable' => true,
-            'default' => null,
-        ],
-        'user_id' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-        'size' => [
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => true,
-            'default' => null,
-        ],
-    ];
-
-    /**
-    * @var array
-    */
-    public $indexes = [
-        'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'category_id' => ['columns' => 'category_id'],
-        'user_id' => ['columns' => 'user_id'],
-    ];
-
-    /**
-    * @var array
-    */
-    public $foreignKeys = [
-        'file_ibfk_1' => [
-            'local_col' => 'category_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'category',
-            'col' => 'id'
-        ],
-        'file_ibfk_2' => [
-            'local_col' => 'user_id',
-            'update' => 'CASCADE',
-            'delete' => 'SET NULL',
-            'table' => 'user',
-            'col' => 'id'
-        ],
-    ];
-
+        // Foreign keys:
+        $this->getters['Category'] = 'getCategory';
+        $this->setters['Category'] = 'setCategory';
+        $this->getters['User'] = 'getUser';
+        $this->setters['User'] = 'setUser';
+    }
     /**
     * Get the value of Id / id.
     *
