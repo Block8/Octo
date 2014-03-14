@@ -59,7 +59,7 @@ trait ArticleStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Article by Article', 0, $ex);
+            throw new StoreException('Could not get Article by Id', 0, $ex);
         }
     }
 
@@ -299,7 +299,7 @@ trait ArticleStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Article by Article', 0, $ex);
+            throw new StoreException('Could not get Article by Slug', 0, $ex);
         }
     }
 }
