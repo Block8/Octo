@@ -2,6 +2,9 @@
 
 namespace Octo\Controller;
 
+use Exception;
+use b8\Exception\HttpException\NotFoundException;
+use b8\Exception\HttpException;
 use Octo\Block;
 use Octo\Controller;
 use Octo\Model\Page;
@@ -65,12 +68,12 @@ class PageController extends Controller
 
         $this->page = $this->pageStore->getByUri($path);
 
-        if ($this->page) {
-            header('HTTP/1.0 404 Not Found');
-            error_log('Page could not be loaded: 404 thrown.');
-            $this->version = $this->page->getCurrentVersion();
-            return $this->render();
+        if (!is_null($this->page) || !($this->page instanceof Page)) {
+            throw new NotFoundException('Page does not exist: ' . $path);
         }
+
+        $this->version = $this->page->getCurrentVersion();
+        return $this->render();
     }
 
     public function preview($pageId)
@@ -131,7 +134,9 @@ class PageController extends Controller
             $block->setPageVersion($this->version);
 
             $rtn = $block->render();
-        } catch (\Exception $ex) {
+        } catch (HttpException $ex) {
+            throw $ex;
+        } catch (Exception $ex) {
             $rtn = '<!-- '.$ex->getMessage().' -->';
         }
 
