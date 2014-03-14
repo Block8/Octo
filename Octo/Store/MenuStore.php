@@ -6,13 +6,13 @@
 
 namespace Octo\Store;
 
-use Octo;
+use Octo\Store\Base\MenuStoreBase;
 
 /**
  * Menu Store
  * @uses Octo\Store\Base\MenuStoreBase
  */
-class MenuStore extends Octo\Store
+class MenuStore extends MenuStoreBase
 {
-    use Base\MenuStoreBase;
+    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }
