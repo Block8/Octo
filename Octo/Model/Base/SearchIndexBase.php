@@ -102,7 +102,7 @@ class SearchIndexBase extends Model
     */
     public $indexes = [
         'PRIMARY' => ['unique' => true, 'columns' => 'id'],
-        'idx_search_2' => ['columns' => 'word, instances, model, content_id'],
+        'idx_search' => ['columns' => 'word, instances, model, content_id'],
     ];
 
     /**

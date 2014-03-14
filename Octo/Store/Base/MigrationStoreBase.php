@@ -59,7 +59,7 @@ trait MigrationStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Migration by Migration', 0, $ex);
+            throw new StoreException('Could not get Migration by Id', 0, $ex);
         }
     }
 }

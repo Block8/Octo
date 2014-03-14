@@ -59,7 +59,7 @@ trait GaPageViewStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get GaPageView by GaPageView', 0, $ex);
+            throw new StoreException('Could not get GaPageView by Id', 0, $ex);
         }
     }
 

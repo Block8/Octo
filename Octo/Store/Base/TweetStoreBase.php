@@ -59,7 +59,7 @@ trait TweetStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Tweet by Tweet', 0, $ex);
+            throw new StoreException('Could not get Tweet by Id', 0, $ex);
         }
     }
     /**
@@ -83,7 +83,7 @@ trait TweetStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Tweet by Tweet', 0, $ex);
+            throw new StoreException('Could not get Tweet by TwitterId', 0, $ex);
         }
     }
 

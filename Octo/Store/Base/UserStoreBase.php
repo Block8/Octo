@@ -59,7 +59,7 @@ trait UserStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get User by User', 0, $ex);
+            throw new StoreException('Could not get User by Id', 0, $ex);
         }
     }
     /**
@@ -83,7 +83,7 @@ trait UserStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get User by User', 0, $ex);
+            throw new StoreException('Could not get User by Email', 0, $ex);
         }
     }
 }

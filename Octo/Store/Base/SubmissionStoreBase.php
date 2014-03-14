@@ -59,7 +59,7 @@ trait SubmissionStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Submission by Submission', 0, $ex);
+            throw new StoreException('Could not get Submission by Id', 0, $ex);
         }
     }
 

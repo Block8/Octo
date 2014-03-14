@@ -59,7 +59,7 @@ trait SearchIndexStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get SearchIndex by SearchIndex', 0, $ex);
+            throw new StoreException('Could not get SearchIndex by Id', 0, $ex);
         }
     }
 

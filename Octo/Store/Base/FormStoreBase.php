@@ -59,7 +59,7 @@ trait FormStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Form by Form', 0, $ex);
+            throw new StoreException('Could not get Form by Id', 0, $ex);
         }
     }
 }

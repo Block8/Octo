@@ -59,7 +59,7 @@ trait PageStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Page by Page', 0, $ex);
+            throw new StoreException('Could not get Page by Id', 0, $ex);
         }
     }
 
@@ -191,7 +191,7 @@ trait PageStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Page by Page', 0, $ex);
+            throw new StoreException('Could not get Page by Uri', 0, $ex);
         }
     }
 }

@@ -59,7 +59,7 @@ trait ContactStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Contact by Contact', 0, $ex);
+            throw new StoreException('Could not get Contact by Id', 0, $ex);
         }
     }
 }

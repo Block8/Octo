@@ -59,7 +59,7 @@ trait FileStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get File by File', 0, $ex);
+            throw new StoreException('Could not get File by Id', 0, $ex);
         }
     }
 

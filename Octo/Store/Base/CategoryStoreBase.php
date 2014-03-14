@@ -59,7 +59,7 @@ trait CategoryStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Category by Category', 0, $ex);
+            throw new StoreException('Could not get Category by Id', 0, $ex);
         }
     }
 

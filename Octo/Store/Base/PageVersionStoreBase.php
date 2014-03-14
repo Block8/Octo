@@ -59,7 +59,7 @@ trait PageVersionStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get PageVersion by PageVersion', 0, $ex);
+            throw new StoreException('Could not get PageVersion by Id', 0, $ex);
         }
     }
 

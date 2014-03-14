@@ -59,7 +59,7 @@ trait MenuItemStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get MenuItem by MenuItem', 0, $ex);
+            throw new StoreException('Could not get MenuItem by Id', 0, $ex);
         }
     }
 

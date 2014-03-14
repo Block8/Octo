@@ -59,7 +59,7 @@ trait GaSummaryViewStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get GaSummaryView by GaSummaryView', 0, $ex);
+            throw new StoreException('Could not get GaSummaryView by Id', 0, $ex);
         }
     }
     /**
@@ -83,7 +83,7 @@ trait GaSummaryViewStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get GaSummaryView by GaSummaryView', 0, $ex);
+            throw new StoreException('Could not get GaSummaryView by Metric', 0, $ex);
         }
     }
 }

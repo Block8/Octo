@@ -255,7 +255,8 @@ class NewsController extends Controller
         $field->setClass('sa-datepicker');
         $fieldset->addField($field);
 
-        Event::trigger($this->scope . 'Form', $form);
+        $data = [&$form, &$values];
+        Event::trigger($this->scope . 'Form', $data);
 
         $field = new Form\Element\Submit();
         $field->setValue('Save ' . $this->articleType);

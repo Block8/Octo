@@ -59,7 +59,7 @@ trait SettingStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Setting by Setting', 0, $ex);
+            throw new StoreException('Could not get Setting by Id', 0, $ex);
         }
     }
 

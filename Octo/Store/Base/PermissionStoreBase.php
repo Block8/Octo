@@ -59,7 +59,7 @@ trait PermissionStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Permission by Permission', 0, $ex);
+            throw new StoreException('Could not get Permission by Id', 0, $ex);
         }
     }
 

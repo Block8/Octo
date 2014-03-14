@@ -59,7 +59,7 @@ trait MenuStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Menu by Menu', 0, $ex);
+            throw new StoreException('Could not get Menu by Id', 0, $ex);
         }
     }
     /**
@@ -83,7 +83,7 @@ trait MenuStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Menu by Menu', 0, $ex);
+            throw new StoreException('Could not get Menu by TemplateTag', 0, $ex);
         }
     }
 }

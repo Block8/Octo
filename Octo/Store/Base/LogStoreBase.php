@@ -59,7 +59,7 @@ trait LogStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Log by Log', 0, $ex);
+            throw new StoreException('Could not get Log by Id', 0, $ex);
         }
     }
 

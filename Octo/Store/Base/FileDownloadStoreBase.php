@@ -59,7 +59,7 @@ trait FileDownloadStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get FileDownload by FileDownload', 0, $ex);
+            throw new StoreException('Could not get FileDownload by Id', 0, $ex);
         }
     }
 

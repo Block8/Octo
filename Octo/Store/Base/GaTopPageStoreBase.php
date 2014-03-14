@@ -59,7 +59,7 @@ trait GaTopPageStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get GaTopPage by GaTopPage', 0, $ex);
+            throw new StoreException('Could not get GaTopPage by Id', 0, $ex);
         }
     }
     /**
@@ -83,7 +83,7 @@ trait GaTopPageStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get GaTopPage by GaTopPage', 0, $ex);
+            throw new StoreException('Could not get GaTopPage by Uri', 0, $ex);
         }
     }
 
