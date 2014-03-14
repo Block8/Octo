@@ -109,7 +109,7 @@ function selectElement(id, label, options, value)
     var input = $('<select></select>').attr('id', id).attr('type', 'text');
 
     for (var i in options) {
-        input.append($('<option></option>').val(options[i]).text(options[i]));
+        input.append($('<option></option>').val(i).text(options[i]));
     }
 
     input.val(value);

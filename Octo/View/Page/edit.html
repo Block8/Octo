@@ -49,9 +49,11 @@
             description: '{@latest.description}',
             meta_description: '{@latest.meta_description}',
             template: '{@latest.template}',
-            image_id: '{@latest.image_id}'
+            image_id: '{@latest.image_id}',
+            parent_id: '{@page.parent_id}'
         };
         editor.templates = {@templates};
+        editor.pages = {@pages};
 
         $('.page-block-btn').click(function() {
             var block = $(this);
@@ -94,6 +96,7 @@
             fieldset.append(textElement('page-short_title', 'Short Title', editor.page.short_title));
             fieldset.append(textElement('page-description', 'Description', editor.page.description));
             fieldset.append(textElement('page-meta_description', 'Meta Description', editor.page.meta_description));
+            fieldset.append(selectElement('page-parent', 'Parent', editor.pages, editor.page.parent_id));
             fieldset.append(selectElement('page-template', 'Template', editor.templates, editor.page.template));
             fieldset.append(imagePicker('page-image', 'Image', editor.page.image_id));
 
@@ -108,7 +111,8 @@
                     description: $('#page-description').val(),
                     meta_description: $('#page-meta_description').val(),
                     template: $('#page-template').val(),
-                    image_id: $('#page-image').val()
+                    image_id: $('#page-image').val(),
+                    parent_id: $('#page-parent').val()
                 };
 
                 editor.saveMetaData();

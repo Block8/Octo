@@ -227,6 +227,7 @@ class PageController extends Controller
         $this->view->blocks = $blocks;
         $this->view->blockTypes = $blockTypes;
         $this->view->templates = json_encode($this->getTemplates());
+        $this->view->pages = json_encode($this->pageStore->getParentPageOptions());
 
         if ($latest->getContentItemId()) {
             $this->view->pageContent = $latest->getContentItem()->getContent();
@@ -253,10 +254,10 @@ class PageController extends Controller
                 continue;
             }
 
-            $rtn[$item->getBasename('.html')] = 1;
+            $rtn[$item->getBasename('.html')] = $item->getBasename('.html');
         }
 
-        return array_keys($rtn);
+        return $rtn;
     }
 
     protected function parseTemplate($template)
@@ -313,6 +314,12 @@ class PageController extends Controller
             }
 
             $page = $this->pageStore->getById($pageId);
+
+            if ($pageData['parent_id'] != $page->getParentId()) {
+                $page->setParentId($pageData['parent_id']);
+                $this->pageStore->saveByUpdate($page);
+            }
+
             $latest = $this->pageStore->getLatestVersion($page);
             $latest->setValues($pageData);
             $latest->setUpdatedDate(new \DateTime());
