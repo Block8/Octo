@@ -1,0 +1,37 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-list-ul"></i> Manage Menus</h1>
+    <a class="btn-default btn pull-right" href="/{@adminUri}/menu/add"><i class="fa fa-plus"></i> Add Menu</a>
+</div>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Template Tag</th>
+			<th width="20%">Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+        {loop menus.items}
+		<tr>
+			<td>{@item.name}</td>
+			<td>{@item.template_tag}</td>
+			<td>
+                <div class="btn-group">
+					<a class="btn btn-default btn-sm" href="/{@adminUri}/menu/edit/{@item.id}">Edit</a>
+					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="/{@adminUri}/menu/edit/{@item.id}">Edit</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="/{@adminUri}/menu/delete/{@item.id}">Delete</a>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+        {/loop}
+	</tbody>
+</table>

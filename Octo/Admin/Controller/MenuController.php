@@ -1,10 +1,11 @@
 <?php
 namespace Octo\Admin\Controller;
 
+use b8\Form;
 use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
-use Octo\Admin\Menu;
-use Octo\Model\Form;
+use Octo\Admin\Menu as AdminMenu;
+use Octo\Model\Menu;
 use Octo\Store;
 
 /**
@@ -21,13 +22,13 @@ class MenuController extends Controller
      */
     protected $menuItemStore;
 
-    public static function registerMenus(Menu $menu)
+    public static function registerMenus(AdminMenu $menu)
     {
         $item = $menu->addRoot('Menus', '/menu')->setIcon('list-ul');
-        $item->addChild(new Menu\Item('Add Menu', '/menu/add'));
-        $manage = new Menu\Item('Manage Menus', '/menu');
-        $manage->addChild(new Menu\Item('Edit Menu', '/menu/edit', true));
-        $manage->addChild(new Menu\Item('Delete Menu', '/menu/delete', true));
+        $item->addChild(new AdminMenu\Item('Add Menu', '/menu/add'));
+        $manage = new AdminMenu\Item('Manage Menus', '/menu');
+        $manage->addChild(new AdminMenu\Item('Edit Menu', '/menu/edit', true));
+        $manage->addChild(new AdminMenu\Item('Delete Menu', '/menu/delete', true));
         $item->addChild($manage);
     }
 
@@ -38,9 +39,7 @@ class MenuController extends Controller
      */
     public function init()
     {
-        $this->formStore = Store::get('Form');
-        $this->submissionStore = Store::get('Submission');
-        $this->contactStore = Store::get('Contact');
+        $this->menuStore = Store::get('Menu');
 
         $this->setTitle('Menus');
         $this->addBreadcrumb('Menus', '/menu');
@@ -48,140 +47,93 @@ class MenuController extends Controller
 
     public function index()
     {
-        $forms = $this->menuStore->getAll();
+        $menus = $this->menuStore->getAll();
         $this->view->menus = $menus;
     }
 
     public function add()
     {
         $this->addBreadcrumb('Add Menu', '/menu/add');
-        if ($this->request->getMethod() == 'POST') {
-//            $form = new Form();
-//            $form->setValues($this->getParams());
-//            $this->formStore->save($form);
-//
-//            $this->successMessage('Form saved successfully!', true);
-//
-//            $this->response = new RedirectResponse();
-//            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
-//            return;
-        }
-    }
-
-    public function edit($id)
-    {
-        $form = $this->formStore->getById($id);
-
-        $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $form->getId());
 
         if ($this->request->getMethod() == 'POST') {
-            $form->setValues($this->getParams());
-            $this->formStore->save($form);
+            $values = $this->getParams();
+            $form = $this->menuForm($values, 'edit');
 
-            $this->successMessage('Form saved successfully!', true);
-
-            $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
-            return;
-        }
-
-        $form = [
-            'id' => $form->getId(),
-            'title' => $form->getTitle(),
-            'recipients' => $form->getRecipients(),
-            'definition' => htmlspecialchars(json_encode($form->getDefinition())),
-            'thankyou_message' => $form->getThankyouMessage(),
-        ];
-
-        $this->view->form = $form;
-    }
-
-    public function submissions($formId)
-    {
-
-        $form = $this->formStore->getById($formId);
-
-        $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $formId);
-        $this->addBreadcrumb('Submissions', '/form/submissions/' . $formId);
-
-        $submissions = $this->submissionStore->getAllForForm($form, 0, 500);
-        $this->view->submissions = $submissions;
-        $this->view->form = $form;
-    }
-
-    public function submission($submissionId)
-    {
-        $submission = $this->submissionStore->getById($submissionId);
-        $form = $submission->getForm();
-
-        $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $form->getId());
-        $this->addBreadcrumb('Submissions', '/form/submissions/' . $form->getId());
-
-        $extra = [];
-
-        if ($submission->getExtra()) {
-            foreach ($submission->getExtra() as $key => $value) {
-                $extra[] = $this->getExtra($form->getDefinition(), $key, $value);
+            if ($form->validate()) {
+                $menu = new Menu();
+                $menu->setValues($this->getParams());
+                $menu = $this->menuStore->saveByInsert($menu);
+                $this->successMessage($menu->getName() . ' was added successfully.', true);
+                header('Location: /' . $this->config->get('site.admin_uri') . '/menu/edit/' . $menu->getId());
             }
         }
 
-        $this->view->submission = $submission;
-        $this->view->extra = $extra;
+        $this->view->menuForm = $this->menuForm([], 'add');
     }
 
-    protected function getExtra($definition, $key, $value)
+    public function edit($menuId)
     {
-        foreach ($definition as $field) {
-            if ($field['id'] == $key) {
-                $rtn = ['id' => $key, 'label' => $field['label']];
+        $menu = $this->menuStore->getById($menuId);
 
-                if (isset($field['options'][$value])) {
-                    $rtn['value'] = $field['options'][$value];
-                } else {
-                    $rtn['value'] = $value;
-                }
+        if ($this->request->getMethod() == 'POST') {
+            $values = array_merge(['id' => $menuId], $this->getParams());
+            $form = $this->menuForm($values, 'edit');
 
-                return $rtn;
+            if ($form->validate()) {
+                $menu->setValues($this->getParams());
+                $menu = $this->menuStore->save($menu);
+                $this->successMessage($menu->getName() . ' was edited successfully.', true);
+                header('Location: /' . $this->config->get('site.admin_uri') . '/menu');
             }
         }
 
-        return ['id' => $key, 'label' => $key, 'value' => $value];
+        $this->view->menu = $menu;
+        $values = array_merge(['id' => $menuId], $menu->getDataArray());
+        $this->view->menuForm = $this->menuForm($values, 'edit');
     }
 
-    public function delete($formId)
+    public function delete($menuId)
     {
-        $form = $this->formStore->getById($formId);
-        $this->successMessage($form->getTitle() . ' has been deleted.', true);
-
-        $this->formStore->delete($form);
+        $menu = $this->menuStore->getById($menuId);
+        $this->menuStore->delete($menu);
+        $this->successMessage($menu->getName() . ' has been deleted.', true);
 
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
+        $this->response->setHeader('Location', '/' . $this->config->get('site.admin_uri') . '/menu');
     }
 
-    public function blockContact($submissionId)
+    protected function menuForm($values = [], $type = 'add')
     {
-        $submission = $this->submissionStore->getById($submissionId);
-        $contact = $submission->getContact();
-        $this->successMessage('Contact blocked!', true);
+        $form = new Form();
+        $form->setMethod('POST');
 
-        $contact->setIsBlocked(1);
-        $this->contactStore->save($contact);
+        if ($type == 'add') {
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/menu/add');
+        } else {
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/menu/edit/' . $values['id']);
+        }
 
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form/submission/'.$submissionId);
-    }
+        $form->setClass('smart-form');
 
-    public function unblockContact($submissionId)
-    {
-        $submission = $this->submissionStore->getById($submissionId);
-        $contact = $submission->getContact();
-        $this->successMessage('Contact unblocked!', true);
+        $fieldset = new Form\FieldSet('fieldset');
+        $form->addField($fieldset);
 
-        $contact->setIsBlocked(0);
-        $this->contactStore->save($contact);
+        $field = new Form\Element\Text('name');
+        $field->setRequired(true);
+        $field->setLabel('Name');
+        $fieldset->addField($field);
 
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form/submission/'.$submissionId);
+        $field = new Form\Element\Text('template_tag');
+        $field->setRequired(true);
+        $field->setLabel('Template Tag');
+        $fieldset->addField($field);
+
+        $field = new Form\Element\Submit();
+        $field->setValue('Save Menu');
+        $field->setClass('btn-success');
+        $form->addField($field);
+
+        $form->setValues($values);
+        return $form;
     }
 }
