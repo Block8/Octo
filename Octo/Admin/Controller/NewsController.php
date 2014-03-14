@@ -257,6 +257,7 @@ class NewsController extends Controller
 
         $data = [&$form, &$values];
         Event::trigger($this->scope . 'Form', $data);
+        list($form, $values) = $data;
 
         $field = new Form\Element\Submit();
         $field->setValue('Save ' . $this->articleType);
