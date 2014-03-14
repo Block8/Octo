@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Menu Base Model
  */
-class MenuBase extends Model
+trait MenuBase
 {
     /**
     * @var array

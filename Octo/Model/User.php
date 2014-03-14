@@ -6,15 +6,17 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\UserBase;
+use Octo;
 use Octo\Store;
 
 /**
  * User Model
  * @uses Octo\Model\Base\UserBase
  */
-class User extends UserBase
+class User extends Octo\Model
 {
+    use Base\UserBase;
+
     protected $permissionsArray;
 
     public function canAccess($uri)

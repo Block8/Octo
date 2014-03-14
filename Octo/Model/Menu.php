@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Menu model for table: menu
- */
+ * Menu model for table: menu */
 
 namespace Octo\Model;
 
-use Octo\Model\Base\MenuBase;
+use Octo;
 
 /**
  * Menu Model
- * @uses Octo\Model\Base\MenuBase
  */
-class Menu extends MenuBase
+class Menu extends Octo\Model
 {
+    use Base\MenuBase;
+
     // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

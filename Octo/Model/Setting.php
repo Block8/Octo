@@ -6,16 +6,17 @@
 
 namespace Octo\Model;
 
+use Octo;
 use Octo\Store;
-use Octo\Store\SettingStore;
-use Octo\Model\Base\SettingBase;
 
 /**
  * Setting Model
  * @uses Octo\Model\Base\SettingBase
  */
-class Setting extends SettingBase
+class Setting extends Octo\Model
 {
+    use Base\SettingBase;
+
     /**
      * Retrieve a setting
      *

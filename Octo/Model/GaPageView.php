@@ -1,18 +1,18 @@
 <?php
 
 /**
- * GaPageView model for table: ga_page_view
- */
+ * GaPageView model for table: ga_page_view */
 
 namespace Octo\Model;
 
-use Octo\Model\Base\GaPageViewBase;
+use Octo;
 
 /**
  * GaPageView Model
- * @uses Octo\Model\Base\GaPageViewBase
  */
-class GaPageView extends GaPageViewBase
+class GaPageView extends Octo\Model
 {
+    use Base\GaPageViewBase;
+
     // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

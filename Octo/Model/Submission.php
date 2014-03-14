@@ -6,14 +6,16 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\SubmissionBase;
+use Octo;
 
 /**
  * Submission Model
  * @uses Octo\Model\Base\SubmissionBase
  */
-class Submission extends SubmissionBase
+class Submission extends Octo\Model
 {
+    use Base\SubmissionBase;
+
     public function setExtra($value)
     {
         if (is_array($value)) {

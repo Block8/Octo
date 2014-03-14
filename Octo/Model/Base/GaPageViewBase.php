@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * GaPageView Base Model
  */
-class GaPageViewBase extends Model
+trait GaPageViewBase
 {
     /**
     * @var array

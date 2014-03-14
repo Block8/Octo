@@ -6,14 +6,16 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\ContactBase;
+use Octo;
 
 /**
  * Contact Model
  * @uses Octo\Model\Base\ContactBase
  */
-class Contact extends ContactBase
+class Contact extends Octo\Model
 {
+    use Base\ContactBase;
+
     public function setDateOfBirth($value)
     {
         if (is_array($value)) {

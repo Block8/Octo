@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * GaSummaryView Base Model
  */
-class GaSummaryViewBase extends Model
+trait GaSummaryViewBase
 {
     /**
     * @var array

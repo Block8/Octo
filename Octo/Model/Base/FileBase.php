@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * File Base Model
  */
-class FileBase extends Model
+trait FileBase
 {
     /**
     * @var array

@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Submission Base Model
  */
-class SubmissionBase extends Model
+trait SubmissionBase
 {
     /**
     * @var array

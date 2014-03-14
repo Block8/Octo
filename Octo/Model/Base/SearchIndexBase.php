@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * SearchIndex Base Model
  */
-class SearchIndexBase extends Model
+trait SearchIndexBase
 {
     /**
     * @var array

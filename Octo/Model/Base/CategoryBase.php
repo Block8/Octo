@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Category Base Model
  */
-class CategoryBase extends Model
+trait CategoryBase
 {
     /**
     * @var array

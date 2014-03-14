@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Log Base Model
  */
-class LogBase extends Model
+trait LogBase
 {
     /**
     * @var array

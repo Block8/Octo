@@ -7,7 +7,7 @@
 namespace Octo\Model;
 
 use b8\Config;
-use Octo\Model\Base\ArticleBase;
+use Octo;
 use Octo\Store;
 use Octo\Store\CategoryStore;
 use Octo\Utilities\StringUtilities;
@@ -17,8 +17,9 @@ use Octo\Model\Setting;
  * Article Model
  * @uses Octo\Model\Base\ArticleBase
  */
-class Article extends ArticleBase
+class Article extends Octo\Model
 {
+    use Base\ArticleBase;
 
     /**
      * @var CategoryStore

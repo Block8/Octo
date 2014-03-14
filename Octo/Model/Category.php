@@ -6,14 +6,15 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\CategoryBase;
+use Octo;
 
 /**
  * Category Model
  * @uses Octo\Model\Base\CategoryBase
  */
-class Category extends CategoryBase
+class Category extends Octo\Model
 {
+    use Base\CategoryBase;
 
     public function __construct($initialData = array())
     {

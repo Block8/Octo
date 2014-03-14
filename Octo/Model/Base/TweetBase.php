@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Tweet Base Model
  */
-class TweetBase extends Model
+trait TweetBase
 {
     /**
     * @var array

@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Permission Base Model
  */
-class PermissionBase extends Model
+trait PermissionBase
 {
     /**
     * @var array

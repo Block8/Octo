@@ -6,15 +6,17 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\LogBase;
+use Octo;
 use Octo\Store;
 
 /**
  * Log Model
  * @uses Octo\Model\Base\LogBase
  */
-class Log extends LogBase
+class Log extends Octo\Model
 {
+    use Base\LogBase;
+
     const TYPE_CREATE = 2;
     const TYPE_DELETE = 4;
     const TYPE_EDIT = 8;

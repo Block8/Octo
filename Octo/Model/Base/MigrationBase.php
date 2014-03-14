@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Migration Base Model
  */
-class MigrationBase extends Model
+trait MigrationBase
 {
     /**
     * @var array

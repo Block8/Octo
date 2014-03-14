@@ -7,16 +7,18 @@
 namespace Octo\Model;
 
 use b8\Cache;
+use Octo;
 use Octo\Store;
-use Octo\Model\Base\PageBase;
 use Octo\Utilities\StringUtilities;
 
 /**
  * Page Model
  * @uses Octo\Model\Base\PageBase
  */
-class Page extends PageBase
+class Page extends Octo\Model
 {
+    use Base\PageBase;
+
     public function __construct($initialData = array())
     {
         parent::__construct($initialData);

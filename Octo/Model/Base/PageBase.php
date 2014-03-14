@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Page Base Model
  */
-class PageBase extends Model
+trait PageBase
 {
     /**
     * @var array

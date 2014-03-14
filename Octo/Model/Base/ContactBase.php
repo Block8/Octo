@@ -6,13 +6,12 @@
 
 namespace Octo\Model\Base;
 
-use Octo\Model;
 use b8\Store\Factory;
 
 /**
  * Contact Base Model
  */
-class ContactBase extends Model
+trait ContactBase
 {
     /**
     * @var array

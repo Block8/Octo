@@ -6,14 +6,16 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\MenuItemBase;
+use Octo;
 
 /**
  * MenuItem Model
  * @uses Octo\Model\Base\MenuItemBase
  */
-class MenuItem extends MenuItemBase
+class MenuItem extends Octo\Model
 {
+    use Base\MenuItemBase;
+
     /**
      * Get the path to the URL
      *

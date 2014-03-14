@@ -6,14 +6,16 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\FormBase;
+use Octo;
 
 /**
  * Form Model
  * @uses Octo\Model\Base\FormBase
  */
-class Form extends FormBase
+class Form extends Octo\Model
 {
+    use Base\FormBase;
+
     public function setDefinition($value)
     {
         if (is_array($value)) {

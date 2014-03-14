@@ -8,14 +8,15 @@ namespace Octo\Model;
 
 use b8\Config;
 use Octo\Store;
-use Octo\Model\Base\FileBase;
+use Octo;
 
 /**
  * File Model
  * @uses Octo\Model\Base\FileBase
  */
-class File extends FileBase
+class File extends Octo\Model
 {
+    use Base\FileBase;
 
     public function __construct($initialData = array())
     {

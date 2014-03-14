@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Migration model for table: migration
- */
+ * Migration model for table: migration */
 
 namespace Octo\Model;
 
-use Octo\Model\Base\MigrationBase;
+use Octo;
 
 /**
  * Migration Model
- * @uses Octo\Model\Base\MigrationBase
  */
-class Migration extends MigrationBase
+class Migration extends Octo\Model
 {
+    use Base\MigrationBase;
+
     // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

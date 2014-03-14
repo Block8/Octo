@@ -6,14 +6,16 @@
 
 namespace Octo\Model;
 
-use Octo\Model\Base\TweetBase;
+use Octo;
 
 /**
  * Tweet Model
  * @uses Octo\Model\Base\TweetBase
  */
-class Tweet extends TweetBase
+class Tweet extends Octo\Model
 {
+    use Base\TweetBase;
+
     /**
      * Set the value of TwitterId / twitter_id.
      *

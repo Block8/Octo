@@ -1,18 +1,18 @@
 <?php
 
 /**
- * PageVersion model for table: page_version
- */
+ * PageVersion model for table: page_version */
 
 namespace Octo\Model;
 
-use Octo\Model\Base\PageVersionBase;
+use Octo;
 
 /**
  * PageVersion Model
- * @uses Octo\Model\Base\PageVersionBase
  */
-class PageVersion extends PageVersionBase
+class PageVersion extends Octo\Model
 {
+    use Base\PageVersionBase;
+
     // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }
