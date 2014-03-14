@@ -6,6 +6,7 @@ use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu as AdminMenu;
 use Octo\Model\Menu;
+use Octo\Model\MenuItem;
 use Octo\Store;
 
 /**
@@ -40,6 +41,7 @@ class MenuController extends Controller
     public function init()
     {
         $this->menuStore = Store::get('Menu');
+        $this->menuItemStore = Store::get('MenuItem');
 
         $this->setTitle('Menus');
         $this->addBreadcrumb('Menus', '/menu');
@@ -136,5 +138,63 @@ class MenuController extends Controller
 
         $form->setValues($values);
         return $form;
+    }
+
+    public function items($menuId)
+    {
+        if ($this->request->getMethod() == 'POST' && $this->request->isAjax()) {
+            $this->updateMenuItems($menuId);
+        }
+
+        $menu = $this->menuStore->getById($menuId);
+        $items = $this->menuItemStore->getByMenuId($menuId, ['order' => [['position', 'ASC']]]);
+
+        $this->view->menu = $menu;
+        $this->view->items = $items;
+    }
+
+    protected function updateMenuItems($menuId)
+    {
+        // Are we updating menu positions?
+        $items = $this->getParam('positions', null);
+
+        if (!is_null($items)) {
+            foreach ($items as $itemId => $position) {
+                $item = $this->menuItemStore->getById($itemId);
+                $item->setPosition($position);
+
+                $this->menuItemStore->save($item);
+            }
+        }
+
+        // Are we adding/editing an item?
+        $data = $this->getParam('item', null);
+
+        if (!is_null($data)) {
+            if (!empty($data['id'])) {
+                $item = $this->menuItemStore->getById($data['id']);
+            } else {
+                $item = new MenuItem();
+                $item->setMenuId($menuId);
+            }
+
+            $item->setValues($data);
+
+            $item = $this->menuItemStore->save($item);
+            die(json_encode($item->toArray(2)));
+        }
+
+        // Are we deleting an item?
+        $id = $this->getParam('delete', null);
+
+        if (!is_null($id)) {
+            $item = $this->menuItemStore->getById($id);
+
+            if (!is_null($item)) {
+                $this->menuItemStore->delete($item);
+            }
+        }
+
+        die('OK');
     }
 }

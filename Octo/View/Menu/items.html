@@ -1,0 +1,219 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-list-ul"></i> Edit {@menu.name}</h1>
+</div>
+
+<table class="table table-bordered table-striped" id="menu-items">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Page / Link</th>
+        <th width="10%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {loop items}
+    <tr class="menu-item" data-id="{@item.id}">
+        <td><input class="menu-item-title form-control" type="text" value="{@item.title}"></td>
+
+        {if item.page_id}
+        <td>{@item.Page.CurrentVersion.title}</td>
+        {/if}
+        {ifnot item.page_id}
+        <td>{@item.url}</td>
+        {/ifnot}
+
+        <td>
+            <button class="remove-item btn btn-danger btn-sm">Remove</button>
+        </td>
+    </tr>
+    {/loop}
+    </tbody>
+</table>
+
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+            <header role="heading">
+                <h2>Add Item</h2>
+            </header>
+
+            <div role="content">
+
+                <div class="widget-body no-padding">
+                    <form class="smart-form">
+
+                            <fieldset>
+                                <section>
+                                    <label class="label">Page</label>
+                                    <label class="input">
+                                        <input id="new-page" name="page" type="text" class="input">
+                                    </label>
+                                </section>
+
+                                <section>
+                                    <label class="label">Title</label>
+                                    <label class="input">
+                                        <input id="new-title" name="title" type="text" class="input">
+                                    </label>
+                                </section>
+
+                                <section>
+                                    <label class="label">Link</label>
+                                    <label class="input">
+                                        <input id="new-link" name="link" type="text" class="input">
+                                    </label>
+                                </section>
+                            </fieldset>
+
+                            <footer>
+                                <button id="add-item" type="submit" class="btn btn-primary">
+                                    Save Form
+                                </button>
+                            </footer>
+                        </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    function registerEvents()
+    {
+        $('#menu-items tbody').sortable({
+            axis: 'y',
+            items: '> tr',
+            helper: fixHelper,
+            update: function () {
+                var position = 0;
+                var items = {};
+
+                $('tr.menu-item').each(function () {
+                    var id = $(this).data('id');
+                    items[id] = position++;
+                });
+
+                savePositions(items);
+            }
+        });
+
+        $(document).on('change', '.menu-item-title', function(e) {
+            e.stopPropagation();
+            $('.pace').removeClass('hide');
+
+            var id = $(this).parents('tr').data('id');
+            $.post('/'+window.adminUri+'/menu/items/{@menu.id}', {item: {id: id, title: $(this).val()}}, function () {
+                $('.pace').addClass('hide');
+            });
+
+            return false;
+        });
+
+        $(document).on('click', '.remove-item', function (e) {
+            e.stopPropagation();
+
+            var id = $(this).parents('tr').data('id');
+            $(this).parents('tr').remove();
+            $.post('/'+window.adminUri+'/menu/items/{@menu.id}', {delete: id}, function () {
+                $('.pace').addClass('hide');
+            });
+
+            return false;
+        })
+    }
+
+    $(document).ready(function () {
+
+        registerEvents();
+
+        $('#new-page').select2({
+            placeholder: "Search for a page",
+            minimumInputLength: 1,
+            ajax: {
+                url: '/'+window.adminUri+'/page/autocomplete',
+                dataType: 'json',
+                data: function(term) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function(data) {
+                    return data;
+                }
+            }
+        }).on('change', function() {
+            if ($('#new-title').val() == '') {
+                $('#new-title').val($(this).select2('data').text);
+            }
+
+            $('#new-link').prop('disabled', true);
+            $('#new-link').attr('placeholder', 'Cannot change link when you choose a page.');
+        });
+
+        $('#add-item').on('click', function (e) {
+            e.preventDefault();
+
+            var position = 0;
+            $('tr.menu-item').each(function () {
+                position++;
+            });
+
+            position++;
+
+            var item = {
+                position: position,
+                title: $('#new-title').val()
+            };
+
+            var pageId = $('#new-page').val();
+            if (pageId) {
+                item.page_id = pageId;
+            } else {
+                item.url = $('#new-link').val();
+            }
+
+            $.post('/'+window.adminUri+'/menu/items/{@menu.id}', {item: item}, function (data) {
+                $('.pace').addClass('hide');
+
+                data = JSON.parse(data);
+
+                var row = $('<tr></tr>').addClass('menu-item').data('id', data.id);
+                var input = $('<input>').addClass('menu-item-title form-control').attr('type', 'text').val(data.title);
+                row.append($('<td></td>').append(input));
+
+                if (data.Page) {
+                    row.append($('<td></td>').text(data.Page.CurrentVersion.title));
+                } else {
+                    row.append($('<td></td>').text(data.url));
+                }
+
+                row.append($('<td></td>').append('<button class="remove-item btn btn-danger btn-sm">Remove</button>'));
+
+                $('#menu-items tbody').append(row);
+            });
+
+            return false;
+        });
+    });
+
+    function savePositions(items)
+    {
+        $('.pace').removeClass('hide');
+
+        $.post('/'+window.adminUri+'/menu/items/{@menu.id}', {positions: items}, function () {
+            $('.pace').addClass('hide');
+        });
+    }
+
+</script>

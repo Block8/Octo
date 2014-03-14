@@ -14,7 +14,7 @@
 	<tbody>
         {loop menus.items}
 		<tr>
-			<td>{@item.name}</td>
+			<td><a href="/{@adminUri}/menu/items/{@item.id}">{@item.name}</a></td>
 			<td>{@item.template_tag}</td>
 			<td>
                 <div class="btn-group">
