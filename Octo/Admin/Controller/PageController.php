@@ -28,7 +28,7 @@ class PageController extends Controller
     protected $versionStore;
 
     /**
-     * @var \Octo\Store\PageContentStore
+     * @var \Octo\Store\ContentItemStore
      */
     protected $contentStore;
 
