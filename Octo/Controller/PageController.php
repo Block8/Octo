@@ -68,7 +68,7 @@ class PageController extends Controller
 
         $this->page = $this->pageStore->getByUri($path);
 
-        if (!is_null($this->page) || !($this->page instanceof Page)) {
+        if (is_null($this->page) || !($this->page instanceof Page)) {
             throw new NotFoundException('Page does not exist: ' . $path);
         }
 
