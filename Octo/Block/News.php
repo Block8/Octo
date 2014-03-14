@@ -31,7 +31,16 @@ class News extends Block
             $this->view = Template::getPublicTemplate('Block/News/' . $this->templateParams['listTemplate']);
         }
 
-        $limit = !empty($this->content['perPage']) ? $this->content['perPage'] : 1000;
+        $limit = 100;
+
+        if (!empty($this->templateParams['count'])) {
+            $limit = $this->templateParams['count'];
+        }
+
+        if (!empty($this->content['perPage'])) {
+            $limit = $this->content['perPage'];
+        }
+        
         $category = !empty($this->content['category']) ? $this->content['category'] : null;
 
         $news = Store::get('Article')->getRecent($category, $limit);
