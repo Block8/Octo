@@ -22,12 +22,19 @@ class Submission extends Octo\Model
             $value = json_encode($value);
         }
 
-        parent::setExtra($value);
+        $this->validateString('Extra', $value);
+
+        if ($this->data['extra'] === $value) {
+            return;
+        }
+
+        $this->data['extra'] = $value;
+        $this->setModified('extra');
     }
 
     public function getExtra()
     {
-        $value = parent::getExtra();
+        $value = $this->data['extra'];
 
         if (is_string($value)) {
             $value = json_decode($value, true);

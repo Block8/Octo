@@ -22,7 +22,14 @@ class Contact extends Octo\Model
             $value = new \DateTime($value['year'] . '-' . $value['month'] . '-' . $value['day']);
         }
 
-        parent::setDateOfBirth($value);
+        $this->validateDate('DateOfBirth', $value);
+
+        if ($this->data['date_of_birth'] === $value) {
+            return;
+        }
+
+        $this->data['date_of_birth'] = $value;
+        $this->setModified('date_of_birth');
     }
 
     public function setAddress($value)
@@ -31,12 +38,19 @@ class Contact extends Octo\Model
             $value = json_encode($value);
         }
 
-        parent::setAddress($value);
+        $this->validateString('Address', $value);
+
+        if ($this->data['address'] === $value) {
+            return;
+        }
+
+        $this->data['address'] = $value;
+        $this->setModified('address');
     }
 
     public function getAddress()
     {
-        $value = parent::getAddress();
+        $value = $this->data['address'];
 
         if (is_string($value)) {
             $value = json_decode($value, true);

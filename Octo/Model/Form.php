@@ -22,12 +22,21 @@ class Form extends Octo\Model
             $value = json_encode($value);
         }
 
-        parent::setDefinition($value);
+        $this->validateNotNull('Definition', $value);
+        $this->validateString('Definition', $value);
+
+        if ($this->data['definition'] === $value) {
+            return;
+        }
+
+        $this->data['definition'] = $value;
+        $this->setModified('definition');
     }
+
 
     public function getDefinition()
     {
-        $value = parent::getDefinition();
+        $value = $this->data['definition'];
 
         if (is_string($value)) {
             $value = json_decode($value, true);
