@@ -40,7 +40,7 @@
                     <td>{@key}</td>
 
                     {if value.migration}
-                    <td>{date_format date: value.migration.date_run}</td>
+                    <td>{@value.migration.date_run.formatted}</td>
                     {/if}
                     {ifnot value.migration}
                     <td><em>Not run yet</em></td>

@@ -45,7 +45,7 @@ class Template extends View\Template
         return CMS_PATH . '/' . $type . '/';
     }
 
-    protected function includeTemplate($args, $view)
+    public function includeTemplate($args, $view)
     {
         if ($view instanceof AdminTemplate) {
             $template = static::getAdminTemplate($view->getVariable($args['template']));

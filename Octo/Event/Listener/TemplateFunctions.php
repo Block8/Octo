@@ -21,6 +21,10 @@ class TemplateFunctions extends Listener
         $template->addFunction('date_format', function ($args, &$view) {
             $date = $view->getVariable($args['date']);
 
+            if (!($date instanceof \DateTime)) {
+                return '';
+            }
+
             if (!isset($args['format'])) {
                 $format = 'jS F Y, g:ia';
             } elseif ($args['format'] == 'short') {
