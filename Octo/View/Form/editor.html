@@ -104,6 +104,22 @@
                 registerField(currentFields[i]);
             }
         }
+
+        var fixHelper = function(e, ui) {
+            ui.children().each(function() {
+                $(this).width($(this).width());
+            });
+            return ui;
+        };
+
+        $('#form-fields tbody').sortable({
+            axis: 'y',
+            items: '> tr',
+            helper: fixHelper,
+            update: function () {
+                updateDefinition();
+            }
+        });
     });
 
     var fieldTypes = {
@@ -270,6 +286,12 @@
         row.append($('<td></td>').append(editButton));
         tbody.append(row);
 
+        updateDefinition();
+    }
+
+    function updateDefinition()
+    {
+        var tbody = $('#form-fields').find('tbody');
         var definitions = [];
         tbody.find('tr').each(function (idx, item) {
             definitions.push($(item).data('definition'));
