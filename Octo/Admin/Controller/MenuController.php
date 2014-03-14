@@ -74,6 +74,7 @@ class MenuController extends Controller
     public function edit($menuId)
     {
         $menu = $this->menuStore->getById($menuId);
+        $this->addBreadcrumb($menu->getName(), '/menu/edit/' . $menu->getId());
 
         if ($this->request->getMethod() == 'POST') {
             $values = array_merge(['id' => $menuId], $this->getParams());
