@@ -170,3 +170,40 @@ function imagePicker(id, label, value)
 
     return section;
 }
+
+function pagePicker(id, label, value)
+{
+    var section = $('<section></section>').addClass('control-group');
+    var label2 = $('<label></label>').addClass('input');
+    var input = $('<input>').attr('id', id).attr('type', 'text');
+    input.css('width', '100%');
+    section.append(label2);
+
+    var img = $('<img>');
+    label2.append(img);
+    label2.append('<br /><br />');
+    label2.append(input);
+    input.css('width', '100%');
+
+    input.select2({
+        placeholder: "Search for a page",
+        minimumInputLength: 1,
+        width: '560px',
+        ajax: {
+            url: '/'+window.adminUri+'/page/autocomplete',
+            dataType: 'json',
+            data: function(term) {
+                return {
+                    q: term
+                };
+            },
+            results: function(data) {
+                return data;
+            }
+        }
+    });
+
+    input.val(value);
+
+    return section;
+}

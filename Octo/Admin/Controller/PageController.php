@@ -360,4 +360,17 @@ class PageController extends Controller
         $this->response = new RedirectResponse();
         $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
     }
+
+    public function autocomplete()
+    {
+        $pages = $this->pageStore->search($this->getParam('q', ''));
+
+        $rtn = ['results' => [], 'more' => false];
+
+        foreach ($pages as $page) {
+            $rtn['results'][] = ['id' => $page->getId(), 'text' => $page->getCurrentVersion()->getTitle()];
+        }
+
+        die(json_encode($rtn));
+    }
 }

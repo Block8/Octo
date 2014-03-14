@@ -139,4 +139,28 @@ class PageStore extends Octo\Store
             return [];
         }
     }
+
+    public function search($query)
+    {
+        $count = null;
+
+        $query = 'SELECT p.* FROM page p
+            LEFT JOIN page_version v ON v.id = p.current_version_id
+            WHERE title LIKE \'%'.$query.'%\' OR short_title LIKE \'%'.$query.'%\'';
+
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Page($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
 }
