@@ -4,6 +4,7 @@ namespace Octo;
 
 use b8\Config;
 use b8\View;
+use Octo\Template as PublicTemplate;
 use Octo\Admin\Template as AdminTemplate;
 use Octo\Event;
 
@@ -25,9 +26,9 @@ class Template extends View\Template
     public static function getPublicTemplate($template)
     {
         if (static::exists($template, static::getSitePath('Template'))) {
-            $rtn = static::createFromFile($template, static::getSitePath('Template'));
+            $rtn = PublicTemplate::createFromFile($template, static::getSitePath('Template'));
         } else {
-            $rtn = static::createFromFile($template, static::getSystemPath('Template'));
+            $rtn = PublicTemplate::createFromFile($template, static::getSystemPath('Template'));
         }
 
         Event::trigger('PublicTemplateLoaded', $rtn);
