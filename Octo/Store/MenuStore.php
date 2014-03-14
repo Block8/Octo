@@ -7,15 +7,17 @@
 namespace Octo\Store;
 
 use b8\Database;
+use Octo;
 use Octo\Model\Menu;
-use Octo\Store\Base\MenuStoreBase;
 
 /**
  * Menu Store
  * @uses Octo\Store\Base\MenuStoreBase
  */
-class MenuStore extends MenuStoreBase
+class MenuStore extends Octo\Store
 {
+    use Base\MenuStoreBase;
+
     public function getAll($order = 'name ASC')
     {
         $query = 'SELECT * FROM menu ORDER BY ' . $order;
