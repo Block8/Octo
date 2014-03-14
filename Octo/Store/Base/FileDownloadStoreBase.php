@@ -50,7 +50,7 @@ trait FileDownloadStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\FileDownload', $useConnection);
+        $query = new Query($this->getNamespace('FileDownload').'\Model\FileDownload', $useConnection);
         $query->select('*')->from('file_download')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait FileDownloadStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\FileDownload', $useConnection);
+        $query = new Query($this->getNamespace('FileDownload').'\Model\FileDownload', $useConnection);
         $query->from('file_download')->where('`file_id` = :file_id');
         $query->bind(':file_id', $value);
 
@@ -102,7 +102,7 @@ trait FileDownloadStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\FileDownload', $useConnection);
+        $query = new Query($this->getNamespace('FileDownload').'\Model\FileDownload', $useConnection);
         $query->from('file_download')->where('`file_id` = :file_id');
         $query->bind(':file_id', $value);
 

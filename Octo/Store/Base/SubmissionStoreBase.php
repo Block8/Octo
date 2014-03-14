@@ -50,7 +50,7 @@ trait SubmissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query = new Query($this->getNamespace('Submission').'\Model\Submission', $useConnection);
         $query->select('*')->from('submission')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait SubmissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query = new Query($this->getNamespace('Submission').'\Model\Submission', $useConnection);
         $query->from('submission')->where('`form_id` = :form_id');
         $query->bind(':form_id', $value);
 
@@ -102,7 +102,7 @@ trait SubmissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query = new Query($this->getNamespace('Submission').'\Model\Submission', $useConnection);
         $query->from('submission')->where('`form_id` = :form_id');
         $query->bind(':form_id', $value);
 
@@ -130,7 +130,7 @@ trait SubmissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query = new Query($this->getNamespace('Submission').'\Model\Submission', $useConnection);
         $query->from('submission')->where('`contact_id` = :contact_id');
         $query->bind(':contact_id', $value);
 
@@ -156,7 +156,7 @@ trait SubmissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Submission', $useConnection);
+        $query = new Query($this->getNamespace('Submission').'\Model\Submission', $useConnection);
         $query->from('submission')->where('`contact_id` = :contact_id');
         $query->bind(':contact_id', $value);
 

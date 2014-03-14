@@ -50,7 +50,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->select('*')->from('article')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 
@@ -102,7 +102,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 
@@ -130,7 +130,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`category_id` = :category_id');
         $query->bind(':category_id', $value);
 
@@ -156,7 +156,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`category_id` = :category_id');
         $query->bind(':category_id', $value);
 
@@ -184,7 +184,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`author_id` = :author_id');
         $query->bind(':author_id', $value);
 
@@ -210,7 +210,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`author_id` = :author_id');
         $query->bind(':author_id', $value);
 
@@ -238,7 +238,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`content_item_id` = :content_item_id');
         $query->bind(':content_item_id', $value);
 
@@ -264,7 +264,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->from('article')->where('`content_item_id` = :content_item_id');
         $query->bind(':content_item_id', $value);
 
@@ -290,7 +290,7 @@ trait ArticleStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Article', $useConnection);
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
         $query->select('*')->from('article')->limit(1);
         $query->where('`slug` = :slug');
         $query->bind(':slug', $value);

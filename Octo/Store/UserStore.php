@@ -7,13 +7,14 @@
 namespace Octo\Store;
 
 use b8\Database;
+use Octo;
 use Octo\Model\User;
 
 /**
  * User Store
  * @uses Octo\Store\Base\UserStoreBase
  */
-class UserStore
+class UserStore extends Octo\Store
 {
     use Base\UserStoreBase;
 

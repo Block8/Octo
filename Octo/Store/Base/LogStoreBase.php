@@ -50,7 +50,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->select('*')->from('log')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->from('log')->where('`type` = :type');
         $query->bind(':type', $value);
 
@@ -102,7 +102,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->from('log')->where('`type` = :type');
         $query->bind(':type', $value);
 
@@ -130,7 +130,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->from('log')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 
@@ -156,7 +156,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->from('log')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 
@@ -184,7 +184,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->from('log')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 
@@ -210,7 +210,7 @@ trait LogStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Log', $useConnection);
+        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->from('log')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 

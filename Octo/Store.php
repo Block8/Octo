@@ -15,7 +15,7 @@ abstract class Store extends \b8\Store
     public static function get($store)
     {
         $namespace = null;
-        $namespaces = Config::getInstance()->get('Octo.namespaces', []);
+        $namespaces = Config::getInstance()->get('app.namespaces', []);
 
         if (array_key_exists($store, $namespaces)) {
             $namespace = $namespaces[$store];

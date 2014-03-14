@@ -50,7 +50,7 @@ trait ContentItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\ContentItem', $useConnection);
+        $query = new Query($this->getNamespace('ContentItem').'\Model\ContentItem', $useConnection);
         $query->select('*')->from('content_item')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);

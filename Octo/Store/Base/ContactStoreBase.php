@@ -50,7 +50,7 @@ trait ContactStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Contact', $useConnection);
+        $query = new Query($this->getNamespace('Contact').'\Model\Contact', $useConnection);
         $query->select('*')->from('contact')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);

@@ -50,7 +50,7 @@ trait PermissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Permission', $useConnection);
+        $query = new Query($this->getNamespace('Permission').'\Model\Permission', $useConnection);
         $query->select('*')->from('permission')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait PermissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Permission', $useConnection);
+        $query = new Query($this->getNamespace('Permission').'\Model\Permission', $useConnection);
         $query->from('permission')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 
@@ -102,7 +102,7 @@ trait PermissionStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Permission', $useConnection);
+        $query = new Query($this->getNamespace('Permission').'\Model\Permission', $useConnection);
         $query->from('permission')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 

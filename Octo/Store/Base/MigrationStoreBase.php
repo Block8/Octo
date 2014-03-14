@@ -50,7 +50,7 @@ trait MigrationStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Migration', $useConnection);
+        $query = new Query($this->getNamespace('Migration').'\Model\Migration', $useConnection);
         $query->select('*')->from('migration')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);

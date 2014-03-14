@@ -50,7 +50,7 @@ trait MenuStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Menu', $useConnection);
+        $query = new Query($this->getNamespace('Menu').'\Model\Menu', $useConnection);
         $query->select('*')->from('menu')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -74,7 +74,7 @@ trait MenuStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Menu', $useConnection);
+        $query = new Query($this->getNamespace('Menu').'\Model\Menu', $useConnection);
         $query->select('*')->from('menu')->limit(1);
         $query->where('`template_tag` = :template_tag');
         $query->bind(':template_tag', $value);

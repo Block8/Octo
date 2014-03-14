@@ -20,7 +20,7 @@ class GenerateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $connection = Database::getConnection();
-        $namespaces = Config::getInstance()->get('Octo.namespaces', ['default' => 'Octo']);
+        $namespaces = Config::getInstance()->get('app.namespaces', ['default' => 'Octo']);
         $paths = ['default' => APP_PATH, 'Octo' => CMS_BASE_PATH];
         $gen = new Database\CodeGenerator($connection, $namespaces, $paths, true);
         $gen->generateModels();

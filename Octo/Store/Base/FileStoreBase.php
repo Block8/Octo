@@ -50,7 +50,7 @@ trait FileStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\File', $useConnection);
+        $query = new Query($this->getNamespace('File').'\Model\File', $useConnection);
         $query->select('*')->from('file')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait FileStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\File', $useConnection);
+        $query = new Query($this->getNamespace('File').'\Model\File', $useConnection);
         $query->from('file')->where('`category_id` = :category_id');
         $query->bind(':category_id', $value);
 
@@ -102,7 +102,7 @@ trait FileStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\File', $useConnection);
+        $query = new Query($this->getNamespace('File').'\Model\File', $useConnection);
         $query->from('file')->where('`category_id` = :category_id');
         $query->bind(':category_id', $value);
 
@@ -130,7 +130,7 @@ trait FileStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\File', $useConnection);
+        $query = new Query($this->getNamespace('File').'\Model\File', $useConnection);
         $query->from('file')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 
@@ -156,7 +156,7 @@ trait FileStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\File', $useConnection);
+        $query = new Query($this->getNamespace('File').'\Model\File', $useConnection);
         $query->from('file')->where('`user_id` = :user_id');
         $query->bind(':user_id', $value);
 

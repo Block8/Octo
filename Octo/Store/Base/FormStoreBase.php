@@ -50,7 +50,7 @@ trait FormStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Form', $useConnection);
+        $query = new Query($this->getNamespace('Form').'\Model\Form', $useConnection);
         $query->select('*')->from('form')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);

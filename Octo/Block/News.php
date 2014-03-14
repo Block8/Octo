@@ -40,7 +40,7 @@ class News extends Block
         if (!empty($this->content['perPage'])) {
             $limit = $this->content['perPage'];
         }
-        
+
         $category = !empty($this->content['category']) ? $this->content['category'] : null;
 
         $news = Store::get('Article')->getRecent($category, $limit);

@@ -50,7 +50,7 @@ trait SettingStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Setting', $useConnection);
+        $query = new Query($this->getNamespace('Setting').'\Model\Setting', $useConnection);
         $query->select('*')->from('setting')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait SettingStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Setting', $useConnection);
+        $query = new Query($this->getNamespace('Setting').'\Model\Setting', $useConnection);
         $query->from('setting')->where('`key` = :key');
         $query->bind(':key', $value);
 
@@ -102,7 +102,7 @@ trait SettingStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Setting', $useConnection);
+        $query = new Query($this->getNamespace('Setting').'\Model\Setting', $useConnection);
         $query->from('setting')->where('`key` = :key');
         $query->bind(':key', $value);
 
@@ -130,7 +130,7 @@ trait SettingStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Setting', $useConnection);
+        $query = new Query($this->getNamespace('Setting').'\Model\Setting', $useConnection);
         $query->from('setting')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 
@@ -156,7 +156,7 @@ trait SettingStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Setting', $useConnection);
+        $query = new Query($this->getNamespace('Setting').'\Model\Setting', $useConnection);
         $query->from('setting')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 

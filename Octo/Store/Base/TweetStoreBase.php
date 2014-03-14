@@ -50,7 +50,7 @@ trait TweetStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query = new Query($this->getNamespace('Tweet').'\Model\Tweet', $useConnection);
         $query->select('*')->from('tweet')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -74,7 +74,7 @@ trait TweetStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query = new Query($this->getNamespace('Tweet').'\Model\Tweet', $useConnection);
         $query->select('*')->from('tweet')->limit(1);
         $query->where('`twitter_id` = :twitter_id');
         $query->bind(':twitter_id', $value);
@@ -100,7 +100,7 @@ trait TweetStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query = new Query($this->getNamespace('Tweet').'\Model\Tweet', $useConnection);
         $query->from('tweet')->where('`screenname` = :screenname');
         $query->bind(':screenname', $value);
 
@@ -126,7 +126,7 @@ trait TweetStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query = new Query($this->getNamespace('Tweet').'\Model\Tweet', $useConnection);
         $query->from('tweet')->where('`screenname` = :screenname');
         $query->bind(':screenname', $value);
 
@@ -154,7 +154,7 @@ trait TweetStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query = new Query($this->getNamespace('Tweet').'\Model\Tweet', $useConnection);
         $query->from('tweet')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 
@@ -180,7 +180,7 @@ trait TweetStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Tweet', $useConnection);
+        $query = new Query($this->getNamespace('Tweet').'\Model\Tweet', $useConnection);
         $query->from('tweet')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 

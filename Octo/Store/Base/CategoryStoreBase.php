@@ -50,7 +50,7 @@ trait CategoryStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Category', $useConnection);
+        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
         $query->select('*')->from('category')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait CategoryStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Category', $useConnection);
+        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
         $query->from('category')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 
@@ -102,7 +102,7 @@ trait CategoryStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Category', $useConnection);
+        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
         $query->from('category')->where('`scope` = :scope');
         $query->bind(':scope', $value);
 
@@ -130,7 +130,7 @@ trait CategoryStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Category', $useConnection);
+        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
         $query->from('category')->where('`parent_id` = :parent_id');
         $query->bind(':parent_id', $value);
 
@@ -156,7 +156,7 @@ trait CategoryStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Category', $useConnection);
+        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
         $query->from('category')->where('`parent_id` = :parent_id');
         $query->bind(':parent_id', $value);
 

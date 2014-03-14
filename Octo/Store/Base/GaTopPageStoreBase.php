@@ -50,7 +50,7 @@ trait GaTopPageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query = new Query($this->getNamespace('GaTopPage').'\Model\GaTopPage', $useConnection);
         $query->select('*')->from('ga_top_page')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -74,7 +74,7 @@ trait GaTopPageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query = new Query($this->getNamespace('GaTopPage').'\Model\GaTopPage', $useConnection);
         $query->select('*')->from('ga_top_page')->limit(1);
         $query->where('`uri` = :uri');
         $query->bind(':uri', $value);
@@ -100,7 +100,7 @@ trait GaTopPageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query = new Query($this->getNamespace('GaTopPage').'\Model\GaTopPage', $useConnection);
         $query->from('ga_top_page')->where('`page_id` = :page_id');
         $query->bind(':page_id', $value);
 
@@ -126,7 +126,7 @@ trait GaTopPageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaTopPage', $useConnection);
+        $query = new Query($this->getNamespace('GaTopPage').'\Model\GaTopPage', $useConnection);
         $query->from('ga_top_page')->where('`page_id` = :page_id');
         $query->bind(':page_id', $value);
 

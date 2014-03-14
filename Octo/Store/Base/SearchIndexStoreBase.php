@@ -50,7 +50,7 @@ trait SearchIndexStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\SearchIndex', $useConnection);
+        $query = new Query($this->getNamespace('SearchIndex').'\Model\SearchIndex', $useConnection);
         $query->select('*')->from('search_index')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait SearchIndexStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\SearchIndex', $useConnection);
+        $query = new Query($this->getNamespace('SearchIndex').'\Model\SearchIndex', $useConnection);
         $query->from('search_index')->where('`word` = :word');
         $query->bind(':word', $value);
 
@@ -102,7 +102,7 @@ trait SearchIndexStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\SearchIndex', $useConnection);
+        $query = new Query($this->getNamespace('SearchIndex').'\Model\SearchIndex', $useConnection);
         $query->from('search_index')->where('`word` = :word');
         $query->bind(':word', $value);
 

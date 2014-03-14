@@ -50,7 +50,7 @@ trait MenuItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\MenuItem', $useConnection);
+        $query = new Query($this->getNamespace('MenuItem').'\Model\MenuItem', $useConnection);
         $query->select('*')->from('menu_item')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait MenuItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\MenuItem', $useConnection);
+        $query = new Query($this->getNamespace('MenuItem').'\Model\MenuItem', $useConnection);
         $query->from('menu_item')->where('`menu_id` = :menu_id');
         $query->bind(':menu_id', $value);
 
@@ -102,7 +102,7 @@ trait MenuItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\MenuItem', $useConnection);
+        $query = new Query($this->getNamespace('MenuItem').'\Model\MenuItem', $useConnection);
         $query->from('menu_item')->where('`menu_id` = :menu_id');
         $query->bind(':menu_id', $value);
 
@@ -130,7 +130,7 @@ trait MenuItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\MenuItem', $useConnection);
+        $query = new Query($this->getNamespace('MenuItem').'\Model\MenuItem', $useConnection);
         $query->from('menu_item')->where('`page_id` = :page_id');
         $query->bind(':page_id', $value);
 
@@ -156,7 +156,7 @@ trait MenuItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\MenuItem', $useConnection);
+        $query = new Query($this->getNamespace('MenuItem').'\Model\MenuItem', $useConnection);
         $query->from('menu_item')->where('`page_id` = :page_id');
         $query->bind(':page_id', $value);
 

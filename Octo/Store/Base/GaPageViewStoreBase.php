@@ -50,7 +50,7 @@ trait GaPageViewStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaPageView', $useConnection);
+        $query = new Query($this->getNamespace('GaPageView').'\Model\GaPageView', $useConnection);
         $query->select('*')->from('ga_page_view')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait GaPageViewStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaPageView', $useConnection);
+        $query = new Query($this->getNamespace('GaPageView').'\Model\GaPageView', $useConnection);
         $query->from('ga_page_view')->where('`metric` = :metric');
         $query->bind(':metric', $value);
 
@@ -102,7 +102,7 @@ trait GaPageViewStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaPageView', $useConnection);
+        $query = new Query($this->getNamespace('GaPageView').'\Model\GaPageView', $useConnection);
         $query->from('ga_page_view')->where('`metric` = :metric');
         $query->bind(':metric', $value);
 

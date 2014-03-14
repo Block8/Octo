@@ -50,7 +50,7 @@ trait PageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Page', $useConnection);
+        $query = new Query($this->getNamespace('Page').'\Model\Page', $useConnection);
         $query->select('*')->from('page')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -76,7 +76,7 @@ trait PageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Page', $useConnection);
+        $query = new Query($this->getNamespace('Page').'\Model\Page', $useConnection);
         $query->from('page')->where('`parent_id` = :parent_id');
         $query->bind(':parent_id', $value);
 
@@ -102,7 +102,7 @@ trait PageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Page', $useConnection);
+        $query = new Query($this->getNamespace('Page').'\Model\Page', $useConnection);
         $query->from('page')->where('`parent_id` = :parent_id');
         $query->bind(':parent_id', $value);
 
@@ -130,7 +130,7 @@ trait PageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Page', $useConnection);
+        $query = new Query($this->getNamespace('Page').'\Model\Page', $useConnection);
         $query->from('page')->where('`current_version_id` = :current_version_id');
         $query->bind(':current_version_id', $value);
 
@@ -156,7 +156,7 @@ trait PageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Page', $useConnection);
+        $query = new Query($this->getNamespace('Page').'\Model\Page', $useConnection);
         $query->from('page')->where('`current_version_id` = :current_version_id');
         $query->bind(':current_version_id', $value);
 
@@ -182,7 +182,7 @@ trait PageStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\Page', $useConnection);
+        $query = new Query($this->getNamespace('Page').'\Model\Page', $useConnection);
         $query->select('*')->from('page')->limit(1);
         $query->where('`uri` = :uri');
         $query->bind(':uri', $value);

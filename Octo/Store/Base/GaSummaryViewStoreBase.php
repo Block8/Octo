@@ -50,7 +50,7 @@ trait GaSummaryViewStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaSummaryView', $useConnection);
+        $query = new Query($this->getNamespace('GaSummaryView').'\Model\GaSummaryView', $useConnection);
         $query->select('*')->from('ga_summary_view')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -74,7 +74,7 @@ trait GaSummaryViewStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\GaSummaryView', $useConnection);
+        $query = new Query($this->getNamespace('GaSummaryView').'\Model\GaSummaryView', $useConnection);
         $query->select('*')->from('ga_summary_view')->limit(1);
         $query->where('`metric` = :metric');
         $query->bind(':metric', $value);

@@ -31,7 +31,7 @@ $_SETTINGS                                       = [];
 $_SETTINGS['b8']['app']['namespace']             = 'Octo';
 $_SETTINGS['b8']['app']['default_controller']    = null;
 $_SETTINGS['b8']['view']['path']                 = CMS_PATH . 'View/';
-$_SETTINGS['Octo']['namespaces']                   = ['default' => 'Octo'];
+$_SETTINGS['app']['namespaces']                   = ['default' => 'Octo'];
 
 // Set up config:
 if (is_file(APP_PATH . 'siteconfig.php')) {

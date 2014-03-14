@@ -50,7 +50,7 @@ trait UserStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\User', $useConnection);
+        $query = new Query($this->getNamespace('User').'\Model\User', $useConnection);
         $query->select('*')->from('user')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
@@ -74,7 +74,7 @@ trait UserStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query('Octo\Model\User', $useConnection);
+        $query = new Query($this->getNamespace('User').'\Model\User', $useConnection);
         $query->select('*')->from('user')->limit(1);
         $query->where('`email` = :email');
         $query->bind(':email', $value);
