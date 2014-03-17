@@ -27,6 +27,11 @@ class NewsController extends Controller
     protected $lowerArticleType;
 
     /**
+     * @var string Article type
+     */
+    protected $modelType = '\Octo\Model\Article';
+
+    /**
      * Return the menu nodes required for this controller
      *
      * @return void
@@ -90,7 +95,8 @@ class NewsController extends Controller
                         $contentItem = $this->contentItemStore->saveByInsert($contentItem);
                     }
 
-                    $article = new Article();
+                    $modelName = $this->modelType;
+                    $article = new $modelName();
                     $article->setValues($this->getParams());
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
@@ -100,7 +106,6 @@ class NewsController extends Controller
                     $article->setSlug($article->generateSlug());
 
                     Event::trigger('before' . $this->articleType . 'Save', $article);
-
                     $article = $this->articleStore->save($article);
 
                     $this->successMessage($article->getTitle() . ' was added successfully.', true);

@@ -26,6 +26,10 @@ class TextImage extends Text
             $this->view->image = $this->content['image'];
         }
 
+        if (isset($this->content['link'])) {
+            $this->view->link = $this->content['link'];
+        }
+
         if (array_key_exists('content', $this->content)) {
             $content = $this->content['content'];
 
