@@ -9,10 +9,24 @@ use Octo\Template;
 
 class News extends Block
 {
+    /**
+     * @var string Type of article to load
+     */
+    protected static $articleType = 'News';
+
+    /**
+     * @var string Scope of articles to filter
+     */
+    protected static $scope = 'news';
+
     public static function getInfo()
     {
         $config = Config::getInstance();
-        return ['title' => 'News Archive', 'editor' => true, 'js' => ['/assets/backoffice/js/block/news.js']];
+        return [
+            'title' => self::$articleType . ' Archive',
+            'editor' => true,
+            'js' => ['/assets/backoffice/js/block/' . self::$articleType . '.js']
+        ];
     }
 
     public function renderNow()
@@ -28,7 +42,8 @@ class News extends Block
     public function renderNewsList()
     {
         if (!empty($this->templateParams['listTemplate'])) {
-            $this->view = Template::getPublicTemplate('Block/News/' . $this->templateParams['listTemplate']);
+            $template = 'Block/' . static::$articleType . '/' . $this->templateParams['listTemplate'];
+            $this->view = Template::getPublicTemplate($template);
         }
 
         $limit = 100;
@@ -43,14 +58,15 @@ class News extends Block
 
         $category = !empty($this->content['category']) ? $this->content['category'] : null;
 
-        $news = Store::get('Article')->getRecent($category, $limit);
+        $news = Store::get('Article')->getRecent($category, $limit, static::$scope);
         $base = $this->request->getPath();
 
         if ($base == '/') {
             $base = '';
         }
 
-        $this->view->news = $news;
+        $articleType = static::$articleType;
+        $this->view->articles = $news;
         $this->view->base = $base;
 
         return $news;
@@ -70,9 +86,10 @@ class News extends Block
         $content = $content['content'];
 
         if (!empty($this->templateParams['itemTemplate'])) {
-            $this->view = Template::getPublicTemplate('Block/News/' . $this->templateParams['itemTemplate']);
+            $template = 'Block/' . static::$articleType . '/' . $this->templateParams['itemTemplate'];
+            $this->view = Template::getPublicTemplate($template);
         } else {
-            $this->view = Template::getPublicTemplate('Block/News/Item');
+            $this->view = Template::getPublicTemplate('Block/' . static::$articleType . '/Item');
         }
 
         $this->view->item = $item;
