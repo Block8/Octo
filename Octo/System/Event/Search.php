@@ -1,5 +1,5 @@
 <?php
-namespace Octo\Event\Listener;
+namespace Octo\System\Event;
 
 use Octo\Event\Listener;
 use Octo\Event\Manager;
@@ -9,7 +9,7 @@ use Octo\Store;
 class Search extends Listener
 {
     /**
-     * @var \Octo\Store\SearchIndexStore
+     * @var \Octo\System\Store\SearchIndexStore
      */
     protected $searchStore;
 

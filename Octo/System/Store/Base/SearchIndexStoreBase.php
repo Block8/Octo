@@ -4,7 +4,7 @@
  * SearchIndex base store for table: search_index
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\SearchIndex;
+use Octo\System\Model\SearchIndex;
 
 /**
  * SearchIndex Base Store
@@ -23,7 +23,7 @@ trait SearchIndexStoreBase
     protected function init()
     {
         $this->tableName = 'search_index';
-        $this->modelName = '\Octo\Model\SearchIndex';
+        $this->modelName = '\Octo\System\Model\SearchIndex';
         $this->primaryKey = 'id';
     }
     /**

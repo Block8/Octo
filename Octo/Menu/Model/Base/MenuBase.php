@@ -4,7 +4,7 @@
  * Menu base model for table: menu
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Menu\Model\Base;
 
 use b8\Store\Factory;
 

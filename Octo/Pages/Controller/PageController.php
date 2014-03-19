@@ -8,21 +8,21 @@ use b8\Exception\HttpException;
 use Octo\Block;
 use Octo\BlockManager;
 use Octo\Controller;
-use Octo\Model\Page;
-use Octo\Model\PageVersion;
-use Octo\Model\ContentItem;
+use Octo\Pages\Model\Page;
+use Octo\Pages\Model\PageVersion;
+use Octo\System\Model\ContentItem;
 use Octo\Store;
 use Octo\Template;
 
 class PageController extends Controller
 {
     /**
-     * @var \Octo\Store\PageStore
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 
     /**
-     * @var \Octo\Store\PageVersionStore
+     * @var \Octo\Pages\Store\PageVersionStore
      */
     protected $versionStore;
 
@@ -32,12 +32,12 @@ class PageController extends Controller
     protected $content;
 
     /**
-     * @var \Octo\Model\Page
+     * @var \Octo\Pages\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Model\PageVersion
+     * @var \Octo\Pages\Model\PageVersion
      */
     protected $version;
 

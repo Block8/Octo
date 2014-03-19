@@ -1,10 +1,10 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\Forms\Admin\Controller;
 
 use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
-use Octo\Model\Form;
+use Octo\Forms\Model\Form;
 use Octo\Store;
 
 /**
@@ -13,17 +13,17 @@ use Octo\Store;
 class FormController extends Controller
 {
     /**
-     * @var \Octo\Store\FormStore
+     * @var \Octo\Forms\Store\FormStore
      */
     protected $formStore;
 
     /**
-     * @var \Octo\Store\SubmissionStore
+     * @var \Octo\Forms\Store\SubmissionStore
      */
     protected $submissionStore;
 
     /**
-     * @var \Octo\Store\ContactStore
+     * @var \Octo\System\Store\ContactStore
      */
     protected $contactStore;
 

@@ -4,15 +4,15 @@
  * Contact store for table: contact
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Contact;
+use Octo\System\Model\Contact;
 
 /**
  * Contact Store
- * @uses Octo\Store\Base\ContactStoreBase
+ * @uses Octo\System\Store\Base\ContactStoreBase
  */
 class ContactStore extends Octo\Store
 {

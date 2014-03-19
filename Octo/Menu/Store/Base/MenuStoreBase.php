@@ -4,7 +4,7 @@
  * Menu base store for table: menu
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Analytics\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Menu;
+use Octo\Menu\Model\Menu;
 
 /**
  * Menu Base Store
@@ -23,7 +23,7 @@ trait MenuStoreBase
     protected function init()
     {
         $this->tableName = 'menu';
-        $this->modelName = '\Octo\Model\Menu';
+        $this->modelName = '\Octo\Menu\Model\Menu';
         $this->primaryKey = 'id';
     }
     /**

@@ -4,15 +4,15 @@
  * Tweet store for table: tweet
  */
 
-namespace Octo\Store;
+namespace Octo\Twitter\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Tweet;
+use Octo\Twitter\Model\Tweet;
 
 /**
  * Tweet Store
- * @uses Octo\Store\Base\TweetStoreBase
+ * @uses Octo\Twitter\Store\Base\TweetStoreBase
  */
 class TweetStore extends Octo\Store
 {

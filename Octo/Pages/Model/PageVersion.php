@@ -3,7 +3,7 @@
 /**
  * PageVersion model for table: page_version */
 
-namespace Octo\Model;
+namespace Octo\Pages\Model;
 
 use Octo;
 

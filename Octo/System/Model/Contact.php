@@ -4,13 +4,13 @@
  * Contact model for table: contact
  */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 
 /**
  * Contact Model
- * @uses Octo\Model\Base\ContactBase
+ * @uses Octo\System\Model\Base\ContactBaseBase
  */
 class Contact extends Octo\Model
 {

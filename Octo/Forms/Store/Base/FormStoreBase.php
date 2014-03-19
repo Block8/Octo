@@ -4,7 +4,7 @@
  * Form base store for table: form
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Forms\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Form;
+use Octo\Forms\Model\Form;
 
 /**
  * Form Base Store
@@ -23,7 +23,7 @@ trait FormStoreBase
     protected function init()
     {
         $this->tableName = 'form';
-        $this->modelName = '\Octo\Model\Form';
+        $this->modelName = '\Octo\Forms\Model\Form';
         $this->primaryKey = 'id';
     }
     /**

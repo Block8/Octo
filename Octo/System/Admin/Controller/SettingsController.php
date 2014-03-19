@@ -1,5 +1,5 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\System\Admin\Controller;
 
 use b8\Form;
 use Octo\Store;

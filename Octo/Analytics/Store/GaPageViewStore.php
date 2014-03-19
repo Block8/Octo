@@ -4,16 +4,16 @@
  * GaPageView store for table: ga_page_view
  */
 
-namespace Octo\Store;
+namespace Octo\Analytics\Store;
 
 use DateTime;
 use b8\Database;
 use Octo;
-use Octo\Model\GaPageView;
+use Octo\Analytics\Model\GaPageView;
 
 /**
  * GaPageView Store
- * @uses Octo\Store\Base\GaPageViewStoreBase
+ * @uses Octo\Analytics\Store\Base\GaPageViewStoreBase
  */
 class GaPageViewStore extends Octo\Store
 {

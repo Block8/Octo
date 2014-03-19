@@ -4,7 +4,7 @@
  * SearchIndex base model for table: search_index
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 

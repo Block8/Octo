@@ -4,13 +4,13 @@
  * Category model for table: category
  */
 
-namespace Octo\Model;
+namespace Octo\Categories\Model;
 
 use Octo;
 
 /**
  * Category Model
- * @uses Octo\Model\Base\CategoryBase
+ * @uses Octo\Categories\Model\Base\CategoryBaseBase
  */
 class Category extends Octo\Model
 {

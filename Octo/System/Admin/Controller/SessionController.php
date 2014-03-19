@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Admin\Controller;
+namespace Octo\System\Admin\Controller;
 
 use Octo\Admin\Controller;
 use Octo\Store;
@@ -11,7 +11,7 @@ use Octo\Store;
 class SessionController extends Controller
 {
     /**
-     * @var \Octo\Store\UserStore
+     * @var \Octo\System\Store\UserStore
      */
     protected $userStore;
 

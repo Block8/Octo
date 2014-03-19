@@ -4,7 +4,7 @@
  * Submission base store for table: submission
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Forms\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Submission;
+use Octo\Forms\Model\Submission;
 
 /**
  * Submission Base Store
@@ -23,7 +23,7 @@ trait SubmissionStoreBase
     protected function init()
     {
         $this->tableName = 'submission';
-        $this->modelName = '\Octo\Model\Submission';
+        $this->modelName = '\Octo\Forms\Model\Submission';
         $this->primaryKey = 'id';
     }
     /**

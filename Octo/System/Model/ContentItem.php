@@ -3,7 +3,7 @@
 /**
  * ContentItem model for table: content_item */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 

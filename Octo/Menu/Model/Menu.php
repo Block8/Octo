@@ -3,7 +3,7 @@
 /**
  * Menu model for table: menu */
 
-namespace Octo\Model;
+namespace Octo\Menu\Model;
 
 use Octo;
 

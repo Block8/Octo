@@ -4,7 +4,7 @@
  * GaTopPage base store for table: ga_top_page
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Analytics\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\GaTopPage;
+use Octo\Analytics\Model\GaTopPage;
 
 /**
  * GaTopPage Base Store
@@ -23,7 +23,7 @@ trait GaTopPageStoreBase
     protected function init()
     {
         $this->tableName = 'ga_top_page';
-        $this->modelName = '\Octo\Model\GaTopPage';
+        $this->modelName = '\Octo\Analytics\Model\GaTopPage';
         $this->primaryKey = 'id';
     }
     /**

@@ -4,13 +4,13 @@
  * MenuItem model for table: menu_item
  */
 
-namespace Octo\Model;
+namespace Octo\Menu\Model;
 
 use Octo;
 
 /**
  * MenuItem Model
- * @uses Octo\Model\Base\MenuItemBase
+ * @uses Octo\Menu\Model\Base\MenuBaseItemBase
  */
 class MenuItem extends Octo\Model
 {

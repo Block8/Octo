@@ -4,15 +4,15 @@
  * GaSummaryView store for table: ga_summary_view
  */
 
-namespace Octo\Store;
+namespace Octo\Analytics\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\GaSummaryView;
+use Octo\Analytics\Model\GaSummaryView;
 
 /**
  * GaSummaryView Store
- * @uses Octo\Store\Base\GaSummaryViewStoreBase
+ * @uses Octo\Analytics\Store\Base\GaSummaryViewStoreBase
  */
 class GaSummaryViewStore extends Octo\Store
 {

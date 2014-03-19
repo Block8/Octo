@@ -5,7 +5,7 @@ namespace Octo\Block;
 use b8\Cache;
 use b8\Config;
 use Octo\Block;
-use Octo\Model\Page;
+use Octo\Pages\Model\Page;
 use Octo\Store;
 
 class Feed extends Block

@@ -4,7 +4,7 @@
  * MenuItem base model for table: menu_item
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Menu\Model\Base;
 
 use b8\Store\Factory;
 
@@ -223,9 +223,9 @@ trait MenuItemBase
     /**
     * Get the Menu model for this MenuItem by Id.
     *
-    * @uses \Octo\Store\MenuStore::getById()
-    * @uses \Octo\Model\Menu
-    * @return \Octo\Model\Menu
+    * @uses \Octo\Menu\Store\MenuStore::getById()
+    * @uses \Octo\Menu\Model\Menu
+    * @return \Octo\Menu\Model\Menu
     */
     public function getMenu()
     {
@@ -246,7 +246,7 @@ trait MenuItemBase
     public function setMenu($value)
     {
         // Is this an instance of Menu?
-        if ($value instanceof \Octo\Model\Menu) {
+        if ($value instanceof \Octo\Menu\Model\Menu) {
             return $this->setMenuObject($value);
         }
 
@@ -262,18 +262,18 @@ trait MenuItemBase
     /**
     * Set Menu - Accepts a Menu model.
     *
-    * @param $value \Octo\Model\Menu
+    * @param $value \Octo\Menu\Model\Menu
     */
-    public function setMenuObject(\Octo\Model\Menu $value)
+    public function setMenuObject(\Octo\Menu\Model\Menu $value)
     {
         return $this->setMenuId($value->getId());
     }
     /**
     * Get the Page model for this MenuItem by Id.
     *
-    * @uses \Octo\Store\PageStore::getById()
-    * @uses \Octo\Model\Page
-    * @return \Octo\Model\Page
+    * @uses \Octo\Pages\Store\PageStore::getById()
+    * @uses \Octo\Pages\Model\Page
+    * @return \Octo\Pages\Model\Page
     */
     public function getPage()
     {
@@ -294,7 +294,7 @@ trait MenuItemBase
     public function setPage($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Model\Page) {
+        if ($value instanceof \Octo\Pages\Model\Page) {
             return $this->setPageObject($value);
         }
 
@@ -310,9 +310,9 @@ trait MenuItemBase
     /**
     * Set Page - Accepts a Page model.
     *
-    * @param $value \Octo\Model\Page
+    * @param $value \Octo\Pages\Model\Page
     */
-    public function setPageObject(\Octo\Model\Page $value)
+    public function setPageObject(\Octo\Pages\Model\Page $value)
     {
         return $this->setPageId($value->getId());
     }

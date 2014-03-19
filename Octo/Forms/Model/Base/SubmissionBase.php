@@ -4,7 +4,7 @@
  * Submission base model for table: submission
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Forms\Model\Base;
 
 use b8\Store\Factory;
 
@@ -233,9 +233,9 @@ trait SubmissionBase
     /**
     * Get the Form model for this Submission by Id.
     *
-    * @uses \Octo\Store\FormStore::getById()
-    * @uses \Octo\Model\Form
-    * @return \Octo\Model\Form
+    * @uses \Octo\Forms\Store\FormStore::getById()
+    * @uses \Octo\Forms\Model\Form
+    * @return \Octo\Forms\Model\Form
     */
     public function getForm()
     {
@@ -256,7 +256,7 @@ trait SubmissionBase
     public function setForm($value)
     {
         // Is this an instance of Form?
-        if ($value instanceof \Octo\Model\Form) {
+        if ($value instanceof \Octo\Forms\Model\Form) {
             return $this->setFormObject($value);
         }
 
@@ -272,18 +272,18 @@ trait SubmissionBase
     /**
     * Set Form - Accepts a Form model.
     *
-    * @param $value \Octo\Model\Form
+    * @param $value \Octo\Forms\Model\Form
     */
-    public function setFormObject(\Octo\Model\Form $value)
+    public function setFormObject(\Octo\Forms\Model\Form $value)
     {
         return $this->setFormId($value->getId());
     }
     /**
     * Get the Contact model for this Submission by Id.
     *
-    * @uses \Octo\Store\ContactStore::getById()
-    * @uses \Octo\Model\Contact
-    * @return \Octo\Model\Contact
+    * @uses \Octo\System\Store\ContactStore::getById()
+    * @uses \Octo\System\Model\Contact
+    * @return \Octo\System\Model\Contact
     */
     public function getContact()
     {
@@ -304,7 +304,7 @@ trait SubmissionBase
     public function setContact($value)
     {
         // Is this an instance of Contact?
-        if ($value instanceof \Octo\Model\Contact) {
+        if ($value instanceof \Octo\System\Model\Contact) {
             return $this->setContactObject($value);
         }
 
@@ -320,9 +320,9 @@ trait SubmissionBase
     /**
     * Set Contact - Accepts a Contact model.
     *
-    * @param $value \Octo\Model\Contact
+    * @param $value \Octo\System\Model\Contact
     */
-    public function setContactObject(\Octo\Model\Contact $value)
+    public function setContactObject(\Octo\System\Model\Contact $value)
     {
         return $this->setContactId($value->getId());
     }

@@ -4,7 +4,7 @@
  * Migration base store for table: migration
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Migration;
+use Octo\System\Model\Migration;
 
 /**
  * Migration Base Store
@@ -23,7 +23,7 @@ trait MigrationStoreBase
     protected function init()
     {
         $this->tableName = 'migration';
-        $this->modelName = '\Octo\Model\Migration';
+        $this->modelName = '\Octo\System\Model\Migration';
         $this->primaryKey = 'id';
     }
     /**

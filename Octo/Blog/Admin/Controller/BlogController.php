@@ -1,12 +1,12 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\Blog\Admin\Controller;
 
 use b8\Form;
 use Octo\Store;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
-use Octo\Model\Article;
-use Octo\Model\ContentItem;
+use Octo\Articles\Model\Article;
+use Octo\System\Model\ContentItem;
 
 class BlogController extends \Octo\Admin\Controller\NewsController
 {

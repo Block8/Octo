@@ -4,7 +4,7 @@
  * User base store for table: user
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\User;
+use Octo\System\Model\User;
 
 /**
  * User Base Store
@@ -23,7 +23,7 @@ trait UserStoreBase
     protected function init()
     {
         $this->tableName = 'user';
-        $this->modelName = '\Octo\Model\User';
+        $this->modelName = '\Octo\System\Model\User';
         $this->primaryKey = 'id';
     }
     /**

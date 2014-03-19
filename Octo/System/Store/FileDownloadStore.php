@@ -4,13 +4,13 @@
  * FileDownload store for table: file_download
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use Octo;
 
 /**
  * FileDownload Store
- * @uses Octo\Store\Base\FileDownloadStoreBase
+ * @uses Octo\System\Store\Base\FileDownloadStoreBase
  */
 class FileDownloadStore extends Octo\Store
 {

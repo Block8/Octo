@@ -4,7 +4,7 @@
  * Article base store for table: article
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Articles\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Article;
+use Octo\Articles\Model\Article;
 
 /**
  * Article Base Store
@@ -23,7 +23,7 @@ trait ArticleStoreBase
     protected function init()
     {
         $this->tableName = 'article';
-        $this->modelName = '\Octo\Model\Article';
+        $this->modelName = '\Octo\Articles\Model\Article';
         $this->primaryKey = 'id';
     }
     /**

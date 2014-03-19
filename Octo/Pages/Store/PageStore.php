@@ -4,16 +4,16 @@
  * Page store for table: page
  */
 
-namespace Octo\Store;
+namespace Octo\Pages\Store;
 
 use Octo;
 use b8\Database;
-use Octo\Model\Page;
-use Octo\Model\PageVersion;
+use Octo\Pages\Model\Page;
+use Octo\Pages\Model\PageVersion;
 
 /**
  * Page Store
- * @uses Octo\Store\Base\PageStoreBase
+ * @uses Octo\Pages\Store\Base\PageStoreBase
  */
 class PageStore extends Octo\Store
 {

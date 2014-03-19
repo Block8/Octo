@@ -5,7 +5,7 @@ namespace Octo\Block;
 use b8\Config;
 use Octo\Template;
 use Octo\Block;
-use Octo\Model\File;
+use Octo\System\Model\File;
 
 class Text extends Block
 {

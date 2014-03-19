@@ -1,5 +1,5 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\Media\Admin\Controller;
 
 use b8\Form;
 use b8\Image;
@@ -9,7 +9,7 @@ use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
 use Octo\Utilities\StringUtilities;
-use Octo\Model\File;
+use Octo\System\Model\File;
 
 class MediaController extends Controller
 {
@@ -38,11 +38,11 @@ class MediaController extends Controller
     }
 
     /**
-     * @var \Octo\Store\FileStore
+     * @var \Octo\System\Store\FileStore
      */
     protected $fileStore;
     /**
-     * @var \Octo\Store\CategoryStore
+     * @var \Octo\Categories\Store\CategoryStore
      */
     protected $categoryStore;
 

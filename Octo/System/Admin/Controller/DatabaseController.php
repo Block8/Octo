@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Admin\Controller;
+namespace Octo\System\Admin\Controller;
 
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;

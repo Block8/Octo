@@ -4,7 +4,7 @@
  * FileDownload base store for table: file_download
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\FileDownload;
+use Octo\System\Model\FileDownload;
 
 /**
  * FileDownload Base Store
@@ -23,7 +23,7 @@ trait FileDownloadStoreBase
     protected function init()
     {
         $this->tableName = 'file_download';
-        $this->modelName = '\Octo\Model\FileDownload';
+        $this->modelName = '\Octo\System\Model\FileDownload';
         $this->primaryKey = 'id';
     }
     /**

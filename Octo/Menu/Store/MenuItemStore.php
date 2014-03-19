@@ -4,15 +4,15 @@
  * MenuItem store for table: menu_item
  */
 
-namespace Octo\Store;
+namespace Octo\Analytics\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\MenuItem;;
+use Octo\Menu\Model\MenuItem;;
 
 /**
  * MenuItem Store
- * @uses Octo\Store\Base\MenuItemStoreBase
+ * @uses Octo\Menu\Store\Base\MenuItemStoreBase
  */
 class MenuItemStore extends Octo\Store
 {

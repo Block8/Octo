@@ -3,7 +3,7 @@
 /**
  * SearchIndex model for table: search_index */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 

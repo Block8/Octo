@@ -4,7 +4,7 @@
  * Category base store for table: category
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Analytics\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Category;
+use Octo\Categories\Model\Category;
 
 /**
  * Category Base Store
@@ -23,7 +23,7 @@ trait CategoryStoreBase
     protected function init()
     {
         $this->tableName = 'category';
-        $this->modelName = '\Octo\Model\Category';
+        $this->modelName = '\Octo\Categories\Model\Category';
         $this->primaryKey = 'id';
     }
     /**

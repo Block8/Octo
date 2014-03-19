@@ -20,7 +20,7 @@ class Item
     protected $isRoot;
 
     /**
-     * @var \Octo\Model\User
+     * @var \Octo\System\Model\User
      */
     protected $user;
 

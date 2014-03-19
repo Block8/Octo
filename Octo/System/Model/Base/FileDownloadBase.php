@@ -4,7 +4,7 @@
  * FileDownload base model for table: file_download
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 
@@ -129,9 +129,9 @@ trait FileDownloadBase
     /**
     * Get the File model for this FileDownload by Id.
     *
-    * @uses \Octo\Store\FileStore::getById()
-    * @uses \Octo\Model\File
-    * @return \Octo\Model\File
+    * @uses \Octo\System\Store\FileStore::getById()
+    * @uses \Octo\System\Model\File
+    * @return \Octo\System\Model\File
     */
     public function getFile()
     {
@@ -152,7 +152,7 @@ trait FileDownloadBase
     public function setFile($value)
     {
         // Is this an instance of File?
-        if ($value instanceof \Octo\Model\File) {
+        if ($value instanceof \Octo\System\Model\File) {
             return $this->setFileObject($value);
         }
 
@@ -168,9 +168,9 @@ trait FileDownloadBase
     /**
     * Set File - Accepts a File model.
     *
-    * @param $value \Octo\Model\File
+    * @param $value \Octo\System\Model\File
     */
-    public function setFileObject(\Octo\Model\File $value)
+    public function setFileObject(\Octo\System\Model\File $value)
     {
         return $this->setFileId($value->getId());
     }

@@ -4,14 +4,14 @@
  * Setting model for table: setting
  */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 use Octo\Store;
 
 /**
  * Setting Model
- * @uses Octo\Model\Base\SettingBase
+ * @uses Octo\System\Model\Base\SettingBaseBase
  */
 class Setting extends Octo\Model
 {

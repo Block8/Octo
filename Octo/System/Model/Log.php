@@ -4,14 +4,14 @@
  * Log model for table: log
  */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 use Octo\Store;
 
 /**
  * Log Model
- * @uses Octo\Model\Base\LogBase
+ * @uses Octo\System\Model\Base\LogBaseBase
  */
 class Log extends Octo\Model
 {

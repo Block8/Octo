@@ -4,7 +4,7 @@
  * Setting base store for table: setting
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Setting;
+use Octo\System\Model\Setting;
 
 /**
  * Setting Base Store
@@ -23,7 +23,7 @@ trait SettingStoreBase
     protected function init()
     {
         $this->tableName = 'setting';
-        $this->modelName = '\Octo\Model\Setting';
+        $this->modelName = '\Octo\System\Model\Setting';
         $this->primaryKey = 'id';
     }
     /**

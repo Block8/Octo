@@ -3,7 +3,7 @@
 /**
  * FileDownload model for table: file_download */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 

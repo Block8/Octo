@@ -1,5 +1,5 @@
 <?php
-namespace Octo\Event\Listener;
+namespace Octo\System\Event;
 
 use b8\Config;
 use Octo\Event\Listener;
@@ -12,7 +12,6 @@ class TemplateFunctions extends Listener
     {
         $manager->registerListener('AdminTemplateLoaded', array($this, 'globalTemplateFunctions'));
         $manager->registerListener('PublicTemplateLoaded', array($this, 'globalTemplateFunctions'));
-
         $manager->registerListener('AdminTemplateLoaded', array($this, 'adminTemplateFunctions'));
     }
 

@@ -1,25 +1,25 @@
 <?php
 
-namespace Octo\Admin\Controller;
+namespace Octo\System\Admin\Controller;
 
 use Exception;
 use b8\Form;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
-use Octo\Model\User;
-use Octo\Model\Permission;
+use Octo\System\Model\User;
+use Octo\System\Model\Permission;
 use Octo\Store;
 
 class UserController extends Controller
 {
     /**
-     * @var \Octo\Store\UserStore
+     * @var \Octo\System\Store\UserStore
      */
     protected $userStore;
 
     /**
-     * @var \Octo\Store\PermissionStore
+     * @var \Octo\System\Store\PermissionStore
      */
     protected $permissionStore;
 

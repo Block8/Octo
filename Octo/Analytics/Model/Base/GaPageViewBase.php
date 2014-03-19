@@ -4,7 +4,7 @@
  * GaPageView base model for table: ga_page_view
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Analytics\Model\Base;
 
 use b8\Store\Factory;
 

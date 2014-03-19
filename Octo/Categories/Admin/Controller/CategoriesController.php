@@ -1,13 +1,13 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\Categories\Admin\Controller;
 
 use b8\Form;
 use Octo\Store;
-use Octo\Store\CategoryStore;
+use Octo\Categories\Store\CategoryStore;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
-use Octo\Model\Category;
+use Octo\Categories\Model\Category;
 use Octo\Utilities\StringUtilities;
 
 class CategoriesController extends Controller

@@ -4,10 +4,10 @@ namespace Octo\Controller;
 use b8\Image;
 use b8\Form;
 use Octo\Store;
-use Octo\Store\FileStore;
-use Octo\Store\FileDownloadStore;
-use Octo\Model\File;
-use Octo\Model\FileDownload;
+use Octo\System\Store\FileStore;
+use Octo\System\Store\FileDownloadStore;
+use Octo\System\Model\File;
+use Octo\System\Model\FileDownload;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
 

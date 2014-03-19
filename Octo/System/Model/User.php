@@ -4,14 +4,14 @@
  * User model for table: user
  */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 use Octo\Store;
 
 /**
  * User Model
- * @uses Octo\Model\Base\UserBase
+ * @uses Octo\System\Model\Base\UserBaseBase
  */
 class User extends Octo\Model
 {

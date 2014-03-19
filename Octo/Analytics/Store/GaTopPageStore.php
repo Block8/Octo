@@ -4,15 +4,15 @@
  * GaTopPage store for table: ga_top_page
  */
 
-namespace Octo\Store;
+namespace Octo\Analytics\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\GaTopPage;
+use Octo\Analytics\Model\GaTopPage;
 
 /**
  * GaTopPage Store
- * @uses Octo\Store\Base\GaTopPageStoreBase
+ * @uses Octo\Analytics\Store\Base\GaTopPageStoreBase
  */
 class GaTopPageStore extends Octo\Store
 {

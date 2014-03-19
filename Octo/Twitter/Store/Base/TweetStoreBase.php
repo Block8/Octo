@@ -4,7 +4,7 @@
  * Tweet base store for table: tweet
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Twitter\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Tweet;
+use Octo\Twitter\Model\Tweet;
 
 /**
  * Tweet Base Store
@@ -23,7 +23,7 @@ trait TweetStoreBase
     protected function init()
     {
         $this->tableName = 'tweet';
-        $this->modelName = '\Octo\Model\Tweet';
+        $this->modelName = '\Octo\Twitter\Model\Tweet';
         $this->primaryKey = 'id';
     }
     /**

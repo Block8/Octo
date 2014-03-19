@@ -1,27 +1,27 @@
 <?php
 
-namespace Octo\Admin\Controller;
+namespace Octo\Analytics\Admin\Controller;
 
 use \DateTime;
 use Octo\Admin\Controller;
 use Octo\Store;
-use Octo\Model\GaPageView;
-use Octo\Store\GaPageViewStore;
+use Octo\Analytics\Model\GaPageView;
+use Octo\Analytics\Store\GaPageViewStore;
 
 class AnalyticsController extends Controller
 {
     /**
-     * @var \Octo\Store\GaTopPageStore
+     * @var \Octo\Analytics\Store\GaTopPageStore
      */
     protected $gaTopPageStore;
 
     /**
-     * @var \Octo\Store\GaPageViewStore
+     * @var \Octo\Analytics\Store\GaPageViewStore
      */
     protected $gaPageViewStore;
 
     /**
-     * @var \Octo\Store\GaSummaryViewStore
+     * @var \Octo\Analytics\Store\GaSummaryViewStore
      */
     protected $gaSummaryViewStore;
 

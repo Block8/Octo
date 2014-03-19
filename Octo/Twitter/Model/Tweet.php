@@ -4,13 +4,13 @@
  * Tweet model for table: tweet
  */
 
-namespace Octo\Model;
+namespace Octo\Twitter\Model;
 
 use Octo;
 
 /**
  * Tweet Model
- * @uses Octo\Model\Base\TweetBase
+ * @uses Octo\Twitter\Model\Base\TweetBaseBase
  */
 class Tweet extends Octo\Model
 {

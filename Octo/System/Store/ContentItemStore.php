@@ -4,13 +4,13 @@
  * ContentItem store for table: content_item
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use Octo;
 
 /**
  * ContentItem Store
- * @uses Octo\Store\Base\ContentItemStoreBase
+ * @uses Octo\System\Store\Base\ContentItemStoreBase
  */
 class ContentItemStore extends Octo\Store
 {

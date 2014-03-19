@@ -4,13 +4,13 @@
  * Submission model for table: submission
  */
 
-namespace Octo\Model;
+namespace Octo\Forms\Model;
 
 use Octo;
 
 /**
  * Submission Model
- * @uses Octo\Model\Base\SubmissionBase
+ * @uses Octo\Forms\Model\Base\SubmissionBaseBase
  */
 class Submission extends Octo\Model
 {

@@ -4,7 +4,7 @@
  * PageVersion base store for table: page_version
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Pages\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\PageVersion;
+use Octo\Pages\Model\PageVersion;
 
 /**
  * PageVersion Base Store
@@ -23,7 +23,7 @@ trait PageVersionStoreBase
     protected function init()
     {
         $this->tableName = 'page_version';
-        $this->modelName = '\Octo\Model\PageVersion';
+        $this->modelName = '\Octo\Pages\Model\PageVersion';
         $this->primaryKey = 'id';
     }
     /**

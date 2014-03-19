@@ -4,7 +4,7 @@
  * Contact base store for table: contact
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Contact;
+use Octo\System\Model\Contact;
 
 /**
  * Contact Base Store
@@ -23,7 +23,7 @@ trait ContactStoreBase
     protected function init()
     {
         $this->tableName = 'contact';
-        $this->modelName = '\Octo\Model\Contact';
+        $this->modelName = '\Octo\System\Model\Contact';
         $this->primaryKey = 'id';
     }
     /**

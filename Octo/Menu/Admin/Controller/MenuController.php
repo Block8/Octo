@@ -1,12 +1,12 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\Menu\Admin\Controller;
 
 use b8\Form;
 use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu as AdminMenu;
-use Octo\Model\Menu;
-use Octo\Model\MenuItem;
+use Octo\Menu\Model\Menu;
+use Octo\Menu\Model\MenuItem;
 use Octo\Store;
 
 /**
@@ -15,11 +15,11 @@ use Octo\Store;
 class MenuController extends Controller
 {
     /**
-     * @var \Octo\Store\MenuStore
+     * @var \Octo\Menu\Store\MenuStore
      */
     protected $menuStore;
     /**
-     * @var \Octo\Store\MenuItemStore
+     * @var \Octo\Menu\Store\MenuItemStore
      */
     protected $menuItemStore;
 

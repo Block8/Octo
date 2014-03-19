@@ -3,7 +3,7 @@
 /**
  * GaSummaryView model for table: ga_summary_view */
 
-namespace Octo\Model;
+namespace Octo\Analytics\Model;
 
 use Octo;
 

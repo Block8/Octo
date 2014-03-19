@@ -4,7 +4,7 @@
  * Migration base model for table: migration
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 

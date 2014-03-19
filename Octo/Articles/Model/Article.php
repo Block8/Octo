@@ -4,18 +4,18 @@
  * Article model for table: article
  */
 
-namespace Octo\Model;
+namespace Octo\Articles\Model;
 
 use b8\Config;
 use Octo;
 use Octo\Store;
-use Octo\Store\CategoryStore;
+use Octo\Categories\Store\CategoryStore;
 use Octo\Utilities\StringUtilities;
-use Octo\Model\Setting;
+use Octo\System\Model\Setting;
 
 /**
  * Article Model
- * @uses Octo\Model\Base\ArticleBase
+ * @uses Octo\Articles\Model\Base\ArticleBaseBase
  */
 class Article extends Octo\Model
 {

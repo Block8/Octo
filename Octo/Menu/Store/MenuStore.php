@@ -4,15 +4,15 @@
  * Menu store for table: menu
  */
 
-namespace Octo\Store;
+namespace Octo\Analytics\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Menu;
+use Octo\Menu\Model\Menu;
 
 /**
  * Menu Store
- * @uses Octo\Store\Base\MenuStoreBase
+ * @uses Octo\Menu\Store\Base\MenuStoreBase
  */
 class MenuStore extends Octo\Store
 {

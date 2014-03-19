@@ -4,7 +4,7 @@
  * Permission base store for table: permission
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Permission;
+use Octo\System\Model\Permission;
 
 /**
  * Permission Base Store
@@ -23,7 +23,7 @@ trait PermissionStoreBase
     protected function init()
     {
         $this->tableName = 'permission';
-        $this->modelName = '\Octo\Model\Permission';
+        $this->modelName = '\Octo\System\Model\Permission';
         $this->primaryKey = 'id';
     }
     /**

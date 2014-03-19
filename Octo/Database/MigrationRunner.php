@@ -3,14 +3,14 @@
 namespace Octo\Database;
 
 use b8\Config;
-use Octo\Model\Migration;
+use Octo\System\Model\Migration;
 use Octo\Store;
-use Octo\Store\MigrationStore;
+use Octo\System\Store\MigrationStore;
 
 class MigrationRunner
 {
     /**
-     * @var \Octo\Store\MigrationStore
+     * @var \Octo\System\Store\MigrationStore
      */
     protected $store;
 

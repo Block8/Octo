@@ -4,8 +4,8 @@ namespace Octo\Block;
 
 use Octo\Template;
 use Octo\Block;
-use Octo\Store\MenuStore;
-use Octo\Store\MenuItemStore;
+use Octo\Menu\Store\MenuStore;
+use Octo\Menu\Store\MenuItemStore;
 
 class Menu extends Block
 {

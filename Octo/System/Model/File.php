@@ -4,7 +4,7 @@
  * File model for table: file
  */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use b8\Config;
 use Octo\Store;
@@ -12,7 +12,7 @@ use Octo;
 
 /**
  * File Model
- * @uses Octo\Model\Base\FileBase
+ * @uses Octo\System\Model\Base\FileBaseBase
  */
 class File extends Octo\Model
 {

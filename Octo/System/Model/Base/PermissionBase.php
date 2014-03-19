@@ -4,7 +4,7 @@
  * Permission base model for table: permission
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 
@@ -163,9 +163,9 @@ trait PermissionBase
     /**
     * Get the User model for this Permission by Id.
     *
-    * @uses \Octo\Store\UserStore::getById()
-    * @uses \Octo\Model\User
-    * @return \Octo\Model\User
+    * @uses \Octo\System\Store\UserStore::getById()
+    * @uses \Octo\System\Model\User
+    * @return \Octo\System\Model\User
     */
     public function getUser()
     {
@@ -186,7 +186,7 @@ trait PermissionBase
     public function setUser($value)
     {
         // Is this an instance of User?
-        if ($value instanceof \Octo\Model\User) {
+        if ($value instanceof \Octo\System\Model\User) {
             return $this->setUserObject($value);
         }
 
@@ -202,9 +202,9 @@ trait PermissionBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\Model\User
+    * @param $value \Octo\System\Model\User
     */
-    public function setUserObject(\Octo\Model\User $value)
+    public function setUserObject(\Octo\System\Model\User $value)
     {
         return $this->setUserId($value->getId());
     }

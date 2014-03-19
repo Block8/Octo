@@ -4,7 +4,7 @@
  * Contact base model for table: contact
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 

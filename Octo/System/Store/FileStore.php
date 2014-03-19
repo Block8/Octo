@@ -4,15 +4,15 @@
  * File store for table: file
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\File;
+use Octo\System\Model\File;
 
 /**
  * File Store
- * @uses Octo\Store\Base\FileStoreBase
+ * @uses Octo\System\Store\Base\FileStoreBase
  */
 class FileStore extends Octo\Store
 {

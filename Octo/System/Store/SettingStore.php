@@ -4,15 +4,15 @@
  * Setting store for table: setting
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Setting;
+use Octo\System\Model\Setting;
 
 /**
  * Setting Store
- * @uses Octo\Store\Base\SettingStoreBase
+ * @uses Octo\System\Store\Base\SettingStoreBase
  */
 class SettingStore extends Octo\Store
 {

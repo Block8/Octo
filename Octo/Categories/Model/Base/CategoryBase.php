@@ -4,7 +4,7 @@
  * Category base model for table: category
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Categories\Model\Base;
 
 use b8\Store\Factory;
 
@@ -189,9 +189,9 @@ trait CategoryBase
     /**
     * Get the Category model for this Category by Id.
     *
-    * @uses \Octo\Store\CategoryStore::getById()
-    * @uses \Octo\Model\Category
-    * @return \Octo\Model\Category
+    * @uses \Octo\Categories\Store\CategoryStore::getById()
+    * @uses \Octo\Categories\Model\Category
+    * @return \Octo\Categories\Model\Category
     */
     public function getParent()
     {
@@ -212,7 +212,7 @@ trait CategoryBase
     public function setParent($value)
     {
         // Is this an instance of Category?
-        if ($value instanceof \Octo\Model\Category) {
+        if ($value instanceof \Octo\Categories\Model\Category) {
             return $this->setParentObject($value);
         }
 
@@ -228,9 +228,9 @@ trait CategoryBase
     /**
     * Set Parent - Accepts a Category model.
     *
-    * @param $value \Octo\Model\Category
+    * @param $value \Octo\Categories\Model\Category
     */
-    public function setParentObject(\Octo\Model\Category $value)
+    public function setParentObject(\Octo\Categories\Model\Category $value)
     {
         return $this->setParentId($value->getId());
     }

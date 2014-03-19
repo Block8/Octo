@@ -4,7 +4,7 @@
  * PageVersion base model for table: page_version
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Pages\Model\Base;
 
 use b8\Store\Factory;
 
@@ -431,9 +431,9 @@ trait PageVersionBase
     /**
     * Get the ContentItem model for this PageVersion by Id.
     *
-    * @uses \Octo\Store\ContentItemStore::getById()
-    * @uses \Octo\Model\ContentItem
-    * @return \Octo\Model\ContentItem
+    * @uses \Octo\System\Store\ContentItemStore::getById()
+    * @uses \Octo\System\Model\ContentItem
+    * @return \Octo\System\Model\ContentItem
     */
     public function getContentItem()
     {
@@ -454,7 +454,7 @@ trait PageVersionBase
     public function setContentItem($value)
     {
         // Is this an instance of ContentItem?
-        if ($value instanceof \Octo\Model\ContentItem) {
+        if ($value instanceof \Octo\System\Model\ContentItem) {
             return $this->setContentItemObject($value);
         }
 
@@ -470,18 +470,18 @@ trait PageVersionBase
     /**
     * Set ContentItem - Accepts a ContentItem model.
     *
-    * @param $value \Octo\Model\ContentItem
+    * @param $value \Octo\System\Model\ContentItem
     */
-    public function setContentItemObject(\Octo\Model\ContentItem $value)
+    public function setContentItemObject(\Octo\System\Model\ContentItem $value)
     {
         return $this->setContentItemId($value->getId());
     }
     /**
     * Get the Page model for this PageVersion by Id.
     *
-    * @uses \Octo\Store\PageStore::getById()
-    * @uses \Octo\Model\Page
-    * @return \Octo\Model\Page
+    * @uses \Octo\Pages\Store\PageStore::getById()
+    * @uses \Octo\Pages\Model\Page
+    * @return \Octo\Pages\Model\Page
     */
     public function getPage()
     {
@@ -502,7 +502,7 @@ trait PageVersionBase
     public function setPage($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Model\Page) {
+        if ($value instanceof \Octo\Pages\Model\Page) {
             return $this->setPageObject($value);
         }
 
@@ -518,18 +518,18 @@ trait PageVersionBase
     /**
     * Set Page - Accepts a Page model.
     *
-    * @param $value \Octo\Model\Page
+    * @param $value \Octo\Pages\Model\Page
     */
-    public function setPageObject(\Octo\Model\Page $value)
+    public function setPageObject(\Octo\Pages\Model\Page $value)
     {
         return $this->setPageId($value->getId());
     }
     /**
     * Get the User model for this PageVersion by Id.
     *
-    * @uses \Octo\Store\UserStore::getById()
-    * @uses \Octo\Model\User
-    * @return \Octo\Model\User
+    * @uses \Octo\System\Store\UserStore::getById()
+    * @uses \Octo\System\Model\User
+    * @return \Octo\System\Model\User
     */
     public function getUser()
     {
@@ -550,7 +550,7 @@ trait PageVersionBase
     public function setUser($value)
     {
         // Is this an instance of User?
-        if ($value instanceof \Octo\Model\User) {
+        if ($value instanceof \Octo\System\Model\User) {
             return $this->setUserObject($value);
         }
 
@@ -566,18 +566,18 @@ trait PageVersionBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\Model\User
+    * @param $value \Octo\System\Model\User
     */
-    public function setUserObject(\Octo\Model\User $value)
+    public function setUserObject(\Octo\System\Model\User $value)
     {
         return $this->setUserId($value->getId());
     }
     /**
     * Get the File model for this PageVersion by Id.
     *
-    * @uses \Octo\Store\FileStore::getById()
-    * @uses \Octo\Model\File
-    * @return \Octo\Model\File
+    * @uses \Octo\System\Store\FileStore::getById()
+    * @uses \Octo\System\Model\File
+    * @return \Octo\System\Model\File
     */
     public function getImage()
     {
@@ -598,7 +598,7 @@ trait PageVersionBase
     public function setImage($value)
     {
         // Is this an instance of File?
-        if ($value instanceof \Octo\Model\File) {
+        if ($value instanceof \Octo\System\Model\File) {
             return $this->setImageObject($value);
         }
 
@@ -614,9 +614,9 @@ trait PageVersionBase
     /**
     * Set Image - Accepts a File model.
     *
-    * @param $value \Octo\Model\File
+    * @param $value \Octo\System\Model\File
     */
-    public function setImageObject(\Octo\Model\File $value)
+    public function setImageObject(\Octo\System\Model\File $value)
     {
         return $this->setImageId($value->getId());
     }

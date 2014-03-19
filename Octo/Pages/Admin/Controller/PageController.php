@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Admin\Controller;
+namespace Octo\Pages\Admin\Controller;
 
 use b8\Form;
 use b8\Http\Response\RedirectResponse;
@@ -9,26 +9,26 @@ use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
 use Octo\Block;
 use Octo\Event;
-use Octo\Model\Page;
-use Octo\Model\ContentItem;
-use Octo\Model\PageVersion;
+use Octo\Pages\Model\Page;
+use Octo\System\Model\ContentItem;
+use Octo\Pages\Model\PageVersion;
 use Octo\Store;
 use Octo\Template;
 
 class PageController extends Controller
 {
     /**
-     * @var \Octo\Store\PageStore
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 
     /**
-     * @var \Octo\Store\PageVersionStore
+     * @var \Octo\Pages\Store\PageVersionStore
      */
     protected $versionStore;
 
     /**
-     * @var \Octo\Store\ContentItemStore
+     * @var \Octo\System\Store\ContentItemStore
      */
     protected $contentStore;
 
@@ -150,7 +150,7 @@ class PageController extends Controller
         // Create an ID for the page, which will also create a temporary URI for it:
         $page->generateId();
 
-        /** @var \Octo\Model\Page $page */
+        /** @var \Octo\Pages\Model\Page $page */
         $page = $this->pageStore->saveByInsert($page);
 
         // Set up the current version of the page:

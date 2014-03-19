@@ -4,7 +4,7 @@
  * Setting base model for table: setting
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 

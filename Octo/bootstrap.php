@@ -38,7 +38,26 @@ if (is_file(APP_PATH . 'siteconfig.php')) {
     require_once(APP_PATH . 'siteconfig.php');
 }
 
+$_SETTINGS['site']['modules'] = [
+    'Octo' => [
+        'System',
+        'Pages',
+    ]
+];
+
 $config = new b8\Config($_SETTINGS);
+
+$modules = [];
+
+foreach ($_SETTINGS['site']['modules'] as $namespace => $moduleNames) {
+    foreach ($moduleNames as $module) {
+        $class = '\\' . $namespace . '\\' . $module . '\\Module';
+        $modules[] = new $class($config);
+    }
+}
+
+var_dump($config->get('Octo'));
+
 
 if (!defined('IS_CONSOLE')) {
     try {

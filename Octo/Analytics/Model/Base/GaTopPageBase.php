@@ -4,7 +4,7 @@
  * GaTopPage base model for table: ga_top_page
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Analytics\Model\Base;
 
 use b8\Store\Factory;
 
@@ -225,9 +225,9 @@ trait GaTopPageBase
     /**
     * Get the Page model for this GaTopPage by Id.
     *
-    * @uses \Octo\Store\PageStore::getById()
-    * @uses \Octo\Model\Page
-    * @return \Octo\Model\Page
+    * @uses \Octo\Pages\Store\PageStore::getById()
+    * @uses \Octo\Pages\Model\Page
+    * @return \Octo\Pages\Model\Page
     */
     public function getPage()
     {
@@ -248,7 +248,7 @@ trait GaTopPageBase
     public function setPage($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Model\Page) {
+        if ($value instanceof \Octo\Pages\Model\Page) {
             return $this->setPageObject($value);
         }
 
@@ -264,9 +264,9 @@ trait GaTopPageBase
     /**
     * Set Page - Accepts a Page model.
     *
-    * @param $value \Octo\Model\Page
+    * @param $value \Octo\Pages\Model\Page
     */
-    public function setPageObject(\Octo\Model\Page $value)
+    public function setPageObject(\Octo\Pages\Model\Page $value)
     {
         return $this->setPageId($value->getId());
     }

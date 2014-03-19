@@ -14,14 +14,36 @@ abstract class Store extends \b8\Store
      */
     public static function get($store)
     {
-        $namespace = null;
-        $namespaces = Config::getInstance()->get('app.namespaces', []);
+        $namespace = self::getModelNamespace($store);
 
-        if (array_key_exists($store, $namespaces)) {
-            $namespace = $namespaces[$store];
+        if (!is_null($namespace)) {
+            return Factory::getStore($store, $namespace);
         }
 
-        return Factory::getStore($store, $namespace);
+        return null;
+    }
+
+    public static function getModelNamespace($model)
+    {
+        $config = Config::getInstance();
+        $siteModules = array_reverse($config->get('site.modules', []));
+
+        foreach ($siteModules as $namespace => $modules) {
+            foreach ($modules as $module) {
+                $class = "\\{$namespace}\\{$module}\\Model\\{$model}";
+
+                if (class_exists($class)) {
+                    return "\\{$namespace}\\{$module}";
+                }
+            }
+        }
+
+        return null;
+    }
+
+    protected function getNamespace($model)
+    {
+        return self::getModelNamespace($model);
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Octo\Admin\Controller;
+namespace Octo\News\Admin\Controller;
 
 use DateTime;
 use b8\Form;
@@ -8,8 +8,8 @@ use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
 use Octo\Event;
-use Octo\Model\Article;
-use Octo\Model\ContentItem;
+use Octo\Articles\Model\Article;
+use Octo\System\Model\ContentItem;
 
 class NewsController extends Controller
 {
@@ -29,7 +29,7 @@ class NewsController extends Controller
     /**
      * @var string Article type
      */
-    protected $modelType = '\Octo\Model\Article';
+    protected $modelType = '\Octo\Articles\Model\Article';
 
     /**
      * Return the menu nodes required for this controller

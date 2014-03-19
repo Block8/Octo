@@ -4,15 +4,15 @@
  * Submission store for table: submission
  */
 
-namespace Octo\Store;
+namespace Octo\Forms\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Submission;
+use Octo\Forms\Model\Submission;
 
 /**
  * Submission Store
- * @uses Octo\Store\Base\SubmissionStoreBase
+ * @uses Octo\Forms\Store\Base\SubmissionStoreBase
  */
 class SubmissionStore extends Octo\Store
 {

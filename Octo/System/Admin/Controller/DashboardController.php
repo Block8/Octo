@@ -1,11 +1,11 @@
 <?php
 
-namespace Octo\Admin\Controller;
+namespace Octo\System\Admin\Controller;
 
 use b8\Config;
 use Octo\Admin\Controller;
 use Octo\Store;
-use Octo\Model\Setting;
+use Octo\System\Model\Setting;
 
 class DashboardController extends Controller
 {

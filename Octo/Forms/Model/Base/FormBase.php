@@ -4,7 +4,7 @@
  * Form base model for table: form
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Forms\Model\Base;
 
 use b8\Store\Factory;
 

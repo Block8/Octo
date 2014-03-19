@@ -4,15 +4,15 @@
  * Form store for table: form
  */
 
-namespace Octo\Store;
+namespace Octo\Forms\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Form;
+use Octo\Forms\Model\Form;
 
 /**
  * Form Store
- * @uses Octo\Store\Base\FormStoreBase
+ * @uses Octo\Forms\Store\Base\FormStoreBase
  */
 class FormStore extends Octo\Store
 {

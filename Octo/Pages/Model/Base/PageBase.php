@@ -4,7 +4,7 @@
  * Page base model for table: page
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Pages\Model\Base;
 
 use b8\Store\Factory;
 
@@ -161,9 +161,9 @@ trait PageBase
     /**
     * Get the PageVersion model for this Page by Id.
     *
-    * @uses \Octo\Store\PageVersionStore::getById()
-    * @uses \Octo\Model\PageVersion
-    * @return \Octo\Model\PageVersion
+    * @uses \Octo\Pages\Store\PageVersionStore::getById()
+    * @uses \Octo\Pages\Model\PageVersion
+    * @return \Octo\Pages\Model\PageVersion
     */
     public function getCurrentVersion()
     {
@@ -184,7 +184,7 @@ trait PageBase
     public function setCurrentVersion($value)
     {
         // Is this an instance of PageVersion?
-        if ($value instanceof \Octo\Model\PageVersion) {
+        if ($value instanceof \Octo\Pages\Model\PageVersion) {
             return $this->setCurrentVersionObject($value);
         }
 
@@ -200,18 +200,18 @@ trait PageBase
     /**
     * Set CurrentVersion - Accepts a PageVersion model.
     *
-    * @param $value \Octo\Model\PageVersion
+    * @param $value \Octo\Pages\Model\PageVersion
     */
-    public function setCurrentVersionObject(\Octo\Model\PageVersion $value)
+    public function setCurrentVersionObject(\Octo\Pages\Model\PageVersion $value)
     {
         return $this->setCurrentVersionId($value->getId());
     }
     /**
     * Get the Page model for this Page by Id.
     *
-    * @uses \Octo\Store\PageStore::getById()
-    * @uses \Octo\Model\Page
-    * @return \Octo\Model\Page
+    * @uses \Octo\Pages\Store\PageStore::getById()
+    * @uses \Octo\Pages\Model\Page
+    * @return \Octo\Pages\Model\Page
     */
     public function getParent()
     {
@@ -232,7 +232,7 @@ trait PageBase
     public function setParent($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Model\Page) {
+        if ($value instanceof \Octo\Pages\Model\Page) {
             return $this->setParentObject($value);
         }
 
@@ -248,9 +248,9 @@ trait PageBase
     /**
     * Set Parent - Accepts a Page model.
     *
-    * @param $value \Octo\Model\Page
+    * @param $value \Octo\Pages\Model\Page
     */
-    public function setParentObject(\Octo\Model\Page $value)
+    public function setParentObject(\Octo\Pages\Model\Page $value)
     {
         return $this->setParentId($value->getId());
     }

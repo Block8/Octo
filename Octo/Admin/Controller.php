@@ -12,7 +12,7 @@ abstract class Controller extends \b8\Controller
     protected $className = '';
 
     /**
-     * @var \Octo\Model\User
+     * @var \Octo\System\Model\User
      */
     protected $currentUser;
 
@@ -138,5 +138,22 @@ abstract class Controller extends \b8\Controller
         $breadcrumb = $this->layout->breadcrumb;
         $breadcrumb[] = array('title' => $title, 'link' => $link);
         $this->layout->breadcrumb = $breadcrumb;
+    }
+
+    public static function getClass($controller) {
+        $config = Config::getInstance();
+        $siteModules = $config->get('site.modules');
+
+        foreach ($siteModules as $namespace => $modules) {
+            foreach ($modules as $module) {
+                $class = "\\{$namespace}\\{$module}\\Admin\\Controller\\{$controller}Controller";
+
+                if (class_exists($class)) {
+                    return $class;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -4,16 +4,16 @@
  * Article store for table: article
  */
 
-namespace Octo\Store;
+namespace Octo\Articles\Store;
 
 use b8\Database;
 use b8\Database\Query;
 use Octo;
-use Octo\Model\Article;
+use Octo\Articles\Model\Article;
 
 /**
  * Article Store
- * @uses Octo\Store\Base\ArticleStoreBase
+ * @uses Octo\Articles\Store\Base\ArticleStoreBase
  */
 class ArticleStore extends Octo\Store
 {
@@ -28,7 +28,7 @@ class ArticleStore extends Octo\Store
      */
     public function getAllForCategoryScope($scope, $order = 'name', $direction = 'ASC')
     {
-        $query = new Query('Octo\Model\Article');
+        $query = new Query('Octo\Articles\Model\Article');
         $query->select('a.*')->from('article', 'a')->join('category', 'c', 'c.id = a.category_id');
         $query->where('c.scope = :scope');
         $query->order($order, $direction);

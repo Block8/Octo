@@ -4,8 +4,8 @@ namespace Octo;
 
 use b8\Http\Response;
 use b8\Http\Request;
-use Octo\Model\Page;
-use Octo\Model\PageVersion;
+use Octo\Pages\Model\Page;
+use Octo\Pages\Model\PageVersion;
 use Octo\Template;
 
 abstract class Block
@@ -41,12 +41,12 @@ abstract class Block
     protected $view;
 
     /**
-     * @var \Octo\Model\Page
+     * @var \Octo\Pages\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Model\PageVersion
+     * @var \Octo\Pages\Model\PageVersion
      */
     protected $pageVersion;
 

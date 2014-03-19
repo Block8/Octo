@@ -3,7 +3,7 @@
 /**
  * Permission model for table: permission */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 

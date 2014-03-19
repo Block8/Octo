@@ -4,7 +4,7 @@
  * File base model for table: file
  */
 
-namespace Octo\Model\Base;
+namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
 
@@ -391,9 +391,9 @@ trait FileBase
     /**
     * Get the Category model for this File by Id.
     *
-    * @uses \Octo\Store\CategoryStore::getById()
-    * @uses \Octo\Model\Category
-    * @return \Octo\Model\Category
+    * @uses \Octo\Categories\Store\CategoryStore::getById()
+    * @uses \Octo\Categories\Model\Category
+    * @return \Octo\Categories\Model\Category
     */
     public function getCategory()
     {
@@ -414,7 +414,7 @@ trait FileBase
     public function setCategory($value)
     {
         // Is this an instance of Category?
-        if ($value instanceof \Octo\Model\Category) {
+        if ($value instanceof \Octo\Categories\Model\Category) {
             return $this->setCategoryObject($value);
         }
 
@@ -430,18 +430,18 @@ trait FileBase
     /**
     * Set Category - Accepts a Category model.
     *
-    * @param $value \Octo\Model\Category
+    * @param $value \Octo\Categories\Model\Category
     */
-    public function setCategoryObject(\Octo\Model\Category $value)
+    public function setCategoryObject(\Octo\Categories\Model\Category $value)
     {
         return $this->setCategoryId($value->getId());
     }
     /**
     * Get the User model for this File by Id.
     *
-    * @uses \Octo\Store\UserStore::getById()
-    * @uses \Octo\Model\User
-    * @return \Octo\Model\User
+    * @uses \Octo\System\Store\UserStore::getById()
+    * @uses \Octo\System\Model\User
+    * @return \Octo\System\Model\User
     */
     public function getUser()
     {
@@ -462,7 +462,7 @@ trait FileBase
     public function setUser($value)
     {
         // Is this an instance of User?
-        if ($value instanceof \Octo\Model\User) {
+        if ($value instanceof \Octo\System\Model\User) {
             return $this->setUserObject($value);
         }
 
@@ -478,9 +478,9 @@ trait FileBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\Model\User
+    * @param $value \Octo\System\Model\User
     */
-    public function setUserObject(\Octo\Model\User $value)
+    public function setUserObject(\Octo\System\Model\User $value)
     {
         return $this->setUserId($value->getId());
     }

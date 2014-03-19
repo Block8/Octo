@@ -4,7 +4,7 @@
  * Log base store for table: log
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Log;
+use Octo\System\Model\Log;
 
 /**
  * Log Base Store
@@ -23,7 +23,7 @@ trait LogStoreBase
     protected function init()
     {
         $this->tableName = 'log';
-        $this->modelName = '\Octo\Model\Log';
+        $this->modelName = '\Octo\System\Model\Log';
         $this->primaryKey = 'id';
     }
     /**

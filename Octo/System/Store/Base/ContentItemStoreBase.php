@@ -4,7 +4,7 @@
  * ContentItem base store for table: content_item
  */
 
-namespace Octo\Store\Base;
+namespace Octo\System\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\ContentItem;
+use Octo\System\Model\ContentItem;
 
 /**
  * ContentItem Base Store
@@ -23,7 +23,7 @@ trait ContentItemStoreBase
     protected function init()
     {
         $this->tableName = 'content_item';
-        $this->modelName = '\Octo\Model\ContentItem';
+        $this->modelName = '\Octo\System\Model\ContentItem';
         $this->primaryKey = 'id';
     }
     /**

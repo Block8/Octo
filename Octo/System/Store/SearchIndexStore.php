@@ -4,14 +4,14 @@
  * SearchIndex store for table: search_index
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
 
 /**
  * SearchIndex Store
- * @uses Octo\Store\Base\SearchIndexStoreBase
+ * @uses Octo\System\Store\Base\SearchIndexStoreBase
  */
 class SearchIndexStore extends Octo\Store
 {

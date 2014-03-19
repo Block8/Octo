@@ -4,14 +4,14 @@
  * Migration store for table: migration
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
 
 /**
  * Migration Store
- * @uses Octo\Store\Base\MigrationStoreBase
+ * @uses Octo\System\Store\Base\MigrationStoreBase
  */
 class MigrationStore extends Octo\Store
 {

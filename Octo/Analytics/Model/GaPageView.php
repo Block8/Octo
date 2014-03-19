@@ -3,7 +3,7 @@
 /**
  * GaPageView model for table: ga_page_view */
 
-namespace Octo\Model;
+namespace Octo\Analytics\Model;
 
 use Octo;
 

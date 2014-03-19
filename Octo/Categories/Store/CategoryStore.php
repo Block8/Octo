@@ -4,15 +4,15 @@
  * Category store for table: category
  */
 
-namespace Octo\Store;
+namespace Octo\Analytics\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\Category;
+use Octo\Categories\Model\Category;
 
 /**
  * Category Store
- * @uses Octo\Store\Base\CategoryStoreBase
+ * @uses Octo\Categories\Store\Base\CategoryStoreBase
  */
 class CategoryStore extends Octo\Store
 {

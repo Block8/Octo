@@ -4,19 +4,19 @@ namespace Octo;
 
 use b8\Http\Request;
 use b8\Http\Response;
-use Octo\Model\Page;
-use Octo\Model\PageVersion;
+use Octo\Pages\Model\Page;
+use Octo\Pages\Model\PageVersion;
 use Octo\Template;
 
 class BlockManager
 {
     /**
-     * @var \Octo\Model\Page
+     * @var \Octo\Pages\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Model\PageVersion
+     * @var \Octo\Pages\Model\PageVersion
      */
     protected $version;
 

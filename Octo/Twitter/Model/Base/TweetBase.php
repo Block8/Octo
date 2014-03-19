@@ -4,7 +4,7 @@
  * Tweet base model for table: tweet
  */
 
-namespace Octo\Model\Base;
+namespace Octo\Twitter\Model\Base;
 
 use b8\Store\Factory;
 

@@ -12,12 +12,14 @@ class Manager
     public function init()
     {
         $this->config = Config::getInstance();
-        $siteNs = $this->config->get('site.namespace');
-        $sitePath = APP_PATH . $siteNs . '/Event/Listener/';
-        $siteNs = $siteNs . '\\Event\\Listener\\';
+        $siteModules = array_reverse($this->config->get('site.modules', []));
 
-        $this->registerListeners(CMS_PATH . 'Event/Listener/', '\\Octo\\Event\\Listener\\');
-        $this->registerListeners($sitePath, $siteNs);
+        foreach ($siteModules as $namespace => $modules) {
+            foreach ($modules as $module) {
+                $path = $this->config->get('site.module_paths.' . $module, '') . 'Event/';
+                $this->registerListeners($path, $namespace . '\\' . $module . '\\Event\\');
+            }
+        }
     }
 
     protected function registerListeners($directory, $namespace)
@@ -26,7 +28,6 @@ class Manager
 
         foreach ($files as $file) {
             require_once($file);
-
             $className = $namespace . basename($file, '.php');
 
             if (class_exists($className)) {

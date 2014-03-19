@@ -4,7 +4,7 @@
  * GaSummaryView base store for table: ga_summary_view
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Analytics\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\GaSummaryView;
+use Octo\Analytics\Model\GaSummaryView;
 
 /**
  * GaSummaryView Base Store
@@ -23,7 +23,7 @@ trait GaSummaryViewStoreBase
     protected function init()
     {
         $this->tableName = 'ga_summary_view';
-        $this->modelName = '\Octo\Model\GaSummaryView';
+        $this->modelName = '\Octo\Analytics\Model\GaSummaryView';
         $this->primaryKey = 'id';
     }
     /**

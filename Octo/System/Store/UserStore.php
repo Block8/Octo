@@ -4,15 +4,15 @@
  * User store for table: user
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Model\User;
+use Octo\System\Model\User;
 
 /**
  * User Store
- * @uses Octo\Store\Base\UserStoreBase
+ * @uses Octo\System\Store\Base\UserStoreBase
  */
 class UserStore extends Octo\Store
 {

@@ -4,6 +4,8 @@ namespace Octo\Admin;
 
 class Template extends \Octo\Template
 {
+    protected static $templateType = 'admin_templates';
+
     public static function createFromFile($file, $path = null)
     {
         if (!static::exists($file, $path)) {

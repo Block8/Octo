@@ -3,7 +3,7 @@
 /**
  * Migration model for table: migration */
 
-namespace Octo\Model;
+namespace Octo\System\Model;
 
 use Octo;
 

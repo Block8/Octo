@@ -4,13 +4,13 @@
  * Form model for table: form
  */
 
-namespace Octo\Model;
+namespace Octo\Forms\Model;
 
 use Octo;
 
 /**
  * Form Model
- * @uses Octo\Model\Base\FormBase
+ * @uses Octo\Forms\Model\Base\FormBaseBase
  */
 class Form extends Octo\Model
 {

@@ -4,14 +4,14 @@ namespace Octo\Block;
 
 use b8\Database;
 use Octo\Block;
-use Octo\Model\Page;
+use Octo\Pages\Model\Page;
 use Octo\Store;
 use Octo\Template;
 
 class SectionCollection extends Block
 {
     /**
-     * @var \Octo\Store\PageStore
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 

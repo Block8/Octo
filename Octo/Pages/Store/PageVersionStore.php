@@ -4,13 +4,13 @@
  * PageVersion store for table: page_version
  */
 
-namespace Octo\Store;
+namespace Octo\Pages\Store;
 
 use Octo;
 
 /**
  * PageVersion Store
- * @uses Octo\Store\Base\PageVersionStoreBase
+ * @uses Octo\Pages\Store\Base\PageVersionStoreBase
  */
 class PageVersionStore extends Octo\Store
 {

@@ -7,9 +7,9 @@ use b8\Config;
 use b8\Form\Element\Submit;
 use Octo\Block;
 use Octo\Form as FormElement;
-use Octo\Model\Contact;
-use Octo\Model\Form as FormModel;
-use Octo\Model\Submission;
+use Octo\System\Model\Contact;
+use Octo\Forms\Model\Form as FormModel;
+use Octo\Forms\Model\Submission;
 use Octo\Store;
 use Octo\Template;
 
@@ -31,7 +31,7 @@ class Form extends Block
     protected $submissionStore;
 
     /**
-     * @var \Octo\Model\Form
+     * @var \Octo\Forms\Model\Form
      */
     protected $formModel;
 

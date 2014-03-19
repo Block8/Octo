@@ -4,7 +4,7 @@
  * GaPageView base store for table: ga_page_view
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Analytics\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\GaPageView;
+use Octo\Analytics\Model\GaPageView;
 
 /**
  * GaPageView Base Store
@@ -23,7 +23,7 @@ trait GaPageViewStoreBase
     protected function init()
     {
         $this->tableName = 'ga_page_view';
-        $this->modelName = '\Octo\Model\GaPageView';
+        $this->modelName = '\Octo\Analytics\Model\GaPageView';
         $this->primaryKey = 'id';
     }
     /**

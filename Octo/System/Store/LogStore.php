@@ -4,13 +4,13 @@
  * Log store for table: log
  */
 
-namespace Octo\Store;
+namespace Octo\System\Store;
 
 use Octo;
 
 /**
  * Log Store
- * @uses Octo\Store\Base\LogStoreBase
+ * @uses Octo\System\Store\Base\LogStoreBase
  */
 class LogStore extends Octo\Store
 {

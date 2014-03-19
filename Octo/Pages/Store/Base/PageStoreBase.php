@@ -4,7 +4,7 @@
  * Page base store for table: page
  */
 
-namespace Octo\Store\Base;
+namespace Octo\Pages\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use Octo\Model\Page;
+use Octo\Pages\Model\Page;
 
 /**
  * Page Base Store
@@ -23,7 +23,7 @@ trait PageStoreBase
     protected function init()
     {
         $this->tableName = 'page';
-        $this->modelName = '\Octo\Model\Page';
+        $this->modelName = '\Octo\Pages\Model\Page';
         $this->primaryKey = 'id';
     }
     /**

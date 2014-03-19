@@ -3,7 +3,7 @@
 /**
  * GaTopPage model for table: ga_top_page */
 
-namespace Octo\Model;
+namespace Octo\Analytics\Model;
 
 use Octo;
 

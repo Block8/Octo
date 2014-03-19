@@ -4,7 +4,7 @@
  * Page model for table: page
  */
 
-namespace Octo\Model;
+namespace Octo\Pages\Model;
 
 use b8\Cache;
 use Octo;
@@ -13,7 +13,7 @@ use Octo\Utilities\StringUtilities;
 
 /**
  * Page Model
- * @uses Octo\Model\Base\PageBase
+ * @uses Octo\Pages\Model\Base\PageBaseBase
  */
 class Page extends Octo\Model
 {
