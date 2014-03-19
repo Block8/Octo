@@ -365,9 +365,9 @@ trait ArticleBase
     /**
     * Get the User model for this Article by Id.
     *
-    * @uses \Octo\System\Store\UserStore::getById()
-    * @uses \Octo\System\Model\User
-    * @return \Octo\System\Model\User
+    * @uses \Octo\Articles\Store\UserStore::getById()
+    * @uses \Octo\Articles\Model\User
+    * @return \Octo\Articles\Model\User
     */
     public function getUser()
     {
@@ -377,7 +377,7 @@ trait ArticleBase
             return null;
         }
 
-        return Factory::getStore('User', 'Octo')->getById($key);
+        return Factory::getStore('User', 'Octo\System')->getById($key);
     }
 
     /**
@@ -388,7 +388,7 @@ trait ArticleBase
     public function setUser($value)
     {
         // Is this an instance of User?
-        if ($value instanceof \Octo\System\Model\User) {
+        if ($value instanceof \Octo\Articles\Model\User) {
             return $this->setUserObject($value);
         }
 
@@ -404,18 +404,18 @@ trait ArticleBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\System\Model\User
+    * @param $value \Octo\Articles\Model\User
     */
-    public function setUserObject(\Octo\System\Model\User $value)
+    public function setUserObject(\Octo\Articles\Model\User $value)
     {
         return $this->setUserId($value->getId());
     }
     /**
     * Get the Category model for this Article by Id.
     *
-    * @uses \Octo\Categories\Store\CategoryStore::getById()
-    * @uses \Octo\Categories\Model\Category
-    * @return \Octo\Categories\Model\Category
+    * @uses \Octo\Articles\Store\CategoryStore::getById()
+    * @uses \Octo\Articles\Model\Category
+    * @return \Octo\Articles\Model\Category
     */
     public function getCategory()
     {
@@ -425,7 +425,7 @@ trait ArticleBase
             return null;
         }
 
-        return Factory::getStore('Category', 'Octo')->getById($key);
+        return Factory::getStore('Category', 'Octo\Categories')->getById($key);
     }
 
     /**
@@ -436,7 +436,7 @@ trait ArticleBase
     public function setCategory($value)
     {
         // Is this an instance of Category?
-        if ($value instanceof \Octo\Categories\Model\Category) {
+        if ($value instanceof \Octo\Articles\Model\Category) {
             return $this->setCategoryObject($value);
         }
 
@@ -452,18 +452,18 @@ trait ArticleBase
     /**
     * Set Category - Accepts a Category model.
     *
-    * @param $value \Octo\Categories\Model\Category
+    * @param $value \Octo\Articles\Model\Category
     */
-    public function setCategoryObject(\Octo\Categories\Model\Category $value)
+    public function setCategoryObject(\Octo\Articles\Model\Category $value)
     {
         return $this->setCategoryId($value->getId());
     }
     /**
     * Get the User model for this Article by Id.
     *
-    * @uses \Octo\System\Store\UserStore::getById()
-    * @uses \Octo\System\Model\User
-    * @return \Octo\System\Model\User
+    * @uses \Octo\Articles\Store\UserStore::getById()
+    * @uses \Octo\Articles\Model\User
+    * @return \Octo\Articles\Model\User
     */
     public function getAuthor()
     {
@@ -473,7 +473,7 @@ trait ArticleBase
             return null;
         }
 
-        return Factory::getStore('User', 'Octo')->getById($key);
+        return Factory::getStore('User', 'Octo\System')->getById($key);
     }
 
     /**
@@ -484,7 +484,7 @@ trait ArticleBase
     public function setAuthor($value)
     {
         // Is this an instance of User?
-        if ($value instanceof \Octo\System\Model\User) {
+        if ($value instanceof \Octo\Articles\Model\User) {
             return $this->setAuthorObject($value);
         }
 
@@ -500,18 +500,18 @@ trait ArticleBase
     /**
     * Set Author - Accepts a User model.
     *
-    * @param $value \Octo\System\Model\User
+    * @param $value \Octo\Articles\Model\User
     */
-    public function setAuthorObject(\Octo\System\Model\User $value)
+    public function setAuthorObject(\Octo\Articles\Model\User $value)
     {
         return $this->setAuthorId($value->getId());
     }
     /**
     * Get the ContentItem model for this Article by Id.
     *
-    * @uses \Octo\System\Store\ContentItemStore::getById()
-    * @uses \Octo\System\Model\ContentItem
-    * @return \Octo\System\Model\ContentItem
+    * @uses \Octo\Articles\Store\ContentItemStore::getById()
+    * @uses \Octo\Articles\Model\ContentItem
+    * @return \Octo\Articles\Model\ContentItem
     */
     public function getContentItem()
     {
@@ -521,7 +521,7 @@ trait ArticleBase
             return null;
         }
 
-        return Factory::getStore('ContentItem', 'Octo')->getById($key);
+        return Factory::getStore('ContentItem', 'Octo\System')->getById($key);
     }
 
     /**
@@ -532,7 +532,7 @@ trait ArticleBase
     public function setContentItem($value)
     {
         // Is this an instance of ContentItem?
-        if ($value instanceof \Octo\System\Model\ContentItem) {
+        if ($value instanceof \Octo\Articles\Model\ContentItem) {
             return $this->setContentItemObject($value);
         }
 
@@ -548,9 +548,9 @@ trait ArticleBase
     /**
     * Set ContentItem - Accepts a ContentItem model.
     *
-    * @param $value \Octo\System\Model\ContentItem
+    * @param $value \Octo\Articles\Model\ContentItem
     */
-    public function setContentItemObject(\Octo\System\Model\ContentItem $value)
+    public function setContentItemObject(\Octo\Articles\Model\ContentItem $value)
     {
         return $this->setContentItemId($value->getId());
     }

@@ -431,9 +431,9 @@ trait PageVersionBase
     /**
     * Get the ContentItem model for this PageVersion by Id.
     *
-    * @uses \Octo\System\Store\ContentItemStore::getById()
-    * @uses \Octo\System\Model\ContentItem
-    * @return \Octo\System\Model\ContentItem
+    * @uses \Octo\Pages\Store\ContentItemStore::getById()
+    * @uses \Octo\Pages\Model\ContentItem
+    * @return \Octo\Pages\Model\ContentItem
     */
     public function getContentItem()
     {
@@ -443,7 +443,7 @@ trait PageVersionBase
             return null;
         }
 
-        return Factory::getStore('ContentItem', 'Octo')->getById($key);
+        return Factory::getStore('ContentItem', 'Octo\System')->getById($key);
     }
 
     /**
@@ -454,7 +454,7 @@ trait PageVersionBase
     public function setContentItem($value)
     {
         // Is this an instance of ContentItem?
-        if ($value instanceof \Octo\System\Model\ContentItem) {
+        if ($value instanceof \Octo\Pages\Model\ContentItem) {
             return $this->setContentItemObject($value);
         }
 
@@ -470,9 +470,9 @@ trait PageVersionBase
     /**
     * Set ContentItem - Accepts a ContentItem model.
     *
-    * @param $value \Octo\System\Model\ContentItem
+    * @param $value \Octo\Pages\Model\ContentItem
     */
-    public function setContentItemObject(\Octo\System\Model\ContentItem $value)
+    public function setContentItemObject(\Octo\Pages\Model\ContentItem $value)
     {
         return $this->setContentItemId($value->getId());
     }
@@ -491,7 +491,7 @@ trait PageVersionBase
             return null;
         }
 
-        return Factory::getStore('Page', 'Octo')->getById($key);
+        return Factory::getStore('Page', 'Octo\Pages')->getById($key);
     }
 
     /**
@@ -527,9 +527,9 @@ trait PageVersionBase
     /**
     * Get the User model for this PageVersion by Id.
     *
-    * @uses \Octo\System\Store\UserStore::getById()
-    * @uses \Octo\System\Model\User
-    * @return \Octo\System\Model\User
+    * @uses \Octo\Pages\Store\UserStore::getById()
+    * @uses \Octo\Pages\Model\User
+    * @return \Octo\Pages\Model\User
     */
     public function getUser()
     {
@@ -539,7 +539,7 @@ trait PageVersionBase
             return null;
         }
 
-        return Factory::getStore('User', 'Octo')->getById($key);
+        return Factory::getStore('User', 'Octo\System')->getById($key);
     }
 
     /**
@@ -550,7 +550,7 @@ trait PageVersionBase
     public function setUser($value)
     {
         // Is this an instance of User?
-        if ($value instanceof \Octo\System\Model\User) {
+        if ($value instanceof \Octo\Pages\Model\User) {
             return $this->setUserObject($value);
         }
 
@@ -566,18 +566,18 @@ trait PageVersionBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\System\Model\User
+    * @param $value \Octo\Pages\Model\User
     */
-    public function setUserObject(\Octo\System\Model\User $value)
+    public function setUserObject(\Octo\Pages\Model\User $value)
     {
         return $this->setUserId($value->getId());
     }
     /**
     * Get the File model for this PageVersion by Id.
     *
-    * @uses \Octo\System\Store\FileStore::getById()
-    * @uses \Octo\System\Model\File
-    * @return \Octo\System\Model\File
+    * @uses \Octo\Pages\Store\FileStore::getById()
+    * @uses \Octo\Pages\Model\File
+    * @return \Octo\Pages\Model\File
     */
     public function getImage()
     {
@@ -587,7 +587,7 @@ trait PageVersionBase
             return null;
         }
 
-        return Factory::getStore('File', 'Octo')->getById($key);
+        return Factory::getStore('File', 'Octo\System')->getById($key);
     }
 
     /**
@@ -598,7 +598,7 @@ trait PageVersionBase
     public function setImage($value)
     {
         // Is this an instance of File?
-        if ($value instanceof \Octo\System\Model\File) {
+        if ($value instanceof \Octo\Pages\Model\File) {
             return $this->setImageObject($value);
         }
 
@@ -614,9 +614,9 @@ trait PageVersionBase
     /**
     * Set Image - Accepts a File model.
     *
-    * @param $value \Octo\System\Model\File
+    * @param $value \Octo\Pages\Model\File
     */
-    public function setImageObject(\Octo\System\Model\File $value)
+    public function setImageObject(\Octo\Pages\Model\File $value)
     {
         return $this->setImageId($value->getId());
     }

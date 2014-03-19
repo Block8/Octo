@@ -22,6 +22,8 @@ abstract class Module
         }
 
         $octoConfig['paths']['modules'][$this->getName()] = $base;
+        $octoConfig['paths']['namespaces'][$namespace . '\\' . $this->getName()] = $base;
+
         $app = $config->get('app', []);
         $app['namespaces'] = array_merge($app['namespaces'], $this->getModels($namespace));
 

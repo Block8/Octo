@@ -201,7 +201,7 @@ trait CategoryBase
             return null;
         }
 
-        return Factory::getStore('Category', 'Octo')->getById($key);
+        return Factory::getStore('Category', 'Octo\Categories')->getById($key);
     }
 
     /**

@@ -245,7 +245,7 @@ trait SubmissionBase
             return null;
         }
 
-        return Factory::getStore('Form', 'Octo')->getById($key);
+        return Factory::getStore('Form', 'Octo\Forms')->getById($key);
     }
 
     /**
@@ -281,9 +281,9 @@ trait SubmissionBase
     /**
     * Get the Contact model for this Submission by Id.
     *
-    * @uses \Octo\System\Store\ContactStore::getById()
-    * @uses \Octo\System\Model\Contact
-    * @return \Octo\System\Model\Contact
+    * @uses \Octo\Forms\Store\ContactStore::getById()
+    * @uses \Octo\Forms\Model\Contact
+    * @return \Octo\Forms\Model\Contact
     */
     public function getContact()
     {
@@ -293,7 +293,7 @@ trait SubmissionBase
             return null;
         }
 
-        return Factory::getStore('Contact', 'Octo')->getById($key);
+        return Factory::getStore('Contact', 'Octo\System')->getById($key);
     }
 
     /**
@@ -304,7 +304,7 @@ trait SubmissionBase
     public function setContact($value)
     {
         // Is this an instance of Contact?
-        if ($value instanceof \Octo\System\Model\Contact) {
+        if ($value instanceof \Octo\Forms\Model\Contact) {
             return $this->setContactObject($value);
         }
 
@@ -320,9 +320,9 @@ trait SubmissionBase
     /**
     * Set Contact - Accepts a Contact model.
     *
-    * @param $value \Octo\System\Model\Contact
+    * @param $value \Octo\Forms\Model\Contact
     */
-    public function setContactObject(\Octo\System\Model\Contact $value)
+    public function setContactObject(\Octo\Forms\Model\Contact $value)
     {
         return $this->setContactId($value->getId());
     }

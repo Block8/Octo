@@ -175,7 +175,7 @@ trait PermissionBase
             return null;
         }
 
-        return Factory::getStore('User', 'Octo')->getById($key);
+        return Factory::getStore('User', 'Octo\System')->getById($key);
     }
 
     /**

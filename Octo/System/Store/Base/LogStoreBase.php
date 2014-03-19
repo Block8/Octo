@@ -12,7 +12,7 @@ use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
-use Octo\Store;
+use Octo\System\Store;
 use Octo\System\Model\Log;
 
 /**

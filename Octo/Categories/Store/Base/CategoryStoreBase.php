@@ -4,7 +4,7 @@
  * Category base store for table: category
  */
 
-namespace Octo\Analytics\Store\Base;
+namespace Octo\Categories\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -12,7 +12,7 @@ use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
-use Octo\Store;
+use Octo\Categories\Store;
 use Octo\Categories\Model\Category;
 
 /**

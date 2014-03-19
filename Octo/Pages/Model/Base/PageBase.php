@@ -173,7 +173,7 @@ trait PageBase
             return null;
         }
 
-        return Factory::getStore('PageVersion', 'Octo')->getById($key);
+        return Factory::getStore('PageVersion', 'Octo\Pages')->getById($key);
     }
 
     /**
@@ -221,7 +221,7 @@ trait PageBase
             return null;
         }
 
-        return Factory::getStore('Page', 'Octo')->getById($key);
+        return Factory::getStore('Page', 'Octo\Pages')->getById($key);
     }
 
     /**

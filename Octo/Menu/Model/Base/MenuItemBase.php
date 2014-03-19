@@ -235,7 +235,7 @@ trait MenuItemBase
             return null;
         }
 
-        return Factory::getStore('Menu', 'Octo')->getById($key);
+        return Factory::getStore('Menu', 'Octo\Menu')->getById($key);
     }
 
     /**
@@ -271,9 +271,9 @@ trait MenuItemBase
     /**
     * Get the Page model for this MenuItem by Id.
     *
-    * @uses \Octo\Pages\Store\PageStore::getById()
-    * @uses \Octo\Pages\Model\Page
-    * @return \Octo\Pages\Model\Page
+    * @uses \Octo\Menu\Store\PageStore::getById()
+    * @uses \Octo\Menu\Model\Page
+    * @return \Octo\Menu\Model\Page
     */
     public function getPage()
     {
@@ -283,7 +283,7 @@ trait MenuItemBase
             return null;
         }
 
-        return Factory::getStore('Page', 'Octo')->getById($key);
+        return Factory::getStore('Page', 'Octo\Pages')->getById($key);
     }
 
     /**
@@ -294,7 +294,7 @@ trait MenuItemBase
     public function setPage($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Pages\Model\Page) {
+        if ($value instanceof \Octo\Menu\Model\Page) {
             return $this->setPageObject($value);
         }
 
@@ -310,9 +310,9 @@ trait MenuItemBase
     /**
     * Set Page - Accepts a Page model.
     *
-    * @param $value \Octo\Pages\Model\Page
+    * @param $value \Octo\Menu\Model\Page
     */
-    public function setPageObject(\Octo\Pages\Model\Page $value)
+    public function setPageObject(\Octo\Menu\Model\Page $value)
     {
         return $this->setPageId($value->getId());
     }

@@ -141,7 +141,7 @@ trait FileDownloadBase
             return null;
         }
 
-        return Factory::getStore('File', 'Octo')->getById($key);
+        return Factory::getStore('File', 'Octo\System')->getById($key);
     }
 
     /**

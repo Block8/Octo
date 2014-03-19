@@ -391,9 +391,9 @@ trait FileBase
     /**
     * Get the Category model for this File by Id.
     *
-    * @uses \Octo\Categories\Store\CategoryStore::getById()
-    * @uses \Octo\Categories\Model\Category
-    * @return \Octo\Categories\Model\Category
+    * @uses \Octo\System\Store\CategoryStore::getById()
+    * @uses \Octo\System\Model\Category
+    * @return \Octo\System\Model\Category
     */
     public function getCategory()
     {
@@ -403,7 +403,7 @@ trait FileBase
             return null;
         }
 
-        return Factory::getStore('Category', 'Octo')->getById($key);
+        return Factory::getStore('Category', 'Octo\Categories')->getById($key);
     }
 
     /**
@@ -414,7 +414,7 @@ trait FileBase
     public function setCategory($value)
     {
         // Is this an instance of Category?
-        if ($value instanceof \Octo\Categories\Model\Category) {
+        if ($value instanceof \Octo\System\Model\Category) {
             return $this->setCategoryObject($value);
         }
 
@@ -430,9 +430,9 @@ trait FileBase
     /**
     * Set Category - Accepts a Category model.
     *
-    * @param $value \Octo\Categories\Model\Category
+    * @param $value \Octo\System\Model\Category
     */
-    public function setCategoryObject(\Octo\Categories\Model\Category $value)
+    public function setCategoryObject(\Octo\System\Model\Category $value)
     {
         return $this->setCategoryId($value->getId());
     }
@@ -451,7 +451,7 @@ trait FileBase
             return null;
         }
 
-        return Factory::getStore('User', 'Octo')->getById($key);
+        return Factory::getStore('User', 'Octo\System')->getById($key);
     }
 
     /**
