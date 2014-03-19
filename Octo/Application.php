@@ -2,6 +2,7 @@
 
 namespace Octo;
 
+use Exception;
 use b8\Exception\HttpException;
 use b8\Http\Response;
 use b8\Http\Response\RedirectResponse;
@@ -92,19 +93,30 @@ class Application extends \b8\Application
         try {
             $rtn = parent::handleRequest();
         } catch (HttpException $ex) {
-            if (Template::checkExists('Error/' . $ex->getErrorCode())) {
-                $template = Template::getPublicTemplate('Error/' . $ex->getErrorCode());
-
-                $blockManager = new BlockManager();
-                $blockManager->setRequest($this->request);
-                $blockManager->setResponse($this->response);
-                $blockManager->attachToTemplate($template);
-
-                $rtn = $template->render();
-            }
+            $rtn = $this->handleHttpError($ex->getErrorCode());
+        } catch (Exception $ex) {
+            $rtn = $this->handleHttpError(500);
         }
 
         return $rtn;
+    }
+
+    protected function handleHttpError($code)
+    {
+        if (Template::checkExists('Error/' . $code)) {
+
+            $this->response->setResponseCode($code);
+
+            $template = Template::getPublicTemplate('Error/' . $code);
+            $blockManager = new BlockManager();
+            $blockManager->setRequest($this->request);
+            $blockManager->setResponse($this->response);
+            $blockManager->attachToTemplate($template);
+
+            $this->response->setContent($template->render());
+        }
+
+        return $this->response;
     }
 
     /**

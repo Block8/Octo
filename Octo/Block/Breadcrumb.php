@@ -30,7 +30,7 @@ class Breadcrumb extends Block
         if (!isset($this->page)) {
             return;
         }
-        
+
         $this->view->items = $this->getAncestors();
     }
 
