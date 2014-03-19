@@ -6,6 +6,7 @@ use Exception;
 use b8\Exception\HttpException\NotFoundException;
 use b8\Exception\HttpException;
 use Octo\Block;
+use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Model\Page;
 use Octo\Model\PageVersion;
@@ -104,42 +105,16 @@ class PageController extends Controller
         $template = Template::getPublicTemplate($this->version->getTemplate());
         $template->version = $this->version;
         $template->page = $this->page;
-        $template->addFunction('block', [$this, 'renderBlock']);
+
+        $blockManager = new BlockManager();
+        $blockManager->setArgs($this->args);
+        $blockManager->setContent($this->content);
+        $blockManager->setPage($this->page);
+        $blockManager->setPageVersion($this->version);
+        $blockManager->setRequest($this->request);
+        $blockManager->setResponse($this->response);
+        $blockManager->attachToTemplate($template);
 
         return $template->render();
-    }
-
-    public function renderBlock($args, &$view)
-    {
-        foreach ($args as &$value) {
-            $value = $view->getVariable($value);
-        }
-
-        $type = $args['type'];
-        $blockId = isset($args['id']) ? $args['id'] : null;
-
-        try {
-            $content = [];
-
-            if (array_key_exists($blockId, $this->content)) {
-                $content = $this->content[$blockId];
-            }
-
-            $block = Block::create($type, $content);
-            $block->setRequest($this->request);
-            $block->setResponse($this->response);
-            $block->setArgs($this->args);
-            $block->setTemplateParams($args);
-            $block->setPage($this->page);
-            $block->setPageVersion($this->version);
-
-            $rtn = $block->render();
-        } catch (HttpException $ex) {
-            throw $ex;
-        } catch (Exception $ex) {
-            $rtn = '<!-- '.$ex->getMessage().' -->';
-        }
-
-        return $rtn;
     }
 }

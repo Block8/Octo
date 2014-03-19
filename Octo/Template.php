@@ -10,6 +10,18 @@ use Octo\Event;
 
 class Template extends View\Template
 {
+    public static function checkExists($template) {
+        if (PublicTemplate::exists($template, self::getSitePath('Template'))) {
+            return true;
+        }
+
+        if (PublicTemplate::exists($template, self::getSystemPath('Template'))) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function getAdminTemplate($template)
     {
         if (AdminTemplate::exists($template, static::getSitePath())) {

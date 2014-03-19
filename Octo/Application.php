@@ -6,9 +6,11 @@ use b8\Exception\HttpException;
 use b8\Http\Response;
 use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
-use Octo\Store;
 use Octo\Admin\Menu;
+use Octo\BlockManager;
 use Octo\Model\Log;
+use Octo\Store;
+use Octo\Template;
 
 class Application extends \b8\Application
 {
@@ -83,6 +85,26 @@ class Application extends \b8\Application
 
             return true;
         });
+    }
+
+    public function handleRequest()
+    {
+        try {
+            $rtn = parent::handleRequest();
+        } catch (HttpException $ex) {
+            if (Template::checkExists('Error/' . $ex->getErrorCode())) {
+                $template = Template::getPublicTemplate('Error/' . $ex->getErrorCode());
+
+                $blockManager = new BlockManager();
+                $blockManager->setRequest($this->request);
+                $blockManager->setResponse($this->response);
+                $blockManager->attachToTemplate($template);
+
+                $rtn = $template->render();
+            }
+        }
+
+        return $rtn;
     }
 
     /**
