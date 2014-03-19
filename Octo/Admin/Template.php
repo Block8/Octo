@@ -20,11 +20,13 @@ class Template extends \Octo\Template
     {
         $rtn = parent::getAdminTemplate($template);
 
-        $rtn->addFunction('pagination', array($rtn, 'handlePagination'));
+        if (!is_null($rtn)) {
+            $rtn->addFunction('pagination', array($rtn, 'handlePagination'));
 
-        $rtn->addFunction('hash', function ($args, $view) {
-            return md5($view->getVariable($args['value']));
-        });
+            $rtn->addFunction('hash', function ($args, $view) {
+                    return md5($view->getVariable($args['value']));
+                });
+        }
 
         return $rtn;
     }

@@ -21,6 +21,24 @@ class MigrationRunner
         $this->store = Store::get('Migration');
     }
 
+    public function markAllAsRun()
+    {
+        foreach ($this->getMigrationData() as $key => $migration) {
+            if (!is_null($migration['migration'])) {
+                continue;
+            }
+
+            try {
+                $obj = new Migration();
+                $obj->setId((string)$key);
+                $obj->setDateRun(new \DateTime());
+                $this->store->saveByInsert($obj);
+            } catch (\Exception $ex) {
+                throw new \Exception('Failed to run migration: ' . $key, 0, $ex);
+            }
+        }
+    }
+
     public function runMigrations()
     {
         foreach ($this->getMigrationData() as $key => $migration) {

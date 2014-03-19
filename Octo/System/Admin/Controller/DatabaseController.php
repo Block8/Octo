@@ -5,6 +5,7 @@ namespace Octo\System\Admin\Controller;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
 use Octo\Database\MigrationRunner;
+use Octo\System\Model\Migration;
 
 class DatabaseController extends Controller
 {
@@ -57,6 +58,16 @@ class DatabaseController extends Controller
         if (!$errors) {
             $this->successMessage('All database migrations ran successfully.', true);
         }
+
+        $this->response = new \b8\Http\Response\RedirectResponse();
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/database');
+    }
+
+    public function markAsRun()
+    {
+        $runner = new MigrationRunner();
+        $runner->markAllAsRun();
+        $this->successMessage('All database migrations ran successfully.', true);
 
         $this->response = new \b8\Http\Response\RedirectResponse();
         $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/database');

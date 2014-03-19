@@ -41,9 +41,10 @@ class Template extends View\Template
 
         if (AdminTemplate::exists($template)) {
             $rtn = AdminTemplate::createFromFile($template, AdminTemplate::getPath($template));
+            Event::trigger('AdminTemplateLoaded', $rtn);
+        } else {
+            throw new \Exception('Template does not exist: ' . $template);
         }
-
-        Event::trigger('AdminTemplateLoaded', $rtn);
 
         return $rtn;
     }
@@ -54,9 +55,10 @@ class Template extends View\Template
 
         if (PublicTemplate::exists($template)) {
             $rtn = PublicTemplate::createFromFile($template, PublicTemplate::getPath($template));
+            Event::trigger('PublicTemplateLoaded', $rtn);
+        } else {
+            throw new \Exception('Template does not exist: ' . $template);
         }
-
-        Event::trigger('PublicTemplateLoaded', $rtn);
 
         return $rtn;
     }
