@@ -6,6 +6,7 @@ use b8\Config;
 use Octo\Template;
 use Octo\Block;
 use Octo\Model\File;
+use Octo\Store;
 
 class Text extends Block
 {
@@ -28,7 +29,7 @@ class Text extends Block
     public function replaceFile($matches)
     {
         if (isset($matches[1])) {
-            $file = File::getById($matches[1]);
+            $file = Store::get('File')->getById($matches[1]);
             if ($file) {
                 $template = Template::getPublicTemplate('Block/Text/File');
                 $template->file = $file;

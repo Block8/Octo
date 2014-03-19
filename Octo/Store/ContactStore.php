@@ -41,28 +41,32 @@ class ContactStore extends Octo\Store
     {
         $database = Database::getConnection('read');
 
-        $query = 'SELECT * FROM contact WHERE email = :email LIMIT 1';
-        $stmt = $database->prepare($query);
-        $stmt->bindValue(':email', $details['email']);
+        if (isset($details['email'])) {
+            $query = 'SELECT * FROM contact WHERE email = :email LIMIT 1';
+            $stmt = $database->prepare($query);
+            $stmt->bindValue(':email', $details['email']);
 
-        if ($stmt->execute()) {
-            $res = $stmt->fetch(Database::FETCH_ASSOC);
-            return new Contact($res);
+            if ($stmt->execute()) {
+                $res = $stmt->fetch(Database::FETCH_ASSOC);
+                return new Contact($res);
+            }
         }
 
-        $query = 'SELECT * FROM contact
+        if (in_array(['first_name', 'last_name', 'phone', 'postcode'], $details)) {
+            $query = 'SELECT * FROM contact
                     WHERE first_name = :first AND last_name = :last AND (phone = :phone OR postcode = :postcode)
                     LIMIT 1';
 
-        $stmt = $database->prepare($query);
-        $stmt->bindValue(':first', $details['first_name']);
-        $stmt->bindValue(':last', $details['last_name']);
-        $stmt->bindValue(':phone', $details['phone']);
-        $stmt->bindValue(':postcode', $details['postcode']);
+            $stmt = $database->prepare($query);
+            $stmt->bindValue(':first', $details['first_name']);
+            $stmt->bindValue(':last', $details['last_name']);
+            $stmt->bindValue(':phone', $details['phone']);
+            $stmt->bindValue(':postcode', $details['postcode']);
 
-        if ($stmt->execute()) {
-            $res = $stmt->fetch(Database::FETCH_ASSOC);
-            return new Contact($res);
+            if ($stmt->execute()) {
+                $res = $stmt->fetch(Database::FETCH_ASSOC);
+                return new Contact($res);
+            }
         }
 
         return null;

@@ -42,32 +42,44 @@ class ArticleStore extends Octo\Store
      *
      * @param $categoryId Category to retrieve articles for
      * @param int $limit Number of articles to retrieve
+     * @param string $scope Scope of articles to retrieve
      * @return array
      */
-    public function getRecent($categoryId = null, $limit = 10)
+    public function getRecent($categoryId = null, $limit = 10, $scope)
     {
-        $where = '';
+        $where = 'WHERE 1';
         if (!is_null($categoryId)) {
-            $where = ' WHERE category_id = :catId ';
+            $where .= ' AND category_id = :catId ';
+        }
+        if (!is_null($scope)) {
+            $where .= ' AND c.scope = :scope ';
         }
 
-        $query = 'SELECT COUNT(*) AS cnt FROM article '.$where;
+        $query = 'SELECT COUNT(*) AS cnt FROM article LEFT JOIN category c ON c.id = article.category_id ' . $where;
         $stmt = Database::getConnection('read')->prepare($query);
 
         if (!is_null($categoryId)) {
             $stmt->bindValue(':catId', (int)$categoryId, Database::PARAM_INT);
+        }
+
+        if (!is_null($scope)) {
+            $stmt->bindValue(':scope', $scope, Database::PARAM_STR);
         }
 
         $stmt->execute();
         $res = $stmt->fetch(Database::FETCH_ASSOC);
         $count = $res['cnt'];
 
-
-        $query = 'SELECT article.* FROM article '.$where.' ORDER BY id DESC LIMIT :limit';
+        $query = 'SELECT article.* FROM article LEFT JOIN category c ON c.id = article.category_id ' . $where;
+        $query .= ' ORDER BY id DESC LIMIT :limit';
         $stmt = Database::getConnection('read')->prepare($query);
 
         if (!is_null($categoryId)) {
             $stmt->bindValue(':catId', (int)$categoryId, Database::PARAM_INT);
+        }
+
+        if (!is_null($scope)) {
+            $stmt->bindValue(':scope', $scope, Database::PARAM_STR);
         }
 
         $stmt->bindValue(':limit', (int)$limit, Database::PARAM_INT);
