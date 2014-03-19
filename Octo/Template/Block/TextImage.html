@@ -1,7 +1,13 @@
 <div class="block text-image">
-{if image}
-<img src="/media/render/{@image}/{@width}/{@height}">
-{/if}
 
-{@content}
+    {if link}<a href="{@link}">{/if}
+
+    {if image}
+    <img src="/media/render/{@image}/{@width}/{@height}">
+    {/if}
+
+    {@content}
+
+    {if link}</a>{/if}
+
 </div>
