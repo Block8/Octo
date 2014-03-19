@@ -58,18 +58,16 @@ class Menu
     protected function setupControllerMenus()
     {
         $this->config = Config::getInstance();
-        $systemControllers = CMS_PATH . 'Admin/Controller/';
-        $files = glob($systemControllers . '*Controller.php');
 
-        foreach ($files as $file) {
-            $this->getControllerMenuItems($file, $this->config->get('b8.app.namespace'));
-        }
+        $paths = Config::getInstance()->get('Octo.paths.namespaces');
 
-        $siteControllerPath = APP_PATH . $this->config->get('site.namespace') . '/Admin/Controller/';
-        $files = glob($siteControllerPath . '*Controller.php');
+        foreach ($paths as $namespace => $path) {
+            $thisPath = $path . 'Admin/Controller/*.php';
+            $files = glob($thisPath);
 
-        foreach ($files as $file) {
-            $this->getControllerMenuItems($file, $this->config->get('site.namespace'));
+            foreach ($files as $file) {
+                $this->getControllerMenuItems($file, $namespace);
+            }
         }
     }
 

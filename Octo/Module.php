@@ -24,6 +24,12 @@ abstract class Module
         $octoConfig['paths']['modules'][$this->getName()] = $base;
         $octoConfig['paths']['namespaces'][$namespace . '\\' . $this->getName()] = $base;
 
+        if (!isset($octoConfig['namespaces']['blocks'])) {
+            $octoConfig['namespaces']['blocks'] = [];
+        }
+
+        $octoConfig['namespaces']['blocks'] = array_merge($octoConfig['namespaces']['blocks'], $this->getBlocks($namespace));
+
         $app = $config->get('app', []);
         $app['namespaces'] = array_merge($app['namespaces'], $this->getModels($namespace));
 
@@ -43,6 +49,27 @@ abstract class Module
         }
 
         $dir = new \DirectoryIterator($modelPath);
+        $rtn = [];
+
+        foreach ($dir as $item) {
+            if ($item->isFile() && $item->getExtension() == 'php') {
+                $modelName = $item->getBasename('.php');
+                $rtn[$modelName] = $namespace . '\\' . $this->getName();
+            }
+        }
+
+        return $rtn;
+    }
+
+    protected function getBlocks($namespace)
+    {
+        $blockPath = $this->getPath() . 'Block/';
+
+        if (!is_dir($blockPath)) {
+            return [];
+        }
+
+        $dir = new \DirectoryIterator($blockPath);
         $rtn = [];
 
         foreach ($dir as $item) {

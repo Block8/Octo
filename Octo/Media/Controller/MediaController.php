@@ -1,15 +1,14 @@
 <?php
-namespace Octo\Controller;
+namespace Octo\Media\Controller;
 
 use b8\Image;
 use b8\Form;
+use Octo\Controller;
 use Octo\Store;
 use Octo\System\Store\FileStore;
 use Octo\System\Store\FileDownloadStore;
 use Octo\System\Model\File;
 use Octo\System\Model\FileDownload;
-use Octo\Admin\Controller;
-use Octo\Admin\Menu;
 
 class MediaController extends Controller
 {

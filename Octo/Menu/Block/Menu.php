@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Block;
+namespace Octo\Menu\Block;
 
 use Octo\Template;
 use Octo\Block;

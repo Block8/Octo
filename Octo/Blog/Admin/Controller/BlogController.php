@@ -8,7 +8,7 @@ use Octo\Admin\Menu;
 use Octo\Articles\Model\Article;
 use Octo\System\Model\ContentItem;
 
-class BlogController extends \Octo\Admin\Controller\NewsController
+class BlogController extends \Octo\News\Admin\Controller\NewsController
 {
     /**
      * Return the menu nodes required for this controller

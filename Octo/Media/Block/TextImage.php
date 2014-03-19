@@ -1,6 +1,8 @@
 <?php
 
-namespace Octo\Block;
+namespace Octo\Media\Block;
+
+use Octo\Pages\Block\Text;
 
 class TextImage extends Text
 {

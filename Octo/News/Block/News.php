@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Block;
+namespace Octo\News\Block;
 
 use b8\Config;
 use Octo\Block;

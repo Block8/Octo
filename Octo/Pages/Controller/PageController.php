@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Controller;
+namespace Octo\Pages\Controller;
 
 use Exception;
 use b8\Exception\HttpException\NotFoundException;

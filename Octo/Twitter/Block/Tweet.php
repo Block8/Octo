@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Block;
+namespace Octo\Twitter\Block;
 
 use Octo\Block;
 use Octo\Store;

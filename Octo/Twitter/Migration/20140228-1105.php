@@ -1,8 +1,6 @@
 <?php
 $queries = [];
 
-$queries[] = "ALTER TABLE `setting` ADD `hidden` TINYINT(1)  NULL  DEFAULT '0'  AFTER `scope`;";
-
 $queries[] = "INSERT INTO `setting` (`id`, `key`, `value`, `scope`, `hidden`)
 VALUES
 	(1, 'consumer_key', NULL, 'twitter', 0),

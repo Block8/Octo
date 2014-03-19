@@ -4,7 +4,7 @@
  * Menu store for table: menu
  */
 
-namespace Octo\Analytics\Store;
+namespace Octo\Menu\Store;
 
 use b8\Database;
 use Octo;

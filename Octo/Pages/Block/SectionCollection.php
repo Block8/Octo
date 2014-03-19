@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Block;
+namespace Octo\Pages\Block;
 
 use b8\Database;
 use Octo\Block;

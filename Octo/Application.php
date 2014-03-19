@@ -98,7 +98,6 @@ class Application extends \b8\Application
             throw $ex;
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
-            throw $ex;
             $rtn = $this->handleHttpError(500);
         }
 
@@ -144,7 +143,6 @@ class Application extends \b8\Application
     protected function controllerExists($route)
     {
         $controller = $this->toPhpName($route['controller']);
-
         $controllerClass = '\\Octo\\' . $route['namespace'];
         $class = $controllerClass::getClass($controller);
 

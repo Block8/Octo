@@ -4,7 +4,7 @@
  * Category store for table: category
  */
 
-namespace Octo\Analytics\Store;
+namespace Octo\Categories\Store;
 
 use b8\Database;
 use Octo;

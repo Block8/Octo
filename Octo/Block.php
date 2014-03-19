@@ -113,14 +113,11 @@ abstract class Block
     public static function create($type, $content)
     {
         $config = \b8\Config::getInstance();
+        $namespace = $config->get('Octo.namespaces.blocks.' . $type);
+        $class = '\\' . $namespace . '\\Block\\' . $type;
 
-        $siteNs = '\\' . $config->get('site.namespace') . '\\Block\\' . $type;
-        $systemNs = '\\' . $config->get('b8.app.namespace') . '\\Block\\' . $type;
-
-        if (class_exists($siteNs)) {
-            return new $siteNs($content);
-        } elseif (class_exists($systemNs)) {
-            return new $systemNs($content);
+        if (class_exists($class)) {
+            return new $class($content);
         }
 
         throw new \Exception('Block type ' . $type . ' does not exist');

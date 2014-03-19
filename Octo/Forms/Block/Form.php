@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Block;
+namespace Octo\Forms\Block;
 
 use b8;
 use b8\Config;

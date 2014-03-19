@@ -16,7 +16,7 @@ class Manager
 
         foreach ($siteModules as $namespace => $modules) {
             foreach ($modules as $module) {
-                $path = $this->config->get('site.module_paths.' . $module, '') . 'Event/';
+                $path = $this->config->get('Octo.paths.modules.' . $module, '') . 'Event/';
                 $this->registerListeners($path, $namespace . '\\' . $module . '\\Event\\');
             }
         }
