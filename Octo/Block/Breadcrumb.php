@@ -27,6 +27,10 @@ class Breadcrumb extends Block
 
     public function renderNow()
     {
+        if (!isset($this->page)) {
+            return;
+        }
+        
         $this->view->items = $this->getAncestors();
     }
 
