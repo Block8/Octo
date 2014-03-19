@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Command;
+namespace Octo\Twitter\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
