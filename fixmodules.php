@@ -25,14 +25,27 @@ $find = [];
 $replace = [];
 
 foreach ($models as $model => $module) {
+    $find[] = 'namespace Octo\Model;';
+    $find[] = 'namespace Octo\Store;';
+    $replace[] = 'namespace ' . $namespace . '\\' . $module . '\\Model;';
+    $replace[] = 'namespace ' . $namespace . '\\' . $module . '\\Store;';
+
+    $find[] = 'namespace Octo\Model\Base;';
+    $find[] = 'namespace Octo\Store\Base;';
+    $replace[] = 'namespace ' . $namespace . '\\' . $module . '\\Model\\Base;';
+    $replace[] = 'namespace ' . $namespace . '\\' . $module . '\\Store\\Base;';
+
     $find[] = $namespace . '\\Model\\' . $model;
+    $find[] = $namespace . '\\Model\\Base\\' . $model;
     $find[] = $namespace . '\\Store\\' . $model . 'Store';
+    $find[] = $namespace . '\\Store\\Base\\' . $model . 'StoreBase';
     $replace[] = $namespace . '\\' . $module . '\\Model\\' . $model;
+    $replace[] = $namespace . '\\' . $module . '\\Model\\Base\\' . $model . 'Base';
     $replace[] = $namespace . '\\' . $module . '\\Store\\' . $model . 'Store';
+    $replace[] = $namespace . '\\' . $module . '\\Store\\Base\\' . $model . 'StoreBase';
 }
 
-var_dump($find, $replace);
-
+recursiveReplace('./'.$namespace.'/', $find, $replace);
 
 function getModels($module)
 {
@@ -52,9 +65,21 @@ function getModels($module)
 
 function recursiveReplace($dir, $find, $replace)
 {
-    $files = glob($dir . '/*.php');
+    $files = new DirectoryIterator($dir);
 
     foreach ($files as $file) {
+        if ($file->isDot()) {
+            continue;
+        }
 
+        if ($file->isDir()) {
+            recursiveReplace($file->getPathname(), $find, $replace);
+        }
+
+        if ($file->isFile() && $file->getExtension() == 'php') {
+            $content = file_get_contents($file->getPathname());
+            $content = str_replace($find, $replace, $content);
+            file_put_contents($file->getPathname(), $content);
+        }
     }
 }

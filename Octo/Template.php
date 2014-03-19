@@ -24,10 +24,9 @@ class Template extends View\Template
     public static function getPath($template)
     {
         $config = Config::getInstance();
-        $paths = array_reverse($config->get('Octo.paths.' . self::$templateType, []));
+        $paths = array_reverse($config->get('Octo.paths.' . static::$templateType, []));
 
         foreach ($paths as $path) {
-            var_dump($path . $template . '.html');
             if (file_exists($path . $template . '.html')) {
                 return $path;
             }

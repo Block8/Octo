@@ -14,6 +14,7 @@ abstract class Store extends \b8\Store
      */
     public static function get($store)
     {
+
         $namespace = self::getModelNamespace($store);
 
         if (!is_null($namespace)) {
@@ -26,19 +27,9 @@ abstract class Store extends \b8\Store
     public static function getModelNamespace($model)
     {
         $config = Config::getInstance();
-        $siteModules = array_reverse($config->get('site.modules', []));
+        $default = $config->get('app.namespaces.default', 'Octo\\System');
 
-        foreach ($siteModules as $namespace => $modules) {
-            foreach ($modules as $module) {
-                $class = "\\{$namespace}\\{$module}\\Model\\{$model}";
-
-                if (class_exists($class)) {
-                    return "\\{$namespace}\\{$module}";
-                }
-            }
-        }
-
-        return null;
+        return $config->get('app.namespaces.'.$model, $default);
     }
 
     protected function getNamespace($model)
