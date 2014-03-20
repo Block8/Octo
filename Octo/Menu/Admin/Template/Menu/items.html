@@ -1,5 +1,5 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-list-ul"></i> Edit {@menu.name}</h1>
+    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-list-ul"></i> Edit {@menu.name}</h1>
 </div>
 
 <table class="table table-bordered table-striped" id="menu-items">
@@ -7,6 +7,7 @@
     <tr>
         <th>Title</th>
         <th>Page / Link</th>
+        <th width="2%"> </th>
         <th width="10%">Actions</th>
     </tr>
     </thead>
@@ -22,8 +23,9 @@
         <td>{@item.url}</td>
         {/ifnot}
 
+        <td width="2%"><i class="fa fa-fw fa-reorder handler"></i></td>
         <td>
-            <button class="remove-item btn btn-danger btn-sm">Remove</button>
+            <button class="remove-item btn btn-danger btn-sm">Delete</button>
         </td>
     </tr>
     {/loop}
@@ -82,6 +84,7 @@
 
 
 <script>
+    sorting = false;
     var fixHelper = function(e, ui) {
         ui.children().each(function() {
             $(this).width($(this).width());
@@ -91,23 +94,6 @@
 
     function registerEvents()
     {
-        $('#menu-items tbody').sortable({
-            axis: 'y',
-            items: '> tr',
-            helper: fixHelper,
-            update: function () {
-                var position = 0;
-                var items = {};
-
-                $('tr.menu-item').each(function () {
-                    var id = $(this).data('id');
-                    items[id] = position++;
-                });
-
-                savePositions(items);
-            }
-        });
-
         $(document).on('change', '.menu-item-title', function(e) {
             e.stopPropagation();
             $('.pace').removeClass('hide');
@@ -136,6 +122,24 @@
     $(document).ready(function () {
 
         registerEvents();
+
+        $('#menu-items tbody').sortable({
+            handle: '.handler',
+            axis: 'y',
+            items: '> tr',
+            helper: fixHelper,
+            update: function () {
+                var position = 0;
+                var items = {};
+
+                $('tr.menu-item').each(function () {
+                    var id = $(this).data('id');
+                    items[id] = position++;
+                });
+
+                savePositions(items);
+            }
+        });
 
         $('#new-page').select2({
             placeholder: "Search for a page",
