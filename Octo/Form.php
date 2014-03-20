@@ -9,13 +9,12 @@ class Form extends b8\Form
 {
     public function getView($view)
     {
-        try {
+        if (Template::exists('Form/' . $view)) {
             $view = Template::getPublicTemplate('Form/' . $view);
-        } catch (\Exception $ex) {
-            $view = new View($view, B8_PATH . 'Form/View/');
+            return $view;
         }
 
-        return $view;
+        return new View($view, B8_PATH . 'Form/View/');
     }
 
     public static function getFieldClass($type)

@@ -6,10 +6,12 @@ use Exception;
 use b8\Exception\HttpException;
 use b8\Http\Response;
 use b8\Http\Response\RedirectResponse;
+use Octo;
+use Octo\Admin;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
 use Octo\BlockManager;
-use Octo\Model\Log;
+use Octo\System\Model\Log;
 use Octo\Store;
 use Octo\Template;
 
@@ -93,6 +95,7 @@ class Application extends \b8\Application
         try {
             $rtn = parent::handleRequest();
         } catch (HttpException $ex) {
+            throw $ex;
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
             $rtn = $this->handleHttpError(500);
@@ -103,7 +106,7 @@ class Application extends \b8\Application
 
     protected function handleHttpError($code)
     {
-        if (Template::checkExists('Error/' . $code)) {
+        if (Template::exists('Error/' . $code)) {
 
             $this->response->setResponseCode($code);
 
@@ -125,28 +128,25 @@ class Application extends \b8\Application
     public function getController()
     {
         if (empty($this->controller)) {
-            $namespace = $this->toPhpName($this->route['namespace']);
             $controller = $this->toPhpName($this->route['controller']);
-            $siteNs = $this->config->get('site.namespace');
-            $controllerClass = '\\'. $siteNs . '\\' . $namespace . '\\' . $controller . 'Controller';
+            $controllerClass = '\\Octo\\' . $this->route['namespace'];
+            $class = $controllerClass::getClass($controller);
 
-            if (class_exists($controllerClass)) {
-                $this->controller = $this->loadController($controllerClass);
+            if (!is_null($class)) {
+                $this->controller = $this->loadController($class);
             }
         }
 
-        return parent::getController();
+        return $this->controller;
     }
 
     protected function controllerExists($route)
     {
-        $namespace = $this->toPhpName($route['namespace']);
         $controller = $this->toPhpName($route['controller']);
-        $siteNs = $this->config->get('site.namespace');
+        $controllerClass = '\\Octo\\' . $route['namespace'];
+        $class = $controllerClass::getClass($controller);
 
-        $controllerClass = '\\' . $siteNs . '\\' . $namespace . '\\' . $controller . 'Controller';
-
-        return class_exists($controllerClass) ? true : parent::controllerExists($route);
+        return !is_null($class);
     }
 
     protected function permissionDenied($user, $uri, &$response)

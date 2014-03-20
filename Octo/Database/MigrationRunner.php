@@ -3,14 +3,14 @@
 namespace Octo\Database;
 
 use b8\Config;
-use Octo\Model\Migration;
+use Octo\System\Model\Migration;
 use Octo\Store;
-use Octo\Store\MigrationStore;
+use Octo\System\Store\MigrationStore;
 
 class MigrationRunner
 {
     /**
-     * @var \Octo\Store\MigrationStore
+     * @var \Octo\System\Store\MigrationStore
      */
     protected $store;
 
@@ -19,6 +19,24 @@ class MigrationRunner
     public function __construct()
     {
         $this->store = Store::get('Migration');
+    }
+
+    public function markAllAsRun()
+    {
+        foreach ($this->getMigrationData() as $key => $migration) {
+            if (!is_null($migration['migration'])) {
+                continue;
+            }
+
+            try {
+                $obj = new Migration();
+                $obj->setId((string)$key);
+                $obj->setDateRun(new \DateTime());
+                $this->store->saveByInsert($obj);
+            } catch (\Exception $ex) {
+                throw new \Exception('Failed to run migration: ' . $key, 0, $ex);
+            }
+        }
     }
 
     public function runMigrations()
@@ -43,13 +61,16 @@ class MigrationRunner
 
     public function getMigrationData()
     {
-        $migrations = $this->getMigrations(CMS_PATH . 'Database/Migrations/');
+        $config = Config::getInstance();
+        $modules = $config->get('Octo.paths.modules');
+        $migrations = [];
 
-        $namespace = Config::getInstance()->get('site.namespace');
-        $path = APP_PATH . $namespace . '/Database/Migrations/';
+        foreach ($modules as $module => $path) {
+            $migrationsPath = $path . 'Migration/';
 
-        if (is_dir($path)) {
-            $migrations = array_merge($migrations, $this->getMigrations($path));
+            if (is_dir($migrationsPath)) {
+                $migrations = array_merge($migrations, $this->getMigrations($migrationsPath, $module));
+            }
         }
 
         ksort($migrations);
@@ -67,7 +88,7 @@ class MigrationRunner
         return $migrations;
     }
 
-    protected function getMigrations($path)
+    protected function getMigrations($path, $module)
     {
         $directory = new \DirectoryIterator($path);
 
@@ -81,7 +102,7 @@ class MigrationRunner
             }
 
             require_once($path . '/' . $file->getFilename());
-            $migrations[$file->getBasename('.php')] = ['queries' => $queries];
+            $migrations[$file->getBasename('.php') . '.' . $module] = ['queries' => $queries];
         }
 
         return $migrations;

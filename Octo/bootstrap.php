@@ -31,7 +31,15 @@ $_SETTINGS                                       = [];
 $_SETTINGS['b8']['app']['namespace']             = 'Octo';
 $_SETTINGS['b8']['app']['default_controller']    = null;
 $_SETTINGS['b8']['view']['path']                 = CMS_PATH . 'View/';
-$_SETTINGS['app']['namespaces']                   = ['default' => 'Octo'];
+$_SETTINGS['app']['namespaces']                   = ['default' => 'Octo\\System'];
+
+$_SETTINGS['site']['modules'] = [
+    'Octo' => [
+        'System',
+        'Pages',
+        'Forms',
+    ]
+];
 
 // Set up config:
 if (is_file(APP_PATH . 'siteconfig.php')) {
@@ -39,6 +47,15 @@ if (is_file(APP_PATH . 'siteconfig.php')) {
 }
 
 $config = new b8\Config($_SETTINGS);
+
+$modules = [];
+
+foreach ($_SETTINGS['site']['modules'] as $namespace => $moduleNames) {
+    foreach ($moduleNames as $module) {
+        $class = '\\' . $namespace . '\\' . $module . '\\Module';
+        $modules[] = new $class($config, $namespace);
+    }
+}
 
 if (!defined('IS_CONSOLE')) {
     try {

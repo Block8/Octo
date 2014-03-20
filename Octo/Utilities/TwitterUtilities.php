@@ -2,8 +2,8 @@
 namespace Octo\Utilities;
 
 use Twitter;
-use Octo\Model\Setting;
-use Octo\Model\Tweet;
+use Octo\System\Model\Setting;
+use Octo\Twitter\Model\Tweet;
 use Octo\Store;
 
 class TwitterUtilities

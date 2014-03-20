@@ -10,52 +10,57 @@ use Octo\Event;
 
 class Template extends View\Template
 {
-    public static function checkExists($template) {
-        if (PublicTemplate::exists($template, self::getSitePath('Template'))) {
-            return true;
-        }
+    protected static $templateType = 'templates';
 
-        if (PublicTemplate::exists($template, self::getSystemPath('Template'))) {
+    public static function exists($template)
+    {
+        if (!is_null(static::getPath($template))) {
             return true;
         }
 
         return false;
     }
 
-    public static function getAdminTemplate($template)
+    public static function getPath($template)
     {
-        if (AdminTemplate::exists($template, static::getSitePath())) {
-            $rtn = AdminTemplate::createFromFile($template, static::getSitePath());
-        } else {
-            $rtn = AdminTemplate::createFromFile($template, static::getSystemPath());
+        $config = Config::getInstance();
+        $paths = array_reverse($config->get('Octo.paths.' . static::$templateType, []));
+
+        foreach ($paths as $path) {
+            if (file_exists($path . $template . '.html')) {
+                return $path;
+            }
         }
 
-        Event::trigger('AdminTemplateLoaded', $rtn);
+        return null;
+    }
+
+    public static function getAdminTemplate($template)
+    {
+        $rtn = null;
+
+        if (AdminTemplate::exists($template)) {
+            $rtn = AdminTemplate::createFromFile($template, AdminTemplate::getPath($template));
+            Event::trigger('AdminTemplateLoaded', $rtn);
+        } else {
+            throw new \Exception('Template does not exist: ' . $template);
+        }
 
         return $rtn;
     }
 
     public static function getPublicTemplate($template)
     {
-        if (static::exists($template, static::getSitePath('Template'))) {
-            $rtn = PublicTemplate::createFromFile($template, static::getSitePath('Template'));
+        $rtn = null;
+
+        if (PublicTemplate::exists($template)) {
+            $rtn = PublicTemplate::createFromFile($template, PublicTemplate::getPath($template));
+            Event::trigger('PublicTemplateLoaded', $rtn);
         } else {
-            $rtn = PublicTemplate::createFromFile($template, static::getSystemPath('Template'));
+            throw new \Exception('Template does not exist: ' . $template);
         }
 
-        Event::trigger('PublicTemplateLoaded', $rtn);
-
         return $rtn;
-    }
-
-    public static function getSitePath($type = 'View')
-    {
-        return APP_PATH . Config::getInstance()->get('site.namespace') . '/' . $type . '/';
-    }
-
-    public static function getSystemPath($type = 'View')
-    {
-        return CMS_PATH . '/' . $type . '/';
     }
 
     public function includeTemplate($args, $view)
