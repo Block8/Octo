@@ -31,31 +31,20 @@ $_SETTINGS                                       = [];
 $_SETTINGS['b8']['app']['namespace']             = 'Octo';
 $_SETTINGS['b8']['app']['default_controller']    = null;
 $_SETTINGS['b8']['view']['path']                 = CMS_PATH . 'View/';
-$_SETTINGS['app']['namespaces']                   = ['default' => 'Octo\\System'];
+$_SETTINGS['app']['namespaces']                   = [];
 
-$_SETTINGS['site']['modules'] = [
-    'Octo' => [
-        'System',
-        'Pages',
-        'Forms',
-    ]
-];
+$config = new b8\Config($_SETTINGS);
+$moduleManager = new Octo\ModuleManager();
+$moduleManager->setConfig($config);
+$moduleManager->enable('Octo', 'System');
 
 // Set up config:
 if (is_file(APP_PATH . 'siteconfig.php')) {
     require_once(APP_PATH . 'siteconfig.php');
 }
 
-$config = new b8\Config($_SETTINGS);
-
-$modules = [];
-
-foreach ($_SETTINGS['site']['modules'] as $namespace => $moduleNames) {
-    foreach ($moduleNames as $module) {
-        $class = '\\' . $namespace . '\\' . $module . '\\Module';
-        $modules[] = new $class($config, $namespace);
-    }
-}
+$config->setArray($_SETTINGS);
+$moduleManager->initialiseModules();
 
 if (!empty($_SETTINGS['Octo']['site_templates'])) {
     $settings = $config->get('Octo');

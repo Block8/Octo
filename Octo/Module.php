@@ -3,15 +3,42 @@
 namespace Octo;
 
 use b8\Config;
+use Octo\ModuleManager;
 
 abstract class Module
 {
-    public function __construct(Config &$config, $namespace)
+    /**
+     * @var ModuleManager
+     */
+    protected $manager;
+
+    /**
+     * @var \b8\Config
+     */
+    protected $config;
+
+    /**
+     * @var string
+     */
+    protected $namespace;
+
+    public function __construct(ModuleManager &$manager, Config &$config, $namespace)
+    {
+        $this->manager = $manager;
+        $this->config = $config;
+        $this->namespace = $namespace;
+
+        if (method_exists($this, 'requires')) {
+            $this->requires();
+        }
+    }
+
+    public function init()
     {
         $base = $this->getPath();
         $templatePath = $base . 'Template/';
         $adminTemplatePath = $base . 'Admin/Template/';
-        $octoConfig = $config->get('Octo', []);
+        $octoConfig = $this->config->get('Octo', []);
 
         if (is_dir($templatePath)) {
             $octoConfig['paths']['templates'][] = $templatePath;
@@ -22,19 +49,20 @@ abstract class Module
         }
 
         $octoConfig['paths']['modules'][$this->getName()] = $base;
-        $octoConfig['paths']['namespaces'][$namespace . '\\' . $this->getName()] = $base;
+        $octoConfig['paths']['namespaces'][$this->namespace . '\\' . $this->getName()] = $base;
 
         if (!isset($octoConfig['namespaces']['blocks'])) {
             $octoConfig['namespaces']['blocks'] = [];
         }
 
-        $octoConfig['namespaces']['blocks'] = array_merge($octoConfig['namespaces']['blocks'], $this->getBlocks($namespace));
+        $blocks = $this->getBlocks($this->namespace);
+        $octoConfig['namespaces']['blocks'] = array_merge($octoConfig['namespaces']['blocks'], $blocks);
 
-        $app = $config->get('app', []);
-        $app['namespaces'] = array_merge($app['namespaces'], $this->getModels($namespace));
+        $app = $this->config->get('app', []);
+        $app['namespaces'] = array_merge($app['namespaces'], $this->getModels($this->namespace));
 
-        $config->set('app', $app);
-        $config->set('Octo', $octoConfig);
+        $this->config->set('app', $app);
+        $this->config->set('Octo', $octoConfig);
     }
 
     abstract protected function getName();

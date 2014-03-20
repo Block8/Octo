@@ -142,7 +142,7 @@ abstract class Controller extends \b8\Controller
 
     public static function getClass($controller) {
         $config = Config::getInstance();
-        $siteModules = $config->get('site.modules');
+        $siteModules = $config->get('ModuleManager')->getEnabled();
 
         foreach ($siteModules as $namespace => $modules) {
             foreach ($modules as $module) {

@@ -14,12 +14,25 @@ class DashboardController extends Controller
         $this->setTitle(Config::getInstance()->get('site.name') . ': Dashboard');
         $this->addBreadcrumb('Dashboard', '/');
 
-        $this->view->pages = Store::get('Page')->getTotal();
-        $this->view->contacts = Store::get('Contact')->getTotal();
-        $this->view->submissions = Store::get('Submission')->getTotal();
+        $pageStore = Store::get('Page');
 
-        $this->view->latestSubmissions = Store::get('Submission')->getAll(0, 5);
-        $this->view->latestPages = Store::get('Page')->getLatest(5);
+        if ($pageStore) {
+            $this->view->pages = $pageStore->getTotal();
+            $this->view->latestPages = $pageStore->getLatest(5);
+        }
+
+        $contactStore = Store::get('Contact');
+
+        if ($contactStore) {
+            $this->view->contacts = $contactStore->getTotal();
+        }
+
+        $submissionStore = Store::get('Submission');
+
+        if ($submissionStore) {
+            $this->view->submissions = $submissionStore->getTotal();
+            $this->view->latestSubmissions = $submissionStore->getAll(0, 5);
+        }
 
         $this->view->showAnalytics = false;
         if(Setting::get('analytics', 'ga_email') != '') {

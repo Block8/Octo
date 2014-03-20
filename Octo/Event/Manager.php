@@ -12,7 +12,7 @@ class Manager
     public function init()
     {
         $this->config = Config::getInstance();
-        $siteModules = array_reverse($this->config->get('site.modules', []));
+        $siteModules = array_reverse($this->config->get('ModuleManager')->getEnabled());
 
         foreach ($siteModules as $namespace => $modules) {
             foreach ($modules as $module) {

@@ -27,9 +27,7 @@ abstract class Store extends \b8\Store
     public static function getModelNamespace($model)
     {
         $config = Config::getInstance();
-        $default = $config->get('app.namespaces.default', 'Octo\\System');
-
-        return $config->get('app.namespaces.'.$model, $default);
+        return $config->get('app.namespaces.'.$model, null);
     }
 
     protected function getNamespace($model)
