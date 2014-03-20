@@ -21,9 +21,9 @@ class BlockManager
     protected $version;
 
     /**
-     * @var array
+     * @var string
      */
-    protected $args = [];
+    protected $uri;
 
     /**
      * @var \b8\Http\Request
@@ -40,6 +40,11 @@ class BlockManager
      */
     protected $content = [];
 
+    /**
+     * @var bool
+     */
+    protected $uriExtensionsHandled = false;
+
     public function __construct()
     {
     }
@@ -54,9 +59,9 @@ class BlockManager
         $this->version = $version;
     }
 
-    public function setArgs(array $args)
+    public function setUriExtension($uri)
     {
-        $this->args = $args;
+        $this->uri = $uri;
     }
 
     public function setRequest(Request $request)
@@ -96,8 +101,12 @@ class BlockManager
         $block = Block::create($type, $content);
         $block->setRequest($this->request);
         $block->setResponse($this->response);
-        $block->setArgs($this->args);
         $block->setTemplateParams($args);
+
+        if ($block->hasUriExtensions()) {
+            $this->uriExtensionsHandled = true;
+            $block->setUriExtension($this->uri);
+        }
 
         if (isset($this->page)) {
             $block->setPage($this->page);
@@ -108,5 +117,10 @@ class BlockManager
         }
 
         return $block->render();
+    }
+
+    public function uriExtensionsHandled()
+    {
+        return $this->uriExtensionsHandled;
     }
 }

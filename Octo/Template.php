@@ -12,7 +12,7 @@ class Template extends View\Template
 {
     protected static $templateType = 'templates';
 
-    public static function exists($template)
+    public static function exists($template, $path = null)
     {
         if (!is_null(static::getPath($template))) {
             return true;

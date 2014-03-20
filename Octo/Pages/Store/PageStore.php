@@ -8,6 +8,7 @@ namespace Octo\Pages\Store;
 
 use Octo;
 use b8\Database;
+use b8\Database\Query;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
 
@@ -162,5 +163,18 @@ class PageStore extends Octo\Store
         } else {
             return [];
         }
+    }
+
+    public function getUriBestMatch($uri)
+    {
+        $query = new Query($this->getNamespace('Page').'\Model\Page');
+        $query->select('*')->from('page')->where(":uri LIKE CONCAT(uri, '%')")->order('LENGTH(uri)', 'DESC')->limit(1);
+        $query->bind(':uri', $uri);
+
+        if ($query->execute()) {
+            return $query->fetch();
+        }
+
+        return null;
     }
 }

@@ -1,0 +1,10 @@
+<section class="control-group {@ccss} {if error}error{/if}">
+    {if label}<label class="label">{@label}</label>{/if}
+	<label class="textarea {if error}state-error{/if}">
+		<textarea rows="{@rows}" id="{@id}" class="{@css}" name="{@name}" {if required} required{/if}>{@value}</textarea>
+    </label>
+
+	{if error}
+    <em for="{@name}" class="invalid">{@error}</em>
+	{/if}
+</section>

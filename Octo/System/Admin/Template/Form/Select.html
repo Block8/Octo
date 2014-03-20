@@ -1,0 +1,15 @@
+<section class="control-group {@ccss}">
+    {if label}<label class="label">{@label}</label>{/if}
+    
+	<label class="select {if error}state-error{/if}">
+	<select id="{@id}" class="{@css}" name="{@name}">
+        {for options}
+		<option value="{@key}"{if parent.value == value} selected="selected"{/if}>{@value}</option>
+        {/for}
+	</select>
+    </label>
+
+    {if error}
+    <em for="{@name}" class="invalid">{@error}</em>
+	{/if}
+</section>

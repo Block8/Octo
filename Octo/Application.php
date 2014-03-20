@@ -98,6 +98,7 @@ class Application extends \b8\Application
             throw $ex;
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
+            throw $ex;
             $rtn = $this->handleHttpError(500);
         }
 

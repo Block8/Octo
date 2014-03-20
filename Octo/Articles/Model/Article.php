@@ -86,6 +86,6 @@ class Article extends Octo\Model
 
         $scopeUrl = array_key_exists($scope, $scopeSlugs) ? $scopeSlugs[$scope] : '/' . $scope;
 
-        return $baseUrl . $scopeUrl . '/_' . $this->getSlug();
+        return $baseUrl . $scopeUrl . $this->getSlug();
     }
 }

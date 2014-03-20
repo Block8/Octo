@@ -3,12 +3,15 @@
 namespace Octo\News\Block;
 
 use b8\Config;
+use b8\Exception\HttpException\NotFoundException;
 use Octo\Block;
 use Octo\Store;
 use Octo\Template;
 
 class News extends Block
 {
+    protected $hasUriExtensions = true;
+
     /**
      * @var string Type of article to load
      */
@@ -21,7 +24,6 @@ class News extends Block
 
     public static function getInfo()
     {
-        $config = Config::getInstance();
         return [
             'title' => self::$articleType . ' Archive',
             'editor' => true,
@@ -31,9 +33,8 @@ class News extends Block
 
     public function renderNow()
     {
-        if (count($this->args)) {
-            $slug = '/' . implode('/', $this->args);
-            return $this->renderNewsItem($slug);
+        if (!empty($this->uri)) {
+            return $this->renderNewsItem($this->uri);
         } else {
             return $this->renderNewsList();
         }
@@ -77,8 +78,7 @@ class News extends Block
         $item = Store::get('Article')->getBySlug($slug);
 
         if (!$item) {
-            $this->response->setResponseCode(404);
-            return false;
+            throw new NotFoundException('News item not found: ' . $slug);
         }
 
         $content = $item->getContentItem()->getContent();

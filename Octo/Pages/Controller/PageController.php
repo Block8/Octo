@@ -42,9 +42,9 @@ class PageController extends Controller
     protected $version;
 
     /**
-     * @var array
+     * @var string
      */
-    protected $args = [];
+    protected $uriExtension;
 
     public function init()
     {
@@ -56,25 +56,28 @@ class PageController extends Controller
     {
         $path = $this->request->getPath();
 
-        if (strpos($path, '/_/') !== false) {
-            $parts = explode('/_/', $path);
-            $path = $parts[0];
+        $this->page = $this->pageStore->getUriBestMatch($path);
+        $this->uriExtension = substr($path, strlen($this->page->getUri()));
 
-            if ($path == '') {
-                $path = '/';
-            }
-
-            $this->args = explode('/', $parts[1]);
+        if (empty($this->uriExtension)) {
+            $this->uriExtension = null;
         }
-
-        $this->page = $this->pageStore->getByUri($path);
 
         if (is_null($this->page) || !($this->page instanceof Page)) {
             throw new NotFoundException('Page does not exist: ' . $path);
         }
 
         $this->version = $this->page->getCurrentVersion();
-        return $this->render();
+        $template = $this->getTemplate();
+        $blockManager = $this->getBlockManager($template);
+
+        $output = $template->render();
+
+        if (!is_null($this->uriExtension) && !$blockManager->uriExtensionsHandled()) {
+            throw new NotFoundException('Page not found: ' . $path . $this->uriExtension);
+        }
+
+        return $output;
     }
 
     public function preview($pageId)
@@ -95,10 +98,12 @@ class PageController extends Controller
             $this->version = $this->versionStore->getById($versionId);
         }
 
-        return $this->render();
+        $template = $this->getTemplate();
+        $blockManager = $this->getBlockManager($template);
+        return $template->render();
     }
 
-    public function render()
+    public function getTemplate()
     {
         $this->content = json_decode($this->version->getContentItem()->getContent(), true);
 
@@ -106,8 +111,13 @@ class PageController extends Controller
         $template->version = $this->version;
         $template->page = $this->page;
 
+        return $template;
+    }
+
+    public function getBlockManager(&$template)
+    {
         $blockManager = new BlockManager();
-        $blockManager->setArgs($this->args);
+        $blockManager->setUriExtension($this->uriExtension);
         $blockManager->setContent($this->content);
         $blockManager->setPage($this->page);
         $blockManager->setPageVersion($this->version);
@@ -115,6 +125,6 @@ class PageController extends Controller
         $blockManager->setResponse($this->response);
         $blockManager->attachToTemplate($template);
 
-        return $template->render();
+        return $blockManager;
     }
 }

@@ -58,7 +58,9 @@ foreach ($_SETTINGS['site']['modules'] as $namespace => $moduleNames) {
 }
 
 if (!empty($_SETTINGS['Octo']['site_templates'])) {
-    $_SETTINGS['Octo']['paths']['templates'][] = $_SETTINGS['Octo']['site_templates'];
+    $settings = $config->get('Octo');
+    $settings['paths']['templates'][] = $_SETTINGS['Octo']['site_templates'];
+    $config->set('Octo', $settings);
 }
 
 if (!defined('IS_CONSOLE')) {

@@ -11,14 +11,19 @@ use Octo\Template;
 abstract class Block
 {
     /**
+     * @var bool
+     */
+    protected $hasUriExtensions = false;
+
+    /**
      * @var array
      */
     protected $content;
 
     /**
-     * @var array
+     * @var string
      */
-    protected $args = [];
+    protected $uri;
 
     /**
      * @var array
@@ -110,6 +115,12 @@ abstract class Block
         return $rtn;
     }
 
+    /**
+     * @param $type
+     * @param $content
+     * @return Block
+     * @throws \Exception
+     */
     public static function create($type, $content)
     {
         $config = \b8\Config::getInstance();
@@ -132,6 +143,11 @@ abstract class Block
     protected function init()
     {
 
+    }
+
+    public function hasUriExtensions()
+    {
+        return $this->hasUriExtensions;
     }
 
     public function render()
@@ -173,9 +189,9 @@ abstract class Block
         $this->response =& $response;
     }
 
-    public function setArgs(array $args)
+    public function setUriExtension($uri)
     {
-        $this->args = $args;
+        $this->uri = $uri;
     }
 
     public function setTemplateParams(array $args)
