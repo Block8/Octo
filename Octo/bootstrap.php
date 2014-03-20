@@ -57,6 +57,10 @@ foreach ($_SETTINGS['site']['modules'] as $namespace => $moduleNames) {
     }
 }
 
+if (!empty($_SETTINGS['Octo']['site_templates'])) {
+    $_SETTINGS['Octo']['paths']['templates'][] = $_SETTINGS['Octo']['site_templates'];
+}
+
 if (!defined('IS_CONSOLE')) {
     try {
         $appClass = $config->get('site.namespace') . '\\Application';
