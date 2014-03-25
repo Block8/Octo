@@ -14,7 +14,6 @@ abstract class Store extends \b8\Store
      */
     public static function get($store)
     {
-
         $namespace = self::getModelNamespace($store);
 
         if (!is_null($namespace)) {
@@ -33,6 +32,15 @@ abstract class Store extends \b8\Store
     protected function getNamespace($model)
     {
         return self::getModelNamespace($model);
+    }
+
+    /**
+     * Makes table name public
+     *
+     * @return mixed
+     */
+    public function getTableName() {
+        return $this->tableName;
     }
 
     /**

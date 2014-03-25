@@ -1,0 +1,134 @@
+<div class="col-lg-12">
+    <div style="text-align: right; margin-bottom: 15px;">
+        <a class="btn btn-success" href="/{@adminUri}/page/publish/{@page.id}">Publish Page</a>
+    </div>
+</div>
+
+<div class="col-lg-3">
+    <div class="well">
+        <button id="edit-page-details" class="btn btn-block btn-primary">Edit Page Details</button>
+
+        <h2>Editable areas:</h2>
+            {for blocks}
+            {if value.editable}
+            <button class="page-block-btn btn btn-block" data-type="{@item.type}" data-name="{@item.name}" data-id="{@item.id}">Edit: <strong>{@item.name}</strong></button>
+            {/if}
+            {/for}
+    </div>
+</div>
+
+<div class="col-lg-9">
+    <div class="well">
+        <iframe id="page-preview" src="/page/preview/{@page.id}?version={@latest.id}" style="width: 100%; height: 450px; border: 0"></iframe>
+    </div>
+</div>
+
+
+<!-- Include block editor JS -->
+<script src="/assets/backoffice/js/class.js"></script>
+<script src="/assets/backoffice/js/block.js"></script>
+<script src="/assets/backoffice/js/system.js"></script>
+
+{for blockTypes}
+    {if value.editor}
+        {for value.js}
+            <script src="{@value}"></script>
+        {/for}
+    {/if}
+{/for}
+
+<script>
+    $(document).ready(function ()
+    {
+        var editor = new window.pageEditor();
+        editor.id = '{@page.id}';
+        editor.content = {@pageContent};
+        editor.page = {
+            title: '{@latest.title}',
+            short_title: '{@latest.short_title}',
+            description: '{@latest.description}',
+            meta_description: '{@latest.meta_description}',
+            template: '{@latest.template}',
+            image_id: '{@latest.image_id}',
+            parent_id: '{@page.parent_id}'
+        };
+        editor.templates = {@templates};
+        editor.pages = {@pages};
+
+        $('.page-block-btn').click(function() {
+            var block = $(this);
+            var saveButton = $('<button>Save</button>').addClass('btn btn-success');
+            var dialog = createDialog('block-editor', {allowClose: true, title: 'Edit ' + block.data('name'), button: saveButton});
+            var blockEditor = new window.blockEditors[block.data('type')]();
+            var content = null;
+
+            if (block.data('id') in editor.content) {
+                content = editor.content[block.data('id')];
+            }
+
+            blockEditor.edit(dialog.find('.modal-body'), content);
+
+            // Set up the save functionality:
+            saveButton.on('click', function () {
+                editor.content[block.data('id')] = blockEditor.save();
+                editor.saveContent();
+
+                dialog.on('hidden.bs.modal', function () {
+                    dialog.remove();
+                });
+
+                dialog.modal('hide');
+            });
+
+            dialog.modal('show');
+        });
+
+        $('#edit-page-details').click(function ()
+        {
+            var saveButton = $('<button>Save</button>').addClass('btn btn-success');
+            var dialog = createDialog('page-details-editor', {allowClose: true, title: 'Edit Page Details', button: saveButton});
+
+            var form = $('<form></form>').addClass('smart-form');
+            var fieldset = $('<fieldset></fieldset>');
+            form.append(fieldset);
+
+            fieldset.append(textElement('page-title', 'Page Title', editor.page.title));
+            fieldset.append(textElement('page-short_title', 'Short Title', editor.page.short_title));
+            fieldset.append(textElement('page-description', 'Description', editor.page.description));
+            fieldset.append(textElement('page-meta_description', 'Meta Description', editor.page.meta_description));
+
+            if (editor.page.parent_id.length != undefined && editor.page.parent_id.length != 0) {
+                fieldset.append(selectElement('page-parent', 'Parent', editor.pages, editor.page.parent_id));
+            }
+
+            fieldset.append(selectElement('page-template', 'Template', editor.templates, editor.page.template));
+            fieldset.append(imagePicker('page-image', 'Image', editor.page.image_id));
+
+            dialog.find('.modal-body').append(form);
+
+            // Set up the save functionality:
+            saveButton.on('click', function () {
+
+                editor.page = {
+                    title: $('#page-title').val(),
+                    short_title: $('#page-short_title').val(),
+                    description: $('#page-description').val(),
+                    meta_description: $('#page-meta_description').val(),
+                    template: $('#page-template').val(),
+                    image_id: $('#page-image').val(),
+                    parent_id: $('#page-parent').val()
+                };
+
+                editor.saveMetaData();
+
+                dialog.on('hidden.bs.modal', function () {
+                    dialog.remove();
+                });
+
+                dialog.modal('hide');
+            });
+
+            dialog.modal('show');
+        });
+    });
+</script>

@@ -1,0 +1,17 @@
+<h1>{@category.name}</h1>
+
+<ul class="media-list grid-collection row">
+
+    {for products}
+    <li class="media col-md-4 col-sm-4 col-xs-12">
+
+        <a href="/shop/{@category.slug}/{@value.slug}" class="pull-left"><img class="media-image" src="/media/render/{@value.main_image.id}/600/600" alt=""></a>
+        <div class="media-body">
+            <h4 class="media-heading"><a href="/shop/{@category.slug}/{@value.slug}">{@value.title}</a></h4>
+            <p>&pound;{@value.price}</p>
+        </div>
+        <a href="/shop/{@category.slug}/{@value.slug}" class="btn btn-default">More</a>
+    </li>
+    {/for}
+
+</ul>

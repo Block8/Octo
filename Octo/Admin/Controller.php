@@ -22,6 +22,11 @@ abstract class Controller extends \b8\Controller
     protected $menu;
 
     /**
+     * @var View Turn view public to make it accessible to listeners
+     */
+    public $view;
+
+    /**
      * @param Config $config
      * @param Request $request
      * @param Response $response
@@ -52,7 +57,10 @@ abstract class Controller extends \b8\Controller
     public function handleAction($action, $params)
     {
         try {
-            $this->view = Template::getAdminTemplate($this->className . '/' . $action);
+            $thisClass = explode('\\', get_class($this));
+            $module = $thisClass[1];
+
+            $this->view = Template::getAdminTemplate($this->className . '/' . $action, $module);
             $this->view->currentUser = $this->currentUser;
         } catch (\Exception $ex) {
             $error = '<div class="alert alert-danger">You have not created a view for: ';
@@ -140,6 +148,13 @@ abstract class Controller extends \b8\Controller
         $this->layout->breadcrumb = $breadcrumb;
     }
 
+    public function popBreadcrumb() {
+        $breadcrumbs = $this->layout->breadcrumb;
+        $item = array_pop($breadcrumbs);
+        $this->layout->breadcrumb = $breadcrumbs;
+        return $item;
+    }
+
     public static function getClass($controller) {
         $config = Config::getInstance();
         $siteModules = $config->get('ModuleManager')->getEnabled();
@@ -155,5 +170,10 @@ abstract class Controller extends \b8\Controller
         }
 
         return null;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

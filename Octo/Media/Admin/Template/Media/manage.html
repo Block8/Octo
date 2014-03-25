@@ -1,13 +1,15 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-picture-o"></i> {@scope_name}</h1>
-    <a class="btn-default btn pull-right" href="/{@adminUri}/media/add"><i class="fa fa-plus"></i> Upload</a>
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-picture-o"></i> {@scope_name}{if title}: {@title}{/if}</h1>
+    <div class="pull-right header-buttons">
+        <a class="btn-default btn" href="/{@adminUri}/media/add/{@scope}{@queryStringAppend}"><i class="fa fa-plus"></i> Upload</a>
+    </div>
 </div>
 
 {if gallery}
 <div class="row">
 	<div class="superbox col-sm-12">
         {loop files}
-		<div class="superbox-list">
+		<div class="superbox-list" data-id="image-{@item.id}">
 			<img src="/media/render/{@item.id}/" alt="{@item.title}" title="{@item.title}" class="superbox-img">
 		</div>
 
@@ -52,40 +54,87 @@ $(document).ready( function() {
 {/if}
 
 {ifnot gallery}
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="table-items">
 	<thead>
 		<tr>
 			<th>Title</th>
 			<th>Filename</th>
 			<th>Uploaded By</th>
 			<th>Uploaded On</th>
-			<th width="20%">Actions</th>
+            {if reorder}<th width="2%"></th>{/if}
+			<th width="10%">Actions</th>
 		</tr>
 	</thead>
 	<tbody>
         {loop files}
-        <tbody>
-            <td>{@item.title}</td>
-            <td><a href="{@item.url}">{@item.filename}</a></td>
+        <tr class="table-item" data-id="{@item.id}">
+            {if thumbnail}
+                <td align="center"><img src="/media/render/{@item.id}/100/100"></td>
+                <td><strong>Title:</strong> {@item.title}<br /><strong>Filename: </strong><a href="{@item.url}">{@item.filename}</a></td>
+            {/if}
+            {ifnot thumbnail}
+                <td>{@item.title}</td>
+                <td><a href="{@item.url}">{@item.filename}</a></td>
+            {/ifnot}
             <td>{@item.User.name}</td>
             <td>{date_format date: item.created_date}</td>
+            {if reorder}<td><i class="fa fa-fw fa-move handler"></i></td>{/if}
 			<td>
                 <div class="btn-group">
-					<a class="btn btn-default btn-sm" href="/{@adminUri}/media/edit/{@scope}/{@item.id}">Edit</a>
+					<a class="btn btn-default btn-sm" href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
 					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="/{@adminUri}/media/edit/{@scope}/{@item.id}">Edit</a>
+							<a href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
 						</li>
 						<li class="divider"></li>
 						<li>
-							<a href="/{@adminUri}/media/delete/{@scope}/{@item.id}">Delete</a>
+							<a href="/{@adminUri}/media/delete/{@scope}/{@item.id}{@queryStringAppend}">Delete</a>
 						</li>
 					</ul>
 				</div>
 			</td>
-        </tbody>
+        </tr>
         {/loop}
 	</tbody>
 </table>
+
+<script>
+$(document).ready(function(e) {
+    $('#table-items tbody').sortable({
+        handle: '.handler',
+        axis: 'y',
+        items: '> tr',
+        helper: fixHelper,
+        update: function () {
+            var position = 0;
+            var items = {};
+
+            $('.table-item').each(function () {
+                var id = $(this).data('id');
+                items[id] = position++;
+            });
+
+            savePositions(items);
+        }
+    });
+});
+
+
+function savePositions(items)
+{
+    $('.pace').removeClass('hide');
+
+    $.post('{@reorderSaveUrl}', {positions: items}, function () {
+        $('.pace').addClass('hide');
+    });
+}
+
+var fixHelper = function(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+};
+</script>
 {/if}

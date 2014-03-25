@@ -84,14 +84,6 @@
 
 
 <script>
-    sorting = false;
-    var fixHelper = function(e, ui) {
-        ui.children().each(function() {
-            $(this).width($(this).width());
-        });
-        return ui;
-    };
-
     function registerEvents()
     {
         $(document).on('change', '.menu-item-title', function(e) {
@@ -215,9 +207,15 @@
     {
         $('.pace').removeClass('hide');
 
-        $.post('/'+window.adminUri+'/menu/items/{@menu.id}', {positions: items}, function () {
+        $.post('/' + window.adminUri + '/menu/items/{@menu.id}', {positions: items}, function () {
             $('.pace').addClass('hide');
         });
     }
 
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
 </script>

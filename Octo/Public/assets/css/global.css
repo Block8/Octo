@@ -44,3 +44,11 @@ div.image_form_container {
 div.image_form_container p {
     margin-bottom: 10px;
 }
+
+.header-buttons {
+    padding-top: 10px;
+}
+
+.header-buttons a {
+    margin-left: 10px;
+}

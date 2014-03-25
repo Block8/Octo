@@ -6,6 +6,11 @@ use Octo;
 
 class Module extends Octo\Module
 {
+    protected function requires()
+    {
+        $this->manager->enable('Octo', 'Media');
+    }
+
     protected function getName()
     {
         return 'Categories';

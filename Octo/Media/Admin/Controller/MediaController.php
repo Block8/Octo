@@ -8,6 +8,7 @@ use Octo\Store;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
+use Octo\Event;
 use Octo\Utilities\StringUtilities;
 use Octo\System\Model\File;
 
@@ -67,20 +68,16 @@ class MediaController extends Controller
      * @return void
      * @author James Inman
      */
-    public function add()
+    public function add($scope = '')
     {
+        Event::trigger($scope . 'Upload', $this);
+
         if ($this->request->getMethod() == 'POST') {
             $upload = new Upload('file');
             $info = $upload->getFileInfo();
 
-            if ($file = $this->fileStore->getById(strtolower($info['hash']))) {
-                $data = array_merge($file->getDataArray(), array('url' => $file->getUrl()));
-                print json_encode($data);
-                exit;
-            }
-
             $file = new File;
-            $file->setId(strtolower($info['hash']));
+            $file->setId(md5(strtolower($info['hash'] . $scope)));
             $file->setFilename(strtolower($info['basename']));
             $file->setTitle(strtolower($info['basename']));
             $file->setExtension(strtolower($info['extension']));
@@ -114,16 +111,28 @@ class MediaController extends Controller
             }
 
             try {
+                Event::trigger($scope . 'BeforeUploadProcessed', $file);
+
+                if ($foundFile = $this->fileStore->getById($file->getId())) {
+                    $data = array_merge($foundFile->getDataArray(), array('url' => $foundFile->getUrl()));
+                    print json_encode($data);
+                    exit;
+                }
+
                 $uploadDirectory = APP_PATH . 'public/uploads/';
-                $upload->copyTo($uploadDirectory . $info['hash'] . '.' . $info['extension']);
+                $upload->copyTo($uploadDirectory . $file->getId() . '.' . $info['extension']);
                 $file = $this->fileStore->saveByInsert($file);
 
-                $url = '/uploads/' . $info['hash'] . '.' . $info['extension'];
+                Event::trigger($scope . 'FileSaved', $file);
+
+                $url = '/uploads/' . $file->getId() . '.' . $info['extension'];
                 $data = array_merge($file->getDataArray(), array('url' => $url));
                 print json_encode($data);
                 exit;
             } catch (\Exception $ex) {
+                print $ex->getMessage();
                 print json_encode(array('error' => true));
+                exit;
             }
         }
     }
@@ -136,6 +145,7 @@ class MediaController extends Controller
         $this->setTitle('Edit File: ' . $file->getTitle());
         $this->addBreadcrumb(ucwords($scope), '/media/' . $scope . '/' . $fileId);
         $this->addBreadcrumb($file->getTitle(), '/media/edit/' . $scope . '/' . $fileId);
+        $this->view->file = $file;
 
         if ($this->request->getMethod() == 'POST') {
             $values = array_merge($this->getParams(), array('id' => $fileId));
@@ -147,8 +157,10 @@ class MediaController extends Controller
                     $file = $this->fileStore->save($file);
                     $this->successMessage($file->getTitle() . ' was edited successfully.', true);
 
+                    Event::trigger($scope . 'MediaEditPostSave', $this);
+
                     header('Location: /' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->errorMessage('There was an error editing the file. Please try again.');
                 }
             } else {
@@ -162,6 +174,8 @@ class MediaController extends Controller
         if (in_array($file->getExtension(), $imageFiles)) {
             $this->view->image = $file->getUrl();
         }
+
+        Event::trigger($scope . 'MediaEditForm', $this);
     }
 
     protected function fileForm($values, $scope)
@@ -185,6 +199,10 @@ class MediaController extends Controller
         $field->setRequired(true);
         $field->setLabel('File Name');
         $fieldset->addField($field);
+
+        $data = [&$form, &$values];
+        Event::trigger($scope . 'FileFormFields', $data);
+        list($form, $values) = $data;
 
         $field = new Form\Element\Submit();
         $field->setValue('Save File');
@@ -212,6 +230,8 @@ class MediaController extends Controller
         if ($scope == 'images') {
             $this->view->gallery = true;
         }
+
+        Event::trigger($scope . 'MediaList', $this);
     }
 
     /**
@@ -242,6 +262,9 @@ class MediaController extends Controller
         $this->fileStore->delete($file);
 
         $this->successMessage($file->getTitle() . ' was deleted successfully.', true);
+
+        Event::trigger($scope . 'DeleteFile', $this);
+
         header('Location: /' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
     }
 

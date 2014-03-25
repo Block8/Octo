@@ -8,17 +8,12 @@ class Template extends \Octo\Template
 
     public static function createFromFile($file, $path = null)
     {
-        if (!static::exists($file, $path)) {
-            throw new \Exception('View file does not exist: ' . $file);
-        }
-
-        $viewFile = static::getViewFile($file, $path);
-        return new static(file_get_contents($viewFile));
+        return new static(file_get_contents($file));
     }
 
-    public static function getAdminTemplate($template)
+    public static function getAdminTemplate($template, $module = null)
     {
-        $rtn = parent::getAdminTemplate($template);
+        $rtn = parent::getAdminTemplate($template, $module);
 
         if (!is_null($rtn)) {
             $rtn->addFunction('pagination', array($rtn, 'handlePagination'));

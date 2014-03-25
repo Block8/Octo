@@ -34,10 +34,21 @@ trait CategoryBase
         $this->data['parent_id'] = null;
         $this->getters['parent_id'] = 'getParentId';
         $this->setters['parent_id'] = 'setParentId';
+        $this->data['image_id'] = null;
+        $this->getters['image_id'] = 'getImageId';
+        $this->setters['image_id'] = 'setImageId';
+        $this->data['description'] = null;
+        $this->getters['description'] = 'getDescription';
+        $this->setters['description'] = 'setDescription';
+        $this->data['position'] = null;
+        $this->getters['position'] = 'getPosition';
+        $this->setters['position'] = 'setPosition';
 
         // Foreign keys:
         $this->getters['Parent'] = 'getParent';
         $this->setters['Parent'] = 'setParent';
+        $this->getters['Image'] = 'getImage';
+        $this->setters['Image'] = 'setImage';
     }
     /**
     * Get the value of Id / id.
@@ -95,6 +106,42 @@ trait CategoryBase
     public function getParentId()
     {
         $rtn = $this->data['parent_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ImageId / image_id.
+    *
+    * @return string
+    */
+    public function getImageId()
+    {
+        $rtn = $this->data['image_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Description / description.
+    *
+    * @return string
+    */
+    public function getDescription()
+    {
+        $rtn = $this->data['description'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Position / position.
+    *
+    * @return int
+    */
+    public function getPosition()
+    {
+        $rtn = $this->data['position'];
 
         return $rtn;
     }
@@ -187,6 +234,57 @@ trait CategoryBase
     }
 
     /**
+    * Set the value of ImageId / image_id.
+    *
+    * @param $value string
+    */
+    public function setImageId($value)
+    {
+        $this->validateString('ImageId', $value);
+
+        if ($this->data['image_id'] === $value) {
+            return;
+        }
+
+        $this->data['image_id'] = $value;
+        $this->setModified('image_id');
+    }
+
+    /**
+    * Set the value of Description / description.
+    *
+    * @param $value string
+    */
+    public function setDescription($value)
+    {
+        $this->validateString('Description', $value);
+
+        if ($this->data['description'] === $value) {
+            return;
+        }
+
+        $this->data['description'] = $value;
+        $this->setModified('description');
+    }
+
+    /**
+    * Set the value of Position / position.
+    *
+    * @param $value int
+    */
+    public function setPosition($value)
+    {
+        $this->validateInt('Position', $value);
+
+        if ($this->data['position'] === $value) {
+            return;
+        }
+
+        $this->data['position'] = $value;
+        $this->setModified('position');
+    }
+
+    /**
     * Get the Category model for this Category by Id.
     *
     * @uses \Octo\Categories\Store\CategoryStore::getById()
@@ -233,5 +331,53 @@ trait CategoryBase
     public function setParentObject(\Octo\Categories\Model\Category $value)
     {
         return $this->setParentId($value->getId());
+    }
+    /**
+    * Get the File model for this Category by Id.
+    *
+    * @uses \Octo\Categories\Store\FileStore::getById()
+    * @uses \Octo\Categories\Model\File
+    * @return \Octo\Categories\Model\File
+    */
+    public function getImage()
+    {
+        $key = $this->getImageId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('File', 'Octo\System')->getById($key);
+    }
+
+    /**
+    * Set Image - Accepts an ID, an array representing a File or a File model.
+    *
+    * @param $value mixed
+    */
+    public function setImage($value)
+    {
+        // Is this an instance of File?
+        if ($value instanceof \Octo\Categories\Model\File) {
+            return $this->setImageObject($value);
+        }
+
+        // Is this an array representing a File item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setImageId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setImageId($value);
+    }
+
+    /**
+    * Set Image - Accepts a File model.
+    *
+    * @param $value \Octo\Categories\Model\File
+    */
+    public function setImageObject(\Octo\Categories\Model\File $value)
+    {
+        return $this->setImageId($value->getId());
     }
 }

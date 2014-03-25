@@ -9,8 +9,9 @@ class Form extends b8\Form
 {
     public function getView($view)
     {
-        if (Template::exists('Form/' . $view)) {
-            $view = Template::getAdminTemplate('Form/' . $view);
+        $template = Template::getAdminTemplate('Form/' . $view, 'System');
+        if ($template) {
+            $view = Template::getAdminTemplate('Form/' . $view, 'System');
             return $view;
         }
 

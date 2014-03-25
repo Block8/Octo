@@ -23,8 +23,29 @@ class Template extends View\Template
 
     public static function getPath($template)
     {
-        $config = Config::getInstance();
-        $paths = array_reverse($config->get('Octo.paths.' . static::$templateType, []));
+        $paths = [];
+
+        if (strpos(get_called_class(), 'Admin') === false) {
+            // Load a normal template
+            $config = Config::getInstance();
+            $moduleManager = $config->get('ModuleManager');
+            $modules = $moduleManager->getEnabled()['Octo'];
+
+            $paths = [];
+            $systemPaths = [];
+
+            $paths[] = $config->get('Octo.site_templates');
+            foreach ($modules as $module) {
+                // Load site-specific templates first, overwriting with blocks
+                $paths[] = APP_PATH . $config->get('site.namespace') . '/' . $module . '/Template/';
+                $paths[] = APP_PATH . $config->get('site.namespace') . '/' . $module . '/Template/Block/';
+                // Then load CMS templates
+                $systemPaths[] = CMS_PATH . $module . '/Template/';
+                $systemPaths[] = CMS_PATH . $module . '/Template/Block/';
+            }
+
+            $paths = array_merge($paths, $systemPaths);
+        }
 
         foreach ($paths as $path) {
             if (file_exists($path . $template . '.html')) {
@@ -35,18 +56,51 @@ class Template extends View\Template
         return null;
     }
 
-    public static function getAdminTemplate($template)
+    public static function getSitePath($template)
+    {
+        // TODO: Why are we passing in 'Template' here?
+        $config = Config::getInstance();
+        return $config->get('Octo.site_templates');
+    }
+
+    public static function getAdminTemplate($template, $module = null)
     {
         $rtn = null;
+        $path = null;
 
-        if (AdminTemplate::exists($template)) {
-            $rtn = AdminTemplate::createFromFile($template, AdminTemplate::getPath($template));
-            Event::trigger('AdminTemplateLoaded', $rtn);
+        $paths = [];
+        $config = Config::getInstance();
+
+        // Are we including a system module template?
+        if (strpos($template, '/') === false) {
+            $paths[] = CMS_PATH . 'System/Admin/Template/';
+            $paths[] = APP_PATH . $config->get('site.namespace') . '/System/Admin/Template/';
         } else {
-            throw new \Exception('Template does not exist: ' . $template);
+            if (is_null($module)) {
+                $parts = explode('/', $template);
+                $module = $parts[0];
+                array_shift($parts);
+                $template = implode('/', $parts);
+            }
+
+            $paths[] = APP_PATH . $config->get('site.namespace') . '/System/Admin/Template/' . $module . '/';
+            $paths[] = APP_PATH . $config->get('site.namespace') . '/' . $module . '/Admin/Template/';
+            $paths[] = APP_PATH . $config->get('site.namespace') . '/' . $module . '/Admin/Template/' . $module . '/';
+            $paths[] = CMS_PATH . 'System/Admin/Template/' . $module . '/';
+            $paths[] = CMS_PATH . $module . '/Admin/Template/' . $module . '/';
+            $paths[] = CMS_PATH . $module . '/Admin/Template/';
         }
 
-        return $rtn;
+        foreach ($paths as $path) {
+            $file = $path . $template . '.html';
+            if (file_exists($file)) {
+                $rtn = AdminTemplate::createFromFile($file, null);
+                Event::trigger('AdminTemplateLoaded', $rtn);
+                return $rtn;
+            }
+        }
+
+        throw new \Exception('Template does not exist: ' . $template);
     }
 
     public static function getPublicTemplate($template)
@@ -56,8 +110,34 @@ class Template extends View\Template
         if (PublicTemplate::exists($template)) {
             $rtn = PublicTemplate::createFromFile($template, PublicTemplate::getPath($template));
             Event::trigger('PublicTemplateLoaded', $rtn);
-        } else {
-            throw new \Exception('Template does not exist: ' . $template);
+            return $rtn;
+        }
+
+        $config = Config::getInstance();
+        $moduleManager = $config->get('ModuleManager');
+        $modules = $moduleManager->getEnabled()['Octo'];
+
+        foreach (glob(CMS_PATH . '*/Template') as $directory) {
+            $module = basename(dirname($directory));
+
+            if (!in_array($module, $modules)) {
+                continue;
+            }
+
+            $directoryIterator = new \DirectoryIterator($directory);
+
+            foreach ($directoryIterator as $file) {
+                if ($file->isDot()) {
+                    continue;
+                }
+
+                if ($file->isFile() && $file->getExtension() == 'html') {
+                    $className = $file->getBasename('.php');
+                    $namespace = "\\Octo\\$module\\Block";
+
+                    $blocks[$className] = self::getBlockInformation($namespace, $className);
+                }
+            }
         }
 
         return $rtn;

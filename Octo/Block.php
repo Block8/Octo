@@ -4,8 +4,8 @@ namespace Octo;
 
 use b8\Http\Response;
 use b8\Http\Request;
-use Octo\Pages\Model\Page;
-use Octo\Pages\Model\PageVersion;
+use Octo\Page\Model\Page;
+use Octo\Page\Model\PageVersion;
 use Octo\Template;
 
 abstract class Block
@@ -46,12 +46,12 @@ abstract class Block
     protected $view;
 
     /**
-     * @var \Octo\Pages\Model\Page
+     * @var \Octo\Page\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Pages\Model\PageVersion
+     * @var \Octo\Page\Model\PageVersion
      */
     protected $pageVersion;
 
@@ -65,16 +65,30 @@ abstract class Block
     {
         $blocks = array();
 
-        $directory = new \DirectoryIterator(CMS_PATH . 'Block/');
+        $config = \b8\Config::getInstance();
+        $moduleManager = $config->get('ModuleManager');
+        $modules = $moduleManager->getEnabled()['Octo'];
 
-        foreach ($directory as $file) {
-            if ($file->isDot()) {
+        foreach (glob(CMS_PATH . '*/Block') as $directory) {
+            $module = basename(dirname($directory));
+
+            if (!in_array($module, $modules)) {
                 continue;
             }
 
-            if ($file->isFile() && $file->getExtension() == 'php') {
-                $className = $file->getBasename('.php');
-                $blocks[$className] = self::getBlockInformation('Octo', $className);
+            $directoryIterator = new \DirectoryIterator($directory);
+
+            foreach ($directoryIterator as $file) {
+                if ($file->isDot()) {
+                    continue;
+                }
+
+                if ($file->isFile() && $file->getExtension() == 'php') {
+                    $className = $file->getBasename('.php');
+                    $namespace = "\\Octo\\$module\\Block";
+
+                    $blocks[$className] = self::getBlockInformation($namespace, $className);
+                }
             }
         }
 
@@ -109,9 +123,8 @@ abstract class Block
 
     protected static function getBlockInformation($namespace, $block)
     {
-        $fullClass = $namespace . '\\Block\\' . $block;
+        $fullClass = $namespace . "\\" . $block;
         $rtn = array_merge(['namespace' => $namespace, 'class' => $block], $fullClass::getInfo());
-
         return $rtn;
     }
 
@@ -159,7 +172,20 @@ abstract class Block
         $parts = explode('\\', get_class($this));
         $class = array_pop($parts);
 
-        $this->view = Template::getPublicTemplate('Block/' . $class);
+        if (isset($this->templateParams['templateFile'])) {
+            try {
+                $this->view = Template::getPublicTemplate('Block/' . $this->templateParams['templateFile']);
+            } catch (\Exception $e) {
+                // TODO: Something with this
+                throw $e;
+            }
+        } else {
+            $this->view = Template::getPublicTemplate('Block/' . $class);
+        }
+
+        foreach ($this->templateParams['variables'] as $key => $value) {
+            $this->view->{$key} = $value;
+        }
 
         $rtn = $this->renderNow();
 

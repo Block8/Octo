@@ -2,12 +2,15 @@
 namespace Octo\Categories\Admin\Controller;
 
 use b8\Form;
-use Octo\Store;
-use Octo\Categories\Store\CategoryStore;
+use b8\Http\Upload;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
 use Octo\Categories\Model\Category;
+use Octo\Categories\Store\CategoryStore;
+use Octo\Form\Element\ImageUpload;
+use Octo\System\Model\File;
+use Octo\Store;
 use Octo\Utilities\StringUtilities;
 
 class CategoriesController extends Controller
@@ -27,6 +30,7 @@ class CategoriesController extends Controller
     public function init()
     {
         $this->categoryStore = Store::get('Category');
+        $this->fileStore = Store::get('File');
     }
 
     public function categoryList($scope)
@@ -73,10 +77,10 @@ class CategoriesController extends Controller
         if ($this->getParam('parent')) {
             $parentId = $this->getParam('parent');
             $parent = $this->categoryStore->getById($parentId);
-            $this->view->categories = $this->categoryStore->getAllForParent($parentId);
+            $this->view->categories = $this->categoryStore->getAllForParent($parentId, 'position ASC, name ASC');
             $this->addBreadcrumb($parent->getName(), '/categories/manage/' . $scope . $base . '?parent=' . $parentId);
         } else {
-            $this->view->categories = $this->categoryStore->getAllForScope($scope);
+            $this->view->categories = $this->categoryStore->getAllForScope($scope, 'position ASC, name ASC');
         }
     }
 
@@ -114,6 +118,12 @@ class CategoriesController extends Controller
 
                     if ($category->getParentId() == 0) {
                         $category->setParentId(null);
+                    }
+
+                    if ($files = File::upload('image', 'category')) {
+                        foreach ($files as $file) {
+                            $category->setImageId($file->getId());
+                        }
                     }
 
                     $category = $this->categoryStore->save($category);
@@ -174,6 +184,15 @@ class CategoriesController extends Controller
                         $category->setParentId(null);
                     }
 
+                    if ($files = File::upload('image', 'category')) {
+                        if (isset($files[0])) {
+                            $category->setImageId($files[0]->getId());
+                        }
+                    }
+                    if ($this->getParam('remove_image')) {
+                        $category->setImageId(null);
+                    }
+
                     // Later, we might want to change the slug if there's nothing in the category already
                     // or fix URLs, or something. [JI - 21/02/14]
                     $category = $this->categoryStore->save($category);
@@ -211,6 +230,20 @@ class CategoriesController extends Controller
         }
     }
 
+    public function positions()
+    {
+        // Are we updating menu positions?
+        $items = $this->getParam('positions', null);
+
+        if (!is_null($items)) {
+            foreach ($items as $itemId => $position) {
+                $item = $this->categoryStore->getById($itemId);
+                $item->setPosition($position);
+                $this->categoryStore->save($item);
+            }
+        }
+    }
+
     protected function categoryForm($scope, $values = [], $type = 'add', $useBase = false)
     {
         $form = new FormElement();
@@ -237,6 +270,19 @@ class CategoriesController extends Controller
         $field = new Form\Element\Text('name');
         $field->setRequired(true);
         $field->setLabel('Name');
+        $fieldset->addField($field);
+
+        $field = new Form\Element\Text('description');
+        $field->setRequired(false);
+        $field->setLabel('Description (optional)');
+        $fieldset->addField($field);
+
+        $field = new ImageUpload('image');
+        $field->setRequired(false);
+        $field->setLabel('Image (optional)');
+        if (isset($values['image_id'])) {
+            $field->setImageId($values['image_id']);
+        }
         $fieldset->addField($field);
 
         $field = new Form\Element\Select('parent_id');
@@ -270,4 +316,5 @@ class CategoriesController extends Controller
         $form->setValues($values);
         return $form;
     }
+
 }

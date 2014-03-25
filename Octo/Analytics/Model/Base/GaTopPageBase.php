@@ -237,7 +237,7 @@ trait GaTopPageBase
             return null;
         }
 
-        return Factory::getStore('Page', 'Octo\Pages')->getById($key);
+        return Factory::getStore('Page', 'Octo\Page')->getById($key);
     }
 
     /**

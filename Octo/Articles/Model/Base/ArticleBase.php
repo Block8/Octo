@@ -46,6 +46,9 @@ trait ArticleBase
         $this->data['updated_date'] = null;
         $this->getters['updated_date'] = 'getUpdatedDate';
         $this->setters['updated_date'] = 'setUpdatedDate';
+        $this->data['publish_date'] = null;
+        $this->getters['publish_date'] = 'getPublishDate';
+        $this->setters['publish_date'] = 'setPublishDate';
         $this->data['slug'] = null;
         $this->getters['slug'] = 'getSlug';
         $this->setters['slug'] = 'setSlug';
@@ -168,6 +171,22 @@ trait ArticleBase
     public function getUpdatedDate()
     {
         $rtn = $this->data['updated_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of PublishDate / publish_date.
+    *
+    * @return \DateTime
+    */
+    public function getPublishDate()
+    {
+        $rtn = $this->data['publish_date'];
 
         if (!empty($rtn)) {
             $rtn = new \DateTime($rtn);
@@ -341,6 +360,23 @@ trait ArticleBase
 
         $this->data['updated_date'] = $value;
         $this->setModified('updated_date');
+    }
+
+    /**
+    * Set the value of PublishDate / publish_date.
+    *
+    * @param $value \DateTime
+    */
+    public function setPublishDate($value)
+    {
+        $this->validateDate('PublishDate', $value);
+
+        if ($this->data['publish_date'] === $value) {
+            return;
+        }
+
+        $this->data['publish_date'] = $value;
+        $this->setModified('publish_date');
     }
 
     /**

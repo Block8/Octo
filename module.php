@@ -3,7 +3,7 @@
 
 $base = 'Octo/';
 
-$modules = ['Pages', 'System', 'Analytics', 'Articles', 'Blog', 'News', 'Categories', 'Forms', 'Media', 'Menu', 'Twitter'];
+$modules = ['Shop'];
 
 foreach ($modules as $module) {
     @mkdir($base . $module . '/Admin/Controller', 0755, true);

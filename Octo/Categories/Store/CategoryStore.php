@@ -9,6 +9,7 @@ namespace Octo\Categories\Store;
 use b8\Database;
 use Octo;
 use Octo\Categories\Model\Category;
+use Octo\Store;
 
 /**
  * Category Store
@@ -23,17 +24,28 @@ class CategoryStore extends Octo\Store
      *
      * @param string $scope
      * @param string $order
+     * @param string $requiresPresence Model to require presence of
      * @return array
      */
-    public function getAllForScope($scope, $order = 'name ASC')
+    public function getAllForScope($scope, $order = 'name ASC', $requiresPresence = null)
     {
-        $count = null;
+        if ($requiresPresence) {
+            $store = Store::get($requiresPresence);
+            $table = $store->getTableName();
+        }
 
-        $query = 'SELECT c.*, IF(c2.id, true, false) AS has_children FROM category c
-LEFT JOIN category c2 ON c.id = c2.parent_id
-WHERE c.scope = :scope AND c.parent_id IS NULL
-GROUP BY c.id
-ORDER BY ' . $order;
+        $query = 'SELECT c.*, IF(c2.id, true, false) AS has_children FROM category c LEFT JOIN category c2 ON c.id = c2.parent_id ';
+
+        if ($requiresPresence) {
+            $query .= "LEFT JOIN $table ON $table.category_id = c.id ";
+        }
+
+        $query .= 'WHERE c.scope = :scope AND c.parent_id IS NULL ';
+        $query .= 'GROUP BY c.id ';
+        if ($requiresPresence) {
+            $query .= "HAVING COUNT($table.id) > 0 ";
+        }
+        $query .= 'ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);
 
@@ -136,5 +148,22 @@ ORDER BY c.parent_id ASC, " . $order;
         } else {
             return array();
         }
+    }
+
+    public function getByScopeAndSlug($scope, $slug)
+    {
+
+        $query = 'SELECT * FROM category WHERE scope = :scope AND slug = :slug LIMIT 1';
+        $stmt = Database::getConnection('read')->prepare($query);
+        $stmt->bindParam(':scope', $scope);
+        $stmt->bindParam(':slug', $slug);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return new Category($res);
+        } else {
+            return null;
+        }
+
     }
 }

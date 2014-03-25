@@ -4,19 +4,19 @@ namespace Octo;
 
 use b8\Http\Request;
 use b8\Http\Response;
-use Octo\Pages\Model\Page;
-use Octo\Pages\Model\PageVersion;
+use Octo\Page\Model\Page;
+use Octo\Page\Model\PageVersion;
 use Octo\Template;
 
 class BlockManager
 {
     /**
-     * @var \Octo\Pages\Model\Page
+     * @var \Octo\Page\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Pages\Model\PageVersion
+     * @var \Octo\Page\Model\PageVersion
      */
     protected $version;
 
@@ -86,6 +86,27 @@ class BlockManager
 
     public function renderBlock($args, &$view)
     {
+        // Allow passing variables to blocks
+        $templateVariables = [];
+        if (isset($args['variables'])) {
+            if (!is_array($args['variables'])) {
+                $args['variables'] = array($args['variables']);
+            }
+
+            foreach ($args['variables'] as $variable) {
+                $variable = explode('=>', $variable);
+                $variable = array_map('trim', $variable);
+
+                if (count($variable) == 1) {
+                    $templateVariables[$variable[0]] = $variable[0];
+                } else {
+                    $templateVariables[$variable[0]] = $variable[1];
+                }
+            }
+
+            unset($args['variables']);
+        }
+
         foreach ($args as &$value) {
             $value = $view->getVariable($value);
         }
@@ -101,6 +122,9 @@ class BlockManager
         $block = Block::create($type, $content);
         $block->setRequest($this->request);
         $block->setResponse($this->response);
+
+        $args = array_merge(['variables' => $templateVariables], $args);
+
         $block->setTemplateParams($args);
 
         if ($block->hasUriExtensions()) {
