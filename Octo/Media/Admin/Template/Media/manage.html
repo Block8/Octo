@@ -10,11 +10,11 @@
 	<div class="superbox col-sm-12">
         {loop files}
 		<div class="superbox-list" data-id="image-{@item.id}">
-			<img src="/media/render/{@item.id}/" alt="{@item.title}" title="{@item.title}" class="superbox-img">
+			<img src="/media/render/{@item.id}/250/250" alt="{@item.title}" title="{@item.title}" class="superbox-img">
 		</div>
 
         <div class="superbox-show" style="display: none;">
-            <img src="/media/render/{@item.id}/" class="superbox-current-img">
+            <img src="/media/render/{@item.id}/250/250" class="superbox-current-img">
             <div id="imgInfoBox" class="superbox-imageinfo inline-block">
                 <h1>{@item.title}</h1>
                 <span>

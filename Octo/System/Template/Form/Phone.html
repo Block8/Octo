@@ -1,10 +1,10 @@
-<div class="control-group {@ccss} {if error}error{/if}">
+<div class="form-group {@ccss} {if error}error{/if}">
     {if label}
-    <label class="control-label" for="{@id}">{@label}</label>
+    <label for="{@id}">{@label}</label>
     {/if}
 
     <div class="controls">
-        <input id="{@id}" type="{@type}" class="{@css}"
+        <input id="{@id}" type="{@type}" class="form-control {@css}"
                name="{@name}"{if value} value="{@value}"{/if}{if pattern} pattern="{@pattern}"{/if}{if required} required{/if}>
 
         {if error}

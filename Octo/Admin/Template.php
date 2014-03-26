@@ -6,11 +6,6 @@ class Template extends \Octo\Template
 {
     protected static $templateType = 'admin_templates';
 
-    public static function createFromFile($file, $path = null)
-    {
-        return new static(file_get_contents($file));
-    }
-
     public static function getAdminTemplate($template, $module = null)
     {
         $rtn = parent::getAdminTemplate($template, $module);

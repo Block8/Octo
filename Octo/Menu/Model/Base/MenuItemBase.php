@@ -271,9 +271,9 @@ trait MenuItemBase
     /**
     * Get the Page model for this MenuItem by Id.
     *
-    * @uses \Octo\Menu\Store\PageStore::getById()
-    * @uses \Octo\Menu\Model\Page
-    * @return \Octo\Menu\Model\Page
+    * @uses \Octo\Pages\Store\PageStore::getById()
+    * @uses \Octo\Pages\Model\Page
+    * @return \Octo\Pages\Model\Page
     */
     public function getPage()
     {
@@ -283,7 +283,7 @@ trait MenuItemBase
             return null;
         }
 
-        return Factory::getStore('Page', 'Octo\Page')->getById($key);
+        return Factory::getStore('Page', 'Octo\Pages')->getById($key);
     }
 
     /**
@@ -294,7 +294,7 @@ trait MenuItemBase
     public function setPage($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Menu\Model\Page) {
+        if ($value instanceof \Octo\Pages\Model\Page) {
             return $this->setPageObject($value);
         }
 
@@ -312,7 +312,7 @@ trait MenuItemBase
     *
     * @param $value \Octo\Menu\Model\Page
     */
-    public function setPageObject(\Octo\Menu\Model\Page $value)
+    public function setPageObject(\Octo\Pages\Model\Page $value)
     {
         return $this->setPageId($value->getId());
     }

@@ -4,8 +4,8 @@ namespace Octo;
 
 use b8\Http\Response;
 use b8\Http\Request;
-use Octo\Page\Model\Page;
-use Octo\Page\Model\PageVersion;
+use Octo\Pages\Model\Page;
+use Octo\Pages\Model\PageVersion;
 use Octo\Template;
 
 abstract class Block
@@ -46,12 +46,12 @@ abstract class Block
     protected $view;
 
     /**
-     * @var \Octo\Page\Model\Page
+     * @var \Octo\Pages\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Page\Model\PageVersion
+     * @var \Octo\Pages\Model\PageVersion
      */
     protected $pageVersion;
 
@@ -172,9 +172,9 @@ abstract class Block
         $parts = explode('\\', get_class($this));
         $class = array_pop($parts);
 
-        if (isset($this->templateParams['templateFile'])) {
+        if (isset($this->templateParams['template'])) {
             try {
-                $this->view = Template::getPublicTemplate('Block/' . $this->templateParams['templateFile']);
+                $this->view = Template::getPublicTemplate('Block/' . $this->templateParams['template']);
             } catch (\Exception $e) {
                 // TODO: Something with this
                 throw $e;

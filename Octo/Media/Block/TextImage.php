@@ -2,7 +2,7 @@
 
 namespace Octo\Media\Block;
 
-use Octo\Page\Block\Text;
+use Octo\Pages\Block\Text;
 
 class TextImage extends Text
 {

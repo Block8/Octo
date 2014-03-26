@@ -129,6 +129,7 @@ class Form extends Block
             $contact->setValues($contactDetails);
             $contact = $this->contactStore->save($contact);
 
+
             $submission = new Submission();
             $submission->setForm($formModel);
             $submission->setCreatedDate(new \DateTime());

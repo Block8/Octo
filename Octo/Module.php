@@ -41,11 +41,11 @@ abstract class Module
         $octoConfig = $this->config->get('Octo', []);
 
         if (is_dir($templatePath)) {
-            $octoConfig['paths']['templates'][] = $templatePath;
+            $octoConfig['paths']['templates'][$this->getName()] = $templatePath;
         }
 
         if (is_dir($adminTemplatePath)) {
-            $octoConfig['paths']['admin_templates'][] = $adminTemplatePath;
+            $octoConfig['paths']['admin_templates'][$this->getName()] = $adminTemplatePath;
         }
 
         $octoConfig['paths']['modules'][$this->getName()] = $base;

@@ -225,9 +225,9 @@ trait GaTopPageBase
     /**
     * Get the Page model for this GaTopPage by Id.
     *
-    * @uses \Octo\Analytics\Store\PageStore::getById()
-    * @uses \Octo\Analytics\Model\Page
-    * @return \Octo\Analytics\Model\Page
+    * @uses \Octo\Pages\Store\PageStore::getById()
+    * @uses \Octo\Pages\Model\Page
+    * @return \Octo\Pages\Model\Page
     */
     public function getPage()
     {
@@ -237,7 +237,7 @@ trait GaTopPageBase
             return null;
         }
 
-        return Factory::getStore('Page', 'Octo\Page')->getById($key);
+        return Factory::getStore('Page', 'Octo\Pages')->getById($key);
     }
 
     /**
@@ -248,7 +248,7 @@ trait GaTopPageBase
     public function setPage($value)
     {
         // Is this an instance of Page?
-        if ($value instanceof \Octo\Analytics\Model\Page) {
+        if ($value instanceof \Octo\Pages\Model\Page) {
             return $this->setPageObject($value);
         }
 
@@ -266,7 +266,7 @@ trait GaTopPageBase
     *
     * @param $value \Octo\Analytics\Model\Page
     */
-    public function setPageObject(\Octo\Analytics\Model\Page $value)
+    public function setPageObject(\Octo\Pages\Model\Page $value)
     {
         return $this->setPageId($value->getId());
     }

@@ -391,9 +391,9 @@ trait FileBase
     /**
     * Get the Category model for this File by Id.
     *
-    * @uses \Octo\System\Store\CategoryStore::getById()
-    * @uses \Octo\System\Model\Category
-    * @return \Octo\System\Model\Category
+    * @uses \Octo\Categories\Store\CategoryStore::getById()
+    * @uses \Octo\Categories\Model\Category
+    * @return \Octo\Categories\Model\Category
     */
     public function getCategory()
     {
@@ -414,7 +414,7 @@ trait FileBase
     public function setCategory($value)
     {
         // Is this an instance of Category?
-        if ($value instanceof \Octo\System\Model\Category) {
+        if ($value instanceof \Octo\Categories\Model\Category) {
             return $this->setCategoryObject($value);
         }
 
@@ -432,7 +432,7 @@ trait FileBase
     *
     * @param $value \Octo\System\Model\Category
     */
-    public function setCategoryObject(\Octo\System\Model\Category $value)
+    public function setCategoryObject(\Octo\Categories\Model\Category $value)
     {
         return $this->setCategoryId($value->getId());
     }

@@ -46,9 +46,20 @@ if (is_file(APP_PATH . 'siteconfig.php')) {
 $config->setArray($_SETTINGS);
 $moduleManager->initialiseModules();
 
-if (!empty($_SETTINGS['Octo']['site_templates'])) {
+$templatePath = realpath(APP_PATH . $_SETTINGS['site']['namespace'] . '/Template');
+define('SITE_TEMPLATE_PATH', $templatePath);
+
+if (is_dir($templatePath)) {
     $settings = $config->get('Octo');
-    $settings['paths']['templates'][] = $_SETTINGS['Octo']['site_templates'];
+    $settings['paths']['templates'][] = $templatePath . '/';
+    $config->set('Octo', $settings);
+}
+
+$adminTemplatePath = realpath(APP_PATH . $_SETTINGS['site']['namespace'] . '/Admin/Template');
+
+if (is_dir($adminTemplatePath)) {
+    $settings = $config->get('Octo');
+    $settings['paths']['admin_templates'][] = $adminTemplatePath . '/';
     $config->set('Octo', $settings);
 }
 

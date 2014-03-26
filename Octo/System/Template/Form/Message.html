@@ -1,10 +1,10 @@
-<div class="control-group {@ccss} {if error}error{/if}">
+<div class="form-group {@ccss} {if error}error{/if}">
     {if label}
-    <label class="control-label" for="{@id}">{@label}</label>
+    <label for="{@id}">{@label}</label>
     {/if}
 
     <div class="controls">
-        <textarea rows="{@rows}" id="{@id}" class="{@css}" name="{@name}" {if required}required{/if}>{@value}</textarea>
+        <textarea rows="{@rows}" id="{@id}" class="form-control {@css}" name="{@name}" {if required}required{/if}>{@value}</textarea>
 
         {if error}
         <span class="help-block">{@error}</span>

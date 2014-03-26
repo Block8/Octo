@@ -1,8 +1,0 @@
-{for pages}
-    {if value.CurrentVersion.image_id}
-    <a href="{@value.uri}"><img src="/media/render/{@value.CurrentVersion.image_id}/160/90" alt="{@value.CurrentVersion.title}"></a>
-    {/if}
-
-    <a href="{@value.CurrentVersion.uri}">{@value.CurrentVersion.title}</a>
-    <p>{@value.CurrentVersion.description}</p>
-{/for}

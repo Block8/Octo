@@ -47,14 +47,15 @@ class MediaController extends Controller
             $height = $originalHeight;
         }
 
-        $output = $image->render($width, $height);
+        $output = (string)$image->render($width, $height);
 
-        $this->response->setHeader('Content-Type', 'image/jpeg');
-        $this->response->setContent($output);
-        $this->response->disableLayout();
-        $this->response->flush();
-        print $this->response->getContent();
-        exit;
+        header('Content-Type: image/jpeg');
+        header('Content-Length: ' . strlen($output));
+        header('Cache-Control: public');
+        header('Pragma: cache');
+        header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (86400*100)));
+
+        die($output);
     }
 
     /**
