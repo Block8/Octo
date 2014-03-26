@@ -63,7 +63,7 @@
 
 <div class="row">
 
-    {if (can_access uri: "/forms")}
+    {if (can_access uri: "/form")}
     <div class="col-lg-6">
         <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
             <header role="heading">
@@ -88,7 +88,7 @@
                             <td>{@value.Contact.email}</td>
                             <td>{@value.created_date.formatted}</td>
                             <td>
-                                {if (can_access uri: "/form/view-submission")}
+                                {if (can_access uri: "/form/submission")}
                                 <a class="btn btn-default btn-sm" href="/{@adminUri}/form/submission/{@value.id}">View</a>
                                 {/if}
                             </td>
