@@ -36,7 +36,15 @@
 
 <header id="header">
     <div id="logo-group">
-        <span id="logo"> <img src="/assets/backoffice/img/logo.png" alt=""></span>
+        <span id="logo">
+            {if siteLogo}
+            <img src="/assets/images/cms-logo.png" alt="">
+            {/if}
+
+            {ifnot siteLogo}
+            <img src="/assets/backoffice/img/logo.png" alt="">
+            {/ifnot}
+        </span>
     </div>
 
     <!-- we're not ready yet
