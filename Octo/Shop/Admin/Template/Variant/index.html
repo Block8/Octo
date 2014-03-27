@@ -1,0 +1,50 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-shopping-cart"></i> Manage Variants</h1>
+    <div class="pull-right header-buttons">
+        <a class="btn-default btn" href="/{@adminUri}/variant/add"><i class="fa fa-plus"></i> Add Variant</a>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th width="20%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {for variants}
+    <tr>
+        <td>{@value.title}</td>
+        <td>
+            <div class="btn-group">
+                {if (can_access uri: "/variant-option")}
+                <a class="btn btn-default btn-sm" href="/{@adminUri}/variant-option/manage/{@value.id}">Edit Options</a>
+                {/if}
+
+                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {if (can_access uri: "/variant-option")}
+                    <li>
+                        <a href="/{@adminUri}/variant-option/manage/{@value.id}">Edit Options</a>
+                    </li>
+                    {/if}
+
+                    {if (can_access uri: "/variant/edit")}
+                    <li>
+                        <a href="/{@adminUri}/variant/edit/{@value.id}">Edit Variant</a>
+                    </li>
+                    {/if}
+
+                    {if (can_access uri: "/variant/delete")}
+                    <li>
+                        <a href="/{@adminUri}/variant/delete/{@value.id}">Delete</a>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+        </td>
+    </tr>
+    {/for}
+    </tbody>
+</table>

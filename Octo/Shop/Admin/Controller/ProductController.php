@@ -36,8 +36,17 @@ class ProductController extends Controller
         $manage->addChild(new Menu\Item('Edit Product Image', '/media/edit/shop', true));
         $manage->addChild(new Menu\Item('Delete Product Image', '/media/delete/shop', true));
         $products->addChild($manage);
+
         $categories = new Menu\Item('Manage Categories', '/categories/manage/shop');
         $products->addChild($categories);
+
+        $variants = new Menu\Item('Manage Variants', '/variant');
+        $variants->addChild(new Menu\Item('Edit Variant', '/variant/edit', true));
+        $variants->addChild(new Menu\Item('Manage Variant Options', '/variant-option/manage', true));
+        $variants->addChild(new Menu\Item('Add Variant Option', '/variant-option/add', true));
+        $variants->addChild(new Menu\Item('Edit Variant Option', '/variant-option/edit', true));
+        $variants->addChild(new Menu\Item('Delete Variant Option', '/variant-option/delete', true));
+        $products->addChild($variants);
     }
 
     public function init()

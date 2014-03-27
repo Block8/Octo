@@ -25,9 +25,12 @@ trait VariantOptionBase
         $this->data['variant_id'] = null;
         $this->getters['variant_id'] = 'getVariantId';
         $this->setters['variant_id'] = 'setVariantId';
-        $this->data['option'] = null;
-        $this->getters['option'] = 'getOption';
-        $this->setters['option'] = 'setOption';
+        $this->data['option_title'] = null;
+        $this->getters['option_title'] = 'getOptionTitle';
+        $this->setters['option_title'] = 'setOptionTitle';
+        $this->data['position'] = null;
+        $this->getters['position'] = 'getPosition';
+        $this->setters['position'] = 'setPosition';
 
         // Foreign keys:
         $this->getters['Variant'] = 'getVariant';
@@ -58,13 +61,25 @@ trait VariantOptionBase
     }
 
     /**
-    * Get the value of Option / option.
+    * Get the value of OptionTitle / option_title.
     *
     * @return string
     */
-    public function getOption()
+    public function getOptionTitle()
     {
-        $rtn = $this->data['option'];
+        $rtn = $this->data['option_title'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Position / position.
+    *
+    * @return int
+    */
+    public function getPosition()
+    {
+        $rtn = $this->data['position'];
 
         return $rtn;
     }
@@ -108,22 +123,39 @@ trait VariantOptionBase
     }
 
     /**
-    * Set the value of Option / option.
+    * Set the value of OptionTitle / option_title.
     *
     * Must not be null.
     * @param $value string
     */
-    public function setOption($value)
+    public function setOptionTitle($value)
     {
-        $this->validateNotNull('Option', $value);
-        $this->validateString('Option', $value);
+        $this->validateNotNull('OptionTitle', $value);
+        $this->validateString('OptionTitle', $value);
 
-        if ($this->data['option'] === $value) {
+        if ($this->data['option_title'] === $value) {
             return;
         }
 
-        $this->data['option'] = $value;
-        $this->setModified('option');
+        $this->data['option_title'] = $value;
+        $this->setModified('option_title');
+    }
+
+    /**
+    * Set the value of Position / position.
+    *
+    * @param $value int
+    */
+    public function setPosition($value)
+    {
+        $this->validateInt('Position', $value);
+
+        if ($this->data['position'] === $value) {
+            return;
+        }
+
+        $this->data['position'] = $value;
+        $this->setModified('position');
     }
 
     /**

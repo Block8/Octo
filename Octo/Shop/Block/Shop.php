@@ -60,7 +60,7 @@ class Shop extends Block
 
     protected function renderCategoryList()
     {
-        $this->view = Template::getPublicTemplate('ShopCategoryList');
+        $this->view = Template::getPublicTemplate('Block/ShopCategoryList');
         $this->view->categories = $this->categoryStore->getAllForScope('shop', 'position ASC, name ASC', 'Item');
     }
 
@@ -69,7 +69,7 @@ class Shop extends Block
         $categorySlug = $this->uriParts[0];
         $category = $this->categoryStore->getByScopeAndSlug('shop', $categorySlug);
 
-        $this->view = Template::getPublicTemplate('ShopProductList');
+        $this->view = Template::getPublicTemplate('Block/ShopProductList');
         $this->view->category = $category;
         $this->view->products = $this->productStore->getByCategoryId($category->getId());
     }
@@ -81,7 +81,7 @@ class Shop extends Block
 
         $productSlug = $this->uriParts[1];
 
-        $this->view = Template::getPublicTemplate('ShopProduct');
+        $this->view = Template::getPublicTemplate('Block/ShopProduct');
         $this->view->category = $category;
         $product  = $this->productStore->getBySlug($productSlug);
 

@@ -211,9 +211,9 @@ trait ItemFileBase
     /**
     * Get the File model for this ItemFile by Id.
     *
-    * @uses \Octo\Shop\Store\FileStore::getById()
-    * @uses \Octo\Shop\Model\File
-    * @return \Octo\Shop\Model\File
+    * @uses \Octo\System\Store\FileStore::getById()
+    * @uses \Octo\System\Model\File
+    * @return \Octo\System\Model\File
     */
     public function getFile()
     {
@@ -234,7 +234,7 @@ trait ItemFileBase
     public function setFile($value)
     {
         // Is this an instance of File?
-        if ($value instanceof \Octo\Shop\Model\File) {
+        if ($value instanceof \Octo\System\Model\File) {
             return $this->setFileObject($value);
         }
 
@@ -252,7 +252,7 @@ trait ItemFileBase
     *
     * @param $value \Octo\Shop\Model\File
     */
-    public function setFileObject(\Octo\Shop\Model\File $value)
+    public function setFileObject(\Octo\System\Model\File $value)
     {
         return $this->setFileId($value->getId());
     }
