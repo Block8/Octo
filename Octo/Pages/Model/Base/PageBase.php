@@ -31,6 +31,9 @@ trait PageBase
         $this->data['uri'] = null;
         $this->getters['uri'] = 'getUri';
         $this->setters['uri'] = 'setUri';
+        $this->data['position'] = null;
+        $this->getters['position'] = 'getPosition';
+        $this->setters['position'] = 'setPosition';
 
         // Foreign keys:
         $this->getters['CurrentVersion'] = 'getCurrentVersion';
@@ -82,6 +85,18 @@ trait PageBase
     public function getUri()
     {
         $rtn = $this->data['uri'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Position / position.
+    *
+    * @return int
+    */
+    public function getPosition()
+    {
+        $rtn = $this->data['position'];
 
         return $rtn;
     }
@@ -156,6 +171,25 @@ trait PageBase
 
         $this->data['uri'] = $value;
         $this->setModified('uri');
+    }
+
+    /**
+    * Set the value of Position / position.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setPosition($value)
+    {
+        $this->validateNotNull('Position', $value);
+        $this->validateInt('Position', $value);
+
+        if ($this->data['position'] === $value) {
+            return;
+        }
+
+        $this->data['position'] = $value;
+        $this->setModified('position');
     }
 
     /**

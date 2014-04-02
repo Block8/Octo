@@ -18,12 +18,12 @@ use Octo\Template;
 class PageController extends Controller
 {
     /**
-     * @var \Octo\Page\Store\PageStore
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 
     /**
-     * @var \Octo\Page\Store\PageVersionStore
+     * @var \Octo\Pages\Store\PageVersionStore
      */
     protected $versionStore;
 
@@ -73,7 +73,7 @@ class PageController extends Controller
             $parentId = $parent->getId();
         }
 
-        $pages = $this->pageStore->getByParentId($parentId);
+        $pages = $this->pageStore->getByParentId($parentId, ['order' => [['position', 'ASC']]]);
 
         if (isset($parent)) {
             array_unshift($pages, $parent);
@@ -372,5 +372,21 @@ class PageController extends Controller
         }
 
         die(json_encode($rtn));
+    }
+
+    public function sort()
+    {
+        $positions = $this->getParam('positions', []);
+
+        foreach ($positions as $id => $position) {
+            $page = $this->pageStore->getById($id);
+
+            if ($page instanceof Page) {
+                $page->setPosition($position);
+                $this->pageStore->save($page);
+            }
+        }
+
+        die('OK');
     }
 }

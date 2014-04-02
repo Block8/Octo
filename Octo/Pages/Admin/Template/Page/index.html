@@ -1,16 +1,17 @@
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped pages-list">
     <thead>
     <tr>
         <th>Title</th>
         <th>Link</th>
         <th>Last Editor</th>
         <th>Last Update</th>
-        <th width="20%">Actions</th>
+        <th></th>
+        <th width="100px">Actions</th>
     </tr>
     </thead>
     <tbody>
     {for pages}
-    <tr>
+    <tr{if item.parent_id} class="sub-page"{/if} data-id="{@item.id}">
         <td>{if item.id != parentId}<i class="fa fa-chevron-right"></i> {/if}
             {if item.hasChildren}{if item.id != parentId}<a href="/{@adminUri}/page?parent={@item.id}">{/if}{/if}
             {@item.CurrentVersion.title}
@@ -19,6 +20,11 @@
         <td><a href="{@item.uri}">{@item.uri}</a></td>
         <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
         <td>{date_format date: item.CurrentVersion.updated_date}</td>
+        <td width="2%">
+            {if item.parent_id}
+            <i class="fa fa-fw fa-move handler"></i>
+            {/if}
+        </td>
         <td>
             <div class="btn-group">
                 {if (can_access uri: "/page/edit")}
@@ -39,3 +45,41 @@
     {/for}
     </tbody>
 </table>
+
+<script>
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $('.pages-list tbody').sortable({
+        handle: '.handler',
+        axis: 'y',
+        items: '> tr.sub-page',
+        helper: fixHelper,
+        update: function () {
+            var position = 0;
+            var items = {};
+
+            $('tr.sub-page').each(function () {
+                var id = $(this).data('id');
+                items[id] = position++;
+            });
+
+            savePositions(items);
+        }
+    });
+
+    function savePositions(items)
+    {
+        $('.pace').removeClass('hide');
+
+        $.post('/' + window.adminUri + '/page/sort', {positions: items}, function () {
+            $('.pace').addClass('hide');
+        });
+    }
+
+
+</script>

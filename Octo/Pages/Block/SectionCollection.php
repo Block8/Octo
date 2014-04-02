@@ -27,10 +27,6 @@ class SectionCollection extends Block
 
     public function renderNow()
     {
-        if (array_key_exists('template', $this->templateParams)) {
-            $this->view = Template::getPublicTemplate('Block/Collection/' . $this->templateParams['template']);
-        }
-
         $this->limit = 25;
 
         if (array_key_exists('limit', $this->templateParams)) {
@@ -48,7 +44,7 @@ class SectionCollection extends Block
 
     protected function getChildren(Page $page)
     {
-        $options = ['order' => [['id', 'DESC']], 'limit' => $this->limit];
+        $options = ['order' => [['position', 'ASC']], 'limit' => $this->limit];
         $children = $this->pageStore->getByParentId($page->getId(), $options);
 
         if (count($children)) {

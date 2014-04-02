@@ -27,10 +27,6 @@ class PageCollection extends Block
 
     public function renderNow()
     {
-        if (array_key_exists('template', $this->templateParams)) {
-            $this->view = Template::getPublicTemplate('Block/Collection/' . $this->templateParams['template']);
-        }
-
         $this->limit = 25;
 
         if (array_key_exists('limit', $this->templateParams)) {
