@@ -310,7 +310,7 @@ trait MenuItemBase
     /**
     * Set Page - Accepts a Page model.
     *
-    * @param $value \Octo\Menu\Model\Page
+    * @param $value \Octo\Pages\Model\Page
     */
     public function setPageObject(\Octo\Pages\Model\Page $value)
     {

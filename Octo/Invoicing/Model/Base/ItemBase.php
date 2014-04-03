@@ -4,7 +4,7 @@
  * Item base model for table: item
  */
 
-namespace Octo\Shop\Model\Base;
+namespace Octo\Invoicing\Model\Base;
 
 use b8\Store\Factory;
 
@@ -436,7 +436,7 @@ trait ItemBase
     /**
     * Set Category - Accepts a Category model.
     *
-    * @param $value \Octo\Shop\Model\Category
+    * @param $value \Octo\Categories\Model\Category
     */
     public function setCategoryObject(\Octo\Categories\Model\Category $value)
     {

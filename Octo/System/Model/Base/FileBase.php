@@ -430,7 +430,7 @@ trait FileBase
     /**
     * Set Category - Accepts a Category model.
     *
-    * @param $value \Octo\System\Model\Category
+    * @param $value \Octo\Categories\Model\Category
     */
     public function setCategoryObject(\Octo\Categories\Model\Category $value)
     {

@@ -440,7 +440,7 @@ trait ArticleBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\Articles\Model\User
+    * @param $value \Octo\System\Model\User
     */
     public function setUserObject(\Octo\System\Model\User $value)
     {
@@ -488,7 +488,7 @@ trait ArticleBase
     /**
     * Set Category - Accepts a Category model.
     *
-    * @param $value \Octo\Articles\Model\Category
+    * @param $value \Octo\Categories\Model\Category
     */
     public function setCategoryObject(\Octo\Categories\Model\Category $value)
     {
@@ -536,7 +536,7 @@ trait ArticleBase
     /**
     * Set Author - Accepts a User model.
     *
-    * @param $value \Octo\Articles\Model\User
+    * @param $value \Octo\System\Model\User
     */
     public function setAuthorObject(\Octo\System\Model\User $value)
     {
@@ -584,7 +584,7 @@ trait ArticleBase
     /**
     * Set ContentItem - Accepts a ContentItem model.
     *
-    * @param $value \Octo\Articles\Model\ContentItem
+    * @param $value \Octo\System\Model\ContentItem
     */
     public function setContentItemObject(\Octo\System\Model\ContentItem $value)
     {

@@ -1,0 +1,50 @@
+{if invoice.id}
+<form style="border: 0" action="/{@adminUri}/invoice/edit/{@invoice.id}" method="POST" class="smart-form">
+{/if}
+{ifnot invoice.id}
+<form style="border: 0" action="/{@adminUri}/invoice/add" method="POST" class="smart-form">
+{/ifnot}
+
+    <fieldset>
+        <section>
+            <label class="label">Created date:</label>
+            <label class="input">
+                <input name="created_date" type="text" class="sa-datepicker" value="{@invoice.created_date.formatted}">
+            </label>
+        </section>
+
+        <section>
+            <label class="label">Invoice for:</label>
+            <label class="input">
+                <input id="contact" name="contact_id" type="text" class="input" value="{@invoice.contact_id}">
+            </label>
+        </section>
+    </fieldset>
+
+    <footer>
+        <button type="submit" class="btn btn-primary">
+            Save Form
+        </button>
+    </footer>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('#contact').select2({
+            placeholder: "Search for a contact",
+            minimumInputLength: 1,
+            ajax: {
+                url: '/'+window.adminUri+'/contact/autocomplete',
+                dataType: 'json',
+                data: function(term) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function(data) {
+                    return data;
+                }
+            }
+        });
+    });
+</script>

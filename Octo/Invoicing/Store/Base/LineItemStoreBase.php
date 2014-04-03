@@ -4,7 +4,7 @@
  * LineItem base store for table: line_item
  */
 
-namespace Octo\Shop\Store\Base;
+namespace Octo\Invoicing\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -12,8 +12,8 @@ use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
-use Octo\Shop\Store;
-use Octo\Shop\Model\LineItem;
+use Octo\Store;
+use Octo\Invoicing\Model\LineItem;
 
 /**
  * LineItem Base Store
@@ -23,7 +23,7 @@ trait LineItemStoreBase
     protected function init()
     {
         $this->tableName = 'line_item';
-        $this->modelName = '\Octo\Shop\Model\LineItem';
+        $this->modelName = '\Octo\Invoicing\Model\LineItem';
         $this->primaryKey = 'id';
     }
     /**

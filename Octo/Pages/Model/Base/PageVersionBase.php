@@ -470,7 +470,7 @@ trait PageVersionBase
     /**
     * Set ContentItem - Accepts a ContentItem model.
     *
-    * @param $value \Octo\Pages\Model\ContentItem
+    * @param $value \Octo\System\Model\ContentItem
     */
     public function setContentItemObject(\Octo\System\Model\ContentItem $value)
     {
@@ -566,7 +566,7 @@ trait PageVersionBase
     /**
     * Set User - Accepts a User model.
     *
-    * @param $value \Octo\Pages\Model\User
+    * @param $value \Octo\System\Model\User
     */
     public function setUserObject(\Octo\System\Model\User $value)
     {
@@ -614,7 +614,7 @@ trait PageVersionBase
     /**
     * Set Image - Accepts a File model.
     *
-    * @param $value \Octo\Pages\Model\File
+    * @param $value \Octo\System\Model\File
     */
     public function setImageObject(\Octo\System\Model\File $value)
     {

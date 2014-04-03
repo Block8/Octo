@@ -71,4 +71,26 @@ class ContactStore extends Octo\Store
 
         return null;
     }
+
+    public function search($query)
+    {
+        $count = null;
+
+        $query = 'SELECT * FROM contact WHERE first_name LIKE \'%'.$query.'%\' OR last_name LIKE \'%'.$query.'%\'  OR company LIKE \'%'.$query.'%\' ';
+
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Contact($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
 }

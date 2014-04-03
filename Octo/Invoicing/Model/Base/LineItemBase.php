@@ -4,7 +4,7 @@
  * LineItem base model for table: line_item
  */
 
-namespace Octo\Shop\Model\Base;
+namespace Octo\Invoicing\Model\Base;
 
 use b8\Store\Factory;
 
@@ -225,9 +225,9 @@ trait LineItemBase
     /**
     * Get the Item model for this LineItem by Id.
     *
-    * @uses \Octo\Shop\Store\ItemStore::getById()
-    * @uses \Octo\Shop\Model\Item
-    * @return \Octo\Shop\Model\Item
+    * @uses \Octo\Invoicing\Store\ItemStore::getById()
+    * @uses \Octo\Invoicing\Model\Item
+    * @return \Octo\Invoicing\Model\Item
     */
     public function getItem()
     {
@@ -237,7 +237,7 @@ trait LineItemBase
             return null;
         }
 
-        return Factory::getStore('Item', 'Octo\Shop')->getById($key);
+        return Factory::getStore('Item', 'Octo\Invoicing')->getById($key);
     }
 
     /**
@@ -248,7 +248,7 @@ trait LineItemBase
     public function setItem($value)
     {
         // Is this an instance of Item?
-        if ($value instanceof \Octo\Shop\Model\Item) {
+        if ($value instanceof \Octo\Invoicing\Model\Item) {
             return $this->setItemObject($value);
         }
 
@@ -264,18 +264,18 @@ trait LineItemBase
     /**
     * Set Item - Accepts a Item model.
     *
-    * @param $value \Octo\Shop\Model\Item
+    * @param $value \Octo\Invoicing\Model\Item
     */
-    public function setItemObject(\Octo\Shop\Model\Item $value)
+    public function setItemObject(\Octo\Invoicing\Model\Item $value)
     {
         return $this->setItemId($value->getId());
     }
     /**
     * Get the Invoice model for this LineItem by Id.
     *
-    * @uses \Octo\Shop\Store\InvoiceStore::getById()
-    * @uses \Octo\Shop\Model\Invoice
-    * @return \Octo\Shop\Model\Invoice
+    * @uses \Octo\Invoicing\Store\InvoiceStore::getById()
+    * @uses \Octo\Invoicing\Model\Invoice
+    * @return \Octo\Invoicing\Model\Invoice
     */
     public function getInvoice()
     {
@@ -285,7 +285,7 @@ trait LineItemBase
             return null;
         }
 
-        return Factory::getStore('Invoice', 'Octo\Shop')->getById($key);
+        return Factory::getStore('Invoice', 'Octo\Invoicing')->getById($key);
     }
 
     /**
@@ -296,7 +296,7 @@ trait LineItemBase
     public function setInvoice($value)
     {
         // Is this an instance of Invoice?
-        if ($value instanceof \Octo\Shop\Model\Invoice) {
+        if ($value instanceof \Octo\Invoicing\Model\Invoice) {
             return $this->setInvoiceObject($value);
         }
 
@@ -312,9 +312,9 @@ trait LineItemBase
     /**
     * Set Invoice - Accepts a Invoice model.
     *
-    * @param $value \Octo\Shop\Model\Invoice
+    * @param $value \Octo\Invoicing\Model\Invoice
     */
-    public function setInvoiceObject(\Octo\Shop\Model\Invoice $value)
+    public function setInvoiceObject(\Octo\Invoicing\Model\Invoice $value)
     {
         return $this->setInvoiceId($value->getId());
     }

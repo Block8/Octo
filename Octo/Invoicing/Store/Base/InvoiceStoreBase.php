@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Item base store for table: item
+ * Invoice base store for table: invoice
  */
 
-namespace Octo\Shop\Store\Base;
+namespace Octo\Invoicing\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -12,25 +12,25 @@ use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
-use Octo\Shop\Store;
-use Octo\Shop\Model\Item;
+use Octo\Store;
+use Octo\Invoicing\Model\Invoice;
 
 /**
- * Item Base Store
+ * Invoice Base Store
  */
-trait ItemStoreBase
+trait InvoiceStoreBase
 {
     protected function init()
     {
-        $this->tableName = 'item';
-        $this->modelName = '\Octo\Shop\Model\Item';
+        $this->tableName = 'invoice';
+        $this->modelName = '\Octo\Invoicing\Model\Invoice';
         $this->primaryKey = 'id';
     }
     /**
     * @param $value
     * @param string $useConnection Connection type to use.
     * @throws StoreException
-    * @return Item
+    * @return Invoice
     */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
@@ -42,7 +42,7 @@ trait ItemStoreBase
     * @param $value
     * @param string $useConnection Connection type to use.
     * @throws StoreException
-    * @return Item
+    * @return Invoice
     */
     public function getById($value, $useConnection = 'read')
     {
@@ -50,8 +50,8 @@ trait ItemStoreBase
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
-        $query->select('*')->from('item')->limit(1);
+        $query = new Query($this->getNamespace('Invoice').'\Model\Invoice', $useConnection);
+        $query->select('*')->from('invoice')->limit(1);
         $query->where('`id` = :id');
         $query->bind(':id', $value);
 
@@ -59,7 +59,7 @@ trait ItemStoreBase
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Item by Id', 0, $ex);
+            throw new StoreException('Could not get Invoice by Id', 0, $ex);
         }
     }
 
@@ -70,22 +70,22 @@ trait ItemStoreBase
      * @throws StoreException
      * @return int
      */
-    public function getTotalForCategoryId($value, $options = [], $useConnection = 'read')
+    public function getTotalForInvoiceStatusId($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
-        $query->from('item')->where('`category_id` = :category_id');
-        $query->bind(':category_id', $value);
+        $query = new Query($this->getNamespace('Invoice').'\Model\Invoice', $useConnection);
+        $query->from('invoice')->where('`invoice_status_id` = :invoice_status_id');
+        $query->bind(':invoice_status_id', $value);
 
         $this->handleQueryOptions($query, $options);
 
         try {
             return $query->getCount();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of Item by CategoryId', 0, $ex);
+            throw new StoreException('Could not get count of Invoice by InvoiceStatusId', 0, $ex);
         }
     }
 
@@ -94,17 +94,17 @@ trait ItemStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return Item[]
+     * @return Invoice[]
      */
-    public function getByCategoryId($value, $options = [], $useConnection = 'read')
+    public function getByInvoiceStatusId($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
-        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
-        $query->from('item')->where('`category_id` = :category_id');
-        $query->bind(':category_id', $value);
+        $query = new Query($this->getNamespace('Invoice').'\Model\Invoice', $useConnection);
+        $query->from('invoice')->where('`invoice_status_id` = :invoice_status_id');
+        $query->bind(':invoice_status_id', $value);
 
         $this->handleQueryOptions($query, $options);
 
@@ -112,32 +112,8 @@ trait ItemStoreBase
             $query->execute();
             return $query->fetchAll();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Item by CategoryId', 0, $ex);
+            throw new StoreException('Could not get Invoice by InvoiceStatusId', 0, $ex);
         }
 
-    }
-    /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return Item
-    */
-    public function getBySlug($value, $useConnection = 'read')
-    {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
-        $query->select('*')->from('item')->limit(1);
-        $query->where('`slug` = :slug');
-        $query->bind(':slug', $value);
-
-        try {
-            $query->execute();
-            return $query->fetch();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Item by Slug', 0, $ex);
-        }
     }
 }

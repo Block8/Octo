@@ -163,9 +163,9 @@ trait ItemFileBase
     /**
     * Get the Item model for this ItemFile by Id.
     *
-    * @uses \Octo\Shop\Store\ItemStore::getById()
-    * @uses \Octo\Shop\Model\Item
-    * @return \Octo\Shop\Model\Item
+    * @uses \Octo\Invoicing\Store\ItemStore::getById()
+    * @uses \Octo\Invoicing\Model\Item
+    * @return \Octo\Invoicing\Model\Item
     */
     public function getItem()
     {
@@ -175,7 +175,7 @@ trait ItemFileBase
             return null;
         }
 
-        return Factory::getStore('Item', 'Octo\Shop')->getById($key);
+        return Factory::getStore('Item', 'Octo\Invoicing')->getById($key);
     }
 
     /**
@@ -186,7 +186,7 @@ trait ItemFileBase
     public function setItem($value)
     {
         // Is this an instance of Item?
-        if ($value instanceof \Octo\Shop\Model\Item) {
+        if ($value instanceof \Octo\Invoicing\Model\Item) {
             return $this->setItemObject($value);
         }
 
@@ -202,9 +202,9 @@ trait ItemFileBase
     /**
     * Set Item - Accepts a Item model.
     *
-    * @param $value \Octo\Shop\Model\Item
+    * @param $value \Octo\Invoicing\Model\Item
     */
-    public function setItemObject(\Octo\Shop\Model\Item $value)
+    public function setItemObject(\Octo\Invoicing\Model\Item $value)
     {
         return $this->setItemId($value->getId());
     }
@@ -250,7 +250,7 @@ trait ItemFileBase
     /**
     * Set File - Accepts a File model.
     *
-    * @param $value \Octo\Shop\Model\File
+    * @param $value \Octo\System\Model\File
     */
     public function setFileObject(\Octo\System\Model\File $value)
     {

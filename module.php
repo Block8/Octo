@@ -3,7 +3,7 @@
 
 $base = 'Octo/';
 
-$modules = ['Shop'];
+$modules = ['Invoicing'];
 
 foreach ($modules as $module) {
     @mkdir($base . $module . '/Admin/Controller', 0755, true);

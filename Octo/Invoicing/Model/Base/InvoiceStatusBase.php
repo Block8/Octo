@@ -4,7 +4,7 @@
  * InvoiceStatus base model for table: invoice_status
  */
 
-namespace Octo\Shop\Model\Base;
+namespace Octo\Invoicing\Model\Base;
 
 use b8\Store\Factory;
 

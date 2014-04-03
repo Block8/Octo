@@ -3,7 +3,7 @@
 /**
  * Item model for table: item */
 
-namespace Octo\Shop\Model;
+namespace Octo\Invoicing\Model;
 
 use Octo;
 use Octo\Store;

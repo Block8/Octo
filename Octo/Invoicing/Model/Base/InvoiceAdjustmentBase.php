@@ -4,7 +4,7 @@
  * InvoiceAdjustment base model for table: invoice_adjustment
  */
 
-namespace Octo\Shop\Model\Base;
+namespace Octo\Invoicing\Model\Base;
 
 use b8\Store\Factory;
 
@@ -223,9 +223,9 @@ trait InvoiceAdjustmentBase
     /**
     * Get the Invoice model for this InvoiceAdjustment by Id.
     *
-    * @uses \Octo\Shop\Store\InvoiceStore::getById()
-    * @uses \Octo\Shop\Model\Invoice
-    * @return \Octo\Shop\Model\Invoice
+    * @uses \Octo\Invoicing\Store\InvoiceStore::getById()
+    * @uses \Octo\Invoicing\Model\Invoice
+    * @return \Octo\Invoicing\Model\Invoice
     */
     public function getInvoice()
     {
@@ -235,7 +235,7 @@ trait InvoiceAdjustmentBase
             return null;
         }
 
-        return Factory::getStore('Invoice', 'Octo\Shop')->getById($key);
+        return Factory::getStore('Invoice', 'Octo\Invoicing')->getById($key);
     }
 
     /**
@@ -246,7 +246,7 @@ trait InvoiceAdjustmentBase
     public function setInvoice($value)
     {
         // Is this an instance of Invoice?
-        if ($value instanceof \Octo\Shop\Model\Invoice) {
+        if ($value instanceof \Octo\Invoicing\Model\Invoice) {
             return $this->setInvoiceObject($value);
         }
 
@@ -262,9 +262,9 @@ trait InvoiceAdjustmentBase
     /**
     * Set Invoice - Accepts a Invoice model.
     *
-    * @param $value \Octo\Shop\Model\Invoice
+    * @param $value \Octo\Invoicing\Model\Invoice
     */
-    public function setInvoiceObject(\Octo\Shop\Model\Invoice $value)
+    public function setInvoiceObject(\Octo\Invoicing\Model\Invoice $value)
     {
         return $this->setInvoiceId($value->getId());
     }

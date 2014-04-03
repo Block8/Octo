@@ -3,7 +3,7 @@
 /**
  * LineItem model for table: line_item */
 
-namespace Octo\Shop\Model;
+namespace Octo\Invoicing\Model;
 
 use Octo;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Shop;
+namespace Octo\Invoicing;
 
 use Octo;
 
@@ -8,14 +8,11 @@ class Module extends Octo\Module
 {
     protected function requires()
     {
-        $this->manager->enable('Octo', 'Invoicing');
-        $this->manager->enable('Octo', 'Categories');
-        $this->manager->enable('Octo', 'Media');
     }
 
     protected function getName()
     {
-        return 'Shop';
+        return 'Invoicing';
     }
 
     protected function getPath()

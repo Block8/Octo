@@ -264,7 +264,7 @@ trait GaTopPageBase
     /**
     * Set Page - Accepts a Page model.
     *
-    * @param $value \Octo\Analytics\Model\Page
+    * @param $value \Octo\Pages\Model\Page
     */
     public function setPageObject(\Octo\Pages\Model\Page $value)
     {

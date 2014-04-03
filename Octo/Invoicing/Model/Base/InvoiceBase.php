@@ -4,7 +4,7 @@
  * Invoice base model for table: invoice
  */
 
-namespace Octo\Shop\Model\Base;
+namespace Octo\Invoicing\Model\Base;
 
 use b8\Store\Factory;
 
@@ -40,6 +40,15 @@ trait InvoiceBase
         $this->data['invoice_status_id'] = null;
         $this->getters['invoice_status_id'] = 'getInvoiceStatusId';
         $this->setters['invoice_status_id'] = 'setInvoiceStatusId';
+        $this->data['contact_id'] = null;
+        $this->getters['contact_id'] = 'getContactId';
+        $this->setters['contact_id'] = 'setContactId';
+        $this->data['created_date'] = null;
+        $this->getters['created_date'] = 'getCreatedDate';
+        $this->setters['created_date'] = 'setCreatedDate';
+        $this->data['updated_date'] = null;
+        $this->getters['updated_date'] = 'getUpdatedDate';
+        $this->setters['updated_date'] = 'setUpdatedDate';
 
         // Foreign keys:
         $this->getters['InvoiceStatus'] = 'getInvoiceStatus';
@@ -125,6 +134,50 @@ trait InvoiceBase
     public function getInvoiceStatusId()
     {
         $rtn = $this->data['invoice_status_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ContactId / contact_id.
+    *
+    * @return int
+    */
+    public function getContactId()
+    {
+        $rtn = $this->data['contact_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of CreatedDate / created_date.
+    *
+    * @return \DateTime
+    */
+    public function getCreatedDate()
+    {
+        $rtn = $this->data['created_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of UpdatedDate / updated_date.
+    *
+    * @return \DateTime
+    */
+    public function getUpdatedDate()
+    {
+        $rtn = $this->data['updated_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
 
         return $rtn;
     }
@@ -255,11 +308,68 @@ trait InvoiceBase
     }
 
     /**
+    * Set the value of ContactId / contact_id.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setContactId($value)
+    {
+        $this->validateNotNull('ContactId', $value);
+        $this->validateInt('ContactId', $value);
+
+        if ($this->data['contact_id'] === $value) {
+            return;
+        }
+
+        $this->data['contact_id'] = $value;
+        $this->setModified('contact_id');
+    }
+
+    /**
+    * Set the value of CreatedDate / created_date.
+    *
+    * Must not be null.
+    * @param $value \DateTime
+    */
+    public function setCreatedDate($value)
+    {
+        $this->validateNotNull('CreatedDate', $value);
+        $this->validateDate('CreatedDate', $value);
+
+        if ($this->data['created_date'] === $value) {
+            return;
+        }
+
+        $this->data['created_date'] = $value;
+        $this->setModified('created_date');
+    }
+
+    /**
+    * Set the value of UpdatedDate / updated_date.
+    *
+    * Must not be null.
+    * @param $value \DateTime
+    */
+    public function setUpdatedDate($value)
+    {
+        $this->validateNotNull('UpdatedDate', $value);
+        $this->validateDate('UpdatedDate', $value);
+
+        if ($this->data['updated_date'] === $value) {
+            return;
+        }
+
+        $this->data['updated_date'] = $value;
+        $this->setModified('updated_date');
+    }
+
+    /**
     * Get the InvoiceStatus model for this Invoice by Id.
     *
-    * @uses \Octo\Shop\Store\InvoiceStatusStore::getById()
-    * @uses \Octo\Shop\Model\InvoiceStatus
-    * @return \Octo\Shop\Model\InvoiceStatus
+    * @uses \Octo\Invoicing\Store\InvoiceStatusStore::getById()
+    * @uses \Octo\Invoicing\Model\InvoiceStatus
+    * @return \Octo\Invoicing\Model\InvoiceStatus
     */
     public function getInvoiceStatus()
     {
@@ -269,7 +379,7 @@ trait InvoiceBase
             return null;
         }
 
-        return Factory::getStore('InvoiceStatus', 'Octo\Shop')->getById($key);
+        return Factory::getStore('InvoiceStatus', 'Octo\Invoicing')->getById($key);
     }
 
     /**
@@ -280,7 +390,7 @@ trait InvoiceBase
     public function setInvoiceStatus($value)
     {
         // Is this an instance of InvoiceStatus?
-        if ($value instanceof \Octo\Shop\Model\InvoiceStatus) {
+        if ($value instanceof \Octo\Invoicing\Model\InvoiceStatus) {
             return $this->setInvoiceStatusObject($value);
         }
 
@@ -296,9 +406,9 @@ trait InvoiceBase
     /**
     * Set InvoiceStatus - Accepts a InvoiceStatus model.
     *
-    * @param $value \Octo\Shop\Model\InvoiceStatus
+    * @param $value \Octo\Invoicing\Model\InvoiceStatus
     */
-    public function setInvoiceStatusObject(\Octo\Shop\Model\InvoiceStatus $value)
+    public function setInvoiceStatusObject(\Octo\Invoicing\Model\InvoiceStatus $value)
     {
         return $this->setInvoiceStatusId($value->getId());
     }

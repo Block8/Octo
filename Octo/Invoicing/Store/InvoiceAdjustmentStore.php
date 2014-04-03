@@ -3,7 +3,7 @@
 /**
  * InvoiceAdjustment store for table: invoice_adjustment */
 
-namespace Octo\Shop\Store;
+namespace Octo\Invoicing\Store;
 
 use Octo;
 

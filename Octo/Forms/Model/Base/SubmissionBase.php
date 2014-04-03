@@ -320,7 +320,7 @@ trait SubmissionBase
     /**
     * Set Contact - Accepts a Contact model.
     *
-    * @param $value \Octo\Forms\Model\Contact
+    * @param $value \Octo\System\Model\Contact
     */
     public function setContactObject(\Octo\System\Model\Contact $value)
     {

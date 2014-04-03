@@ -3,7 +3,7 @@
 /**
  * InvoiceStatus store for table: invoice_status */
 
-namespace Octo\Shop\Store;
+namespace Octo\Invoicing\Store;
 
 use Octo;
 

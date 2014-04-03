@@ -4,7 +4,7 @@
  * InvoiceAdjustment base store for table: invoice_adjustment
  */
 
-namespace Octo\Shop\Store\Base;
+namespace Octo\Invoicing\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -12,8 +12,8 @@ use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
-use Octo\Shop\Store;
-use Octo\Shop\Model\InvoiceAdjustment;
+use Octo\Store;
+use Octo\Invoicing\Model\InvoiceAdjustment;
 
 /**
  * InvoiceAdjustment Base Store
@@ -23,7 +23,7 @@ trait InvoiceAdjustmentStoreBase
     protected function init()
     {
         $this->tableName = 'invoice_adjustment';
-        $this->modelName = '\Octo\Shop\Model\InvoiceAdjustment';
+        $this->modelName = '\Octo\Invoicing\Model\InvoiceAdjustment';
         $this->primaryKey = 'id';
     }
     /**

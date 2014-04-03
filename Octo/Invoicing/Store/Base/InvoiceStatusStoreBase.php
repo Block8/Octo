@@ -4,7 +4,7 @@
  * InvoiceStatus base store for table: invoice_status
  */
 
-namespace Octo\Shop\Store\Base;
+namespace Octo\Invoicing\Store\Base;
 
 use PDOException;
 use b8\Cache;
@@ -12,8 +12,8 @@ use b8\Database;
 use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
-use Octo\Shop\Store;
-use Octo\Shop\Model\InvoiceStatus;
+use Octo\Store;
+use Octo\Invoicing\Model\InvoiceStatus;
 
 /**
  * InvoiceStatus Base Store
@@ -23,7 +23,7 @@ trait InvoiceStatusStoreBase
     protected function init()
     {
         $this->tableName = 'invoice_status';
-        $this->modelName = '\Octo\Shop\Model\InvoiceStatus';
+        $this->modelName = '\Octo\Invoicing\Model\InvoiceStatus';
         $this->primaryKey = 'id';
     }
     /**

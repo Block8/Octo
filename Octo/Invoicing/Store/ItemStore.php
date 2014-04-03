@@ -3,7 +3,7 @@
 /**
  * Item store for table: item */
 
-namespace Octo\Shop\Store;
+namespace Octo\Invoicing\Store;
 
 use b8\Database;
 use b8\Database\Query;

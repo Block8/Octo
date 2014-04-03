@@ -3,7 +3,7 @@
 /**
  * Invoice store for table: invoice */
 
-namespace Octo\Shop\Store;
+namespace Octo\Invoicing\Store;
 
 use Octo;
 

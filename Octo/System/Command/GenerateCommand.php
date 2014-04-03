@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use b8\Config;
 use b8\Database;
+use Octo\Database\ControllerGenerator;
 
 class GenerateCommand extends Command
 {
@@ -26,5 +27,8 @@ class GenerateCommand extends Command
         $gen = new Database\CodeGenerator($connection, $namespaces, $paths, true);
         $gen->generateModels();
         $gen->generateStores();
+
+        $controllerGenerator = new ControllerGenerator($connection, $namespaces, $paths);
+        $controllerGenerator->generateControllers();
     }
 }
