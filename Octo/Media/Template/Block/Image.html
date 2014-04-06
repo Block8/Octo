@@ -1,4 +1,10 @@
 
 {if image}
+{if hideTag}
+/media/render/{@image}/{@width}/{@height}
+{/if}
+
+{ifnot hideTag}
 <img src="/media/render/{@image}/{@width}/{@height}">
+{/ifnot}
 {/if}
