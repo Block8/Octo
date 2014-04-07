@@ -342,6 +342,7 @@ class PageController extends Controller
         $this->versionStore->save($latest);
 
         $page->setCurrentVersion($latest);
+        $page->generateUri();
         $this->pageStore->save($page);
 
         $content = $latest->getContentItem()->getContent();
