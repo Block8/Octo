@@ -37,9 +37,15 @@
                     </li>
                     {/if}
 
+                    {if (can_access uri: "/product/variants")}
+                    <li>
+                        <a href="/{@adminUri}/product/variants/{@value.id}">Manage Variants</a>
+                    </li>
+                    {/if}
+
                     {if (can_access uri: "/product/delete")}
                     <li>
-                        <a href="/{@adminUri}/product/delete/{@value.id}">Delete</a>
+                        <a href="/{@adminUri}/product/delete/{@value.id}" class="btn-delete">Delete</a>
                     </li>
                     {/if}
                 </ul>
