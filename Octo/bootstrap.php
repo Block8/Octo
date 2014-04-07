@@ -55,6 +55,15 @@ if (is_dir($templatePath)) {
     $config->set('Octo', $settings);
 }
 
+//set up ADMIN_URI constant, throws exception if the config value isn't set.
+if (!defined('ADMIN_URI')) {
+    if ($config->get('site.admin_uri') === null) {
+        throw new Exception('site.admin_uri has not been set in the siteconfig');
+    } else {
+        define('ADMIN_URI', $config->get('site.admin_uri'));
+    }
+}
+
 $adminTemplatePath = realpath(APP_PATH . $_SETTINGS['site']['namespace'] . '/Admin/Template');
 
 if (is_dir($adminTemplatePath)) {
