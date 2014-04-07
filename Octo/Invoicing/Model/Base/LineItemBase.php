@@ -37,13 +37,8 @@ trait LineItemBase
         $this->data['line_price'] = null;
         $this->getters['line_price'] = 'getLinePrice';
         $this->setters['line_price'] = 'setLinePrice';
-        $this->data['description'] = null;
-        $this->getters['description'] = 'getDescription';
-        $this->setters['description'] = 'setDescription';
 
         // Foreign keys:
-        $this->getters['Invoice'] = 'getInvoice';
-        $this->setters['Invoice'] = 'setInvoice';
         $this->getters['Item'] = 'getItem';
         $this->setters['Item'] = 'setItem';
     }
@@ -115,18 +110,6 @@ trait LineItemBase
     public function getLinePrice()
     {
         $rtn = $this->data['line_price'];
-
-        return $rtn;
-    }
-
-    /**
-    * Get the value of Description / description.
-    *
-    * @return string
-    */
-    public function getDescription()
-    {
-        $rtn = $this->data['description'];
 
         return $rtn;
     }
@@ -237,71 +220,6 @@ trait LineItemBase
         $this->setModified('line_price');
     }
 
-    /**
-    * Set the value of Description / description.
-    *
-    * @param $value string
-    */
-    public function setDescription($value)
-    {
-        $this->validateString('Description', $value);
-
-        if ($this->data['description'] === $value) {
-            return;
-        }
-
-        $this->data['description'] = $value;
-        $this->setModified('description');
-    }
-
-    /**
-    * Get the Invoice model for this LineItem by Id.
-    *
-    * @uses \Octo\Invoicing\Store\InvoiceStore::getById()
-    * @uses \Octo\Invoicing\Model\Invoice
-    * @return \Octo\Invoicing\Model\Invoice
-    */
-    public function getInvoice()
-    {
-        $key = $this->getInvoiceId();
-
-        if (empty($key)) {
-            return null;
-        }
-
-        return Factory::getStore('Invoice', 'Octo\Invoicing')->getById($key);
-    }
-
-    /**
-    * Set Invoice - Accepts an ID, an array representing a Invoice or a Invoice model.
-    *
-    * @param $value mixed
-    */
-    public function setInvoice($value)
-    {
-        // Is this an instance of Invoice?
-        if ($value instanceof \Octo\Invoicing\Model\Invoice) {
-            return $this->setInvoiceObject($value);
-        }
-
-        // Is this an array representing a Invoice item?
-        if (is_array($value) && !empty($value['id'])) {
-            return $this->setInvoiceId($value['id']);
-        }
-
-        // Is this a scalar value representing the ID of this foreign key?
-        return $this->setInvoiceId($value);
-    }
-
-    /**
-    * Set Invoice - Accepts a Invoice model.
-    *
-    * @param $value \Octo\Invoicing\Model\Invoice
-    */
-    public function setInvoiceObject(\Octo\Invoicing\Model\Invoice $value)
-    {
-        return $this->setInvoiceId($value->getId());
-    }
     /**
     * Get the Item model for this LineItem by Id.
     *

@@ -8,6 +8,7 @@ use Octo\Admin\Menu;
 use Octo\Form\Element\ImageUpload;
 use Octo\Shop\Model\Item;
 use Octo\Shop\Model\ItemFile;
+use Octo\Shop\Model\ItemVariant;
 use Octo\System\Model\File;;
 use Octo\Store;
 use Octo\Utilities\StringUtilities;
@@ -15,7 +16,30 @@ use Octo\Utilities\StringUtilities;
 class ProductController extends Controller
 {
 
+    /**
+     * @var \Octo\Shop\Store\ItemStore
+     */
+    protected $productStore;
+    /**
+     * @var \Octo\Categories\Store\CategoryStore
+     */
+    protected $categoryStore;
+    /**
+     * @var \Octo\Shop\Store\ItemFileStore
+     */
     protected $itemFileStore;
+    /**
+     * @var \Octo\Shop\Store\VariantStore
+     */
+    protected $variantStore;
+    /**
+     * @var \Octo\Shop\Store\VariantOptionStore
+     */
+    protected $variantOptionStore;
+    /**
+     * @var \Octo\Shop\Store\ItemVariantStore
+     */
+    protected $itemVariantStore;
 
     /**
      * Return the menu nodes required for this controller
@@ -54,6 +78,9 @@ class ProductController extends Controller
         $this->productStore = Store::get('Item');
         $this->categoryStore = Store::get('Category');
         $this->itemFileStore = Store::get('ItemFile');
+        $this->variantStore = Store::get('Variant');
+        $this->variantOptionStore = Store::get('VariantOption');
+        $this->itemVariantStore = Store::get('ItemVariant');
     }
 
     public function index()
@@ -187,6 +214,34 @@ class ProductController extends Controller
 
         $this->successMessage($product->getTitle() . ' was deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/product/');
+    }
+
+    public function variants($productId)
+    {
+        $product = $this->productStore->getById($productId);
+
+        $this->view->product = $product;
+        $this->view->variants = $this->variantStore->getVariantsNotUsedByProduct($productId);
+
+        $this->setTitle($product->getTitle() . ' Variants');
+        $this->addBreadcrumb('Products', '/product');
+        $this->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
+        $this->addBreadcrumb('Variants', '/product/variants/' . $product->getId());
+
+        if ($this->request->getMethod() == 'POST') {
+            if ($this->getParam('new_variant')) {
+                $variant = $this->variantStore->getById($this->getParam('new_variant'));
+                $options = $this->variantOptionStore->getByVariantId($variant->getId());
+
+                foreach ($options as $option) {
+                    $iv = new ItemVariant();
+                    $iv->setVariantId($variant->getId());
+                    $iv->setVariantOptionId($option->getId());
+                    $iv->setItemId($productId);
+                    $this->itemVariantStore->save($iv);
+                }
+            }
+        }
     }
 
     public function productForm($values = [], $type = 'add')
