@@ -4,6 +4,7 @@ namespace Octo\Menu\Admin\Controller;
 use b8\Form;
 use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
+use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu as AdminMenu;
 use Octo\Menu\Model\Menu;
 use Octo\Menu\Model\MenuItem;
@@ -107,7 +108,7 @@ class MenuController extends Controller
 
     protected function menuForm($values = [], $type = 'add')
     {
-        $form = new Form();
+        $form = new FormElement();
         $form->setMethod('POST');
 
         if ($type == 'add') {
