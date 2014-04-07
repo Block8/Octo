@@ -84,20 +84,20 @@ $queries[] = "RENAME TABLE `order_adjustment` TO `invoice_adjustment`;";
 
 $queries[] = "RENAME TABLE `order_status` TO `invoice_status`;";
 
-$queries[] = "ALTER TABLE `invoice_adjustment` CHANGE `order_id` `invoice_id` INT(10)  UNSIGNED  NOT NULL;";
-
 $queries[] = "ALTER TABLE `invoice_adjustment` DROP FOREIGN KEY `invoice_adjustment_ibfk_1`;";
+
+$queries[] = "ALTER TABLE `invoice_adjustment` CHANGE `order_id` `invoice_id` INT(10)  UNSIGNED  NOT NULL;";
 
 $queries[] = "ALTER TABLE `invoice_adjustment` ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 
-$queries[] = "ALTER TABLE `invoice` CHANGE `order_status_id` `invoice_status_id` INT(11)  UNSIGNED  NULL  DEFAULT NULL;";
-
 $queries[] = "ALTER TABLE `invoice` DROP FOREIGN KEY `invoice_ibfk_1`;";
+
+$queries[] = "ALTER TABLE `invoice` CHANGE `order_status_id` `invoice_status_id` INT(11)  UNSIGNED  NULL  DEFAULT NULL;";
 
 $queries[] = "ALTER TABLE `invoice` ADD FOREIGN KEY (`invoice_status_id`) REFERENCES `invoice_status` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
 
-$queries[] = "ALTER TABLE `line_item` CHANGE `order_id` `invoice_id` INT(11)  UNSIGNED  NOT NULL;";
-
 $queries[] = "ALTER TABLE `line_item` DROP FOREIGN KEY `line_item_ibfk_2`;";
+
+$queries[] = "ALTER TABLE `line_item` CHANGE `order_id` `invoice_id` INT(11)  UNSIGNED  NOT NULL;";
 
 $queries[] = "ALTER TABLE `line_item` ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
