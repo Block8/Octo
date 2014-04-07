@@ -207,6 +207,8 @@ class PageController extends Controller
         $blocks = $this->parseTemplate($latest->getTemplate());
         $blockTypes = Block::getBlocks();
 
+        $hasEditableBlocks = false;
+
         foreach ($blocks as &$block) {
             if (!isset($blockTypes[$block['type']])) {
                 $block['editable'] = false;
@@ -218,6 +220,7 @@ class PageController extends Controller
 
                 if (isset($blockTypes[$block['type']]['editor']) && $blockTypes[$block['type']]['editor']) {
                     $block['editable'] = true;
+                    $hasEditableBlocks = true;
                 }
             }
         }
@@ -226,6 +229,7 @@ class PageController extends Controller
         $this->view->latest = $latest;
         $this->view->blocks = $blocks;
         $this->view->blockTypes = $blockTypes;
+        $this->view->hasEditableBlocks = $hasEditableBlocks;
         $this->view->templates = json_encode($this->getTemplates());
         $this->view->pages = json_encode($this->pageStore->getParentPageOptions());
 

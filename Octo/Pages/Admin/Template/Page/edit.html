@@ -8,12 +8,14 @@
     <div class="well">
         <button id="edit-page-details" class="btn btn-block btn-primary">Edit Page Details</button>
 
-        <h2>Editable areas:</h2>
+        {if hasEditableBlocks}
+            <h2>Editable areas:</h2>
             {for blocks}
-            {if value.editable}
-            <button class="page-block-btn btn btn-block" data-type="{@item.type}" data-name="{@item.name}" data-id="{@item.id}">Edit: <strong>{@item.name}</strong></button>
-            {/if}
+                {if value.editable}
+                    <button class="page-block-btn btn btn-block" data-type="{@item.type}" data-name="{@item.name}" data-id="{@item.id}">Edit: <strong>{@item.name}</strong></button>
+                {/if}
             {/for}
+        {/if}
     </div>
 </div>
 
