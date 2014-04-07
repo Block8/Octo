@@ -25,6 +25,10 @@ class Image extends Block
             $this->view->height = $this->templateParams['height'];
         }
 
+        if (isset($this->templateParams['hideTag'])) {
+            $this->view->hideTag = true;
+        }
+
         if (isset($this->content['image'])) {
             $this->view->image = $this->content['image'];
             return;
