@@ -4,7 +4,7 @@
 	<label class="select {if error}state-error{/if}">
 	<select id="{@id}" class="{@css}" name="{@name}">
         {for options}
-		<option value="{@key}"{if parent.value == value} selected="selected"{/if}>{@value}</option>
+		<option value="{@key}"{if parent.value == key} selected="selected"{/if}>{@value}</option>
         {/for}
 	</select>
     </label>
