@@ -26,6 +26,10 @@ class SessionController extends Controller
      */
     public function login()
     {
+        if (file_exists(APP_PATH . 'public/assets/images/cms-logo.png')) {
+            $this->view->siteLogo = true;
+        }
+
         if ($this->request->getMethod() == 'POST') {
             $user = $this->userStore->getByEmail($this->getParam('email'));
 
