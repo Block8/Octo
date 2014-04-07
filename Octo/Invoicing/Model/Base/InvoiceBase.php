@@ -51,6 +51,8 @@ trait InvoiceBase
         $this->setters['updated_date'] = 'setUpdatedDate';
 
         // Foreign keys:
+        $this->getters['Contact'] = 'getContact';
+        $this->setters['Contact'] = 'setContact';
         $this->getters['InvoiceStatus'] = 'getInvoiceStatus';
         $this->setters['InvoiceStatus'] = 'setInvoiceStatus';
     }
@@ -364,6 +366,54 @@ trait InvoiceBase
         $this->setModified('updated_date');
     }
 
+    /**
+    * Get the Contact model for this Invoice by Id.
+    *
+    * @uses \Octo\System\Store\ContactStore::getById()
+    * @uses \Octo\System\Model\Contact
+    * @return \Octo\System\Model\Contact
+    */
+    public function getContact()
+    {
+        $key = $this->getContactId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('Contact', 'Octo\System')->getById($key);
+    }
+
+    /**
+    * Set Contact - Accepts an ID, an array representing a Contact or a Contact model.
+    *
+    * @param $value mixed
+    */
+    public function setContact($value)
+    {
+        // Is this an instance of Contact?
+        if ($value instanceof \Octo\System\Model\Contact) {
+            return $this->setContactObject($value);
+        }
+
+        // Is this an array representing a Contact item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setContactId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setContactId($value);
+    }
+
+    /**
+    * Set Contact - Accepts a Contact model.
+    *
+    * @param $value \Octo\System\Model\Contact
+    */
+    public function setContactObject(\Octo\System\Model\Contact $value)
+    {
+        return $this->setContactId($value->getId());
+    }
     /**
     * Get the InvoiceStatus model for this Invoice by Id.
     *

@@ -5,6 +5,7 @@
 
 namespace Octo\Invoicing\Store;
 
+use b8\Database;
 use Octo;
 
 /**
@@ -14,5 +15,16 @@ class LineItemStore extends Octo\Store
 {
     use Base\LineItemStoreBase;
 
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    public function clearItemsForInvoice($invoice)
+    {
+        $query = 'DELETE FROM line_item WHERE invoice_id = :invoice_id';
+        $stmt = Database::getConnection('read')->prepare($query);
+        $stmt->bindValue(':invoice_id', $invoice->getId());
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

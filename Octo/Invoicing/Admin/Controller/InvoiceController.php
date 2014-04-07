@@ -8,15 +8,16 @@ use Octo\Admin;
 use Octo\Admin\Menu;
 use Octo\Admin\Form as FormElement;
 use Octo\Invoicing\Model\Invoice;
+use Octo\Invoicing\Service\InvoiceService;
 use Octo\Event;
 use Octo\Store;
 
 class InvoiceController extends Admin\Controller
 {
     /**
-     * @var \Octo\Invoicing\Store\ItemStore
+     * @var \Octo\Invoicing\Service\InvoiceService
      */
-    protected $store;
+    protected $invoiceService;
 
     /**
      * Set up menus for this controller.
@@ -40,8 +41,14 @@ class InvoiceController extends Admin\Controller
      */
     public function init()
     {
-        $this->store = Store::get('Invoice');
         $this->addBreadcrumb('Invoices', '/item');
+
+        $invoiceStore = Store::get('Invoice');
+        $adjustmentStore = Store::get('InvoiceAdjustment');
+        $itemStore = Store::get('Item');
+        $lineItemStore = Store::get('LineItem');
+
+        $this->invoiceService = new InvoiceService($invoiceStore, $adjustmentStore, $itemStore, $lineItemStore);
     }
 
     public function index()
@@ -52,9 +59,23 @@ class InvoiceController extends Admin\Controller
     public function add()
     {
         $this->addBreadcrumb('Add Invoice', '/invoice/add');
-        $invoice = new Invoice();
-        $invoice->setCreatedDate(new \DateTime());
-        $this->view->item = $invoice;
+
+        if ($this->request->getMethod() == 'POST') {
+
+            $contact = Store::get('Contact')->getById($this->getParam('contact_id'));
+            $invoiceDate = $this->getParam('created_date', null);
+
+            if (!is_null($invoiceDate)) {
+                $invoiceDate = new \DateTime($invoiceDate);
+            } else {
+                $invoiceDate = new \DateTime();
+            }
+
+            $invoice = $this->invoiceService->createInvoice($contact, $invoiceDate);
+            $this->invoiceService->updateInvoiceItems($invoice, $this->getParam('items', []));
+
+            var_dump($invoice); die;
+        }
     }
 
     public function edit($key)

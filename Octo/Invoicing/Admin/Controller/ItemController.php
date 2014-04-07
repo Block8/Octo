@@ -59,6 +59,8 @@ class ItemController extends Admin\Controller
                 try {
                     $item = new Item();
                     $item->setValues($this->getParams());
+                    $item->setCreatedDate(new \DateTime());
+                    $item->setUpdatedDate(new \DateTime());
 
                     if (Event::trigger('BeforeItemSave', $item)) {
                         $item = $this->store->save($item);
@@ -94,6 +96,7 @@ class ItemController extends Admin\Controller
             if ($form->validate()) {
                 try {
                     $item->setValues($values);
+                    $item->setUpdatedDate(new \DateTime());
 
                     if (Event::trigger('BeforeItemSave', $item)) {
                         $item = $this->store->save($item);
@@ -165,5 +168,23 @@ class ItemController extends Admin\Controller
 
         $form->setValues($values);
         return $form;
+    }
+
+    public function autocomplete()
+    {
+        $items = Store::get('Item')->search($this->getParam('q', ''));
+
+        $rtn = ['results' => [], 'more' => false];
+
+        foreach ($items as $item) {
+            $rtn['results'][] = [
+                'id' => $item->getId(),
+                'text' => $item->getTitle(),
+                'short_description' => $item->getShortDescription(),
+                'price' => $item->getPrice(),
+            ];
+        }
+
+        die(json_encode($rtn));
     }
 }

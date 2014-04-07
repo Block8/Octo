@@ -8,6 +8,7 @@ namespace Octo\Invoicing\Store;
 use b8\Database;
 use b8\Database\Query;
 use Octo;
+use Octo\Invoicing\Model\Item;
 
 /**
  * Item Store
@@ -33,5 +34,27 @@ class ItemStore extends Octo\Store
         $query->bind(':category_id', $categoryId);
 
         return $query->execute()->fetchAll();
+    }
+
+    public function search($query)
+    {
+        $count = null;
+
+        $query = 'SELECT * FROM item WHERE title LIKE \'%'.$query.'%\'';
+
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Item($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
     }
 }

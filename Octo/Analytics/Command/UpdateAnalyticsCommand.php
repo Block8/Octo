@@ -47,7 +47,6 @@ class UpdateAnalyticsCommand extends Command
 
         $this->today = (new DateTime())->format('Y-m-d');
         $this->monthAgo = (new DateTime())->modify('-1 month')->format('Y-m-d');
-
         $this->authHeader = $this->getAuthHeader($email, $password);
 
         $this->getDateViews();
