@@ -33,12 +33,12 @@ trait ItemVariantBase
         $this->setters['variant_option_id'] = 'setVariantOptionId';
 
         // Foreign keys:
-        $this->getters['VariantOption'] = 'getVariantOption';
-        $this->setters['VariantOption'] = 'setVariantOption';
         $this->getters['Item'] = 'getItem';
         $this->setters['Item'] = 'setItem';
         $this->getters['Variant'] = 'getVariant';
         $this->setters['Variant'] = 'setVariant';
+        $this->getters['VariantOption'] = 'getVariantOption';
+        $this->setters['VariantOption'] = 'setVariantOption';
     }
     /**
     * Get the value of Id / id.
@@ -165,54 +165,6 @@ trait ItemVariantBase
     }
 
     /**
-    * Get the VariantOption model for this ItemVariant by Id.
-    *
-    * @uses \Octo\Shop\Store\VariantOptionStore::getById()
-    * @uses \Octo\Shop\Model\VariantOption
-    * @return \Octo\Shop\Model\VariantOption
-    */
-    public function getVariantOption()
-    {
-        $key = $this->getVariantOptionId();
-
-        if (empty($key)) {
-            return null;
-        }
-
-        return Factory::getStore('VariantOption', 'Octo\Shop')->getById($key);
-    }
-
-    /**
-    * Set VariantOption - Accepts an ID, an array representing a VariantOption or a VariantOption model.
-    *
-    * @param $value mixed
-    */
-    public function setVariantOption($value)
-    {
-        // Is this an instance of VariantOption?
-        if ($value instanceof \Octo\Shop\Model\VariantOption) {
-            return $this->setVariantOptionObject($value);
-        }
-
-        // Is this an array representing a VariantOption item?
-        if (is_array($value) && !empty($value['id'])) {
-            return $this->setVariantOptionId($value['id']);
-        }
-
-        // Is this a scalar value representing the ID of this foreign key?
-        return $this->setVariantOptionId($value);
-    }
-
-    /**
-    * Set VariantOption - Accepts a VariantOption model.
-    *
-    * @param $value \Octo\Shop\Model\VariantOption
-    */
-    public function setVariantOptionObject(\Octo\Shop\Model\VariantOption $value)
-    {
-        return $this->setVariantOptionId($value->getId());
-    }
-    /**
     * Get the Item model for this ItemVariant by Id.
     *
     * @uses \Octo\Invoicing\Store\ItemStore::getById()
@@ -307,5 +259,53 @@ trait ItemVariantBase
     public function setVariantObject(\Octo\Shop\Model\Variant $value)
     {
         return $this->setVariantId($value->getId());
+    }
+    /**
+    * Get the VariantOption model for this ItemVariant by Id.
+    *
+    * @uses \Octo\Shop\Store\VariantOptionStore::getById()
+    * @uses \Octo\Shop\Model\VariantOption
+    * @return \Octo\Shop\Model\VariantOption
+    */
+    public function getVariantOption()
+    {
+        $key = $this->getVariantOptionId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('VariantOption', 'Octo\Shop')->getById($key);
+    }
+
+    /**
+    * Set VariantOption - Accepts an ID, an array representing a VariantOption or a VariantOption model.
+    *
+    * @param $value mixed
+    */
+    public function setVariantOption($value)
+    {
+        // Is this an instance of VariantOption?
+        if ($value instanceof \Octo\Shop\Model\VariantOption) {
+            return $this->setVariantOptionObject($value);
+        }
+
+        // Is this an array representing a VariantOption item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setVariantOptionId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setVariantOptionId($value);
+    }
+
+    /**
+    * Set VariantOption - Accepts a VariantOption model.
+    *
+    * @param $value \Octo\Shop\Model\VariantOption
+    */
+    public function setVariantOptionObject(\Octo\Shop\Model\VariantOption $value)
+    {
+        return $this->setVariantOptionId($value->getId());
     }
 }
