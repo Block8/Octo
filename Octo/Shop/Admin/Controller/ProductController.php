@@ -6,7 +6,7 @@ use Octo\Admin\Form as FormElement;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
 use Octo\Form\Element\ImageUpload;
-use Octo\Shop\Model\Item;
+use Octo\Invoicing\Model\Item;
 use Octo\Shop\Model\ItemFile;
 use Octo\Shop\Model\ItemVariant;
 use Octo\System\Model\File;;
