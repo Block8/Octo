@@ -63,7 +63,7 @@ $(document).ready(function()
         try {
             f = JSON.parse(response.response);
 
-            if(f.extension == 'jpg' || f.extension == 'gif' || f.extension == 'png') {
+            if(f.extension == 'jpg' || f.extension == 'jpeg' || f.extension == 'gif' || f.extension == 'png') {
                 insert = '<div style="display: block; width: 200px;"><img style="max-width:100%; max-height:100%;" src="' + f.url + '"></div>';
             } else {
                 insert = f.title;
