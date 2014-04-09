@@ -38,6 +38,10 @@ class Application extends \b8\Application
         $denied = [$this, 'permissionDenied'];
 
         $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$request, &$denied) {
+            if (!empty($_GET['session_auth'])) {
+                session_id($_GET['session_auth']);
+            }
+
             session_start();
 
             if ($route['controller'] != 'session') {

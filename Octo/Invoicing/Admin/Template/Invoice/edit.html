@@ -2,16 +2,6 @@
     <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-money"></i> Edit Invoice</h1>
 </div>
 
-<div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
 
-    <div role="content">
 
-        <div class="widget-body ">
-
-            {include template: "Invoice/editor"; variables: item => invoice}
-
-        </div>
-
-    </div>
-
-</div>
+            {include template: "Invoice/editor"; variables: item => invoice,invoiceItems}

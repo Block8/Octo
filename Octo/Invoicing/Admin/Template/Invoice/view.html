@@ -1,0 +1,191 @@
+{if ownLayout}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" type="text/css" media="screen" href="{@siteUrl}/assets/backoffice/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row" style="margin-bottom: 30px">
+                <div class="col-lg-12">
+                    <h1>Invoice</h1>
+                </div>
+            </div>
+{/if}
+{ifnot ownLayout}
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-money"></i> Invoice</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    {include template: "Contact/card"; variables: invoice.Contact => contact}
+                </div>
+
+            <div class="col-lg-8 col-md-8">
+            <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+                <header role="heading">
+                    <h2>{@invoice.title}</h2>
+                </header>
+
+                <div role="content">
+                    <div class="widget-body">
+{/ifnot}
+                        {if invoice.InvoiceStatus.code}
+                        <div class="alert alert-{@invoice.InvoiceStatus.code}">{@invoice.InvoiceStatus.status}</div>
+                        {/if}
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6">
+            <strong>{if invoice.Contact.company}{@invoice.Contact.company}{/if}
+            {ifnot invoice.Contact.company}{@invoice.Contact.first_name} {@invoice.Contact.last_name}{/if}</strong><br>
+            {if invoice.Contact.address.address1}{@invoice.Contact.address.address1}<br>{/if}
+            {if invoice.Contact.address.address1}{@invoice.Contact.address.address2}<br>{/if}
+            {if invoice.Contact.address.address1}{@invoice.Contact.address.town}<br>{/if}
+            {@invoice.Contact.postcode}
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+            <p><strong>Date</strong><br>{@invoice.created_date.formatted}</p>
+            <p><strong>Invoice Number</strong><br>#{@invoice.id}</p>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" style="text-align: right">
+            <p><strong>{@siteCompanyName}</strong><br>{@siteCompanyAddress}</p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 30px">
+        <div class="col-lg-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        {if hasQuantity}
+                        <th style="width: 150px; text-align: right">Item Price</th>
+                        <th style="width: 150px; text-align: right">Quantity</th>
+                        <th style="width: 150px; text-align: right">Amount</th>
+                        {/if}
+
+                        {ifnot hasQuantity}
+                        <th>Amount</th>
+                        {/ifnot}
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {for invoiceItems}
+                <tr>
+                    {if value.description}
+                    <td>{@value.description}</td>
+                    {/if}
+                    {ifnot value.description}
+                    <td>{@value.Item.title}</td>
+                    {/ifnot}
+
+                    {if hasQuantity}
+                    <td style="text-align: right">&pound;{@value.item_price.currency}</td>
+                    <td style="text-align: right">{@value.quantity}</td>
+                    {/if}
+
+                    <td style="text-align: right">&pound;{@value.line_price.currency}</td>
+                </tr>
+                {/for}
+                </tbody>
+                <tfoot>
+                <tr>
+                    {if hasQuantity}
+                    <td style="text-align: right" colspan="2"></td>
+                    {/if}
+                    {ifnot hasQuantity}
+                    <td style="text-align: right" colspan="1"></td>
+                    {/ifnot}
+                    <td class="title">Subtotal:</td>
+
+                    <td class="amount" style="text-align: right">&pound;{@invoice.subtotal.currency}</td>
+                </tr>
+
+                {for invoiceAdjustments}
+                <tr>
+                    {if hasQuantity}
+                    <td style="text-align: right" colspan="2"></td>
+                    {/if}
+                    {ifnot hasQuantity}
+                    <td style="text-align: right" colspan="1"></td>
+                    {/ifnot}
+                    <td class="title">{@value.title}:</td>
+
+                    <td class="amount" style="text-align: right">&pound;{@value.value.currency}</td>
+                </tr>
+                {/for}
+
+                <tr>
+                    {if hasQuantity}
+                    <td style="text-align: right" colspan="2"></td>
+                    {/if}
+                    {ifnot hasQuantity}
+                    <td style="text-align: right" colspan="1"></td>
+                    {/ifnot}
+                    <td class="title">
+                        <strong>Total:</strong>
+                    </td>
+
+                    <td class="amount" style="text-align: right"><strong>&pound;{@invoice.total.currency}</strong></td>
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+
+            <style>
+                .table {
+                    border: 1px solid #ccc;
+                    border-bottom: 0;
+                    border-left: 0;
+                }
+                .table>thead>tr>th {
+                    border: 0;
+                    border-left: 1px solid #ccc;
+                }
+
+                .table>tbody>tr>td {
+                    border-left: 1px solid #ccc;
+                }
+
+                tfoot {
+                    border-top: 1px solid #ccc;
+                }
+
+                .table tfoot tr td {
+                    border: 0;
+                    text-align: right;
+                }
+
+                .table tfoot tr td.amount {
+                    border: 1px solid #ccc;
+                    border-top: 0;
+                }
+
+                .table tfoot tr td.title {
+                    border: 1px solid #ccc;
+                    border-top: 0;
+                    border-right: 0;
+                }
+
+            </style>
+
+{if ownLayout}
+        </div>
+    </body>
+</html>
+{/if}
+{ifnot ownLayout}
+        </div></div>
+</div>
+</div>
+</div>
+{/ifnot}

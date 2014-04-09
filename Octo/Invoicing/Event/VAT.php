@@ -35,6 +35,6 @@ class VAT extends Listener
         $adjustment->setTitle('VAT');
         $adjustment->setValue($vat);
 
-        $this->adjustmentStore->save($adjustment);
+        $this->adjustmentStore->saveByReplace($adjustment);
     }
 }

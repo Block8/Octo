@@ -70,60 +70,6 @@ trait CategoryStoreBase
      * @throws StoreException
      * @return int
      */
-    public function getTotalForSlug($value, $options = [], $useConnection = 'read')
-    {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
-        $query->from('category')->where('`slug` = :slug');
-        $query->bind(':slug', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            return $query->getCount();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of Category by Slug', 0, $ex);
-        }
-    }
-
-    /**
-     * @param $value
-     * @param array $options Limits, offsets, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
-     * @return Category[]
-     */
-    public function getBySlug($value, $options = [], $useConnection = 'read')
-    {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
-        $query->from('category')->where('`slug` = :slug');
-        $query->bind(':slug', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            $query->execute();
-            return $query->fetchAll();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Category by Slug', 0, $ex);
-        }
-
-    }
-
-    /**
-     * @param $value
-     * @param array $options Offsets, limits, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
-     * @return int
-     */
     public function getTotalForScope($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {
@@ -232,22 +178,22 @@ trait CategoryStoreBase
      * @throws StoreException
      * @return int
      */
-    public function getTotalForImageId($value, $options = [], $useConnection = 'read')
+    public function getTotalForImage($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
         $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
-        $query->from('category')->where('`image_id` = :image_id');
-        $query->bind(':image_id', $value);
+        $query->from('category')->where('`image` = :image');
+        $query->bind(':image', $value);
 
         $this->handleQueryOptions($query, $options);
 
         try {
             return $query->getCount();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of Category by ImageId', 0, $ex);
+            throw new StoreException('Could not get count of Category by Image', 0, $ex);
         }
     }
 
@@ -258,15 +204,15 @@ trait CategoryStoreBase
      * @throws StoreException
      * @return Category[]
      */
-    public function getByImageId($value, $options = [], $useConnection = 'read')
+    public function getByImage($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
         $query = new Query($this->getNamespace('Category').'\Model\Category', $useConnection);
-        $query->from('category')->where('`image_id` = :image_id');
-        $query->bind(':image_id', $value);
+        $query->from('category')->where('`image` = :image');
+        $query->bind(':image', $value);
 
         $this->handleQueryOptions($query, $options);
 
@@ -274,7 +220,7 @@ trait CategoryStoreBase
             $query->execute();
             return $query->fetchAll();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Category by ImageId', 0, $ex);
+            throw new StoreException('Could not get Category by Image', 0, $ex);
         }
 
     }

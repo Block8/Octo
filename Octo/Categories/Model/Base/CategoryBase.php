@@ -34,9 +34,9 @@ trait CategoryBase
         $this->data['parent_id'] = null;
         $this->getters['parent_id'] = 'getParentId';
         $this->setters['parent_id'] = 'setParentId';
-        $this->data['image_id'] = null;
-        $this->getters['image_id'] = 'getImageId';
-        $this->setters['image_id'] = 'setImageId';
+        $this->data['image'] = null;
+        $this->getters['image'] = 'getImage';
+        $this->setters['image'] = 'setImage';
         $this->data['description'] = null;
         $this->getters['description'] = 'getDescription';
         $this->setters['description'] = 'setDescription';
@@ -47,8 +47,8 @@ trait CategoryBase
         // Foreign keys:
         $this->getters['Parent'] = 'getParent';
         $this->setters['Parent'] = 'setParent';
-        $this->getters['Image'] = 'getImage';
-        $this->setters['Image'] = 'setImage';
+        $this->getters['Category'] = 'getCategory';
+        $this->setters['Category'] = 'setCategory';
     }
     /**
     * Get the value of Id / id.
@@ -111,13 +111,13 @@ trait CategoryBase
     }
 
     /**
-    * Get the value of ImageId / image_id.
+    * Get the value of Image / image.
     *
     * @return string
     */
-    public function getImageId()
+    public function getImage()
     {
-        $rtn = $this->data['image_id'];
+        $rtn = $this->data['image'];
 
         return $rtn;
     }
@@ -234,20 +234,20 @@ trait CategoryBase
     }
 
     /**
-    * Set the value of ImageId / image_id.
+    * Set the value of Image / image.
     *
     * @param $value string
     */
-    public function setImageId($value)
+    public function setImage($value)
     {
-        $this->validateString('ImageId', $value);
+        $this->validateString('Image', $value);
 
-        if ($this->data['image_id'] === $value) {
+        if ($this->data['image'] === $value) {
             return;
         }
 
-        $this->data['image_id'] = $value;
-        $this->setModified('image_id');
+        $this->data['image'] = $value;
+        $this->setModified('image');
     }
 
     /**
@@ -339,9 +339,9 @@ trait CategoryBase
     * @uses \Octo\System\Model\File
     * @return \Octo\System\Model\File
     */
-    public function getImage()
+    public function getCategory()
     {
-        $key = $this->getImageId();
+        $key = $this->getImage();
 
         if (empty($key)) {
             return null;
@@ -351,33 +351,33 @@ trait CategoryBase
     }
 
     /**
-    * Set Image - Accepts an ID, an array representing a File or a File model.
+    * Set Category - Accepts an ID, an array representing a File or a File model.
     *
     * @param $value mixed
     */
-    public function setImage($value)
+    public function setCategory($value)
     {
         // Is this an instance of File?
         if ($value instanceof \Octo\System\Model\File) {
-            return $this->setImageObject($value);
+            return $this->setCategoryObject($value);
         }
 
         // Is this an array representing a File item?
         if (is_array($value) && !empty($value['id'])) {
-            return $this->setImageId($value['id']);
+            return $this->setImage($value['id']);
         }
 
         // Is this a scalar value representing the ID of this foreign key?
-        return $this->setImageId($value);
+        return $this->setImage($value);
     }
 
     /**
-    * Set Image - Accepts a File model.
+    * Set Category - Accepts a File model.
     *
     * @param $value \Octo\System\Model\File
     */
-    public function setImageObject(\Octo\System\Model\File $value)
+    public function setCategoryObject(\Octo\System\Model\File $value)
     {
-        return $this->setImageId($value->getId());
+        return $this->setImage($value->getId());
     }
 }

@@ -36,8 +36,7 @@ class FormController extends Controller
         $manage->addChild(new Menu\Item('Delete Form', '/form/delete', true));
         $manage->addChild(new Menu\Item('View Submissions', '/form/submissions', true));
         $manage->addChild(new Menu\Item('View Submission', '/form/submission', true));
-        $manage->addChild(new Menu\Item('Block Contact', '/form/block-contact', true));
-        $manage->addChild(new Menu\Item('Unblock Contact', '/form/unblock-contact', true));
+
         $form->addChild($manage);
     }
 
@@ -179,31 +178,5 @@ class FormController extends Controller
 
         $this->response = new RedirectResponse();
         $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form');
-    }
-
-    public function blockContact($submissionId)
-    {
-        $submission = $this->submissionStore->getById($submissionId);
-        $contact = $submission->getContact();
-        $this->successMessage('Contact blocked!', true);
-
-        $contact->setIsBlocked(1);
-        $this->contactStore->save($contact);
-
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form/submission/'.$submissionId);
-    }
-
-    public function unblockContact($submissionId)
-    {
-        $submission = $this->submissionStore->getById($submissionId);
-        $contact = $submission->getContact();
-        $this->successMessage('Contact unblocked!', true);
-
-        $contact->setIsBlocked(0);
-        $this->contactStore->save($contact);
-
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/form/submission/'.$submissionId);
     }
 }

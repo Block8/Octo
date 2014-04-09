@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use Octo\Event;
 use Octo\Invoicing\Model\Invoice;
+use Octo\Invoicing\Model\InvoiceStatus;
 use Octo\Invoicing\Model\LineItem;
 use Octo\Invoicing\Store\InvoiceStore;
 use Octo\Invoicing\Store\InvoiceAdjustmentStore;
@@ -49,22 +50,56 @@ class InvoiceService
         $this->itemStore = $itemStore;
     }
 
-    /**
-     * @param Contact $contact
-     * @param DateTime $invoiceDate
-     * @return Invoice
-     */
-    public function createInvoice(Contact $contact, DateTime $invoiceDate)
+
+    public function createInvoice($title, Contact $contact, DateTime $invoiceDate, $dueDate)
     {
+        if (!is_null($dueDate) && !($dueDate instanceof DateTime)) {
+            throw new Exception('Due Date must be either NULL or a DateTime object.');
+        }
+
         // Create the invoice:
         $invoice = new Invoice();
+        $invoice->setTitle($title);
         $invoice->setCreatedDate($invoiceDate);
+        $invoice->setDueDate($dueDate);
         $invoice->setUpdatedDate(new DateTime());
         $invoice->setContact($contact);
         $invoice->setInvoiceStatusId(Invoice::STATUS_NEW);
 
         // Save the invoice and return the updated model (incl. ID)
-        $invoice = $this->invoiceStore->saveByInsert($invoice);
+        if (Event::trigger('BeforeInvoiceCreate', $invoice)) {
+            $invoice = $this->invoiceStore->saveByInsert($invoice);
+        }
+        Event::trigger('OnInvoiceCreate', $invoice);
+
+        return $invoice;
+    }
+
+    public function updateInvoice(Invoice $invoice, $title, Contact $contact, DateTime $invoiceDate, $dueDate)
+    {
+        if (!is_null($dueDate) && !($dueDate instanceof DateTime)) {
+            throw new Exception('Due Date must be either NULL or a DateTime object.');
+        }
+
+        $invoice->setTitle($title);
+        $invoice->setCreatedDate($invoiceDate);
+        $invoice->setDueDate($dueDate);
+        $invoice->setUpdatedDate(new DateTime());
+        $invoice->setContact($contact);
+
+        if (Event::trigger('BeforeInvoiceSave', $invoice)) {
+            $invoice = $this->invoiceStore->saveByUpdate($invoice);
+        }
+        Event::trigger('OnInvoiceSave', $invoice);
+
+        return $invoice;
+    }
+
+    public function updateInvoiceStatus(Invoice $invoice, InvoiceStatus $status)
+    {
+        $invoice->setInvoiceStatus($status);
+        $invoice = $this->invoiceStore->saveByUpdate($invoice);
+        Event::trigger('OnInvoiceStatusChanged', $invoice);
 
         return $invoice;
     }
@@ -73,10 +108,6 @@ class InvoiceService
     {
         if (!$invoice->getId()) {
             throw new Exception('Error updating invoice items: You must save the invoice before updating its items.');
-        }
-
-        if ($invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
-            throw new Exception('Error updating invoice items: You cannot edit invoice items after the invoice has been sent.');
         }
 
         $this->lineItemStore->clearItemsForInvoice($invoice);

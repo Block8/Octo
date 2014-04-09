@@ -31,9 +31,6 @@ trait InvoiceStatusBase
         $this->data['protected'] = null;
         $this->getters['protected'] = 'getProtected';
         $this->setters['protected'] = 'setProtected';
-        $this->data['price'] = null;
-        $this->getters['price'] = 'getPrice';
-        $this->setters['price'] = 'setPrice';
 
         // Foreign keys:
     }
@@ -81,18 +78,6 @@ trait InvoiceStatusBase
     public function getProtected()
     {
         $rtn = $this->data['protected'];
-
-        return $rtn;
-    }
-
-    /**
-    * Get the value of Price / price.
-    *
-    * @return float
-    */
-    public function getPrice()
-    {
-        $rtn = $this->data['price'];
 
         return $rtn;
     }
@@ -171,23 +156,6 @@ trait InvoiceStatusBase
 
         $this->data['protected'] = $value;
         $this->setModified('protected');
-    }
-
-    /**
-    * Set the value of Price / price.
-    *
-    * @param $value float
-    */
-    public function setPrice($value)
-    {
-        $this->validateFloat('Price', $value);
-
-        if ($this->data['price'] === $value) {
-            return;
-        }
-
-        $this->data['price'] = $value;
-        $this->setModified('price');
     }
 
 }
