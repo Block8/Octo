@@ -72,6 +72,15 @@ if (is_dir($adminTemplatePath)) {
     $config->set('Octo', $settings);
 }
 
+$rtn = 0;
+exec('wkhtmltopdf --version 2>&1', $out, $rtn);
+
+if ($rtn == 0) {
+    define('SYSTEM_PDF_AVAILABLE', true);
+} else {
+    define('SYSTEM_PDF_AVAILABLE', false);
+}
+
 if (!defined('IS_CONSOLE')) {
     try {
         $appClass = $config->get('site.namespace') . '\\Application';

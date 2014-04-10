@@ -1,0 +1,114 @@
+<div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+
+    <header role="heading">
+        <h2>Contact</h2>
+
+        {if (can_access uri: "/contact/block")}
+        <div class="widget-toolbar" role="menu">
+            {if contact.is_blocked}
+            <a href="/{@adminUri}/contact/unblock/{@contact.id}" class="btn btn-success">Unblock</a>
+            {/if}
+
+            {ifnot contact.is_blocked}
+            <a href="/{@adminUri}/contact/block/{@contact.id}" class="btn btn-danger">Block</a>
+            {/ifnot}
+        </div>
+        {/if}
+    </header>
+
+    <div role="content">
+
+        <div class="widget-body no-padding">
+            {if contact.is_blocked}
+            <div class="alert alert-warning" style="margin: 0">
+                This contact has been blocked from the site.
+            </div>
+            {/if}
+
+            <table class="table table-bordered table-striped">
+
+                <tbody>
+                {if contact.title}
+                <tr>
+                    <th>Title</th>
+                    <td>{@contact.title.toUcWords}</td>
+                </tr>
+                {/if}
+
+                <tr>
+                    <th>Name</th>
+                    <td>{@contact.first_name} {@contact.last_name}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{@contact.email}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>{@contact.phone}</td>
+                </tr>
+
+                {if contact.company}
+                <tr>
+                    <th>Company</th>
+                    <td>{@contact.company}</td>
+                </tr>
+                {/if}
+
+                {if contact.gender}
+                <tr>
+                    <th>Gender</th>
+                    <td>{@contact.gender.toUcWords}</td>
+                </tr>
+                {/if}
+
+                {if contact.date_of_birth}
+                <tr>
+                    <th>Date of Birth</th>
+                    <td>{@contact.date_of_birth.formatted}</td>
+                </tr>
+                {/if}
+
+                {if contact.marketing_optin}
+                <tr>
+                    <th>Opt-in</th>
+                    <td>{@contact.marketing_optin.yesNo}</td>
+                </tr>
+                {/if}
+
+                {if contact.address.address1}
+                <tr>
+                    <th>Address</th>
+                    <td>{@contact.address.address1}</td>
+                </tr>
+                {/if}
+
+                {if contact.address.address2}
+                <tr>
+                    <th>Address #2</th>
+                    <td>{@contact.address.address2}</td>
+                </tr>
+                {/if}
+
+                {if contact.address.town}
+                <tr>
+                    <th>Town</th>
+                    <td>{@contact.address.town}</td>
+                </tr>
+                {/if}
+
+                {if contact.postcode}
+                <tr>
+                    <th>Postcode</th>
+                    <td>{@contact.postcode}</td>
+                </tr>
+                {/if}
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

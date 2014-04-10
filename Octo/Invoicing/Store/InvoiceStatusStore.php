@@ -5,6 +5,8 @@
 
 namespace Octo\Invoicing\Store;
 
+use b8\Database;
+use b8\Database\Query;
 use Octo;
 
 /**
@@ -14,5 +16,11 @@ class InvoiceStatusStore extends Octo\Store
 {
     use Base\InvoiceStatusStoreBase;
 
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    public function getAll()
+    {
+        $query = new Query($this->getNamespace('InvoiceStatus') . '\Model\InvoiceStatus');
+        $query->select('*')->from('invoice_status')->order('id', 'ASC');
+
+        return $query->execute()->fetchAll();
+    }
 }

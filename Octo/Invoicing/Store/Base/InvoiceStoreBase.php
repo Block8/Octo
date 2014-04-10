@@ -116,4 +116,58 @@ trait InvoiceStoreBase
         }
 
     }
+
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForContactId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Invoice').'\Model\Invoice', $useConnection);
+        $query->from('invoice')->where('`contact_id` = :contact_id');
+        $query->bind(':contact_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Invoice by ContactId', 0, $ex);
+        }
+    }
+
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Invoice[]
+     */
+    public function getByContactId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Invoice').'\Model\Invoice', $useConnection);
+        $query->from('invoice')->where('`contact_id` = :contact_id');
+        $query->bind(':contact_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Invoice by ContactId', 0, $ex);
+        }
+
+    }
 }

@@ -1,0 +1,121 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-money"></i> Invoices</h1>
+    </div>
+</div>
+        
+<div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+    <header role="heading">
+        <h2>Invoices</h2>
+    </header>
+
+    <div role="content">
+
+
+        <div class="widget-body no-padding">
+<table class="table">
+    <thead>
+    <tr>
+        <th width="1">ID</th>
+        <th>Title</th>
+        <th>Customer</th>
+        <th width="15%">Invoice Date</th>
+        <th width="15%">Due Date</th>
+
+        <th width="75">Total</th>
+        <th width="75">Paid</th>
+        <th width="100">Status</th>
+        <th width="15%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {for invoices}
+    <tr class="{@value.InvoiceStatus.code}" data-invoice="{@value.id}">
+        <td>#{@value.id}</td>
+        <td>{@value.title}</td>
+        <td>
+            {if value.Contact.company}
+            {@value.Contact.company} ({@value.Contact.first_name} {@value.Contact.last_name})
+            {/if}
+
+            {ifnot value.Contact.company}
+            {@value.Contact.first_name} {@value.Contact.last_name}
+            {/ifnot}
+        </td>
+        <td>{@value.created_date.formatted}</td>
+        <td>{@value.due_date.formatted}</td>
+        <td>&pound;{@value.total}</td>
+        <td>
+            {if value.total_paid}&pound;{@value.total_paid}{/if}
+            {ifnot value.total_paid}<em>Unpaid</em>{/ifnot}
+        </td>
+        <td>
+            <div class="btn-group">
+
+            <a class="status-dropdown btn btn-{@value.InvoiceStatus.code} btn-sm dropdown-toggle" data-code="{@value.InvoiceStatus.code}" data-toggle="dropdown" href="javascript:void(0);"><span class="name">{@value.InvoiceStatus.status}</span> <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {for parent.invoiceStatuses}
+                <li><a href="javascript:void(0);" class="status-change" data-name="{@value.status}" data-status="{@value.id}" data-code="{@value.code}">{@value.status}</a></li>
+
+                {/for}
+            </ul>
+            </div>
+
+        </td>
+        <td>
+            <div class="btn-group">
+                {if (can_access uri: "/invoice/view")}
+                <a class="btn btn-default btn-sm" href="/{@adminUri}/invoice/view/{@value.id}">View</a>
+                {/if}
+
+                {if (can_access uri: "/invoice/edit")}
+                <a class="btn btn-default btn-sm" href="/{@adminUri}/invoice/edit/{@value.id}">Edit</a>
+                {/if}
+
+                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {if canPdf}
+                    {if (can_access uri: "/invoice/view")}
+                    <li>
+                        <a target="_blank" href="/{@adminUri}/invoice/view/{@value.id}/pdf">Download PDF</a>
+                    </li>
+                    {/if}
+                    {/if}
+
+                    {if (can_access uri: "/invoice/delete")}
+                    <li>
+                        <a href="/{@adminUri}/invoice/delete/{@value.id}">Delete</a>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+        </td>
+    </tr>
+    {/for}
+    </tbody>
+</table>
+</div></div></div>
+
+        <script>
+            $('.status-change').on('click', function () {
+                var invoiceRow = $(this).parents('tr');
+                var invoiceId = invoiceRow.data('invoice');
+                var newStatus = $(this).data('status');
+                var newCode = $(this).data('code');
+                var newName = $(this).data('name');
+                var statusButton = invoiceRow.find('.status-dropdown');
+
+                $('.pace').removeClass('hide');
+
+                $.post('/' + window.adminUri + '/invoice/edit/' + invoiceId, {invoice_status_id: newStatus}, function () {
+                    $('.pace').addClass('hide');
+                    var oldCode = statusButton.data('code');
+                    statusButton.data('code', newCode);
+                    statusButton.removeClass('btn-' + oldCode);
+                    statusButton.addClass('btn-' + newCode);
+                    statusButton.find('.name').text(newName);
+                    invoiceRow.removeClass(oldCode);
+                    invoiceRow.addClass(newCode);
+                });
+            });
+        </script>
