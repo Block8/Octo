@@ -222,6 +222,7 @@ class ProductController extends Controller
 
         $this->view->product = $product;
         $this->view->variants = $this->variantStore->getVariantsNotUsedByProduct($productId);
+        $this->view->items = $this->itemVariantStore->getAllForItem($productId);
 
         $this->setTitle($product->getTitle() . ' Variants');
         $this->addBreadcrumb('Products', '/product');
@@ -241,6 +242,9 @@ class ProductController extends Controller
                     $this->itemVariantStore->save($iv);
                 }
             }
+
+            $this->successMessage('The variants were updated succcessfully.', true);
+            header('Location: /' . $this->config->get('site.admin_uri') . '/product/variants/' . $productId);
         }
     }
 
