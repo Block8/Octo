@@ -44,7 +44,7 @@
     </div>
     </form>
 
-{if variants}
+{if availableVariants}
 <div class="row">
     <div class="col-lg-12">
 
@@ -63,7 +63,7 @@
                                 <label class="label">Variant</label>
                                 <label class="select">
                                     <select class="select2" size="1" name="new_variant">
-                                        {for variants}
+                                        {for availableVariants}
                                         <option value="{@item.id}">{@item.title}</option>
                                         {/for}
                                     </select>

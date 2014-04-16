@@ -221,7 +221,8 @@ class ProductController extends Controller
         $product = $this->productStore->getById($productId);
 
         $this->view->product = $product;
-        $this->view->variants = $this->variantStore->getVariantsNotUsedByProduct($productId);
+        $this->view->availableVariants = $this->variantStore->getVariantsNotUsedByProduct($productId);
+
         $this->view->items = $this->itemVariantStore->getAllForItem($productId);
 
         $this->setTitle($product->getTitle() . ' Variants');
