@@ -229,7 +229,37 @@ class ProductController extends Controller
         $this->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
         $this->addBreadcrumb('Variants', '/product/variants/' . $product->getId());
 
+        $variants = [];
+        foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {
+            if (!isset($variants[$itemVariant->getVariantId()])) {
+                $variantArray = array_merge($itemVariant->getVariant()->getDataArray(), ['options' => []]);
+                $variants[$itemVariant->getVariantId()] = $variantArray;
+            }
+
+            $ivArray = $itemVariant->getDataArray();
+            $optionsArray = $itemVariant->getVariantOption()->getDataArray();
+
+            $computed = [
+                'item_variant_id' => $ivArray['id'],
+                'title' => $optionsArray['option_title'],
+                'position' => $optionsArray['position'],
+                'price_adjustment' => $ivArray['price_adjustment']
+            ];
+
+            $variants[$itemVariant->getVariantId()]['options'][] = $computed;
+        }
+
+        $this->view->variants = $variants;
+
         if ($this->request->getMethod() == 'POST') {
+            if ($this->getParam('price')) {
+                foreach ($this->getParam('price') as $itemVariantId => $priceAdjustment) {
+                    $itemVariant = $this->itemVariantStore->getById($itemVariantId);
+                    $itemVariant->setPriceAdjustment($priceAdjustment);
+                    $this->itemVariantStore->save($itemVariant);
+                }
+            }
+
             if ($this->getParam('new_variant')) {
                 $variant = $this->variantStore->getById($this->getParam('new_variant'));
                 $options = $this->variantOptionStore->getByVariantId($variant->getId());

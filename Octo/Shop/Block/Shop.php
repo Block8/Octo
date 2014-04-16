@@ -112,7 +112,7 @@ class Shop extends Block
                 'item_variant_id' => $ivArray['id'],
                 'title' => $optionsArray['option_title'],
                 'position' => $optionsArray['position'],
-                'price_adjustment' => $ivArray['price']
+                'price_adjustment' => $ivArray['price_adjustment']
             ];
 
             $variants[$itemVariant->getVariantId()]['options'][] = $computed;

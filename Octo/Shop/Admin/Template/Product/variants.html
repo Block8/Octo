@@ -6,9 +6,13 @@
 <div class="row">
 <div class="col-lg-12">
 
+{for variants}
 <div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
 <header role="heading">
-    <h2>Add Variant</h2>
+    <h2>{@item.title}</h2>
+    <!--<div class="widget-toolbar" role="menu">-->
+        <!--<button id="add-field" class="btn btn-danger">Delete</button>-->
+    <!--</div>-->
 </header>
 
 <div role="content">
@@ -17,27 +21,14 @@
     <thead>
     <tr>
         <th>Title</th>
-        <th>Page / Link</th>
-        <th width="2%"> </th>
-        <th width="10%">Actions</th>
+        <th width="20%">Price Adjustment</th>
     </tr>
     </thead>
     <tbody>
-    {loop items}
+    {loop item.options}
     <tr class="menu-item" data-id="{@item.id}">
-        <td><input class="menu-item-title form-control" type="text" value="{@item.title}"></td>
-
-        {if item.page_id}
-        <td>{@item.Page.CurrentVersion.title}</td>
-        {/if}
-        {ifnot item.page_id}
-        <td>{@item.url}</td>
-        {/ifnot}
-
-        <td width="2%"><i class="fa fa-fw fa-move handler"></i></td>
-        <td>
-            <button class="remove-item btn btn-danger btn-sm" class="btn-delete">Delete</button>
-        </td>
+        <td>{@item.title}</td>
+        <td style="padding-right: 5px"><input class="menu-item-title form-control variant_price" style="padding-left: 5px;" name="price[{@item.item_variant_id}]" type="text" value="{@item.price_adjustment}"></td>
     </tr>
     {/loop}
     </tbody>
@@ -46,6 +37,12 @@
 </div>
 </div>
 {/if}
+
+    <form class="smart-form" id="variants-form" action="/{@adminUri}/product/variants/{@product.id}" method="post" style="border: none; padding: none; margin: none;">
+    <div style="margin: 40px auto; width: 150px;">
+        <input class="btn btn-lg btn-success" type="submit" value="Save Variants">
+    </div>
+    </form>
 
 {if variants}
 <div class="row">
@@ -83,6 +80,24 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 {/if}
+
+<script>
+$(document).ready( function(e) {
+    $('#variants-form').submit( function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $('#variants_form input.price_adjustment').remove();
+
+        $('input.variant_price').each( function(vp) {
+            form.append( '<input class="price_adjustment" type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '">');
+        });
+
+        form.off("submit");
+        form.submit();
+    });
+});
+</script>

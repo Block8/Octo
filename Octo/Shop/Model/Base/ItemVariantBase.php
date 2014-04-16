@@ -31,6 +31,9 @@ trait ItemVariantBase
         $this->data['variant_option_id'] = null;
         $this->getters['variant_option_id'] = 'getVariantOptionId';
         $this->setters['variant_option_id'] = 'setVariantOptionId';
+        $this->data['price_adjustment'] = null;
+        $this->getters['price_adjustment'] = 'getPriceAdjustment';
+        $this->setters['price_adjustment'] = 'setPriceAdjustment';
 
         // Foreign keys:
         $this->getters['Item'] = 'getItem';
@@ -84,6 +87,18 @@ trait ItemVariantBase
     public function getVariantOptionId()
     {
         $rtn = $this->data['variant_option_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of PriceAdjustment / price_adjustment.
+    *
+    * @return float
+    */
+    public function getPriceAdjustment()
+    {
+        $rtn = $this->data['price_adjustment'];
 
         return $rtn;
     }
@@ -162,6 +177,23 @@ trait ItemVariantBase
 
         $this->data['variant_option_id'] = $value;
         $this->setModified('variant_option_id');
+    }
+
+    /**
+    * Set the value of PriceAdjustment / price_adjustment.
+    *
+    * @param $value float
+    */
+    public function setPriceAdjustment($value)
+    {
+        $this->validateFloat('PriceAdjustment', $value);
+
+        if ($this->data['price_adjustment'] === $value) {
+            return;
+        }
+
+        $this->data['price_adjustment'] = $value;
+        $this->setModified('price_adjustment');
     }
 
     /**
