@@ -1,5 +1,98 @@
-<h1>{@product.title}</h1>
+<h1 class="page-title">{@product.title}</h1>
 
-{for product.images}
-        {@value.url}<br />
-{/for}
+<div class="row">
+    <div class="col-md-4">
+        <div class="product-images">
+
+            <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    {for product.images}
+                    <div class="item">
+                        <img src="/media/render/{@item.id}/600/600" alt="Image 1">
+                    </div>
+                    {/for}
+                </div>
+                <ol class="carousel-indicators">
+                    {for product.images}
+                    <li data-target="#product-carousel" data-slide-to="0" class="">
+                        <img src="/media/render/{@item.id}/100/100" alt="Image 1">
+                    </li>
+                    {/for}
+                </ol>
+            </div>
+
+            <script>
+                <!-- This needs to exist before $().ready() -->
+                $('#product-carousel .item:first').addClass('active');
+                $('ol.carousel-indicators li').each(function(i, e) {
+                    $(this).attr('data-slide-to', i);
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <form class="product-form" action="#" method="post" role="form">
+            <div class="product-description">
+                {@product.description}
+            </div>
+
+            <div class="product-price" id="main_price" data-default="{@product.price}">
+                &pound;{@product.price}
+            </div>
+
+            <div class="product-options">
+                {for variants}
+                <div class="form-group">
+                    <label>{@item.title}</label>
+                    <select name="variants[{@item.id}]" class="variant form-control" id="variant{@item.id}">
+                        {for item.options}
+                        <option value="{@item.id}" data-price="{@item.price_adjustment}">{@item.title}</option>
+                        {/for}
+                    </select>
+                </div>
+                {/for}
+
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" name="quantity" value="1" min="1" max="100" class="form-control">
+                </div>
+            </div>
+
+            <a href="#" class="btn btn-grey btn-add-to-basket">Add to basket</a>
+
+        </form>
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready( function() {
+        var defaultPrice = parseFloat($('#main_price').attr('data-default'));
+        var priceAdjustments = {};
+
+        function updatePrice() {
+            var newPrice = defaultPrice;
+            for (var variant in priceAdjustments) {
+                newPrice += parseFloat(priceAdjustments[variant]);
+            }
+            $('#main_price').html('&pound;' + newPrice);
+        }
+
+        $('select.variant').each( function(e) {
+            var selectId = $(this).attr('id');
+            var optionSelected = $("option:selected", this);
+            priceAdjustments[selectId] = optionSelected.data('price');
+            updatePrice();
+        });
+
+        $('select.variant').change( function(e) {
+            var selectId = $(this).attr('id');
+            var optionSelected = $("option:selected", this);
+            priceAdjustments[selectId] = optionSelected.data('price');
+            updatePrice();
+        });
+    });
+</script>
