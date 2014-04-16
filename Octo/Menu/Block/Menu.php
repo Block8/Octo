@@ -35,10 +35,12 @@ class Menu extends Block
         if ($menu) {
             $this->view->menu = $this->menuItemStore->getForMenu($menu->getId());
         }
-        
-        foreach ($this->view->menu as $item) {
-            if ($this->page->getUri() == $item->getPage()->getUri()) {
-                $item->setCurrent('current');
+
+        if (isset($this->view->menu) && is_array($this->view->menu)) {
+            foreach ($this->view->menu as $item) {
+                if ($this->page->getUri() == $item->getPage()->getUri()) {
+                    $item->setCurrent('current');
+                }
             }
         }
     }
