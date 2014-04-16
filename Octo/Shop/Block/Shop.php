@@ -10,9 +10,14 @@ use Octo\Template;
 class Shop extends Block
 {
     /**
-     * @var \Octo\Shop\Store\ItemStore
+     * @var \Octo\Invoicing\Store\ItemStore
      */
     protected $itemStore;
+    /**
+    /**
+     * @var \Octo\Shop\Store\ItemVariantStore
+     */
+    protected $itemVariantStore;
     /**
      * @var bool Set URI extensions
      */
@@ -30,6 +35,7 @@ class Shop extends Block
     public function init() {
         $this->categoryStore = Store::get('Category');
         $this->productStore = Store::get('Item');
+        $this->itemVariantStore = Store::get('ItemVariant');
     }
 
     public function renderNow()
@@ -90,5 +96,28 @@ class Shop extends Block
         } else {
             $this->view->product = $product;
         }
+
+        $variants = [];
+
+        foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {
+            if (!isset($variants[$itemVariant->getVariantId()])) {
+                $variantArray = array_merge($itemVariant->getVariant()->getDataArray(), ['options' => []]);
+                $variants[$itemVariant->getVariantId()] = $variantArray;
+            }
+
+            $ivArray = $itemVariant->getDataArray();
+            $optionsArray = $itemVariant->getVariantOption()->getDataArray();
+
+            $computed = [
+                'item_variant_id' => $ivArray['id'],
+                'title' => $optionsArray['option_title'],
+                'position' => $optionsArray['position'],
+                'price_adjustment' => $ivArray['price']
+            ];
+
+            $variants[$itemVariant->getVariantId()]['options'][] = $computed;
+        }
+
+        $this->view->variants = $variants;
     }
 }

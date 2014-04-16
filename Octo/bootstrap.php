@@ -8,6 +8,11 @@ if (!defined('CMS_PATH')) {
 
 date_default_timezone_set('Europe/London');
 
+// Set up xdebug
+ini_set('xdebug.var_display_max_depth', 5);
+ini_set('xdebug.var_display_max_children', 256);
+ini_set('xdebug.var_display_max_data', 1024);
+
 // Set up autoloaders:
 require_once(APP_PATH . 'vendor/autoload.php');
 

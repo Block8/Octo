@@ -20,12 +20,12 @@ class ItemVariantStore extends Octo\Store
     public function getAllForItem($itemId)
     {
         $query = new Query($this->getNamespace('ItemVariant') . '\Model\ItemVariant');
-        $query->from('item_file')->where('item_id = :item_id');
+        $query->from('item_variant')->where('item_id = :item_id');
         $query->bind(':item_id', $itemId);
 
         try {
             $query->execute();
-            return $query->fetch(\PDO::FETCH_ASSOC);
+            return $query->fetchAll(\PDO::FETCH_ASSOC);
         } catch (PDOException $ex) {
             throw new StoreException('Could not get ItemFile by ItemId and FileId', 0, $ex);
         }
