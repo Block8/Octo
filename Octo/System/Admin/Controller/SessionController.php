@@ -3,6 +3,7 @@
 namespace Octo\System\Admin\Controller;
 
 use Octo\Admin\Controller;
+use Octo\Event;
 use Octo\Store;
 
 /**
@@ -30,10 +31,13 @@ class SessionController extends Controller
             $this->view->siteLogo = true;
         }
 
+        Event::trigger('beforeLogin', $this->view);
+
         if ($this->request->getMethod() == 'POST') {
             $user = $this->userStore->getByEmail($this->getParam('email'));
 
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
+                Event::trigger('loginSuccess', $user);
                 $_SESSION['user_id'] = $user->getId();
 
                 $url = '/'.$this->config->get('site.admin_uri');
@@ -45,6 +49,7 @@ class SessionController extends Controller
                 header('Location: ' . $url);
                 die;
             } else {
+                Event::trigger('loginFailed', $this->view);
                 $this->view->errorMessage = 'Your email address or password were wrong.';
             }
         }
