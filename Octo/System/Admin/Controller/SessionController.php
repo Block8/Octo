@@ -31,6 +31,8 @@ class SessionController extends Controller
             $this->view->siteLogo = true;
         }
 
+        $this->view->emailFieldLabel = 'Email Address';
+
         Event::trigger('beforeLogin', $this->view);
 
         if ($this->request->getMethod() == 'POST') {
