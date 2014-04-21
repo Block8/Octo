@@ -17,6 +17,10 @@
  * - BODY
  * - CUSTOM STYLES
  */
+#content {
+    overflow: auto;
+}
+
 th, td {
     vertical-align: middle !important;
 }
@@ -51,4 +55,51 @@ div.image_form_container p {
 
 .header-buttons a {
     margin-left: 10px;
+}
+
+th, td {
+    vertical-align: middle !important;
+}
+
+form {
+    border-top: 1px solid #CDCDCD;
+}
+
+td ol {
+    margin-top: 10px;
+}
+
+td ol li {
+    margin-bottom: 5px;
+}
+
+td form.table_form {
+    border: 5px solid red !important;
+}
+
+.well a.btn {
+    margin-top: -5px;
+}
+
+div.widget-body header {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(0,0,0,.2);
+    background: #fff;
+    font-size: 16px;
+    font-weight: 300;
+    color: #232323;
+    margin: 10px 14px 0;
+}
+
+div.widget-body header a.btn {
+    margin-top: -8px;
+}
+
+div.widget-body.border-top {
+    border-top: 1px solid #CCCCCC;
+}
+
+div.widget-body.border-top p {
+    margin: 15px;
 }
