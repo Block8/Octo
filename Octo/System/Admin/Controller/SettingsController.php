@@ -22,6 +22,7 @@ class SettingsController extends Controller
 
     public static function registerMenus(Menu $menu)
     {
-        $menu->addRoot('Settings', '/settings')->setIcon('cog');
+        // We don't need these for now - they don't work yet!
+        // $menu->addRoot('Settings', '/settings')->setIcon('cog');
     }
 }

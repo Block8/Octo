@@ -32,17 +32,19 @@ class SessionController extends Controller
         }
 
         $this->view->emailFieldLabel = 'Email Address';
+        $this->userGetMethod = 'getByEmail';
 
-        Event::trigger('beforeLogin', $this->view);
+        Event::trigger('beforeLogin', $this);
 
         if ($this->request->getMethod() == 'POST') {
-            $user = $this->userStore->getByEmail($this->getParam('email'));
+            $ugMethod = $this->userGetMethod;
+            $user = $this->userStore->$ugMethod($this->getParam('email'));
 
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
                 Event::trigger('loginSuccess', $user);
                 $_SESSION['user_id'] = $user->getId();
 
-                $url = '/'.$this->config->get('site.admin_uri');
+                $url = '/' . $this->config->get('site.admin_uri');
 
                 if (isset($_SESSION['previous_url'])) {
                     $url = $_SESSION['previous_url'];
@@ -52,7 +54,7 @@ class SessionController extends Controller
                 die;
             } else {
                 Event::trigger('loginFailed', $this->view);
-                $this->view->errorMessage = 'Your email address or password were wrong.';
+                $this->view->errorMessage = 'Your ' . strtolower($this->view->emailFieldLabel) . ' or password were wrong.';
             }
         }
     }
@@ -66,5 +68,35 @@ class SessionController extends Controller
         session_destroy();
         header('Location: /' . $this->config->get('site.admin_uri'));
         die;
+    }
+
+    public function reset()
+    {
+
+//        $recipients = array_filter(explode("\n", $form->getRecipients()));
+//
+//        $to = implode(', ', $recipients);
+//
+//        $subject = 'Form Submission: ' . $form->getTitle();
+//        $headers = array(
+//            'MIME-Version: 1.0',
+//            'Content-type: text/html; charset=utf-8',
+//        );
+//
+//        if ($submission->getContact() && $submission->getContact()->getEmail()) {
+//            $headers[] = 'Reply-To: ' . $submission->getContact()->getEmail();
+//        }
+//
+//        $config = Config::getInstance();
+//
+//        if (isset($config->site['email_from'])) {
+//            $headers[] = 'From: ' . $config->site['email_from'];
+//        }
+//
+//        $message         = Template::getPublicTemplate('Emails/FormSubmission');
+//        $message->form   = $form;
+//        $message->submission = $submission;
+//
+//        mail($to, $subject, $message->render(), implode("\r\n", $headers));
     }
 }
