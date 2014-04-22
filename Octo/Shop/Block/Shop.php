@@ -14,10 +14,13 @@ class Shop extends Block
      */
     protected $itemStore;
     /**
-    /**
      * @var \Octo\Shop\Store\ItemVariantStore
      */
     protected $itemVariantStore;
+    /**
+     * @var \Octo\Shop\Store\RelatedItemStore
+     */
+    protected $relatedItemStore;
     /**
      * @var bool Set URI extensions
      */
@@ -36,6 +39,7 @@ class Shop extends Block
         $this->categoryStore = Store::get('Category');
         $this->productStore = Store::get('Item');
         $this->itemVariantStore = Store::get('ItemVariant');
+        $this->relatedItemStore = Store::get('RelatedItem');
     }
 
     public function renderNow()
@@ -97,6 +101,12 @@ class Shop extends Block
             $this->view->product = $product;
         }
 
+        $this->view->variants = $this->setupVariants($product);
+        $this->view->related = $this->setupRelatedProducts($product);
+    }
+
+    protected function setupVariants($product)
+    {
         $variants = [];
 
         foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {
@@ -118,6 +128,18 @@ class Shop extends Block
             $variants[$itemVariant->getVariantId()]['options'][] = $computed;
         }
 
-        $this->view->variants = $variants;
+        return $variants;
+    }
+
+    protected function setupRelatedProducts($product)
+    {
+        $relatedItems = $this->relatedItemStore->getByItemID($product->getId());
+        $products = [];
+
+        foreach ($relatedItems as $item) {
+            $products[] = $item->getRelatedItem();
+        }
+
+        return $products;
     }
 }
