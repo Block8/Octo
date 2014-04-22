@@ -38,6 +38,24 @@
 
 <div id="main" role="main">
 
+    {if GlobalMessage:error}
+    <div class="alert alert-danger fade in">
+        <strong>Error:</strong> {@GlobalMessage:error}
+    </div>
+    {/if}
+
+    {if GlobalMessage:success}
+    <div class="alert alert-success fade in">
+        {@GlobalMessage:success}
+    </div>
+    {/if}
+
+    {if GlobalMessage:info}
+    <div class="alert alert-info fade in">
+        {@GlobalMessage:info}
+    </div>
+    {/if}
+
     {if errorMessage}
     <div class="alert alert-danger fade in" style="margin-top: -20px;">
     	<i class="fa-fw fa fa-times"></i>
@@ -61,7 +79,7 @@
                         <fieldset>
 
                             <section>
-                                <label class="label">Email Address</label>
+                                <label class="label">{@emailFieldLabel}</label>
                                 <label class="input"> <i class="icon-append fa fa-user"></i>
                                     <input type="text" name="email" value="" id="email" required>
                             </section>
