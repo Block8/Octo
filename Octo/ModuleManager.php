@@ -31,6 +31,11 @@ class ModuleManager
     {
         return $this->modules;
     }
+    
+    public function isEnabled($module)
+    {
+        return isset($this->modules[$module]);
+    }
 
     public function initialiseModules()
     {
