@@ -44,6 +44,8 @@ class DashboardController extends Controller
             $this->view->showAnalytics = true;
         }
         
-        Event::trigger('dashboardLoad', $this);
+        $instance = clone($this); // Can't pass and return $this to a listener, sadface.
+        Event::trigger('dashboardLoad', $instance);
+        $this->view = $instance->view;
     }
 }
