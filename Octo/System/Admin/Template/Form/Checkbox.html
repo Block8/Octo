@@ -1,8 +1,8 @@
 <div class="control-group {@ccss} {if error}error{/if}">
-	<div class="controls">
+	<div class="controls inline-group">
 		<label class="checkbox {@css}" for="{@id}">
 			<input type="checkbox" id="{@id}" name="{@name}" value="{@checkedValue}"{if checked} checked{/if}{if required} required{/if}>
-			{@label}
+			<i></i>{@label}</label>
 		</label>
 		{if error}
 			<span class="help-block">{@error}</span>
