@@ -221,6 +221,7 @@ trait ContactBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -449,5 +450,4 @@ trait ContactBase
         $this->data['is_blocked'] = $value;
         $this->setModified('is_blocked');
     }
-
 }

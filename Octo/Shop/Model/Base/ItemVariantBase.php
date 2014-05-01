@@ -103,6 +103,7 @@ trait ItemVariantBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -197,7 +198,6 @@ trait ItemVariantBase
         $this->data['price_adjustment'] = $value;
         $this->setModified('price_adjustment');
     }
-
     /**
     * Get the Item model for this ItemVariant by Id.
     *

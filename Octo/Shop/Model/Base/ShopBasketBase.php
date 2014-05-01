@@ -75,6 +75,7 @@ trait ShopBasketBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -131,5 +132,4 @@ trait ShopBasketBase
         $this->data['updated_date'] = $value;
         $this->setModified('updated_date');
     }
-
 }

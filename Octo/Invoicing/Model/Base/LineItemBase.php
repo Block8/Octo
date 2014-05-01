@@ -148,6 +148,7 @@ trait LineItemBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -285,7 +286,6 @@ trait LineItemBase
         $this->data['basket_id'] = $value;
         $this->setModified('basket_id');
     }
-
     /**
     * Get the ShopBasket model for this LineItem by Id.
     *

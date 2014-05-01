@@ -199,6 +199,7 @@ trait FileBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -387,7 +388,6 @@ trait FileBase
         $this->data['size'] = $value;
         $this->setModified('size');
     }
-
     /**
     * Get the Category model for this File by Id.
     *

@@ -84,6 +84,7 @@ trait PermissionBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -159,7 +160,6 @@ trait PermissionBase
         $this->data['can_access'] = $value;
         $this->setModified('can_access');
     }
-
     /**
     * Get the User model for this Permission by Id.
     *

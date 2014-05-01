@@ -77,7 +77,7 @@ class Template extends View\Template
         throw new \Exception('Template does not exist: ' . $template);
     }
 
-    public function includeTemplate($args, $view)
+    public function includeTemplate($args, &$view)
     {
         if ($view instanceof AdminTemplate) {
             $template = static::getAdminTemplate($view->getVariable($args['template']));

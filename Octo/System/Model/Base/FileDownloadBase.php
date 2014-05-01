@@ -73,6 +73,7 @@ trait FileDownloadBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -125,7 +126,6 @@ trait FileDownloadBase
         $this->data['downloaded'] = $value;
         $this->setModified('downloaded');
     }
-
     /**
     * Get the File model for this FileDownload by Id.
     *

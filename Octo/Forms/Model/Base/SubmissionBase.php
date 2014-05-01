@@ -120,6 +120,7 @@ trait SubmissionBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -229,7 +230,6 @@ trait SubmissionBase
         $this->data['message'] = $value;
         $this->setModified('message');
     }
-
     /**
     * Get the Form model for this Submission by Id.
     *

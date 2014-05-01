@@ -116,6 +116,7 @@ trait MenuItemBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -219,7 +220,6 @@ trait MenuItemBase
         $this->data['position'] = $value;
         $this->setModified('position');
     }
-
     /**
     * Get the Menu model for this MenuItem by Id.
     *

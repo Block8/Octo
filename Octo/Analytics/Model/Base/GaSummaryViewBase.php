@@ -86,6 +86,7 @@ trait GaSummaryViewBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -155,5 +156,4 @@ trait GaSummaryViewBase
         $this->data['metric'] = $value;
         $this->setModified('metric');
     }
-
 }

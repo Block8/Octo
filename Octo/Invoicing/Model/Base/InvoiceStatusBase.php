@@ -82,6 +82,7 @@ trait InvoiceStatusBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -157,5 +158,4 @@ trait InvoiceStatusBase
         $this->data['protected'] = $value;
         $this->setModified('protected');
     }
-
 }

@@ -97,6 +97,7 @@ trait SettingBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -187,5 +188,4 @@ trait SettingBase
         $this->data['hidden'] = $value;
         $this->setModified('hidden');
     }
-
 }

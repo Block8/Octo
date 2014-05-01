@@ -112,6 +112,7 @@ trait UserBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -223,5 +224,4 @@ trait UserBase
         $this->data['is_hidden'] = $value;
         $this->setModified('is_hidden');
     }
-
 }

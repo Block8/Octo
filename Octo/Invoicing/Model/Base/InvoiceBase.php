@@ -52,6 +52,12 @@ trait InvoiceBase
         $this->data['due_date'] = null;
         $this->getters['due_date'] = 'getDueDate';
         $this->setters['due_date'] = 'setDueDate';
+        $this->data['billing_address'] = null;
+        $this->getters['billing_address'] = 'getBillingAddress';
+        $this->setters['billing_address'] = 'setBillingAddress';
+        $this->data['shipping_address'] = null;
+        $this->getters['shipping_address'] = 'getShippingAddress';
+        $this->setters['shipping_address'] = 'setShippingAddress';
 
         // Foreign keys:
         $this->getters['InvoiceStatus'] = 'getInvoiceStatus';
@@ -202,6 +208,31 @@ trait InvoiceBase
 
         return $rtn;
     }
+
+    /**
+    * Get the value of BillingAddress / billing_address.
+    *
+    * @return string
+    */
+    public function getBillingAddress()
+    {
+        $rtn = $this->data['billing_address'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ShippingAddress / shipping_address.
+    *
+    * @return string
+    */
+    public function getShippingAddress()
+    {
+        $rtn = $this->data['shipping_address'];
+
+        return $rtn;
+    }
+
 
     /**
     * Set the value of Id / id.
@@ -402,6 +433,39 @@ trait InvoiceBase
         $this->setModified('due_date');
     }
 
+    /**
+    * Set the value of BillingAddress / billing_address.
+    *
+    * @param $value string
+    */
+    public function setBillingAddress($value)
+    {
+        $this->validateString('BillingAddress', $value);
+
+        if ($this->data['billing_address'] === $value) {
+            return;
+        }
+
+        $this->data['billing_address'] = $value;
+        $this->setModified('billing_address');
+    }
+
+    /**
+    * Set the value of ShippingAddress / shipping_address.
+    *
+    * @param $value string
+    */
+    public function setShippingAddress($value)
+    {
+        $this->validateString('ShippingAddress', $value);
+
+        if ($this->data['shipping_address'] === $value) {
+            return;
+        }
+
+        $this->data['shipping_address'] = $value;
+        $this->setModified('shipping_address');
+    }
     /**
     * Get the InvoiceStatus model for this Invoice by Id.
     *

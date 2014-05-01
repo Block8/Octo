@@ -71,6 +71,7 @@ trait RelatedItemBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -127,7 +128,6 @@ trait RelatedItemBase
         $this->data['related_item_id'] = $value;
         $this->setModified('related_item_id');
     }
-
     /**
     * Get the Item model for this RelatedItem by Id.
     *

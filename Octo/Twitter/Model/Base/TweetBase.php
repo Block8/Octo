@@ -150,6 +150,7 @@ trait TweetBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -287,5 +288,4 @@ trait TweetBase
         $this->data['scope'] = $value;
         $this->setModified('scope');
     }
-
 }

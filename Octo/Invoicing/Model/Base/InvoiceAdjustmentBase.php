@@ -114,6 +114,7 @@ trait InvoiceAdjustmentBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -219,7 +220,6 @@ trait InvoiceAdjustmentBase
         $this->data['data'] = $value;
         $this->setModified('data');
     }
-
     /**
     * Get the Invoice model for this InvoiceAdjustment by Id.
     *

@@ -52,6 +52,7 @@ trait VariantBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -87,5 +88,4 @@ trait VariantBase
         $this->data['title'] = $value;
         $this->setModified('title');
     }
-
 }

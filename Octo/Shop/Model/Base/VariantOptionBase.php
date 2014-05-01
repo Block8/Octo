@@ -84,6 +84,7 @@ trait VariantOptionBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -157,7 +158,6 @@ trait VariantOptionBase
         $this->data['position'] = $value;
         $this->setModified('position');
     }
-
     /**
     * Get the Variant model for this VariantOption by Id.
     *

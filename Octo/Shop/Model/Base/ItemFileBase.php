@@ -86,6 +86,7 @@ trait ItemFileBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -159,7 +160,6 @@ trait ItemFileBase
         $this->data['position'] = $value;
         $this->setModified('position');
     }
-
     /**
     * Get the Item model for this ItemFile by Id.
     *
