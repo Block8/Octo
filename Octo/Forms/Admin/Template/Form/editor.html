@@ -152,7 +152,7 @@
     function fieldEditor(actionLabel, values)
     {
         var ftype = $('<select></select>').addClass('select2');
-        var foptions = $('<textarea></textarea>');
+        var foptions = $('<textarea></textarea>').addClass('form-control');
         var flabel = $('<input>').attr('type', 'text');
         var frequired = $('<input>').attr('type', 'checkbox');
 
@@ -193,9 +193,18 @@
 
             frequired.prop('checked', ftype.children(':selected').data('required'));
 
-            flabel.val(ftype.children(':selected').text());
+			// Prevent wipe of a custom written title
+            var flag=false;
+			$.each(fieldTypes, function (i, obj) {
+				if(obj.title == flabel.val()) {
+					flag=true;
+				}
+			});
+			if(flag || flabel.val() == "") {
+	            flabel.val(ftype.children(':selected').text());
+	        }
         });
-
+        
         // If we've been passed values, set them:
         if (values.type) {
             ftype.val(values.type);
@@ -221,13 +230,15 @@
         addFieldForm.append($('<section></section>').append(frequiredLabel));
         //addFieldForm.append($('<section></section>').append(fcontactLabel));
 
-
         var dialog = createDialog('add-field', {
             title: actionLabel + ' Field',
             body: addFieldForm,
             button: addFieldButton,
             show: true
         });
+        
+        // Load the form with the correct initial parameter fields by triggering change on the DDLB
+		ftype.trigger('change');
 
         addFieldButton.on('click', function () {
             var tbl = $('#form-fields');
@@ -246,11 +257,11 @@
             }
 
             if (values.id) {
+            	// It's an edit of an existing field, so let's remove it (we'll add it again below)
                 tbody.find('tr.field_' + values.id).remove();
                 definition.id = values.id;
             } else {
                 var count = tbody.find('tr.field_' + definition.type).length;
-
                 if (count == 0) {
                     definition.id = definition.type;
                 } else {
@@ -278,12 +289,21 @@
             fieldEditor('Edit', $(this).parents('tr').data('definition'));
         });
 
+        var deleteButton = $('<button>Delete</button>');
+        deleteButton.addClass('btn btn-danger');
+        deleteButton.css({'margin-left':'1em'});
+        deleteButton.on('click', function () {
+            $(this).parents('tr').remove();
+            updateDefinition();
+        });
+
+
         var row = $('<tr></tr>');
         row.data('definition', definition);
         row.addClass('field_' + definition.id);
         row.append($('<td></td>').text(definition.label));
         row.append($('<td></td>').text(definition.type));
-        row.append($('<td></td>').append(editButton));
+        row.append($('<td></td>').append(editButton).append(deleteButton));
         tbody.append(row);
 
         updateDefinition();
