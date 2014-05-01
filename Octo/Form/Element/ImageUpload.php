@@ -73,7 +73,17 @@ class ImageUpload extends Upload
         }
 
         $validator = $this->getValidator();
+        $this->callValidator($validator);
 
+        if ($this->customError) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function callValidator($validator)
+    {
         if (is_callable($validator)) {
             try {
                 call_user_func_array($validator, array($this->value));
@@ -82,11 +92,5 @@ class ImageUpload extends Upload
                 return false;
             }
         }
-
-        if ($this->customError) {
-            return false;
-        }
-
-        return true;
     }
 }
