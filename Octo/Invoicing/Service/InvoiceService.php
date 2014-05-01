@@ -42,14 +42,18 @@ class InvoiceService
      * @param ItemStore $itemStore
      * @param LineItemStore $lineItemStore
      */
-    public function __construct(InvoiceStore $invoiceStore, InvoiceAdjustmentStore $adjustmentStore, ItemStore $itemStore, LineItemStore $lineItemStore)
+    public function __construct(
+        InvoiceStore $invoiceStore,
+        InvoiceAdjustmentStore $adjustmentStore,
+        ItemStore $itemStore,
+        LineItemStore $lineItemStore
+    )
     {
         $this->invoiceStore = $invoiceStore;
         $this->adjustmentStore = $adjustmentStore;
         $this->lineItemStore = $lineItemStore;
         $this->itemStore = $itemStore;
     }
-
 
     public function createInvoice($title, Contact $contact, DateTime $invoiceDate, $dueDate)
     {

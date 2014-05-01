@@ -20,7 +20,9 @@ $queries = [
   PRIMARY KEY (`id`),
   KEY `form_id` (`form_id`),
   KEY `contact_id` (`contact_id`),
-  CONSTRAINT `submission_ibfk_1` FOREIGN KEY (`form_id`) REFERENCES `form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `submission_ibfk_2` FOREIGN KEY (`contact_id`) REFERENCES `contact` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `submission_ibfk_1`
+    FOREIGN KEY (`form_id`) REFERENCES `form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `submission_ibfk_2`
+    FOREIGN KEY (`contact_id`) REFERENCES `contact` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 ];

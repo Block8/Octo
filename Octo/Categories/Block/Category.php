@@ -24,10 +24,10 @@ class Category extends Block
 
         $requiresPresence = null;
         if (isset($this->templateParams['requiresPresence'])) {
-            $requiresPresence = $this->templateParams['requiresPresence'];
+            $presence = $this->templateParams['requiresPresence'];
         }
 
         $this->categoryStore = Store::get('Category');
-        $this->view->categories = $this->categoryStore->getAllForScope($scope, 'position ASC, name ASC', $requiresPresence);
+        $this->view->categories = $this->categoryStore->getAllForScope($scope, 'position ASC, name ASC', $presence);
     }
 }

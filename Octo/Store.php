@@ -39,7 +39,8 @@ abstract class Store extends \b8\Store
      *
      * @return mixed
      */
-    public function getTableName() {
+    public function getTableName()
+    {
         return $this->tableName;
     }
 

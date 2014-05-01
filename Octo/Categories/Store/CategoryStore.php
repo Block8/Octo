@@ -34,7 +34,9 @@ class CategoryStore extends Octo\Store
             $table = $store->getTableName();
         }
 
-        $query = 'SELECT c.*, IF(c2.id, true, false) AS has_children FROM category c LEFT JOIN category c2 ON c.id = c2.parent_id ';
+        $query = 'SELECT c.*, IF(c2.id, true, false) AS has_children
+                    FROM category c
+                    LEFT JOIN category c2 ON c.id = c2.parent_id ';
 
         if ($requiresPresence) {
             $query .= "LEFT JOIN $table ON $table.category_id = c.id ";

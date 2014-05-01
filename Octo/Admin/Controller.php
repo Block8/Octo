@@ -152,14 +152,16 @@ abstract class Controller extends \b8\Controller
         $this->layout->breadcrumb = $breadcrumb;
     }
 
-    public function popBreadcrumb() {
+    public function popBreadcrumb()
+    {
         $breadcrumbs = $this->layout->breadcrumb;
         $item = array_pop($breadcrumbs);
         $this->layout->breadcrumb = $breadcrumbs;
         return $item;
     }
 
-    public static function getClass($controller) {
+    public static function getClass($controller)
+    {
         $config = Config::getInstance();
         $siteModules = array_reverse($config->get('ModuleManager')->getEnabled());
 

@@ -54,8 +54,9 @@ class SearchIndexStore extends Octo\Store
         $stmt->bindValue(':id', $contentId);
         $stmt->execute();
 
-        $stmt = $database->prepare('INSERT INTO search_index (word, model, content_id, instances)
-                                        VALUES (:word, :model, :id, :count)');
+        $stmt = $database->prepare(
+            'INSERT INTO search_index (word, model, content_id, instances) VALUES (:word, :model, :id, :count)'
+        );
         $stmt->bindValue(':model', $class);
         $stmt->bindValue(':id', $contentId);
 

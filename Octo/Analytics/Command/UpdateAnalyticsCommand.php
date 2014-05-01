@@ -158,7 +158,8 @@ class UpdateAnalyticsCommand extends Command
         }
     }
 
-    protected function getAuthHeader($email, $password) {
+    protected function getAuthHeader($email, $password)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://www.google.com/accounts/ClientLogin");
         $authData = [

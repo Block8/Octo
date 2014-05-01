@@ -17,7 +17,11 @@ class PageCollection extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Page Collection', 'editor' => true, 'js' => ['/assets/backoffice/js/block/pagecollection.js']];
+        return [
+            'title' => 'Page Collection',
+            'editor' => true,
+            'js' => ['/assets/backoffice/js/block/pagecollection.js'],
+        ];
     }
 
     public function init()

@@ -72,7 +72,9 @@ class ControllerGenerator
             $namespace = $this->getNamespace($table['php_name']);
 
             if (is_null($namespace)) {
-                $msg = 'If you would like to create an admin controller for ' . $table['php_name'] . ', please choose a namespace:';
+                $msg = 'If you would like to create an admin controller for ' .
+                    $table['php_name'] .
+                    ', please choose a namespace:';
                 $namespace = $this->ask($msg, array_keys($this->paths));
 
                 if (is_null($namespace)) {

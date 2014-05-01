@@ -78,9 +78,9 @@ class PageController extends Controller
 
         try {
             $output = $template->render();
-        } catch(NotFoundException $e) {
+        } catch (NotFoundException $e) {
             throw new NotFoundException('Page not found: ' . $path);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException\ServerErrorException('System Error', 0, $e);
         }
 

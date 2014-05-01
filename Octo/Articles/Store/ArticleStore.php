@@ -45,7 +45,7 @@ class ArticleStore extends Octo\Store
      * @param string $scope Scope of articles to retrieve
      * @return array
      */
-    public function getRecent($categoryId = null, $limit = 10, $scope)
+    public function getRecent($categoryId = null, $limit = 10, $scope = null)
     {
         $where = 'WHERE 1';
         if (!is_null($categoryId)) {

@@ -18,7 +18,8 @@ class GaSummaryViewStore extends Octo\Store
 {
     use Base\GaSummaryViewStoreBase;
 
-    public function getResponsiveMetrics() {
+    public function getResponsiveMetrics()
+    {
         $query = "SELECT * FROM ga_summary_view
         WHERE metric IN('desktop', 'tablet', 'mobile')";
         $stmt = Database::getConnection('read')->prepare($query);

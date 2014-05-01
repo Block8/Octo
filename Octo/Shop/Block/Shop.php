@@ -36,7 +36,8 @@ class Shop extends Block
         return ['title' => 'Product', 'editor' => false, 'js' => []];
     }
 
-    public function init() {
+    public function init()
+    {
         $this->categoryStore = Store::get('Category');
         $this->productStore = Store::get('Item');
         $this->itemVariantStore = Store::get('ItemVariant');

@@ -40,14 +40,18 @@ class ProductEditListener extends Listener
             $instance->view->title = $product->getTitle();
             $instance->view->thumbnail = true;
             $instance->view->reorder = true;
-            $instance->view->reorderSaveUrl = '/' . Config::getInstance()->get('site.admin_uri') . '/product/update-image-positions?item_id=' . $product->getId();
+
+            $uri = Config::getInstance()->get('site.admin_uri');
+            $productId = $product->getId();
+            $instance->view->reorderSaveUrl = '/' . $uri . '/product/update-image-positions?item_id=' . $productId;
             $instance->view->queryStringAppend = '?item_id=' . $product->getId();
         }
 
         return true;
     }
 
-    public function setupEditForm(&$instance) {
+    public function setupEditForm(&$instance)
+    {
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
 
@@ -65,7 +69,8 @@ class ProductEditListener extends Listener
         return true;
     }
 
-    public function setupUpload(&$instance) {
+    public function setupUpload(&$instance)
+    {
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
 
@@ -84,7 +89,8 @@ class ProductEditListener extends Listener
     {
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
-        header('Location: /' . Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug());
+        $redirect = Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug();
+        header('Location: /' . $redirect);
         exit;
     }
 
@@ -109,7 +115,8 @@ class ProductEditListener extends Listener
     {
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
-        header('Location: /' . Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug());
+        $redirect = Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug();
+        header('Location: /' . $redirect);
         exit;
     }
 

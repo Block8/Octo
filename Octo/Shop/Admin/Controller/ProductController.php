@@ -9,7 +9,7 @@ use Octo\Form\Element\ImageUpload;
 use Octo\Invoicing\Model\Item;
 use Octo\Shop\Model\ItemFile;
 use Octo\Shop\Model\ItemVariant;
-use Octo\System\Model\File;;
+use Octo\System\Model\File;
 use Octo\Store;
 use Octo\Utilities\StringUtilities;
 

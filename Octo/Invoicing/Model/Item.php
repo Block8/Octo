@@ -32,13 +32,15 @@ class Item extends Octo\Model
     public function getMainImage()
     {
         $itemFileStore = Store::get('ItemFile');
-        $images = $itemFileStore->getByItemId($this->getId(),
+        $images = $itemFileStore->getByItemId(
+            $this->getId(),
             ['order' =>
                 [
                     ['position', 'ASC'],
                     ['id', 'ASC']
                 ]
-            ]);
+            ]
+        );
 
         if (isset($images[0])) {
             $file = $images[0]->getFile();
@@ -49,13 +51,15 @@ class Item extends Octo\Model
     public function getImages()
     {
         $itemFileStore = Store::get('ItemFile');
-        $images = $itemFileStore->getByItemId($this->getId(),
+        $images = $itemFileStore->getByItemId(
+            $this->getId(),
             ['order' =>
                 [
                     ['position', 'ASC'],
                     ['id', 'ASC']
                 ]
-            ]);
+            ]
+        );
         $files = [];
 
         foreach ($images as $image) {

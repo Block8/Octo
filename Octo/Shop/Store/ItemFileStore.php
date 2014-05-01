@@ -12,7 +12,6 @@ use b8\Database\Query;
 use b8\Exception\StoreException;
 use Octo;
 
-
 /**
  * ItemFile Store
  */

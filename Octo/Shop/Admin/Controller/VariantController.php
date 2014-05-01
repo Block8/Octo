@@ -137,5 +137,4 @@ class VariantController extends Controller
         $form->setValues($values);
         return $form;
     }
-
 }
