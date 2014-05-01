@@ -47,8 +47,7 @@ class InvoiceService
         InvoiceAdjustmentStore $adjustmentStore,
         ItemStore $itemStore,
         LineItemStore $lineItemStore
-    )
-    {
+    ) {
         $this->invoiceStore = $invoiceStore;
         $this->adjustmentStore = $adjustmentStore;
         $this->lineItemStore = $lineItemStore;

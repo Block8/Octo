@@ -148,14 +148,10 @@ abstract class Block
         $namespace = $config->get('Octo.namespaces.blocks.' . $type);
         $class = '\\' . $namespace . '\\Block\\' . $type;
 
-		
-
         if (class_exists($class)) {
             return new $class($content);
         }
-		
-		return Block::create("Text", array('content'=>'Block: '.$type.' does not exist'));
-		
+                
         throw new \Exception('Block type ' . $type . ' does not exist');
     }
 

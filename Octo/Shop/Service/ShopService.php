@@ -39,8 +39,12 @@ class ShopService
      */
     protected $invoiceStore;
 
-    public function __construct(ItemStore $itemStore, LineItemStore $lineStore, ItemVariantStore $variantStore, ShopBasketStore $basketStore)
-    {
+    public function __construct(
+        ItemStore $itemStore,
+        LineItemStore $lineStore,
+        ItemVariantStore $variantStore,
+        ShopBasketStore $basketStore
+    ) {
         $this->itemStore = $itemStore;
         $this->lineStore = $lineStore;
         $this->variantStore = $variantStore;
@@ -82,7 +86,8 @@ class ShopService
 
         foreach ($itemData['variants'] as $variantData) {
             $variant = $this->variantStore->getById($variantData['variant']);
-            $description .= ' [' . $variant->getVariant()->getTitle() . ': ' . $variant->getVariantOption()->getOptionTitle() . '] ';
+            $title = $variant->getVariant()->getTitle();
+            $description .= ' [' . $title . ': ' . $variant->getVariantOption()->getOptionTitle() . '] ';
             $itemPrice += $variantData['adjustment'];
         }
 
@@ -103,7 +108,8 @@ class ShopService
 
     public function createInvoiceForBasket(InvoiceService $service, ShopBasket $basket, Contact $contact)
     {
-        $invoice = $service->createInvoice('Order (Basket #' . $basket->getId() . ')', $contact, new \DateTime(), null);
+        $orderTitle = 'Order (Basket #' . $basket->getId() . ')';
+        $invoice = $service->createInvoice($orderTitle, $contact, new \DateTime(), null);
         $this->lineStore->copyBasketToInvoice($basket, $invoice);
         $service->updateSubtotal($invoice);
 
