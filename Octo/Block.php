@@ -98,23 +98,31 @@ abstract class Block
     protected static function getSiteBlocks()
     {
         $blocks = array();
+
         $config = \b8\Config::getInstance();
-        $blockPath = APP_PATH . $config->get('site.namespace') . '/Block/';
+        $moduleManager = $config->get('ModuleManager');
+        $modules = $moduleManager->getEnabled()[$config->get('site.namespace')];
 
-        if (!is_dir($blockPath)) {
-            return $blocks;
-        }
+        foreach (glob(CMS_PATH . '*/Block') as $directory) {
+            $module = basename(dirname($directory));
 
-        $directory = new \DirectoryIterator($blockPath);
-
-        foreach ($directory as $file) {
-            if ($file->isDot()) {
+            if (!in_array($module, $modules)) {
                 continue;
             }
 
-            if ($file->isFile() && $file->getExtension() == 'php') {
-                $className = $file->getBasename('.php');
-                $blocks[$className] = self::getBlockInformation($config->get('site.namespace'), $className);
+            $directoryIterator = new \DirectoryIterator($directory);
+
+            foreach ($directoryIterator as $file) {
+                if ($file->isDot()) {
+                    continue;
+                }
+
+                if ($file->isFile() && $file->getExtension() == 'php') {
+                    $className = $file->getBasename('.php');
+                    $namespace = "\\".$config->get('site.namespace')."\\$module\\Block";
+
+                    $blocks[$className] = self::getBlockInformation($namespace, $className);
+                }
             }
         }
 
@@ -140,10 +148,14 @@ abstract class Block
         $namespace = $config->get('Octo.namespaces.blocks.' . $type);
         $class = '\\' . $namespace . '\\Block\\' . $type;
 
+		
+
         if (class_exists($class)) {
             return new $class($content);
         }
-
+		
+		return Block::create("Text", array('content'=>'Block: '.$type.' does not exist'));
+		
         throw new \Exception('Block type ' . $type . ' does not exist');
     }
 
