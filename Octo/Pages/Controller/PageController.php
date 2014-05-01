@@ -57,6 +57,11 @@ class PageController extends Controller
         $path = $this->request->getPath();
 
         $this->page = $this->pageStore->getUriBestMatch($path);
+
+        if (empty($this->page)) {
+            throw new HttpException\NotFoundException('No page found.');
+        }
+
         $this->uriExtension = substr($path, strlen($this->page->getUri()));
 
         if (empty($this->uriExtension)) {
