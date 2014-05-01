@@ -89,9 +89,9 @@ class FormController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($formId)
     {
-        $form = $this->formStore->getById($id);
+        $form = $this->formStore->getById($formId);
 
         $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $form->getId());
 

@@ -38,8 +38,6 @@ class ItemStore extends Octo\Store
 
     public function search($query)
     {
-        $count = null;
-
         $query = 'SELECT * FROM item WHERE title LIKE \'%'.$query.'%\'';
 
         $stmt = Database::getConnection('read')->prepare($query);

@@ -22,7 +22,7 @@ class Category extends Block
     {
         $scope = $this->templateParams['scope'];
 
-        $requiresPresence = null;
+        $presence = null;
         if (isset($this->templateParams['requiresPresence'])) {
             $presence = $this->templateParams['requiresPresence'];
         }

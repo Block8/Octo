@@ -73,8 +73,6 @@ class CategoryStore extends Octo\Store
      */
     public function getAllForParent($parent, $order = 'name ASC')
     {
-        $count = null;
-
         $query = 'SELECT * FROM category WHERE parent_id = :parent ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':parent', $parent);

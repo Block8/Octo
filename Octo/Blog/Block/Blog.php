@@ -19,7 +19,6 @@ class Blog extends News
 
     public static function getInfo()
     {
-        $config = Config::getInstance();
         return ['title' => 'Blog Archive', 'editor' => true, 'js' => ['/assets/backoffice/js/block/blog.js']];
     }
 }

@@ -22,7 +22,6 @@ class MenuStore extends Octo\Store
     {
         $query = 'SELECT * FROM menu ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
-        $stmt->bindParam(':scope', $scope);
 
         if ($stmt->execute()) {
             $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);

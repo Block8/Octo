@@ -77,10 +77,10 @@ class ShopService
 
     public function addItemToBasket(ShopBasket $basket, array $itemData)
     {
-        $id = $itemData['item_id'];
+        $itemId = $itemData['item_id'];
         $quantity = $itemData['quantity'];
 
-        $item = $this->itemStore->getById($id);
+        $item = $this->itemStore->getById($itemId);
         $description = $item->getTitle();
         $itemPrice = $item->getPrice();
 

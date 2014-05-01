@@ -143,8 +143,6 @@ class PageStore extends Octo\Store
 
     public function search($query)
     {
-        $count = null;
-
         $query = 'SELECT p.* FROM page p
             LEFT JOIN page_version v ON v.id = p.current_version_id
             WHERE title LIKE \'%'.$query.'%\' OR short_title LIKE \'%'.$query.'%\'';

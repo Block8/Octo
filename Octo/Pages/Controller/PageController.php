@@ -46,6 +46,8 @@ class PageController extends Controller
      */
     protected $uriExtension;
 
+    protected $blockManager;
+
     public function init()
     {
         $this->pageStore = Store::get('Page');
@@ -110,7 +112,7 @@ class PageController extends Controller
         }
 
         $template = $this->getTemplate();
-        $blockManager = $this->getBlockManager($template);
+        $this->getBlockManager($template);
         return $template->render();
     }
 
@@ -136,6 +138,8 @@ class PageController extends Controller
         $blockManager->setResponse($this->response);
         $blockManager->attachToTemplate($template);
 
-        return $blockManager;
+        $this->blockManager = $blockManager;
+
+        return $this->blockManager;
     }
 }

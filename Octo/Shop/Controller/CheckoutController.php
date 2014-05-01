@@ -36,7 +36,7 @@ class CheckoutController extends Controller
         return $view->render();
     }
 
-    public function details($id)
+    public function details($basketId)
     {
         $this->contactStore = Store::get('Contact');
 
@@ -59,13 +59,13 @@ class CheckoutController extends Controller
             $shopService = $this->getShopService();
             $invoiceService = $this->getInvoiceService();
 
-            $basket = $shopService->getBasket($id);
+            $basket = $shopService->getBasket($basketId);
             $invoice = $shopService->createInvoiceForBasket($invoiceService, $basket, $contact);
 
             var_dump($invoice);
         }
 
-        $form = $this->detailsForm($id);
+        $form = $this->detailsForm($basketId);
         $view = Template::getPublicTemplate('Checkout/details');
         $view->form = $form;
 
@@ -99,10 +99,10 @@ class CheckoutController extends Controller
         return array_filter($contact);
     }
 
-    protected function detailsForm($id)
+    protected function detailsForm($basketId)
     {
         $form = new FormElement();
-        $form->setAction('/checkout/details/' . $id);
+        $form->setAction('/checkout/details/' . $basketId);
         $form->setMethod('POST');
 
         $fieldset = new Form\FieldSet('basic_details');

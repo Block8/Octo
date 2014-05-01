@@ -239,7 +239,6 @@ class MediaController extends Controller
      */
     public function autocomplete($scope)
     {
-        $scope_name = ucwords($scope);
         $files = $this->fileStore->search($scope, $this->getParam('q', ''));
 
         $rtn = ['results' => [], 'more' => false];

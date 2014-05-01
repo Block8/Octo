@@ -186,10 +186,10 @@ class MenuController extends Controller
         }
 
         // Are we deleting an item?
-        $id = $this->getParam('delete', null);
+        $deleteId = $this->getParam('delete', null);
 
-        if (!is_null($id)) {
-            $item = $this->menuItemStore->getById($id);
+        if (!is_null($deleteId)) {
+            $item = $this->menuItemStore->getById($deleteId);
 
             if (!is_null($item)) {
                 $this->menuItemStore->delete($item);

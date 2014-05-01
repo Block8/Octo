@@ -66,7 +66,6 @@ class News extends Block
             $base = '';
         }
 
-        $articleType = static::$articleType;
         $this->view->articles = $news;
         $this->view->base = $base;
 

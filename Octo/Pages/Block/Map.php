@@ -9,7 +9,6 @@ class Map extends Block
 {
     public static function getInfo()
     {
-        $config = Config::getInstance();
         return ['title' => 'Map', 'editor' => true, 'js' => ['/assets/backoffice/js/block/map.js']];
     }
 

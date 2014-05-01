@@ -42,7 +42,6 @@ class Form extends Block
 
     public static function getInfo()
     {
-        $config = Config::getInstance();
         return ['title' => 'Form', 'editor' => true, 'js' => ['/assets/backoffice/js/block/form.js']];
     }
 
@@ -177,7 +176,7 @@ class Form extends Block
     {
         $recipients = array_filter(explode("\n", $form->getRecipients()));
 
-        $to = implode(', ', $recipients);
+        $sendTo = implode(', ', $recipients);
 
         $subject = 'Form Submission: ' . $form->getTitle();
         $headers = array(
@@ -199,6 +198,6 @@ class Form extends Block
         $message->form   = $form;
         $message->submission = $submission;
 
-        mail($to, $subject, $message->render(), implode("\r\n", $headers));
+        mail($sendTo, $subject, $message->render(), implode("\r\n", $headers));
     }
 }

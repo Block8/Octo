@@ -55,21 +55,6 @@ class ArticleStore extends Octo\Store
             $where .= ' AND c.scope = :scope ';
         }
 
-        $query = 'SELECT COUNT(*) AS cnt FROM article LEFT JOIN category c ON c.id = article.category_id ' . $where;
-        $stmt = Database::getConnection('read')->prepare($query);
-
-        if (!is_null($categoryId)) {
-            $stmt->bindValue(':catId', (int)$categoryId, Database::PARAM_INT);
-        }
-
-        if (!is_null($scope)) {
-            $stmt->bindValue(':scope', $scope, Database::PARAM_STR);
-        }
-
-        $stmt->execute();
-        $res = $stmt->fetch(Database::FETCH_ASSOC);
-        $count = $res['cnt'];
-
         $query = 'SELECT article.* FROM article LEFT JOIN category c ON c.id = article.category_id ' . $where;
         $query .= ' ORDER BY id DESC LIMIT :limit';
         $stmt = Database::getConnection('read')->prepare($query);

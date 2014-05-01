@@ -151,7 +151,7 @@ abstract class Block
         if (class_exists($class)) {
             return new $class($content);
         }
-                
+
         throw new \Exception('Block type ' . $type . ' does not exist');
     }
 

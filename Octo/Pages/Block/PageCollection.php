@@ -39,9 +39,9 @@ class PageCollection extends Block
 
         if (array_key_exists('pages', $this->content)) {
             $pages = [];
-            $i = 0;
+            $rendered = 0;
             foreach ($this->content['pages'] as $pageId) {
-                if (++$i >= $this->limit) {
+                if (++$rendered >= $this->limit) {
                     break;
                 }
 

@@ -20,8 +20,8 @@ class MigrationCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $mr = new MigrationRunner();
-            $mr->runMigrations();
+            $runner = new MigrationRunner();
+            $runner->runMigrations();
         } catch (\Exception $ex) {
             print $ex->getMessage() . PHP_EOL;
         }

@@ -11,8 +11,11 @@ build_settings:
 
 test:
     php_mess_detector:
+        allowed_warnings: 40
     php_code_sniffer:
         standard: "PSR2"
+        allowed_warnings: 0
+        allowed_errors: 0
     php_loc:
 
 failure:

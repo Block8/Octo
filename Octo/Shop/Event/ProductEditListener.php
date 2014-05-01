@@ -75,7 +75,7 @@ class ProductEditListener extends Listener
         $product = $this->productStore->getById($instance->getParam('item_id'));
 
         if ($product) {
-            $file = $instance->popBreadcrumb();
+            $instance->popBreadcrumb();
             $instance->addBreadcrumb('Products', '/product');
             $instance->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
             $instance->addBreadcrumb('Images', '/media/manage/shop/' . $product->getSlug());
@@ -102,9 +102,6 @@ class ProductEditListener extends Listener
 
     public function fileSaved($file)
     {
-        $this->productStore = Store::get('Item');
-        $product = $this->productStore->getById($_GET['item_id']);
-
         $itemFile = new ItemFile();
         $itemFile->setFileId($file->getId());
         $itemFile->setItemId($_GET['item_id']);
