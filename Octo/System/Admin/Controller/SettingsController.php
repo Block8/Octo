@@ -19,10 +19,4 @@ class SettingsController extends Controller
         $this->setTitle('Settings');
         $this->addBreadcrumb('Settings', '/settings');
     }
-
-    public static function registerMenus(/*Menu $menu*/)
-    {
-        // We don't need these for now - they don't work yet!
-        // $menu->addRoot('Settings', '/settings')->setIcon('cog');
-    }
 }
