@@ -34,11 +34,13 @@
 
     <div class="col-md-8">
         <form class="product-form" action="#" method="post" role="form">
+            <input type="hidden" id="item_id" value="{@product.id}">
+
             <div class="product-description">
                 {@product.description}
             </div>
 
-            <div class="product-price" id="main_price" data-default="{@product.price}">
+            <div class="product-price" id="main_price" data-default="{@product.price}" data-value="{@product.price}">
                 &pound;{@product.price}
             </div>
 
@@ -46,9 +48,9 @@
                 {for variants}
                 <div class="form-group">
                     <label>{@item.title}</label>
-                    <select name="variants[{@item.id}]" class="variant form-control" id="variant{@item.id}">
+                    <select name="variants[{@item.id}]" class="variant form-control" id="variant{@item.id}" required>
                         {for item.options}
-                        <option value="{@item.id}" data-price="{@item.price_adjustment}">{@item.title}</option>
+                        <option value="{@item.item_variant_id}" data-price="{@item.price_adjustment}">{@item.title}</option>
                         {/for}
                     </select>
                 </div>
@@ -56,7 +58,7 @@
 
                 <div class="form-group">
                     <label>Quantity</label>
-                    <input type="number" name="quantity" value="1" min="1" max="100" class="form-control">
+                    <input id="item_quantity" type="number" name="quantity" value="1" min="1" max="100" class="form-control">
                 </div>
             </div>
 
@@ -67,32 +69,80 @@
     </div>
 </div>
 
+<script type="text/javascript" src="/assets/js/jquery.cookie.js"></script>
 <script>
 
     $(document).ready( function() {
-        var defaultPrice = parseFloat($('#main_price').attr('data-default'));
+        var defaultPrice = parseFloat($('#main_price').data('default'));
         var priceAdjustments = {};
 
         function updatePrice() {
             var newPrice = defaultPrice;
+
             for (var variant in priceAdjustments) {
-                newPrice += parseFloat(priceAdjustments[variant]);
+                newPrice += parseFloat(priceAdjustments[variant].adjustment);
             }
-            $('#main_price').html('&pound;' + newPrice);
+
+            $('#main_price').html('&pound;' + newPrice.toFixed(2));
         }
+
+        $('.btn-add-to-basket').on('click', function () {
+            Basket.addItem($('#item_id').val(), priceAdjustments, $('#item_quantity').val());
+        });
 
         $('select.variant').each( function(e) {
             var selectId = $(this).attr('id');
             var optionSelected = $("option:selected", this);
-            priceAdjustments[selectId] = optionSelected.data('price');
+            priceAdjustments[selectId] = {variant: optionSelected.val(), adjustment: optionSelected.data('price')};
             updatePrice();
         });
 
         $('select.variant').change( function(e) {
             var selectId = $(this).attr('id');
             var optionSelected = $("option:selected", this);
-            priceAdjustments[selectId] = optionSelected.data('price');
+            priceAdjustments[selectId] = {variant: optionSelected.val(), adjustment: optionSelected.data('price')};
             updatePrice();
         });
     });
+
+var Basket = {
+    getId: function () {
+        var basketId = $.cookie('basket_id');
+
+        if (typeof basketId == 'undefined') {
+            basketId = null;
+        }
+
+        return basketId;
+    },
+
+    addItem: function (id, variants, quantity) {
+        var item = {
+            basket_id: null,
+            item_id: id,
+            quantity: quantity,
+            variants: variants
+        }
+
+        var basketId = Basket.getId();
+        if (basketId != null) {
+            item.basket_id = basketId;
+        }
+
+        $.post(window.location.href, {'add_item': item}, function (data) {
+            var basket = JSON.parse(data);
+
+            $.cookie('basket_id', basket.id, {path: '/'});
+            $.cookie('basket_total', basket.total, {path: '/'});
+            $.cookie('basket_items', basket.items, {path: '/'});
+
+            $(document).trigger('basketUpdated', [basket]);
+            //Basket.update();
+        });
+    }
+}
+
+$(document).on('basketUpdated', function (e, basket) {
+    console.log(basket);
+});
 </script>

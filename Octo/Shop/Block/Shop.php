@@ -6,6 +6,7 @@ use b8\Exception\HttpException\NotFoundException;
 use Octo\Block;
 use Octo\Store;
 use Octo\Template;
+use Octo\Shop\Service\ShopService;
 
 class Shop extends Block
 {
@@ -52,6 +53,11 @@ class Shop extends Block
             $uriPartsCount = count($this->uriParts);
         }
 
+        if ($this->request->getMethod() == 'POST' && array_key_exists('add_item', $_POST)) {
+            $this->addItemToBasket();
+            die('OK');
+        }
+
         // Will need explicit add to basket here
         switch ($uriPartsCount) {
             case 0:
@@ -71,6 +77,7 @@ class Shop extends Block
     protected function renderCategoryList()
     {
         $this->view = Template::getPublicTemplate('Block/ShopCategoryList');
+        $this->view->page = $this->page;
         $this->view->categories = $this->categoryStore->getAllForScope('shop', 'position ASC, name ASC', 'Item');
     }
 
@@ -80,6 +87,7 @@ class Shop extends Block
         $category = $this->categoryStore->getByScopeAndSlug('shop', $categorySlug);
 
         $this->view = Template::getPublicTemplate('Block/ShopProductList');
+        $this->view->page = $this->page;
         $this->view->category = $category;
         $this->view->products = $this->productStore->getByCategoryId($category->getId());
     }
@@ -92,6 +100,7 @@ class Shop extends Block
         $productSlug = $this->uriParts[1];
 
         $this->view = Template::getPublicTemplate('Block/ShopProduct');
+        $this->view->page = $this->page;
         $this->view->category = $category;
         $product  = $this->productStore->getBySlug($productSlug);
 
@@ -141,5 +150,31 @@ class Shop extends Block
         }
 
         return $products;
+    }
+
+    protected function addItemToBasket()
+    {
+        $itemData = $this->request->getParam('add_item');
+
+        $itemStore = Store::get('Item');
+        $lineStore = Store::get('LineItem');
+        $variantStore = Store::get('ItemVariant');
+        $basketStore = Store::get('ShopBasket');
+
+        $service = new ShopService($itemStore, $lineStore, $variantStore, $basketStore);
+        $basket = $service->getBasket($itemData['basket_id']);
+
+        $service->addItemToBasket($basket, $itemData);
+
+        $items = $lineStore->getByBasketId($basket->getId());
+
+        $itemCount = count($items);
+        $basketTotal = 0;
+
+        foreach ($items as $item) {
+            $basketTotal += $item->getLinePrice();
+        }
+
+        die(json_encode(['id' => $basket->getId(), 'items' => $itemCount, 'total' => $basketTotal]));
     }
 }

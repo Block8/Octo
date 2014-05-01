@@ -164,8 +164,6 @@ class InvoiceController extends Admin\Controller
 
     public function view($key, $format = null)
     {
-
-
         $this->view->invoice = $this->invoiceStore->getByPrimaryKey($key);
         $this->view->invoiceItems = $this->lineItemStore->getByInvoiceId($key);
         $this->view->invoiceAdjustments = $this->adjustmentStore->getByInvoiceId($key);

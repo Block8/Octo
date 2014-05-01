@@ -172,5 +172,28 @@ class InvoiceService
         }
 
         $invoice->setTotal($total);
+
+        return $invoice;
+    }
+
+    public function updateSubtotal(Invoice &$invoice)
+    {
+        $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
+        $invoiceSubTotal = 0;
+
+        foreach ($items as $item) {
+            $invoiceSubTotal += $item->getLinePrice();
+        }
+
+        $invoice->setSubtotal($invoiceSubTotal);
+        $this->updateInvoiceTotal($invoice);
+
+        if (Event::trigger('BeforeInvoiceSave', $invoice)) {
+            $invoice = $this->invoiceStore->save($invoice);
+        }
+
+        Event::trigger('OnInvoiceSave', $invoice);
+
+        return $invoice;
     }
 }

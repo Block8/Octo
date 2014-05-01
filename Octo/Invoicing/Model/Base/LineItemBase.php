@@ -37,8 +37,18 @@ trait LineItemBase
         $this->data['line_price'] = null;
         $this->getters['line_price'] = 'getLinePrice';
         $this->setters['line_price'] = 'setLinePrice';
+        $this->data['description'] = null;
+        $this->getters['description'] = 'getDescription';
+        $this->setters['description'] = 'setDescription';
+        $this->data['basket_id'] = null;
+        $this->getters['basket_id'] = 'getBasketId';
+        $this->setters['basket_id'] = 'setBasketId';
 
         // Foreign keys:
+        $this->getters['Basket'] = 'getBasket';
+        $this->setters['Basket'] = 'setBasket';
+        $this->getters['Invoice'] = 'getInvoice';
+        $this->setters['Invoice'] = 'setInvoice';
         $this->getters['Item'] = 'getItem';
         $this->setters['Item'] = 'setItem';
     }
@@ -81,7 +91,7 @@ trait LineItemBase
     /**
     * Get the value of Quantity / quantity.
     *
-    * @return int
+    * @return float
     */
     public function getQuantity()
     {
@@ -115,6 +125,30 @@ trait LineItemBase
     }
 
     /**
+    * Get the value of Description / description.
+    *
+    * @return string
+    */
+    public function getDescription()
+    {
+        $rtn = $this->data['description'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of BasketId / basket_id.
+    *
+    * @return int
+    */
+    public function getBasketId()
+    {
+        $rtn = $this->data['basket_id'];
+
+        return $rtn;
+    }
+
+    /**
     * Set the value of Id / id.
     *
     * Must not be null.
@@ -136,12 +170,10 @@ trait LineItemBase
     /**
     * Set the value of InvoiceId / invoice_id.
     *
-    * Must not be null.
     * @param $value int
     */
     public function setInvoiceId($value)
     {
-        $this->validateNotNull('InvoiceId', $value);
         $this->validateInt('InvoiceId', $value);
 
         if ($this->data['invoice_id'] === $value) {
@@ -172,11 +204,11 @@ trait LineItemBase
     /**
     * Set the value of Quantity / quantity.
     *
-    * @param $value int
+    * @param $value float
     */
     public function setQuantity($value)
     {
-        $this->validateInt('Quantity', $value);
+        $this->validateFloat('Quantity', $value);
 
         if ($this->data['quantity'] === $value) {
             return;
@@ -220,6 +252,136 @@ trait LineItemBase
         $this->setModified('line_price');
     }
 
+    /**
+    * Set the value of Description / description.
+    *
+    * @param $value string
+    */
+    public function setDescription($value)
+    {
+        $this->validateString('Description', $value);
+
+        if ($this->data['description'] === $value) {
+            return;
+        }
+
+        $this->data['description'] = $value;
+        $this->setModified('description');
+    }
+
+    /**
+    * Set the value of BasketId / basket_id.
+    *
+    * @param $value int
+    */
+    public function setBasketId($value)
+    {
+        $this->validateInt('BasketId', $value);
+
+        if ($this->data['basket_id'] === $value) {
+            return;
+        }
+
+        $this->data['basket_id'] = $value;
+        $this->setModified('basket_id');
+    }
+
+    /**
+    * Get the ShopBasket model for this LineItem by Id.
+    *
+    * @uses \Octo\Shop\Store\ShopBasketStore::getById()
+    * @uses \Octo\Shop\Model\ShopBasket
+    * @return \Octo\Shop\Model\ShopBasket
+    */
+    public function getBasket()
+    {
+        $key = $this->getBasketId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('ShopBasket', 'Octo\Shop')->getById($key);
+    }
+
+    /**
+    * Set Basket - Accepts an ID, an array representing a ShopBasket or a ShopBasket model.
+    *
+    * @param $value mixed
+    */
+    public function setBasket($value)
+    {
+        // Is this an instance of ShopBasket?
+        if ($value instanceof \Octo\Shop\Model\ShopBasket) {
+            return $this->setBasketObject($value);
+        }
+
+        // Is this an array representing a ShopBasket item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setBasketId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setBasketId($value);
+    }
+
+    /**
+    * Set Basket - Accepts a ShopBasket model.
+    *
+    * @param $value \Octo\Shop\Model\ShopBasket
+    */
+    public function setBasketObject(\Octo\Shop\Model\ShopBasket $value)
+    {
+        return $this->setBasketId($value->getId());
+    }
+    /**
+    * Get the Invoice model for this LineItem by Id.
+    *
+    * @uses \Octo\Invoicing\Store\InvoiceStore::getById()
+    * @uses \Octo\Invoicing\Model\Invoice
+    * @return \Octo\Invoicing\Model\Invoice
+    */
+    public function getInvoice()
+    {
+        $key = $this->getInvoiceId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('Invoice', 'Octo\Invoicing')->getById($key);
+    }
+
+    /**
+    * Set Invoice - Accepts an ID, an array representing a Invoice or a Invoice model.
+    *
+    * @param $value mixed
+    */
+    public function setInvoice($value)
+    {
+        // Is this an instance of Invoice?
+        if ($value instanceof \Octo\Invoicing\Model\Invoice) {
+            return $this->setInvoiceObject($value);
+        }
+
+        // Is this an array representing a Invoice item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setInvoiceId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setInvoiceId($value);
+    }
+
+    /**
+    * Set Invoice - Accepts a Invoice model.
+    *
+    * @param $value \Octo\Invoicing\Model\Invoice
+    */
+    public function setInvoiceObject(\Octo\Invoicing\Model\Invoice $value)
+    {
+        return $this->setInvoiceId($value->getId());
+    }
     /**
     * Get the Item model for this LineItem by Id.
     *
