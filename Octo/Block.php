@@ -103,7 +103,7 @@ abstract class Block
         $moduleManager = $config->get('ModuleManager');
         $modules = $moduleManager->getEnabled()[$config->get('site.namespace')];
 
-        foreach (glob(CMS_PATH . '*/Block') as $directory) {
+        foreach (glob(APP_PATH . $config->get('site.namespace'). '/*/Block') as $directory) {
             $module = basename(dirname($directory));
 
             if (!in_array($module, $modules)) {
