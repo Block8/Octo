@@ -28,7 +28,8 @@ class GenerateCommand extends Command
         $gen->generateModels();
         $gen->generateStores();
 
-        $controllerGenerator = new ControllerGenerator($connection, $namespaces, $paths);
-        $controllerGenerator->generateControllers();
+        // Removed May 7 2014, as we're not using the functionality.
+        // $controllerGenerator = new ControllerGenerator($connection, $namespaces, $paths);
+        // $controllerGenerator->generateControllers();
     }
 }
