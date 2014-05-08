@@ -17,6 +17,8 @@ test:
         allowed_warnings: 0
         allowed_errors: 0
     php_loc:
+    php_docblock_checker:
+      allowed_warnings: -1
 
 failure:
     email:
