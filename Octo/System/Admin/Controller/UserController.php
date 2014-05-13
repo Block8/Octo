@@ -123,6 +123,11 @@ class UserController extends Controller
                         $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
                     }
                     $user->setValues($params);
+                    
+                    $listenData = [$user, $params];
+                    Event::trigger('beforeUserSave', $listenData);
+                    list($user, $params) = $listenData;
+                    
                     $user = $this->userStore->save($user);
                     $this->successMessage($params['name'] . ' was edited successfully.', true);
 

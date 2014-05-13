@@ -32,13 +32,14 @@ class SessionController extends Controller
         }
 
         $this->view->emailFieldLabel = 'Email Address';
+        $this->userStoreName = 'User';
         $this->userGetMethod = 'getByEmail';
 
         Event::trigger('beforeLogin', $this);
 
         if ($this->request->getMethod() == 'POST') {
             $ugMethod = $this->userGetMethod;
-            $user = $this->userStore->$ugMethod($this->getParam('email'));
+            $user = Store::get($this->userStoreName)->$ugMethod($this->getParam('email'));
 
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
                 Event::trigger('loginSuccess', $user);
