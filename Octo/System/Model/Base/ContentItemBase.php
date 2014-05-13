@@ -52,6 +52,7 @@ trait ContentItemBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -89,5 +90,4 @@ trait ContentItemBase
         $this->data['content'] = $value;
         $this->setModified('content');
     }
-
 }

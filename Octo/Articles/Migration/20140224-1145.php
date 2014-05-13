@@ -17,10 +17,14 @@ $queries = [
       KEY `category_id` (`category_id`),
       KEY `author_id` (`author_id`),
       KEY `content_item_id` (`content_item_id`),
-      CONSTRAINT `article_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT `article_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT `article_ibfk_3` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT `article_ibfk_4` FOREIGN KEY (`content_item_id`) REFERENCES `content_item` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+      CONSTRAINT `article_ibfk_1`
+        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+      CONSTRAINT `article_ibfk_2`
+        FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+      CONSTRAINT `article_ibfk_3`
+        FOREIGN KEY (`author_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+      CONSTRAINT `article_ibfk_4`
+        FOREIGN KEY (`content_item_id`) REFERENCES `content_item` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 
 ];

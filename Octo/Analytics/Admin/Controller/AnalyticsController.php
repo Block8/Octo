@@ -133,7 +133,7 @@ class AnalyticsController extends Controller
 
             // Reset maximum value
             if ($value > $maxValue) {
-               $maxValue = $value;
+                $maxValue = $value;
             }
 
             // Add every third day to the ticks

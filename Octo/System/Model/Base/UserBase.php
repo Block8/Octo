@@ -119,6 +119,7 @@ trait UserBase
         return $rtn;
     }
 
+
     /**
     * Get the value of DateAdded / date_added.
     *

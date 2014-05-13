@@ -6,7 +6,6 @@ namespace Octo\Utilities;
  */
 class StringUtilities
 {
-
     /**
      * Generate a slug from a string
      *
@@ -82,7 +81,8 @@ class StringUtilities
      * @param $append String to append to end, e.g. ...
      * @return string
      */
-    public static function firstWords($string, $num, $append) {
+    public static function firstWords($string, $num, $append)
+    {
         $words = explode(' ', $string);
         $string = implode(' ', array_splice($words, 0, $num));
 

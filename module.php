@@ -1,6 +1,5 @@
 <?php
 
-
 $base = 'Octo/';
 
 $modules = ['Invoicing'];

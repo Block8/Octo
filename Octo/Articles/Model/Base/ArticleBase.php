@@ -207,6 +207,7 @@ trait ArticleBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -397,7 +398,6 @@ trait ArticleBase
         $this->data['slug'] = $value;
         $this->setModified('slug');
     }
-
     /**
     * Get the User model for this Article by Id.
     *

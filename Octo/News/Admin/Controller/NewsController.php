@@ -34,7 +34,7 @@ class NewsController extends Controller
     /**
      * Return the menu nodes required for this controller
      *
-     * @return void
+     * @param Menu $menu
      * @author James Inman
      */
     public static function registerMenus(Menu $menu)
@@ -201,10 +201,11 @@ class NewsController extends Controller
         $form = new FormElement();
         $form->setMethod('POST');
 
+        $adminUri = $this->config->get('site.admin_uri');
         if ($type == 'add') {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/' . $this->scope . '/add');
+            $form->setAction('/' . $adminUri . '/' . $this->scope . '/add');
         } else {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/' . $this->scope . '/edit/' . $values['id']);
+            $form->setAction('/' . $adminUri . '/' . $this->scope . '/edit/' . $values['id']);
         }
 
         $form->setClass('smart-form');

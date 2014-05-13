@@ -17,7 +17,6 @@ class Feed extends Block
 
     public static function getInfo()
     {
-        $config = Config::getInstance();
         return ['title' => 'Feed', 'editor' => true, 'js' => ['/assets/backoffice/js/block/feed.js']];
     }
 

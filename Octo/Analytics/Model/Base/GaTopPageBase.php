@@ -118,6 +118,7 @@ trait GaTopPageBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -221,7 +222,6 @@ trait GaTopPageBase
         $this->data['page_id'] = $value;
         $this->setModified('page_id');
     }
-
     /**
     * Get the Page model for this GaTopPage by Id.
     *

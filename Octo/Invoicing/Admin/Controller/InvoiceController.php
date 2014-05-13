@@ -95,7 +95,8 @@ class InvoiceController extends Admin\Controller
             $this->invoiceService->updateInvoiceItems($invoice, $this->getParam('items', []));
 
             $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/invoice/view/' . $invoice->getId());
+            $redirect = '/'.$this->config->get('site.admin_uri').'/invoice/view/' . $invoice->getId();
+            $this->response->setHeader('Location', $redirect);
             return;
         }
     }
@@ -164,8 +165,6 @@ class InvoiceController extends Admin\Controller
 
     public function view($key, $format = null)
     {
-
-
         $this->view->invoice = $this->invoiceStore->getByPrimaryKey($key);
         $this->view->invoiceItems = $this->lineItemStore->getByInvoiceId($key);
         $this->view->invoiceAdjustments = $this->adjustmentStore->getByInvoiceId($key);

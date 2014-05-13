@@ -1,12 +1,12 @@
 {for categories}
 <ul class="media-list">
     <li class="media">
-        <a href="/{@value.slug}"><img class="media-image" src="{@value.Image.url}" alt=""></a>
+        <a href="{@page.uri}/{@value.slug}"><img class="media-image img-responsive" src="{@value.Image.url}" alt=""></a>
         <div class="media-body">
-            <h4 class="media-heading"><a href="/{@value.slug}">{@value.name}</a></h4>
+            <h4 class="media-heading"><a href="{@page.uri}/{@value.slug}">{@value.name}</a></h4>
             <p>{@value.description}</p>
         </div>
-        <a href="/{@value.slug}" class="btn btn-default">More</a>
+        <a href="{@page.uri}/{@value.slug}" class="btn btn-default">More</a>
     </li>
 </ul>
 {/for}

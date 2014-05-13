@@ -1,11 +1,8 @@
-<div class="form-group {@ccss} {if error}error{/if}">
-	<div class="controls">
-		<label class="checkbox {@css}" for="{@id}">
-			<input class="form-control" type="checkbox" id="{@id}" name="{@name}" value="{@checkedValue}"{if checked} checked{/if}{if required} required{/if}>
-			{@label}
-		</label>
-		{if error}
-			<span class="help-block">{@error}</span>
-        {/if}
-	</div>
+<div class="form-group {@ccss}">
+        <div class="checkbox">
+            <label class="{@css}" for="{@id}">
+                <input class="" type="checkbox" id="{@id}" name="{@name}" value="{@checkedValue}"{if checked} checked{/if}{if required} required{/if}>
+                {@label}
+            </label>
+        </div>
 </div>

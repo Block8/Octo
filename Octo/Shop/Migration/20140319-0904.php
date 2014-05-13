@@ -11,7 +11,8 @@ $queries[] = "CREATE TABLE `order` (
   `order_status_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_status_id` (`order_status_id`),
-  CONSTRAINT `order_ibfk_1` FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `order_ibfk_1`
+    FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $queries[] = "CREATE TABLE `order_status` (
@@ -38,7 +39,8 @@ $queries[] = "CREATE TABLE `item` (
   `active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
-  CONSTRAINT `item_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `item_ibfk_1`
+    FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $queries[] = "CREATE TABLE `line_item` (
@@ -51,8 +53,10 @@ $queries[] = "CREATE TABLE `line_item` (
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   KEY `order_id` (`order_id`),
-  CONSTRAINT `line_item_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `line_item_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `line_item_ibfk_2`
+    FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `line_item_ibfk_1`
+    FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $queries[] = "CREATE TABLE `item_file` (
@@ -75,7 +79,8 @@ $queries[] = "CREATE TABLE `order_adjustment` (
   `data` text,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`),
-  CONSTRAINT `order_adjustment_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `order_adjustment_ibfk_1`
+    FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $queries[] = "RENAME TABLE `order` TO `invoice`;";
@@ -88,16 +93,20 @@ $queries[] = "ALTER TABLE `invoice_adjustment` DROP FOREIGN KEY `invoice_adjustm
 
 $queries[] = "ALTER TABLE `invoice_adjustment` CHANGE `order_id` `invoice_id` INT(10)  UNSIGNED  NOT NULL;";
 
-$queries[] = "ALTER TABLE `invoice_adjustment` ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+$queries[] = "ALTER TABLE `invoice_adjustment`
+ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 
 $queries[] = "ALTER TABLE `invoice` DROP FOREIGN KEY `invoice_ibfk_1`;";
 
-$queries[] = "ALTER TABLE `invoice` CHANGE `order_status_id` `invoice_status_id` INT(11)  UNSIGNED  NULL  DEFAULT NULL;";
+$queries[] = "ALTER TABLE `invoice`
+CHANGE `order_status_id` `invoice_status_id` INT(11)  UNSIGNED  NULL  DEFAULT NULL;";
 
-$queries[] = "ALTER TABLE `invoice` ADD FOREIGN KEY (`invoice_status_id`) REFERENCES `invoice_status` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+$queries[] = "ALTER TABLE `invoice`
+ADD FOREIGN KEY (`invoice_status_id`) REFERENCES `invoice_status` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
 
 $queries[] = "ALTER TABLE `line_item` DROP FOREIGN KEY `line_item_ibfk_2`;";
 
 $queries[] = "ALTER TABLE `line_item` CHANGE `order_id` `invoice_id` INT(11)  UNSIGNED  NOT NULL;";
 
-$queries[] = "ALTER TABLE `line_item` ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+$queries[] = "ALTER TABLE `line_item`
+ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";

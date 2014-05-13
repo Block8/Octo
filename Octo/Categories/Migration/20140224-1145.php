@@ -9,6 +9,7 @@ $queries = [
       `parent_id` int(11) unsigned DEFAULT NULL,
       PRIMARY KEY (`id`),
       KEY `parent_id` (`parent_id`),
-      CONSTRAINT `category_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+      CONSTRAINT `category_ibfk_1`
+        FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 ];

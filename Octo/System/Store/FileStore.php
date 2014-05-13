@@ -25,8 +25,6 @@ class FileStore extends Octo\Store
      */
     public function getAllForScope($scope, $order = 'title ASC')
     {
-        $count = null;
-
         $query = 'SELECT * FROM file WHERE scope = :scope ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);
@@ -52,8 +50,6 @@ class FileStore extends Octo\Store
      */
     public function search($scope, $query)
     {
-        $count = null;
-
         $query = 'SELECT * FROM file WHERE scope = :scope AND title LIKE \'%'.$query.'%\'';
 
         $stmt = Database::getConnection('read')->prepare($query);

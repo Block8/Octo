@@ -14,7 +14,8 @@ $queries[] = "CREATE TABLE `variant_option` (
   `option` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `variant_id` (`variant_id`),
-  CONSTRAINT `variant_option_ibfk_1` FOREIGN KEY (`variant_id`) REFERENCES `variant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `variant_option_ibfk_1`
+    FOREIGN KEY (`variant_id`) REFERENCES `variant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $queries[] = "CREATE TABLE `item_variant` (
@@ -26,7 +27,10 @@ $queries[] = "CREATE TABLE `item_variant` (
   KEY `item_id` (`item_id`),
   KEY `variant_id` (`variant_id`),
   KEY `variant_option_id` (`variant_option_id`),
-  CONSTRAINT `item_variant_ibfk_3` FOREIGN KEY (`variant_option_id`) REFERENCES `variant_option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `item_variant_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `item_variant_ibfk_2` FOREIGN KEY (`variant_id`) REFERENCES `variant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `item_variant_ibfk_3`
+    FOREIGN KEY (`variant_option_id`) REFERENCES `variant_option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `item_variant_ibfk_1`
+    FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `item_variant_ibfk_2`
+    FOREIGN KEY (`variant_id`) REFERENCES `variant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";

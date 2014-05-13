@@ -148,6 +148,7 @@ trait LogBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -291,7 +292,6 @@ trait LogBase
         $this->data['link'] = $value;
         $this->setModified('link');
     }
-
     /**
     * Get the User model for this Log by Id.
     *

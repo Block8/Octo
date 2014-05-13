@@ -39,7 +39,8 @@ abstract class Store extends \b8\Store
      *
      * @return mixed
      */
-    public function getTableName() {
+    public function getTableName()
+    {
         return $this->tableName;
     }
 
@@ -69,14 +70,14 @@ abstract class Store extends \b8\Store
             $colString = implode(', ', $cols);
             $valString = implode(', ', $values);
 
-            $qs = 'REPLACE INTO ' . $this->tableName . ' (' . $colString . ') VALUES (' . $valString . ')';
-            $q = Database::getConnection('write')->prepare($qs);
+            $queryString = 'REPLACE INTO ' . $this->tableName . ' (' . $colString . ') VALUES (' . $valString . ')';
+            $query = Database::getConnection('write')->prepare($queryString);
 
-            if ($q->execute($qParams)) {
-                $id = !empty($data[$this->primaryKey]) ? $data[$this->primaryKey] : Database::getConnection(
+            if ($query->execute($qParams)) {
+                $newId = !empty($data[$this->primaryKey]) ? $data[$this->primaryKey] : Database::getConnection(
                     'write'
                 )->lastInsertId();
-                $rtn = $this->getByPrimaryKey($id, 'write');
+                $rtn = $this->getByPrimaryKey($newId, 'write');
             }
         }
 

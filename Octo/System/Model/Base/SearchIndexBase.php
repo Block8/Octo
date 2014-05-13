@@ -97,6 +97,7 @@ trait SearchIndexBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -191,5 +192,4 @@ trait SearchIndexBase
         $this->data['instances'] = $value;
         $this->setModified('instances');
     }
-
 }

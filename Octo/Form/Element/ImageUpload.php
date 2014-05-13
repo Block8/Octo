@@ -17,10 +17,9 @@ class ImageUpload extends Upload
     protected $multiple = '';
 
     /**
-     * @param null $viewFile
      * @return string
      */
-    public function render($viewFile = null)
+    public function render()
     {
         return parent::render('ImageUpload');
     }
@@ -55,15 +54,15 @@ class ImageUpload extends Upload
 
     public function validate()
     {
-        $multipleFilesUploaded = false;
+        $multipleUploads = false;
         if (strval($this->multiple) != '') {
             $field = str_replace('[]', '', $this->name);
             if (isset($_FILES[$field]['name'][0]) && strlen($_FILES[$field]['name'][0]) > 0) {
-                $multipleFilesUploaded = true;
+                $multipleUploads = true;
             }
         }
 
-        if ($this->getRequired() && !$multipleFilesUploaded && (is_null($this->value) || $this->value == '')) {
+        if ($this->getRequired() && !$multipleUploads && (is_null($this->value) || $this->value == '')) {
             $this->error = $this->getLabel() . ' is required.';
             return false;
         }
@@ -74,7 +73,17 @@ class ImageUpload extends Upload
         }
 
         $validator = $this->getValidator();
+        $this->callValidator($validator);
 
+        if ($this->customError) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function callValidator($validator)
+    {
         if (is_callable($validator)) {
             try {
                 call_user_func_array($validator, array($this->value));
@@ -83,11 +92,5 @@ class ImageUpload extends Upload
                 return false;
             }
         }
-
-        if ($this->customError) {
-            return false;
-        }
-
-        return true;
     }
 }

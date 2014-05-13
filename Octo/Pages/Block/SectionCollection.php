@@ -17,7 +17,11 @@ class SectionCollection extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Section Collection', 'editor' => true, 'js' => ['/assets/backoffice/js/block/sectioncollection.js']];
+        return [
+            'title' => 'Section Collection',
+            'editor' => true,
+            'js' => ['/assets/backoffice/js/block/sectioncollection.js'],
+        ];
     }
 
     public function init()

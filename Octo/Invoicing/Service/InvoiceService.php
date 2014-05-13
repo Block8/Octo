@@ -42,14 +42,17 @@ class InvoiceService
      * @param ItemStore $itemStore
      * @param LineItemStore $lineItemStore
      */
-    public function __construct(InvoiceStore $invoiceStore, InvoiceAdjustmentStore $adjustmentStore, ItemStore $itemStore, LineItemStore $lineItemStore)
-    {
+    public function __construct(
+        InvoiceStore $invoiceStore,
+        InvoiceAdjustmentStore $adjustmentStore,
+        ItemStore $itemStore,
+        LineItemStore $lineItemStore
+    ) {
         $this->invoiceStore = $invoiceStore;
         $this->adjustmentStore = $adjustmentStore;
         $this->lineItemStore = $lineItemStore;
         $this->itemStore = $itemStore;
     }
-
 
     public function createInvoice($title, Contact $contact, DateTime $invoiceDate, $dueDate)
     {
@@ -172,5 +175,28 @@ class InvoiceService
         }
 
         $invoice->setTotal($total);
+
+        return $invoice;
+    }
+
+    public function updateSubtotal(Invoice &$invoice)
+    {
+        $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
+        $invoiceSubTotal = 0;
+
+        foreach ($items as $item) {
+            $invoiceSubTotal += $item->getLinePrice();
+        }
+
+        $invoice->setSubtotal($invoiceSubTotal);
+        $this->updateInvoiceTotal($invoice);
+
+        if (Event::trigger('BeforeInvoiceSave', $invoice)) {
+            $invoice = $this->invoiceStore->save($invoice);
+        }
+
+        Event::trigger('OnInvoiceSave', $invoice);
+
+        return $invoice;
     }
 }

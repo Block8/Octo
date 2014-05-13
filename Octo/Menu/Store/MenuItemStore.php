@@ -8,7 +8,7 @@ namespace Octo\Menu\Store;
 
 use b8\Database;
 use Octo;
-use Octo\Menu\Model\MenuItem;;
+use Octo\Menu\Model\MenuItem;
 
 /**
  * MenuItem Store
@@ -18,7 +18,8 @@ class MenuItemStore extends Octo\Store
 {
     use Base\MenuItemStoreBase;
 
-    public function getForMenu($menuId) {
+    public function getForMenu($menuId)
+    {
         $query = 'SELECT * FROM `menu_item` WHERE `menu_id` = :menu_id ORDER BY `position` ASC';
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindValue(':menu_id', $menuId);

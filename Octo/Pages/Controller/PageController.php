@@ -46,6 +46,8 @@ class PageController extends Controller
      */
     protected $uriExtension;
 
+    protected $blockManager;
+
     public function init()
     {
         $this->pageStore = Store::get('Page');
@@ -57,6 +59,11 @@ class PageController extends Controller
         $path = $this->request->getPath();
 
         $this->page = $this->pageStore->getUriBestMatch($path);
+
+        if (empty($this->page)) {
+            throw new HttpException\NotFoundException('No page found.');
+        }
+
         $this->uriExtension = substr($path, strlen($this->page->getUri()));
 
         if (empty($this->uriExtension)) {
@@ -73,9 +80,9 @@ class PageController extends Controller
 
         try {
             $output = $template->render();
-        } catch(NotFoundException $e) {
+        } catch (NotFoundException $e) {
             throw new NotFoundException('Page not found: ' . $path);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException\ServerErrorException('System Error', 0, $e);
         }
 
@@ -105,7 +112,7 @@ class PageController extends Controller
         }
 
         $template = $this->getTemplate();
-        $blockManager = $this->getBlockManager($template);
+        $this->getBlockManager($template);
         return $template->render();
     }
 
@@ -131,6 +138,8 @@ class PageController extends Controller
         $blockManager->setResponse($this->response);
         $blockManager->attachToTemplate($template);
 
-        return $blockManager;
+        $this->blockManager = $blockManager;
+
+        return $this->blockManager;
     }
 }

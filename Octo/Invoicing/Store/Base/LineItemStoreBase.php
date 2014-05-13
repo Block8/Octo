@@ -170,4 +170,58 @@ trait LineItemStoreBase
         }
 
     }
+
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForBasketId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('LineItem').'\Model\LineItem', $useConnection);
+        $query->from('line_item')->where('`basket_id` = :basket_id');
+        $query->bind(':basket_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of LineItem by BasketId', 0, $ex);
+        }
+    }
+
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return LineItem[]
+     */
+    public function getByBasketId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('LineItem').'\Model\LineItem', $useConnection);
+        $query->from('line_item')->where('`basket_id` = :basket_id');
+        $query->bind(':basket_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get LineItem by BasketId', 0, $ex);
+        }
+
+    }
 }

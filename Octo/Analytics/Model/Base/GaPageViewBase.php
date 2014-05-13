@@ -105,6 +105,7 @@ trait GaPageViewBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -191,5 +192,4 @@ trait GaPageViewBase
         $this->data['metric'] = $value;
         $this->setModified('metric');
     }
-
 }

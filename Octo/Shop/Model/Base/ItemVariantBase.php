@@ -103,6 +103,7 @@ trait ItemVariantBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -182,10 +183,12 @@ trait ItemVariantBase
     /**
     * Set the value of PriceAdjustment / price_adjustment.
     *
+    * Must not be null.
     * @param $value float
     */
     public function setPriceAdjustment($value)
     {
+        $this->validateNotNull('PriceAdjustment', $value);
         $this->validateFloat('PriceAdjustment', $value);
 
         if ($this->data['price_adjustment'] === $value) {
@@ -195,7 +198,6 @@ trait ItemVariantBase
         $this->data['price_adjustment'] = $value;
         $this->setModified('price_adjustment');
     }
-
     /**
     * Get the Item model for this ItemVariant by Id.
     *

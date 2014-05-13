@@ -158,9 +158,10 @@ class UpdateAnalyticsCommand extends Command
         }
     }
 
-    protected function getAuthHeader($email, $password) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://www.google.com/accounts/ClientLogin");
+    protected function getAuthHeader($email, $password)
+    {
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_URL, "https://www.google.com/accounts/ClientLogin");
         $authData = [
             'Email' => $email,
             'Passwd' => $password,
@@ -168,12 +169,12 @@ class UpdateAnalyticsCommand extends Command
             'source' => 'curl-dataFeed-v2',
             'service' => 'analytics'
         ];
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $authData);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        curl_setopt($handle, CURLOPT_HEADER, true);
+        curl_setopt($handle, CURLOPT_POST, true);
+        curl_setopt($handle, CURLOPT_POSTFIELDS, $authData);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($handle);
+        curl_close($handle);
 
         preg_match('/Auth\=(.*)/', $result, $matches);
         $authHeader = $matches[1];
@@ -192,14 +193,14 @@ class UpdateAnalyticsCommand extends Command
             "GData-Version: 2"
         ];
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $feedUri);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_URL, $feedUri);
+        curl_setopt($handle, CURLOPT_HEADER, false);
+        curl_setopt($handle, CURLINFO_HEADER_OUT, true);
+        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($handle);
+        curl_close($handle);
 
         $xml = new SimpleXMLElement($result);
         return $xml;

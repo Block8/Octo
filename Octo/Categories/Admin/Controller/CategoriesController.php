@@ -129,10 +129,12 @@ class CategoriesController extends Controller
                     $category = $this->categoryStore->save($category);
 
                     $this->successMessage($category->getName() . ' was added successfully.', true);
+
+                    $adminUri = $this->config->get('site.admin_uri');
                     if ($useBase) {
-                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope . '/base');
+                        header('Location: /' . $adminUri . '/categories/manage/' . $scope . '/base');
                     } else {
-                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
+                        header('Location: /' . $adminUri . '/categories/manage/' . $scope);
                     }
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error adding the category. Please try again.');
@@ -198,10 +200,12 @@ class CategoriesController extends Controller
                     $category = $this->categoryStore->save($category);
 
                     $this->successMessage($category->getName() . ' was edited successfully.', true);
+
+                    $adminUri = $this->config->get('site.admin_uri');
                     if ($useBase) {
-                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope . '/base');
+                        header('Location: /' . $adminUri . '/categories/manage/' . $scope . '/base');
                     } else {
-                        header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
+                        header('Location: /' . $adminUri . '/categories/manage/' . $scope);
                     }
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the category. Please try again.');
@@ -256,10 +260,11 @@ class CategoriesController extends Controller
             $base = '/base';
         }
 
+        $adminUri = $this->config->get('site.admin_uri');
         if ($type == 'add') {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/categories/add/' . $scope . $base);
+            $form->setAction('/' . $adminUri . '/categories/add/' . $scope . $base);
         } else {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/categories/edit/' . $scope . '/' . $values['id'] . $base);
+            $form->setAction('/' . $adminUri . '/categories/edit/' . $scope . '/' . $values['id'] . $base);
         }
 
         $form->setClass('smart-form');
@@ -316,5 +321,4 @@ class CategoriesController extends Controller
         $form->setValues($values);
         return $form;
     }
-
 }

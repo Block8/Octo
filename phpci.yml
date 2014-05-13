@@ -11,9 +11,14 @@ build_settings:
 
 test:
     php_mess_detector:
+        allowed_warnings: 18 # Error count as at May 1, 2014. Reduce when possible, never increase.
     php_code_sniffer:
         standard: "PSR2"
+        allowed_warnings: 0
+        allowed_errors: 0
     php_loc:
+    php_docblock_checker:
+      allowed_warnings: -1
 
 failure:
     email:

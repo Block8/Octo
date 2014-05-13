@@ -18,7 +18,8 @@ class GaTopPageStore extends Octo\Store
 {
     use Base\GaTopPageStoreBase;
 
-    public function getPages($limit = 5, $order = 'pageviews') {
+    public function getPages($limit = 5, $order = 'pageviews')
+    {
         $query = "SELECT * FROM ga_top_page ORDER BY $order DESC LIMIT $limit";
         $stmt = Database::getConnection('read')->prepare($query);
 

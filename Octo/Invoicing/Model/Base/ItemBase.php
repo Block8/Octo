@@ -201,6 +201,7 @@ trait ItemBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -393,7 +394,6 @@ trait ItemBase
         $this->data['slug'] = $value;
         $this->setModified('slug');
     }
-
     /**
     * Get the Category model for this Item by Id.
     *

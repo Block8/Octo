@@ -54,7 +54,8 @@ class SessionController extends Controller
                 die;
             } else {
                 Event::trigger('loginFailed', $this->view);
-                $this->view->errorMessage = 'Your ' . strtolower($this->view->emailFieldLabel) . ' or password were wrong.';
+                $label = strtolower($this->view->emailFieldLabel);
+                $this->view->errorMessage = 'Your ' . $label . ' or password were wrong.';
             }
         }
     }

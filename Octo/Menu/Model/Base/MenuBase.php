@@ -67,6 +67,7 @@ trait MenuBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -119,5 +120,4 @@ trait MenuBase
         $this->data['template_tag'] = $value;
         $this->setModified('template_tag');
     }
-
 }

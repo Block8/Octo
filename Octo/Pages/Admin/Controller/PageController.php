@@ -40,6 +40,7 @@ class PageController extends Controller
         $manage = new Menu\Item('Manage Pages', '/page');
         $manage->addChild(new Menu\Item('Edit Page', '/page/edit', true));
         $manage->addChild(new Menu\Item('Delete Page', '/page/delete', true));
+        $manage->addChild(new Menu\Item('Save Page', '/page/save', true));
         $manage->addChild(new Menu\Item('Publish Page', '/page/publish', true));
         $pages->addChild($manage);
     }

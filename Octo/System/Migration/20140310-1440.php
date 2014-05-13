@@ -6,4 +6,5 @@ $queries[] = 'CREATE TABLE `file_download` (
   `downloaded` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
-$queries[] = 'ALTER TABLE `file_download` ADD FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;';
+$queries[] = 'ALTER TABLE `file_download` ADD FOREIGN KEY (`file_id`)
+REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;';

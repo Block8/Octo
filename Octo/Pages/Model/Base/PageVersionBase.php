@@ -214,6 +214,7 @@ trait PageVersionBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -427,7 +428,6 @@ trait PageVersionBase
         $this->data['image_id'] = $value;
         $this->setModified('image_id');
     }
-
     /**
     * Get the ContentItem model for this PageVersion by Id.
     *

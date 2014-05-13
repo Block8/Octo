@@ -56,6 +56,7 @@ trait MigrationBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -91,5 +92,4 @@ trait MigrationBase
         $this->data['date_run'] = $value;
         $this->setModified('date_run');
     }
-
 }

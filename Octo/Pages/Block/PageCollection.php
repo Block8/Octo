@@ -17,7 +17,11 @@ class PageCollection extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Page Collection', 'editor' => true, 'js' => ['/assets/backoffice/js/block/pagecollection.js']];
+        return [
+            'title' => 'Page Collection',
+            'editor' => true,
+            'js' => ['/assets/backoffice/js/block/pagecollection.js'],
+        ];
     }
 
     public function init()
@@ -35,9 +39,9 @@ class PageCollection extends Block
 
         if (array_key_exists('pages', $this->content)) {
             $pages = [];
-            $i = 0;
+            $rendered = 0;
             foreach ($this->content['pages'] as $pageId) {
-                if (++$i >= $this->limit) {
+                if (++$rendered >= $this->limit) {
                     break;
                 }
 

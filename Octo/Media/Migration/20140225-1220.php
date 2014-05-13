@@ -15,6 +15,8 @@ $queries[] = "CREATE TABLE `file` (
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `user_id` (`user_id`),
-      CONSTRAINT `file_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT `file_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+      CONSTRAINT `file_ibfk_2`
+        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+      CONSTRAINT `file_ibfk_1`
+        FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";

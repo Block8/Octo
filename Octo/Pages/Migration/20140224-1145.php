@@ -10,8 +10,10 @@ $queries = [
       UNIQUE KEY `uniq_page_uri` (`uri`(100)),
       KEY `fk_page_parent` (`parent_id`),
       KEY `fk_page_current_version` (`current_version_id`),
-      CONSTRAINT `fk_page_current_version` FOREIGN KEY (`current_version_id`) REFERENCES `page_version` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT `fk_page_parent` FOREIGN KEY (`parent_id`) REFERENCES `page` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+      CONSTRAINT `fk_page_current_version`
+        FOREIGN KEY (`current_version_id`) REFERENCES `page_version` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+      CONSTRAINT `fk_page_parent`
+        FOREIGN KEY (`parent_id`) REFERENCES `page` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 
     "CREATE TABLE `page_version` (
@@ -30,8 +32,11 @@ $queries = [
       KEY `fk_page_version_page` (`page_id`),
       KEY `fk_page_version_user` (`user_id`),
       KEY `fk_page_version_content_item` (`content_item_id`),
-      CONSTRAINT `fk_page_version_content_item` FOREIGN KEY (`content_item_id`) REFERENCES `content_item` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT `fk_page_version_page` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-      CONSTRAINT `fk_page_version_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+      CONSTRAINT `fk_page_version_content_item`
+        FOREIGN KEY (`content_item_id`) REFERENCES `content_item` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+      CONSTRAINT `fk_page_version_page`
+        FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+      CONSTRAINT `fk_page_version_user`
+        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 ];

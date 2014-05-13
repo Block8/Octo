@@ -25,7 +25,9 @@ class User extends Octo\Model
         $canAccess = null;
         $callbackData = [$this, $uri, $canAccess];
         Event::trigger('canAccess', $callbackData);
-        list($instance, $uri, $canAccess) = $callbackData;
+
+        $uri = $callbackData[1];
+        $canAccess = $callbackData[2];
 
         if (!is_null($canAccess)) {
             return $canAccess;

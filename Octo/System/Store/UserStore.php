@@ -20,8 +20,6 @@ class UserStore extends Octo\Store
 
     public function getAll($order = 'name ASC')
     {
-        $count = null;
-
         $query = 'SELECT * FROM user WHERE `is_hidden` = 0 ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
 

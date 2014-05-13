@@ -74,9 +74,10 @@ class ContactStore extends Octo\Store
 
     public function search($query)
     {
-        $count = null;
-
-        $query = 'SELECT * FROM contact WHERE first_name LIKE \'%'.$query.'%\' OR last_name LIKE \'%'.$query.'%\'  OR company LIKE \'%'.$query.'%\' ';
+        $query = 'SELECT * FROM contact
+                    WHERE first_name LIKE \'%'.$query.'%\'
+                        OR last_name LIKE \'%'.$query.'%\'
+                        OR company LIKE \'%'.$query.'%\' ';
 
         $stmt = Database::getConnection('read')->prepare($query);
 

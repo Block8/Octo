@@ -38,7 +38,10 @@ class VariantOptionController extends Controller
         $this->addBreadcrumb('Options', '/variant-option/manage/' . $variantId);
 
         $this->view->variant = $variant;
-        $this->view->variantOptions = $this->variantOptionStore->getByVariantId($variantId, ['order' => [['position', 'ASC'], ['id', 'ASC']]]);
+        $this->view->variantOptions = $this->variantOptionStore->getByVariantId(
+            $variantId,
+            ['order' => [['position', 'ASC'], ['id', 'ASC']]]
+        );
     }
 
     public function add($variantId)
@@ -64,7 +67,9 @@ class VariantOptionController extends Controller
                     $variantOption = $this->variantOptionStore->save($variantOption);
 
                     $this->successMessage($variantOption->getOptionTitle() . ' was added successfully.', true);
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/variant-option/manage/' . $variantId);
+
+                    $redirect = $this->config->get('site.admin_uri') . '/variant-option/manage/' . $variantId;
+                    header('Location: /' . $redirect);
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the variant option. Please try again.'
@@ -102,7 +107,9 @@ class VariantOptionController extends Controller
                     $variantOption = $this->variantOptionStore->save($variantOption);
 
                     $this->successMessage($variantOption->getOptionTitle() . ' was edited successfully.', true);
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/variant-option/manage/' . $variantOption->getVariantId());
+                    $adminUri = $this->config->get('site.admin_uri');
+                    $redirect = $adminUri . '/variant-option/manage/' . $variantOption->getVariantId();
+                    header('Location: /' . $redirect);
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error editing the variant option. Please try again.'
@@ -126,7 +133,9 @@ class VariantOptionController extends Controller
         $this->variantOptionStore->delete($variantOption);
 
         $this->successMessage($variantOption->getOptionTitle() . ' was deleted successfully.', true);
-        header('Location: /' . $this->config->get('site.admin_uri') . '/variant-option/manage/' . $variantOption->getVariantId());
+
+        $adminUri = $this->config->get('site.admin_uri');
+        header('Location: /' . $adminUri . '/variant-option/manage/' . $variantOption->getVariantId());
     }
 
     public function variantOptionForm($values = [], $type = 'add')
@@ -134,10 +143,11 @@ class VariantOptionController extends Controller
         $form = new FormElement();
         $form->setMethod('POST');
 
+        $adminUri = $this->config->get('site.admin_uri');
         if ($type == 'add') {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/variant-option/add/' . $values['variant_id']);
+            $form->setAction('/' . $adminUri . '/variant-option/add/' . $values['variant_id']);
         } else {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/variant-option/edit/' . $values['id']);
+            $form->setAction('/' . $adminUri . '/variant-option/edit/' . $values['id']);
         }
 
         $form->setClass('smart-form');
@@ -172,5 +182,4 @@ class VariantOptionController extends Controller
             }
         }
     }
-
 }

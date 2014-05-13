@@ -97,6 +97,7 @@ trait FormBase
         return $rtn;
     }
 
+
     /**
     * Set the value of Id / id.
     *
@@ -187,5 +188,4 @@ trait FormBase
         $this->data['thankyou_message'] = $value;
         $this->setModified('thankyou_message');
     }
-
 }

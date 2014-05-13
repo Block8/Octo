@@ -40,10 +40,30 @@ trait InvoiceBase
         $this->data['invoice_status_id'] = null;
         $this->getters['invoice_status_id'] = 'getInvoiceStatusId';
         $this->setters['invoice_status_id'] = 'setInvoiceStatusId';
+        $this->data['contact_id'] = null;
+        $this->getters['contact_id'] = 'getContactId';
+        $this->setters['contact_id'] = 'setContactId';
+        $this->data['created_date'] = null;
+        $this->getters['created_date'] = 'getCreatedDate';
+        $this->setters['created_date'] = 'setCreatedDate';
+        $this->data['updated_date'] = null;
+        $this->getters['updated_date'] = 'getUpdatedDate';
+        $this->setters['updated_date'] = 'setUpdatedDate';
+        $this->data['due_date'] = null;
+        $this->getters['due_date'] = 'getDueDate';
+        $this->setters['due_date'] = 'setDueDate';
+        $this->data['billing_address'] = null;
+        $this->getters['billing_address'] = 'getBillingAddress';
+        $this->setters['billing_address'] = 'setBillingAddress';
+        $this->data['shipping_address'] = null;
+        $this->getters['shipping_address'] = 'getShippingAddress';
+        $this->setters['shipping_address'] = 'setShippingAddress';
 
         // Foreign keys:
         $this->getters['InvoiceStatus'] = 'getInvoiceStatus';
         $this->setters['InvoiceStatus'] = 'setInvoiceStatus';
+        $this->getters['Contact'] = 'getContact';
+        $this->setters['Contact'] = 'setContact';
     }
     /**
     * Get the value of Id / id.
@@ -128,6 +148,91 @@ trait InvoiceBase
 
         return $rtn;
     }
+
+    /**
+    * Get the value of ContactId / contact_id.
+    *
+    * @return int
+    */
+    public function getContactId()
+    {
+        $rtn = $this->data['contact_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of CreatedDate / created_date.
+    *
+    * @return \DateTime
+    */
+    public function getCreatedDate()
+    {
+        $rtn = $this->data['created_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of UpdatedDate / updated_date.
+    *
+    * @return \DateTime
+    */
+    public function getUpdatedDate()
+    {
+        $rtn = $this->data['updated_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of DueDate / due_date.
+    *
+    * @return \DateTime
+    */
+    public function getDueDate()
+    {
+        $rtn = $this->data['due_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of BillingAddress / billing_address.
+    *
+    * @return string
+    */
+    public function getBillingAddress()
+    {
+        $rtn = $this->data['billing_address'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ShippingAddress / shipping_address.
+    *
+    * @return string
+    */
+    public function getShippingAddress()
+    {
+        $rtn = $this->data['shipping_address'];
+
+        return $rtn;
+    }
+
 
     /**
     * Set the value of Id / id.
@@ -255,6 +360,113 @@ trait InvoiceBase
     }
 
     /**
+    * Set the value of ContactId / contact_id.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setContactId($value)
+    {
+        $this->validateNotNull('ContactId', $value);
+        $this->validateInt('ContactId', $value);
+
+        if ($this->data['contact_id'] === $value) {
+            return;
+        }
+
+        $this->data['contact_id'] = $value;
+        $this->setModified('contact_id');
+    }
+
+    /**
+    * Set the value of CreatedDate / created_date.
+    *
+    * Must not be null.
+    * @param $value \DateTime
+    */
+    public function setCreatedDate($value)
+    {
+        $this->validateNotNull('CreatedDate', $value);
+        $this->validateDate('CreatedDate', $value);
+
+        if ($this->data['created_date'] === $value) {
+            return;
+        }
+
+        $this->data['created_date'] = $value;
+        $this->setModified('created_date');
+    }
+
+    /**
+    * Set the value of UpdatedDate / updated_date.
+    *
+    * Must not be null.
+    * @param $value \DateTime
+    */
+    public function setUpdatedDate($value)
+    {
+        $this->validateNotNull('UpdatedDate', $value);
+        $this->validateDate('UpdatedDate', $value);
+
+        if ($this->data['updated_date'] === $value) {
+            return;
+        }
+
+        $this->data['updated_date'] = $value;
+        $this->setModified('updated_date');
+    }
+
+    /**
+    * Set the value of DueDate / due_date.
+    *
+    * @param $value \DateTime
+    */
+    public function setDueDate($value)
+    {
+        $this->validateDate('DueDate', $value);
+
+        if ($this->data['due_date'] === $value) {
+            return;
+        }
+
+        $this->data['due_date'] = $value;
+        $this->setModified('due_date');
+    }
+
+    /**
+    * Set the value of BillingAddress / billing_address.
+    *
+    * @param $value string
+    */
+    public function setBillingAddress($value)
+    {
+        $this->validateString('BillingAddress', $value);
+
+        if ($this->data['billing_address'] === $value) {
+            return;
+        }
+
+        $this->data['billing_address'] = $value;
+        $this->setModified('billing_address');
+    }
+
+    /**
+    * Set the value of ShippingAddress / shipping_address.
+    *
+    * @param $value string
+    */
+    public function setShippingAddress($value)
+    {
+        $this->validateString('ShippingAddress', $value);
+
+        if ($this->data['shipping_address'] === $value) {
+            return;
+        }
+
+        $this->data['shipping_address'] = $value;
+        $this->setModified('shipping_address');
+    }
+    /**
     * Get the InvoiceStatus model for this Invoice by Id.
     *
     * @uses \Octo\Invoicing\Store\InvoiceStatusStore::getById()
@@ -301,5 +513,53 @@ trait InvoiceBase
     public function setInvoiceStatusObject(\Octo\Invoicing\Model\InvoiceStatus $value)
     {
         return $this->setInvoiceStatusId($value->getId());
+    }
+    /**
+    * Get the Contact model for this Invoice by Id.
+    *
+    * @uses \Octo\System\Store\ContactStore::getById()
+    * @uses \Octo\System\Model\Contact
+    * @return \Octo\System\Model\Contact
+    */
+    public function getContact()
+    {
+        $key = $this->getContactId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('Contact', 'Octo\System')->getById($key);
+    }
+
+    /**
+    * Set Contact - Accepts an ID, an array representing a Contact or a Contact model.
+    *
+    * @param $value mixed
+    */
+    public function setContact($value)
+    {
+        // Is this an instance of Contact?
+        if ($value instanceof \Octo\System\Model\Contact) {
+            return $this->setContactObject($value);
+        }
+
+        // Is this an array representing a Contact item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setContactId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setContactId($value);
+    }
+
+    /**
+    * Set Contact - Accepts a Contact model.
+    *
+    * @param $value \Octo\System\Model\Contact
+    */
+    public function setContactObject(\Octo\System\Model\Contact $value)
+    {
+        return $this->setContactId($value->getId());
     }
 }

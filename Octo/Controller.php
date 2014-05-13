@@ -22,7 +22,8 @@ abstract class Controller extends \b8\Controller
         return $this->response;
     }
 
-    public static function getClass($controller) {
+    public static function getClass($controller)
+    {
         $config = Config::getInstance();
         $siteModules = $config->get('ModuleManager')->getEnabled();
 

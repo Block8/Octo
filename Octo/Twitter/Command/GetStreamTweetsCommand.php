@@ -20,7 +20,7 @@ class GetStreamTweetsCommand extends Command
     {
         $this
             ->setName('tweets:get_stream')
-            ->setDescription('Retrieves and caches tweets for a given search term defined in the application settings.');
+            ->setDescription('Retrieves and caches tweets for a given search term defined in the app settings.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
