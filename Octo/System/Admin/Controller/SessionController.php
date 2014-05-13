@@ -50,7 +50,7 @@ class SessionController extends Controller
                 if (isset($_SESSION['previous_url'])) {
                     $url = $_SESSION['previous_url'];
                 }
-
+                
                 header('Location: ' . $url);
                 die;
             } else {

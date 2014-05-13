@@ -72,6 +72,7 @@ class UserController extends Controller
                     $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
 
                     $user->setValues($params);
+                    $user->setDateAdded(new \DateTime());
                     $user = $this->userStore->save($user);
 
                     $permission = new Permission;
@@ -168,10 +169,12 @@ class UserController extends Controller
         $fieldset = new Form\FieldSet('fieldset');
         $form->addField($fieldset);
 
-        $field = new Form\Element\Hidden('id');
-        $field->setRequired(true);
-        $field->setValue($values['id']);
-        $fieldset->addField($field);
+        if (isset($values['id'])) {
+            $field = new Form\Element\Hidden('id');
+            $field->setRequired(true);
+            $field->setValue($values['id']);
+            $fieldset->addField($field);
+        }
 
         $field = new Form\Element\Text('name');
         $field->setRequired(true);
