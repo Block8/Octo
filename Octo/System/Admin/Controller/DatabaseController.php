@@ -2,6 +2,7 @@
 
 namespace Octo\System\Admin\Controller;
 
+use b8\Config;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
 use Octo\Database\MigrationRunner;
@@ -11,7 +12,7 @@ class DatabaseController extends Controller
 {
     public static function registerMenus(Menu $menu)
     {
-        if ($_SESSION['user']->getIsAdmin()) {
+        if ($_SESSION['user']->getIsAdmin() && !Config::getInstance()->get('b8.hide_database')) {
             $menu->addRoot('Database', '/database')->setIcon('cogs');
         }
     }
