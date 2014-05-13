@@ -118,7 +118,10 @@ class UserController extends Controller
 
                 try {
                     $params = $this->getParams();
-                    $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
+                    
+                    if ($params['password'] != '') {
+                        $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
+                    }
                     $user->setValues($params);
                     $user = $this->userStore->save($user);
                     $this->successMessage($params['name'] . ' was edited successfully.', true);
