@@ -4,6 +4,10 @@ namespace Octo\Admin;
 use b8\Config;
 use Octo\Admin\Menu\Item;
 
+/**
+ * Class Menu
+ * @package Octo\Admin
+ */
 class Menu
 {
     /**

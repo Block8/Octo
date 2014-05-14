@@ -4,8 +4,21 @@ namespace Octo\Admin;
 
 class Template extends \Octo\Template
 {
+
+    /**
+     * Type of template to load
+     *
+     * @var string
+     */
     protected static $templateType = 'admin_templates';
 
+    /**
+     * Load an admin template
+     *
+     * @param $template
+     * @param null $module
+     * @return null|Template
+     */
     public static function getAdminTemplate($template, $module = null)
     {
         $rtn = parent::getAdminTemplate($template, $module);
@@ -21,6 +34,13 @@ class Template extends \Octo\Template
         return $rtn;
     }
 
+    /**
+     * Setup pagination
+     *
+     * @param $args
+     * @param Template $view
+     * @return string
+     */
     public function handlePagination($args, Template $view)
     {
         $uri = $view->getVariable($args['uri']);
@@ -59,6 +79,13 @@ class Template extends \Octo\Template
         return $rtn;
     }
 
+    /**
+     * Setup pagination previous link
+     *
+     * @param $page
+     * @param $uri
+     * @return string
+     */
     protected function getPaginationPrevLink($page, $uri)
     {
         $rtn = '';
@@ -72,6 +99,14 @@ class Template extends \Octo\Template
         return $rtn;
     }
 
+    /**
+     * Setup pagination next link
+     *
+     * @param $page
+     * @param $uri
+     * @param $pages
+     * @return string
+     */
     protected function getPaginationNextLink($page, $uri, $pages)
     {
         $rtn = '';
