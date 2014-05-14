@@ -67,33 +67,7 @@ class Application extends \b8\Application
 
             if ($route['controller'] != 'session') {
                 if (!empty($_SESSION['user_id'])) {
-                    $user = Store::get('User')->getByPrimaryKey($_SESSION['user_id']);
-
-                    if ($user) {
-                        $_SESSION['user'] = $user;
-
-                        $uri = '/';
-
-                        if ($route['controller'] != 'Dashboard') {
-                            $uri .= $route['controller'];
-                        }
-
-                        if ($route['action'] != 'index') {
-                            $uri .= '/' . $route['action'];
-                        }
-
-                        if (in_array($route['controller'], ['categories', 'media']) && isset($route['args'][0])) {
-                            $uri .= '/' . $route['args'][0];
-                        }
-
-                        if (!$user->canAccess($uri) && is_callable($denied)) {
-                            $denied($user, $uri, $response);
-                            return false;
-                        }
-
-
-                        return true;
-                    }
+                    $this->setupUserProperties($route);
 
                     unset($_SESSION['user_id']);
                 }
@@ -113,6 +87,42 @@ class Application extends \b8\Application
 
             return true;
         });
+    }
+
+    /**
+     * Setup the user's permissions etc. for the route
+     *
+     * @param $route
+     * @return bool
+     */
+    protected function setupUserProperties($route)
+    {
+        $user = Store::get('User')->getByPrimaryKey($_SESSION['user_id']);
+
+        if ($user) {
+            $_SESSION['user'] = $user;
+
+            $uri = '/';
+
+            if ($route['controller'] != 'Dashboard') {
+                $uri .= $route['controller'];
+            }
+
+            if ($route['action'] != 'index') {
+                $uri .= '/' . $route['action'];
+            }
+
+            if (in_array($route['controller'], ['categories', 'media']) && isset($route['args'][0])) {
+                $uri .= '/' . $route['args'][0];
+            }
+
+            if (!$user->canAccess($uri) && is_callable($denied)) {
+                $denied($user, $uri, $response);
+                return false;
+            }
+
+            return true;
+        }
     }
 
     /**
