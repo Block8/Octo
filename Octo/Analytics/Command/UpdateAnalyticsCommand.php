@@ -41,8 +41,7 @@ class UpdateAnalyticsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $var = $input;
-        $var = $output;
+        unset($input, $output);
 
         $email = Setting::get('analytics', 'ga_email');
         $password = Setting::get('analytics', 'ga_password');
