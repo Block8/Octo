@@ -297,5 +297,4 @@ trait UserBase
         $this->data['active'] = $value;
         $this->setModified('active');
     }
-
 }
