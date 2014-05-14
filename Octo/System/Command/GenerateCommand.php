@@ -4,9 +4,11 @@ namespace Octo\System\Command;
 
 use b8\Config;
 use b8\Database;
-use Octo\System\CommandBase;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateCommand extends CommandBase
+class GenerateCommand extends Command
 {
     protected function configure()
     {
@@ -15,8 +17,10 @@ class GenerateCommand extends CommandBase
             ->setDescription('Generate models and stores from the database tables.');
     }
 
-    protected function execute()
+    public function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input, $output);
+
         $connection = Database::getConnection();
         $namespaces = Config::getInstance()->get('app.namespaces');
 

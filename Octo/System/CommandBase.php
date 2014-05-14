@@ -7,13 +7,13 @@ use Octo;
 
 class CommandBase extends Command
 {
-    protected function getName()
+    public function getName()
     {
         return 'System';
     }
 
-    protected function execute()
+    public function execute($input, $output)
     {
-        parent::execute();
+        static::run();
     }
 }
