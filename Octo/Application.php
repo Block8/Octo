@@ -15,8 +15,16 @@ use Octo\System\Model\Log;
 use Octo\Store;
 use Octo\Template;
 
+/**
+ * Class Application
+ * @package Octo
+ */
 class Application extends \b8\Application
 {
+
+    /**
+     * Setup the application and register basic routes
+     */
     public function init()
     {
         $path = $this->request->getPath();
@@ -37,6 +45,19 @@ class Application extends \b8\Application
 
         $denied = [$this, 'permissionDenied'];
 
+        return $this->registerRouter($route, $defaults, $request, $denied);
+    }
+
+    /**
+     * Register advanced routers
+     *
+     * @param $route
+     * @param $defaults
+     * @param $request
+     * @param $denied
+     */
+    public function registerRouter($route, $defaults, $request, $denied)
+    {
         $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$request, &$denied) {
             if (!empty($_GET['session_auth'])) {
                 session_id($_GET['session_auth']);
@@ -94,6 +115,14 @@ class Application extends \b8\Application
         });
     }
 
+    /**
+     * Handle the request
+     *
+     * @return mixed
+     * @throws \b8\Exception\HttpException
+     * @throws \Exception
+     * @throws \Exception
+     */
     public function handleRequest()
     {
         try {
@@ -109,6 +138,12 @@ class Application extends \b8\Application
         return $rtn;
     }
 
+    /**
+     * Handle HTTP error
+     *
+     * @param $code
+     * @return mixed
+     */
     protected function handleHttpError($code)
     {
         if (Template::exists('Error/' . $code)) {
@@ -145,6 +180,10 @@ class Application extends \b8\Application
         return $this->controller;
     }
 
+    /**
+     * @param $route
+     * @return bool True if controller exists
+     */
     protected function controllerExists($route)
     {
         $controller = $this->toPhpName($route['controller']);
@@ -154,6 +193,13 @@ class Application extends \b8\Application
         return !is_null($class);
     }
 
+    /**
+     * Callback if permission denied to access
+     *
+     * @param $user
+     * @param $uri
+     * @param $response
+     */
     protected function permissionDenied($user, $uri, &$response)
     {
         $_SESSION['GlobalMessage']['error'] = 'You do not have permission to access: ' . $uri;
