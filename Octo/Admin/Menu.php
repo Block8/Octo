@@ -11,6 +11,9 @@ class Menu
      */
     protected $menu = [];
 
+    /**
+     * Constructor - setup menu and add dashboard
+     */
     public function __construct()
     {
         $this->setupControllerMenus();
@@ -21,6 +24,11 @@ class Menu
         $this->menu = array_merge($this->menu, $menu);
     }
 
+    /**
+     * Render the menu as HTML
+     *
+     * @return string
+     */
     public function __toString()
     {
 
@@ -50,11 +58,20 @@ class Menu
         return $this->menu[$title];
     }
 
+    /**
+     * Get the root item for the requested title
+     *
+     * @param $title
+     * @return Item
+     */
     public function getRoot($title)
     {
         return $this->menu[$title];
     }
 
+    /**
+     * Setup the menus for each controller
+     */
     protected function setupControllerMenus()
     {
         $this->config = Config::getInstance();
@@ -71,6 +88,12 @@ class Menu
         }
     }
 
+    /**
+     * Get menus for each controller
+     *
+     * @param $file
+     * @param $namespace
+     */
     protected function getControllerMenuItems($file, $namespace)
     {
         $controller = '\\' . $namespace . '\\Admin\\Controller\\' . str_replace('.php', '', basename($file));
@@ -81,6 +104,8 @@ class Menu
     }
 
     /**
+     * Get the menu array as a tree
+     *
      * @return array
      */
     public function getTree()
