@@ -5,8 +5,19 @@ use b8;
 use b8\View;
 use Octo\Template;
 
+/**
+ * Class Form
+ * @package Octo
+ */
 class Form extends b8\Form
 {
+
+    /**
+     * Get the view for the form
+     *
+     * @param $view
+     * @return View|null|Template
+     */
     public function getView($view)
     {
         if (Template::exists('Form/' . $view)) {
@@ -17,6 +28,12 @@ class Form extends b8\Form
         return new View($view, B8_PATH . 'Form/View/');
     }
 
+    /**
+     * Get the correct field class for the form
+     *
+     * @param $type
+     * @return null|string
+     */
     public static function getFieldClass($type)
     {
         $config = b8\Config::getInstance();
