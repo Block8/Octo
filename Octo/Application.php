@@ -67,7 +67,7 @@ class Application extends \b8\Application
 
             if ($route['controller'] != 'session') {
                 if (!empty($_SESSION['user_id'])) {
-                    $this->setupUserProperties($route);
+                    $this->setupUserProperties($route, $response, $denied);
 
                     unset($_SESSION['user_id']);
                 }
@@ -93,9 +93,11 @@ class Application extends \b8\Application
      * Setup the user's permissions etc. for the route
      *
      * @param $route
+     * @param $response
+     * @param $denied
      * @return bool
      */
-    protected function setupUserProperties($route)
+    protected function setupUserProperties($route, $response, $denied)
     {
         $user = Store::get('User')->getByPrimaryKey($_SESSION['user_id']);
 
