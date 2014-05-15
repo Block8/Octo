@@ -19,6 +19,8 @@ class MigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input, $output);
+
         try {
             $runner = new MigrationRunner();
             $runner->runMigrations();

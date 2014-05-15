@@ -3,6 +3,10 @@ namespace Octo;
 
 use Octo\Event\Manager;
 
+/**
+ * Class Event
+ * @package Octo
+ */
 class Event
 {
     /**

@@ -45,45 +45,74 @@ class BlockManager
      */
     protected $uriExtensionsHandled = false;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
     }
 
+    /**
+     * @param Page $page
+     */
     public function setPage(Page $page)
     {
         $this->page = $page;
     }
 
+    /**
+     * @param PageVersion $version
+     */
     public function setPageVersion(PageVersion $version)
     {
         $this->version = $version;
     }
 
+    /**
+     * @param $uri
+     */
     public function setUriExtension($uri)
     {
         $this->uri = $uri;
     }
 
+    /**
+     * @param Request $request
+     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
     }
 
+    /**
+     * @param Response $response
+     */
     public function setResponse(Response $response)
     {
         $this->response = $response;
     }
 
+    /**
+     * @param array $content
+     */
     public function setContent(array $content)
     {
         $this->content = $content;
     }
 
+    /**
+     * @param Template $template
+     */
     public function attachToTemplate(Template $template)
     {
         $template->addFunction('block', [$this, 'renderBlock']);
     }
 
+    /**
+     * @param $args
+     * @param $view
+     * @return string|void
+     */
     public function renderBlock($args, &$view)
     {
         // Allow passing variables to blocks
@@ -125,6 +154,20 @@ class BlockManager
 
         $args = array_merge(['variables' => $templateVariables], $args);
 
+        $block = $this->setBlockProperties($block, $args);
+
+        return $block->render();
+    }
+
+    /**
+     * Set template parameters and other properties on a block
+     *
+     * @param $block
+     * @param $args
+     * @return mixed
+     */
+    protected function setBlockProperties($block, $args)
+    {
         $block->setTemplateParams($args);
 
         if ($block->hasUriExtensions()) {
@@ -140,9 +183,14 @@ class BlockManager
             $block->setPageVersion($this->version);
         }
 
-        return $block->render();
+        return $block;
     }
 
+    /**
+     * Whether the block handles URI extensions, e.g. /some_page_with_block/news/article-1/
+     *
+     * @return bool
+     */
     public function uriExtensionsHandled()
     {
         return $this->uriExtensionsHandled;

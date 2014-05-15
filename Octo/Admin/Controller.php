@@ -7,6 +7,10 @@ use b8\Http\Response;
 use Octo\Admin\Menu;
 use Octo\Admin\Template;
 
+/**
+ * Class Controller
+ * @package Octo\Admin
+ */
 abstract class Controller extends \b8\Controller
 {
     protected $className = '';
@@ -54,10 +58,20 @@ abstract class Controller extends \b8\Controller
         return parent::__construct($config, $request, $response);
     }
 
+    /**
+     * Every controller requires an init function
+     */
     public function init()
     {
     }
 
+    /**
+     * Handle the requested action
+     *
+     * @param $action
+     * @param $params
+     * @return mixed
+     */
     public function handleAction($action, $params)
     {
         try {
@@ -107,6 +121,12 @@ abstract class Controller extends \b8\Controller
         return $this->response;
     }
 
+    /**
+     * Display a success message
+     *
+     * @param $message
+     * @param bool $afterRedirect
+     */
     public function successMessage($message, $afterRedirect = false)
     {
         if ($afterRedirect) {
@@ -118,6 +138,12 @@ abstract class Controller extends \b8\Controller
         }
     }
 
+    /**
+     * Display an error message
+     *
+     * @param $message
+     * @param bool $afterRedirect
+     */
     public function errorMessage($message, $afterRedirect = false)
     {
         if ($afterRedirect) {
@@ -129,6 +155,12 @@ abstract class Controller extends \b8\Controller
         }
     }
 
+    /**
+     * Display an info message
+     *
+     * @param $message
+     * @param bool $afterRedirect
+     */
     public function infoMessage($message, $afterRedirect = false)
     {
         if ($afterRedirect) {
@@ -140,11 +172,20 @@ abstract class Controller extends \b8\Controller
         }
     }
 
+    /**
+     * Set the title to display
+     */
     public function setTitle($title)
     {
         $this->layout->title = $title;
     }
 
+    /**
+     * Add an item to the breadcrumbs
+     *
+     * @param $title
+     * @param null $link
+     */
     public function addBreadcrumb($title, $link = null)
     {
         $breadcrumb = $this->layout->breadcrumb;
@@ -152,6 +193,11 @@ abstract class Controller extends \b8\Controller
         $this->layout->breadcrumb = $breadcrumb;
     }
 
+    /**
+     * Remove and return the last breadcrumb
+     *
+     * @return mixed
+     */
     public function popBreadcrumb()
     {
         $breadcrumbs = $this->layout->breadcrumb;
@@ -160,6 +206,12 @@ abstract class Controller extends \b8\Controller
         return $item;
     }
 
+    /**
+     * Get the controller's class
+     *
+     * @param $controller
+     * @return null|string
+     */
     public static function getClass($controller)
     {
         $config = Config::getInstance();
@@ -178,6 +230,11 @@ abstract class Controller extends \b8\Controller
         return null;
     }
 
+    /**
+     * Get the request object
+     *
+     * @return mixed
+     */
     public function getRequest()
     {
         return $this->request;

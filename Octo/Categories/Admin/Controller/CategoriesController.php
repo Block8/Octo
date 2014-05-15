@@ -150,6 +150,13 @@ class CategoriesController extends Controller
         }
     }
 
+    /**
+     * Load the edit form
+     *
+     * @param $scope
+     * @param $categoryId
+     * @param bool $useBase
+     */
     public function edit($scope, $categoryId, $useBase = false)
     {
         $scope_name = ucwords($scope);
@@ -174,6 +181,19 @@ class CategoriesController extends Controller
 
         $this->view->type = $type;
 
+        $this->processEdit($category, $scope, $categoryId, $useBase);
+    }
+
+    /**
+     * Process the form edit
+     *
+     * @param $category
+     * @param $scope
+     * @param $categoryId
+     * @param $useBase
+     */
+    protected function processEdit($category, $scope, $categoryId, $useBase)
+    {
         if ($this->request->getMethod() == 'POST') {
             $values = array_merge($this->getParams(), array('id' => $categoryId));
             $form = $this->categoryForm($scope, $values, 'edit', $useBase);
