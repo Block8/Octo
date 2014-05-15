@@ -1,0 +1,11 @@
+<form action="/stripe-gateway/charge/{@invoice.id}" method="POST">
+    <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_tZxuRnHgK51yODePqrJoTBVR"
+            data-name="{@config.site.name}"
+            data-description="{@itemCount} Items (£{@invoice.total.currency})"
+            data-amount="{@invoiceTotal}"
+            data-currency="GBP"
+            data-email="{@invoice.Contact.email}">
+    </script>
+</form>

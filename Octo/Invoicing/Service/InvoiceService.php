@@ -78,10 +78,25 @@ class InvoiceService
         return $invoice;
     }
 
-    public function updateInvoice(Invoice $invoice, $title, Contact $contact, DateTime $invoiceDate, $dueDate)
+    public function updateInvoice(
+        Invoice $invoice,
+        $title,
+        Contact $contact,
+        DateTime $invoiceDate,
+        $dueDate = null,
+        $billingAddress = null,
+        $shippingAddress = null)
     {
         if (!is_null($dueDate) && !($dueDate instanceof DateTime)) {
             throw new Exception('Due Date must be either NULL or a DateTime object.');
+        }
+
+        if (!is_null($billingAddress) && !is_array($billingAddress)) {
+            throw new Exception('Billing address must be either NULL or an array.');
+        }
+
+        if (!is_null($shippingAddress) && !is_array($shippingAddress)) {
+            throw new Exception('Shipping address must be either NULL or an array.');
         }
 
         $invoice->setTitle($title);
@@ -89,6 +104,8 @@ class InvoiceService
         $invoice->setDueDate($dueDate);
         $invoice->setUpdatedDate(new DateTime());
         $invoice->setContact($contact);
+        $invoice->setBillingAddress((is_array($billingAddress) ? json_encode($billingAddress) : null));
+        $invoice->setShippingAddress((is_array($shippingAddress) ? json_encode($shippingAddress) : null));
 
         if (Event::trigger('BeforeInvoiceSave', $invoice)) {
             $invoice = $this->invoiceStore->saveByUpdate($invoice);
@@ -198,5 +215,10 @@ class InvoiceService
         Event::trigger('OnInvoiceSave', $invoice);
 
         return $invoice;
+    }
+
+    public function getItems(Invoice $invoice)
+    {
+        return $this->lineItemStore->getByInvoiceId($invoice->getId());
     }
 }

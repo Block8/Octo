@@ -21,7 +21,8 @@
     "require": {
         "block8/b8framework": "dev-master",
         "symfony/console": "2.*",
-        "dg/twitter-php": "3.*"
+        "dg/twitter-php": "3.*",
+        "stripe/stripe-php": "dev-master"
     },
 
     "autoload": {
@@ -31,15 +32,5 @@
     "bin": [
         "octocmd",
         "Octo/Public/assets"
-    ],
-
-    "scripts": {
-        "post-update-cmd": [
-            "Octo\\Command\\ComposerCommand::runMigrations"
-        ],
-
-        "post-install-cmd": [
-            "Octo\\Command\\ComposerCommand::runMigrations"
-        ]
-    }
+    ]
 }

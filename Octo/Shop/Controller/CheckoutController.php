@@ -2,8 +2,10 @@
 
 namespace Octo\Shop\Controller;
 
+use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
 use Octo\Controller;
+use Octo\Event;
 use Octo\Form as FormElement;
 use Octo\Invoicing\Service\InvoiceService;
 use Octo\Shop\Store\ShopBasketStore;
@@ -62,12 +64,57 @@ class CheckoutController extends Controller
             $basket = $shopService->getBasket($basketId);
             $invoice = $shopService->createInvoiceForBasket($invoiceService, $basket, $contact);
 
-            var_dump($invoice);
+            $billingAddress = $this->request->getParam('billing_address', []);
+            $shippingAddress = $this->request->getParam('shipping_address', []);
+
+            if ($this->getParam('same_as_billing', false)) {
+                $shippingAddress = $billingAddress;
+            }
+
+            $invoice = $invoiceService->updateInvoice(
+                $invoice,
+                $invoice->getTitle(),
+                $invoice->getContact(),
+                $invoice->getCreatedDate(),
+                $invoice->getDueDate(),
+                $billingAddress,
+                $shippingAddress
+            );
+
+            header('Location: /checkout/invoice/' . $invoice->getId());
+            die;
         }
 
         $form = $this->detailsForm($basketId);
         $view = Template::getPublicTemplate('Checkout/details');
         $view->form = $form;
+
+        return $view->render();
+    }
+
+    public function invoice($invoiceId)
+    {
+        $invoice = Store::get('Invoice')->getById($invoiceId);
+
+        if (is_null($invoice)) {
+            throw new NotFoundException('There is no invoice with ID: ' . $invoiceId);
+        }
+
+        $view = Template::getPublicTemplate('Checkout/invoice');
+        $view->invoice = $invoice;
+        $view->items = $this->getInvoiceService()->getItems($invoice);
+        $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
+        $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
+
+        $invoiceData = [
+            'payment_options' => [],
+            'invoice' => $invoice,
+            'items' => $view->items,
+        ];
+
+        Event::trigger('PaymentOptions', $invoiceData);
+
+        $view->paymentOptions = $invoiceData['payment_options'];
 
         return $view->render();
     }
