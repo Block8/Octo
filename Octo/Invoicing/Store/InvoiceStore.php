@@ -23,4 +23,23 @@ class InvoiceStore extends Octo\Store
 
         return $query->execute()->fetchAll();
     }
+
+    public function getCompletedSinceDate(\DateTime $date)
+    {
+        $criteria = new Query\Criteria();
+        $whereDate = new Query\Criteria();
+        $whereDate->where('updated_date > :since');
+
+        $whereStatus = new Query\Criteria();
+        $whereStatus->where('invoice_status_id = ' . Octo\Invoicing\Model\Invoice::STATUS_PAID);
+
+        $criteria->add($whereDate);
+        $criteria->add($whereStatus);
+
+        $query = new Query($this->getNamespace('Invoice') . '\Model\Invoice');
+        $query->select('*')->from('invoice')->where($criteria)->order('id', 'DESC');
+        $query->bind(':since', $date->format('Y-m-d'));
+
+        return $query->execute()->fetchAll();
+    }
 }

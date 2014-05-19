@@ -10,10 +10,10 @@
                         <h3 class="panel-title">Billing Address</h3>
                     </div>
                     <div class="panel-body">
-                        {@billingAddress.address1}<br>
-                        {@billingAddress.address2}<br>
-                        {@billingAddress.town}<br>
-                        {@billingAddress.postcode}<br>
+                        {if billingAddress.address1}{@billingAddress.address1}<br>{/if}
+                        {if billingAddress.address2}{@billingAddress.address2}<br>{/if}
+                        {if billingAddress.town}{@billingAddress.town}<br>{/if}
+                        {if billingAddress.postcode}{@billingAddress.postcode}<br>{/if}
                     </div>
                 </div>
             </div>
@@ -24,10 +24,10 @@
                         <h3 class="panel-title">Shipping Address</h3>
                     </div>
                     <div class="panel-body">
-                        {@shippingAddress.address1}<br>
-                        {@shippingAddress.address2}<br>
-                        {@shippingAddress.town}<br>
-                        {@shippingAddress.postcode}<br>
+                        {if shippingAddress.address1}{@shippingAddress.address1}<br>{/if}
+                        {if shippingAddress.address2}{@shippingAddress.address2}<br>{/if}
+                        {if shippingAddress.town}{@shippingAddress.town}<br>{/if}
+                        {if shippingAddress.postcode}{@shippingAddress.postcode}<br>{/if}
                     </div>
                 </div>
             </div>
@@ -55,9 +55,9 @@
                         {for items}
                         <tr>
                             <td>{@value.description}</td>
-                            <td style="text-align: right">&pound;{@value.item_price_with_tax.currency}</td>
+                            <td style="text-align: right">&pound;{@value.item_price.currency}</td>
                             <td style="text-align: right">{@value.quantity}</td>
-                            <td style="text-align: right">&pound;{@value.line_price_with_tax.currency}</td>
+                            <td style="text-align: right">&pound;{@value.line_price.currency}</td>
                         </tr>
                         {/for}
                         </tbody>

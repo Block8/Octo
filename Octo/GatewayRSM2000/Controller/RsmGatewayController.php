@@ -17,7 +17,7 @@ use Stripe;
 use Stripe_CardError;
 use Stripe_Charge;
 
-class StripeGatewayController extends Controller
+class RsmGatewayController extends Controller
 {
     public function charge($invoiceId)
     {

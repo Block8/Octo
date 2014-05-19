@@ -21,14 +21,4 @@ class LineItem extends Octo\Model
         $this->getters['line_price_with_tax'] = 'getLinePriceWithTax';
         $this->getters['item_price_with_tax'] = 'getItemPriceWithTax';
     }
-
-    public function getLinePriceWithTax()
-    {
-        return ($this->getLinePrice() * 1.2);
-    }
-
-    public function getItemPriceWithTax()
-    {
-        return ($this->getItemPrice() * 1.2);
-    }
 }

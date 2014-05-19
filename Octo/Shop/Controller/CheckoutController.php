@@ -30,7 +30,7 @@ class CheckoutController extends Controller
         $basketTotal = 0;
 
         foreach ($items as $item) {
-            $basketTotal += $item->getLinePriceWithTax();
+            $basketTotal += $item->getLinePrice();
         }
 
         $view->basketTotal = $basketTotal;
@@ -115,6 +115,23 @@ class CheckoutController extends Controller
         Event::trigger('PaymentOptions', $invoiceData);
 
         $view->paymentOptions = $invoiceData['payment_options'];
+
+        return $view->render();
+    }
+
+    public function thanks($invoiceId)
+    {
+        $invoice = Store::get('Invoice')->getById($invoiceId);
+
+        if (is_null($invoice)) {
+            throw new NotFoundException('There is no invoice with ID: ' . $invoiceId);
+        }
+
+        $view = Template::getPublicTemplate('Checkout/thanks');
+        $view->invoice = $invoice;
+        $view->items = $this->getInvoiceService()->getItems($invoice);
+        $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
+        $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
 
         return $view->render();
     }

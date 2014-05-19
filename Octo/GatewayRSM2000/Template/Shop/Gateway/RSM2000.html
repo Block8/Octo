@@ -1,0 +1,17 @@
+<form id="widget_data_form" action="######################### RSM URL #################" target="cp_widget" method="post" class="auto-form">
+    <input type="hidden" name="vendorid" value="######## RSM VENDOR ID ##########">
+    <input type="hidden" name="firstname" value="{@invoice.Contact.first_name}">
+    <input type="hidden" name="surname" value="{@invoice.Contact.last_name}">
+    <input type="hidden" name="address1" value="{@billingAddress.address1}">
+    <input type="hidden" name="address2" value="{@billingAddress.address2}">
+    <input type="hidden" name="town" value="{@billingAddress.town}">
+    <input type="hidden" name="postcode" value="{@billingAddress.postcode}">
+    <input type="hidden" name="email" value="{@invoice.Contact.email}">
+    <input type="hidden" name="donationfix" value="######### DONATION AMOUNT ###########">
+    <input type="hidden" name="purchasefix" value="{@invoice.total}">
+    <input type="hidden" name="uniqueid" value="########## GUID ########">
+    <input type="hidden" name="giftaid" value="Y">
+    <button type="submit" class="btn btn-black" id="btn-proceed">Proceed to payment</button>
+</form>
+
+<iframe id="cp_widget" name="cp_widget" frameborder="0"></iframe>
