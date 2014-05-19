@@ -25,6 +25,8 @@ class GetStreamTweetsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input, $output);
+
         try {
             TwitterUtilities::getStream();
         } catch (\TwitterException $e) {

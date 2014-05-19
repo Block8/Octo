@@ -7,6 +7,7 @@
 namespace Octo\System\Store;
 
 use b8\Database;
+use b8\Database\Query;
 use Octo;
 use Octo\System\Model\User;
 

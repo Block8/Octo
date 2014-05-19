@@ -7,6 +7,7 @@
 namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
+use Octo\Store;
 
 /**
  * User Base Model
@@ -37,6 +38,12 @@ trait UserBase
         $this->data['is_hidden'] = null;
         $this->getters['is_hidden'] = 'getIsHidden';
         $this->setters['is_hidden'] = 'setIsHidden';
+        $this->data['date_added'] = null;
+        $this->getters['date_added'] = 'getDateAdded';
+        $this->setters['date_added'] = 'setDateAdded';
+        $this->data['active'] = null;
+        $this->getters['active'] = 'getActive';
+        $this->setters['active'] = 'setActive';
 
         // Foreign keys:
     }
@@ -112,6 +119,34 @@ trait UserBase
         return $rtn;
     }
 
+
+    /**
+    * Get the value of DateAdded / date_added.
+    *
+    * @return \DateTime
+    */
+    public function getDateAdded()
+    {
+        $rtn = $this->data['date_added'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Active / active.
+    *
+    * @return int
+    */
+    public function getActive()
+    {
+        $rtn = $this->data['active'];
+
+        return $rtn;
+    }
 
     /**
     * Set the value of Id / id.
@@ -223,5 +258,43 @@ trait UserBase
 
         $this->data['is_hidden'] = $value;
         $this->setModified('is_hidden');
+    }
+
+    /**
+    * Set the value of DateAdded / date_added.
+    *
+    * Must not be null.
+    * @param $value \DateTime
+    */
+    public function setDateAdded($value)
+    {
+        $this->validateNotNull('DateAdded', $value);
+        $this->validateDate('DateAdded', $value);
+
+        if ($this->data['date_added'] === $value) {
+            return;
+        }
+
+        $this->data['date_added'] = $value;
+        $this->setModified('date_added');
+    }
+
+    /**
+    * Set the value of Active / active.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setActive($value)
+    {
+        $this->validateNotNull('Active', $value);
+        $this->validateInt('Active', $value);
+
+        if ($this->data['active'] === $value) {
+            return;
+        }
+
+        $this->data['active'] = $value;
+        $this->setModified('active');
     }
 }

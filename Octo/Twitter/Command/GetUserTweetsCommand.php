@@ -25,6 +25,8 @@ class GetUserTweetsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input, $output);
+
         try {
             TwitterUtilities::getUser();
         } catch (\TwitterException $e) {

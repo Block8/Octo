@@ -52,6 +52,11 @@ class ImageUpload extends Upload
     }
 
 
+    /**
+     * Validate the upload
+     *
+     * @return bool
+     */
     public function validate()
     {
         $multipleUploads = false;
@@ -62,13 +67,7 @@ class ImageUpload extends Upload
             }
         }
 
-        if ($this->getRequired() && !$multipleUploads && (is_null($this->value) || $this->value == '')) {
-            $this->error = $this->getLabel() . ' is required.';
-            return false;
-        }
-
-        if ($this->getPattern() && !preg_match('/' . $this->getPattern() . '/', $this->value)) {
-            $this->error = 'Invalid value entered.';
+        if (!$this->checkValue($multipleUploads)) {
             return false;
         }
 
@@ -82,6 +81,33 @@ class ImageUpload extends Upload
         return true;
     }
 
+    /**
+     * Check whether the correct value has been entered based on multiple or single upload
+     *
+     * @param bool $multipleUploads
+     * @return bool
+     */
+    protected function checkValue($multipleUploads)
+    {
+        if ($this->getRequired() && !$multipleUploads && (is_null($this->value) || $this->value == '')) {
+            $this->error = $this->getLabel() . ' is required.';
+            return false;
+        }
+
+        if ($this->getPattern() && !preg_match('/' . $this->getPattern() . '/', $this->value)) {
+            $this->error = 'Invalid value entered.';
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Call the custom validator
+     *
+     * @param $validator
+     * @return bool
+     */
     protected function callValidator($validator)
     {
         if (is_callable($validator)) {

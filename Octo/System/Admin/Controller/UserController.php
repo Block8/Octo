@@ -7,6 +7,7 @@ use b8\Form;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
+use Octo\Event;
 use Octo\System\Model\User;
 use Octo\System\Model\Permission;
 use Octo\Store;
@@ -71,6 +72,7 @@ class UserController extends Controller
                     $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
 
                     $user->setValues($params);
+                    $user->setDateAdded(new \DateTime());
                     $user = $this->userStore->save($user);
 
                     $permission = new Permission;
@@ -117,8 +119,16 @@ class UserController extends Controller
 
                 try {
                     $params = $this->getParams();
-                    $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
+                    
+                    if ($params['password'] != '') {
+                        $params['hash'] = password_hash($params['password'], PASSWORD_DEFAULT);
+                    }
                     $user->setValues($params);
+                    
+                    $listenData = [$user, $params];
+                    Event::trigger('beforeUserSave', $listenData);
+                    list($user, $params) = $listenData;
+                    
                     $user = $this->userStore->save($user);
                     $this->successMessage($params['name'] . ' was edited successfully.', true);
 
@@ -159,6 +169,13 @@ class UserController extends Controller
         $fieldset = new Form\FieldSet('fieldset');
         $form->addField($fieldset);
 
+        if (isset($values['id'])) {
+            $field = new Form\Element\Hidden('id');
+            $field->setRequired(true);
+            $field->setValue($values['id']);
+            $fieldset->addField($field);
+        }
+
         $field = new Form\Element\Text('name');
         $field->setRequired(true);
         $field->setLabel('Name');
@@ -178,6 +195,21 @@ class UserController extends Controller
         $field->setLabel('Password' . ($type == 'edit' ? ' (leave blank to keep current password)' : ''));
         $fieldset->addField($field);
 
+        if ($this->currentUser->getIsAdmin()) {
+            $field = new Form\Element\Select('is_admin');
+            $field->setRequired(false);
+            $field->setLabel('Administrator');
+            $field->setOptions([0 => 'No', 1 => 'Yes']);
+            $fieldset->addField($field);
+        }
+        
+        $data = [&$form, &$values];
+        Event::trigger('userForm', $data);
+        list($form, $values) = $data;
+
+        $fieldset = new Form\FieldSet('fieldset3');
+        $form->addField($fieldset);
+        
         $field = new Form\Element\Submit();
         $field->setValue('Save User');
         $field->setClass('btn-success');
