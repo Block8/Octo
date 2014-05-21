@@ -14,20 +14,26 @@ class DashboardController extends Controller
     {
         $this->setTitle(Config::getInstance()->get('site.name') . ': Dashboard');
         $this->addBreadcrumb('Dashboard', '/');
+
+        $dashboardOverridden = !Event::trigger('DashboardOverride', $this->view);
+
+        if (!$dashboardOverridden) {
+            $this->loadDashboardWidgets();
+        }
+
+        return;
+
         
         $moduleManager = Config::getInstance()->get('ModuleManager');
 
-        $pageStore = Store::get('Page');
-        
+
         
         if($moduleManager->isEnabled('Spider')) {
-	        $this->view->deadLinks= Store::get('SpiderDeadLink')->getAll();
-	        $this->view->showSpider = true;
+
 	    }   
 
         if ($pageStore && $moduleManager->isEnabled('Pages')) {
-            $this->view->pages = $pageStore->getTotal();
-            $this->view->latestPages = $pageStore->getLatest(5);
+
         }
 
         if ($moduleManager->isEnabled('Forms')) {
@@ -44,14 +50,26 @@ class DashboardController extends Controller
                 $this->view->latestSubmissions = $submissionStore->getAll(0, 5);
             }
         }
+    }
 
-        $this->view->showAnalytics = false;
-        if (Setting::get('analytics', 'ga_email') != '') {
-            $this->view->showAnalytics = true;
-        }
-        
-        $instance = clone($this); // Can't pass and return $this to a listener, sadface.
-        Event::trigger('dashboardLoad', $instance);
-        $this->view = $instance->view;
+    protected function loadDashboardWidgets()
+    {
+        $widgets = [];
+
+        Event::trigger('DashboardWidgets', $widgets);
+
+        uasort($widgets, function ($item1, $item2) {
+            if ($item1['order'] > $item2['order']) {
+                return 1;
+            }
+
+            if ($item2['order'] < $item1['order']) {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        $this->view->widgets = $widgets;
     }
 }
