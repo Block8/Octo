@@ -23,6 +23,9 @@ class DashboardController extends Controller
         if($moduleManager->isEnabled('Spider')) {
 	        $this->view->deadLinks= Store::get('SpiderDeadLink')->getAll();
 	        $this->view->showSpider = true;
+            if (count($this->view->deadLinks) == 0) {
+                $this->view->showSpider = false;
+            }
 	    }   
 
         if ($pageStore && $moduleManager->isEnabled('Pages')) {
