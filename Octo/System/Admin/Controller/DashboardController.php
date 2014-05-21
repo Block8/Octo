@@ -19,36 +19,7 @@ class DashboardController extends Controller
 
         if (!$dashboardOverridden) {
             $this->loadDashboardWidgets();
-        }
-
-        return;
-
-        
-        $moduleManager = Config::getInstance()->get('ModuleManager');
-
-
-        
-        if($moduleManager->isEnabled('Spider')) {
-
-	    }   
-
-        if ($pageStore && $moduleManager->isEnabled('Pages')) {
-
-        }
-
-        if ($moduleManager->isEnabled('Forms')) {
-            $contactStore = Store::get('Contact');
-
-            if ($contactStore) {
-                $this->view->contacts = $contactStore->getTotal();
-            }
-
-            $submissionStore = Store::get('Submission');
-
-            if ($submissionStore) {
-                $this->view->submissions = $submissionStore->getTotal();
-                $this->view->latestSubmissions = $submissionStore->getAll(0, 5);
-            }
+            $this->loadDashboardStatistics();
         }
     }
 
@@ -71,5 +42,14 @@ class DashboardController extends Controller
         });
 
         $this->view->widgets = $widgets;
+    }
+
+    protected function loadDashboardStatistics()
+    {
+        $stats = [];
+
+        Event::trigger('DashboardStatistics', $stats);
+
+        $this->view->statistics = $stats;
     }
 }
