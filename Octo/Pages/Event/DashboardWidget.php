@@ -11,10 +11,23 @@ class DashboardWidget extends Listener
 {
     public function registerListeners(Manager $manager)
     {
-        $manager->registerListener('DashboardWidgets', array($this, 'pagesWidget'));
+        $manager->registerListener('DashboardWidgets', array($this, 'getWidget'));
+        $manager->registerListener('DashboardStatistics', array($this, 'getStatistics'));
     }
 
-    public function pagesWidget(&$widgets)
+    public function getStatistics(&$stats)
+    {
+        $store = Store::get('Page');
+
+        $stats[] = [
+            'title' => 'Total Pages',
+            'count' => number_format($store->getTotal()),
+            'icon' => 'sitemap',
+            'color' => 'greenDark',
+        ];
+    }
+
+    public function getWidget(&$widgets)
     {
         $pageStore = Store::get('Page');
 
