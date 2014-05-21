@@ -137,8 +137,16 @@ class Application extends \b8\Application
         try {
             $rtn = parent::handleRequest();
         } catch (HttpException $ex) {
+            if (CMS_ENV == 'development') {
+                throw $ex;
+            }
+
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
+            if (CMS_ENV == 'development') {
+                throw $ex;
+            }
+
             $rtn = $this->handleHttpError(500);
         }
 

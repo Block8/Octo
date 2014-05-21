@@ -6,6 +6,10 @@ if (!defined('CMS_PATH')) {
     define('CMS_BASE_PATH', dirname(CMS_PATH . '../'));
 }
 
+if (isset($_SERVER['APPLICATION_ENV'])) {
+    define('CMS_ENV', $_SERVER['APPLICATION_ENV']);
+}
+
 date_default_timezone_set('Europe/London');
 
 // Set up xdebug
