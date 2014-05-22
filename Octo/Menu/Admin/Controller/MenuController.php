@@ -60,7 +60,7 @@ class MenuController extends Controller
 
         if ($this->request->getMethod() == 'POST') {
             $values = $this->getParams();
-            $form = $this->menuForm($values, 'edit');
+            $form = $this->menuForm($values, 'add');
 
             if ($form->validate()) {
                 $menu = new Menu();
