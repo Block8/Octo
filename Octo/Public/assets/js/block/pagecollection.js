@@ -16,6 +16,8 @@ window.blockEditors.PageCollection = PageBlock.extend({
             self.pageList.append(item);
         }
 
+        $('.modal-footer button').attr('disabled', true);
+
         $.ajax({
             url: '/'+window.adminUri+'/page/metadata',
             data: {
@@ -29,12 +31,13 @@ window.blockEditors.PageCollection = PageBlock.extend({
                 });
                 modalBody.append(pageList);
 
-                self.editor = pagePicker('collection-page', 'Add a page', current);
+                self.editor = pagePicker('collection-page', 'Add a page', blockContent.pages);
                 self.editor.find('#collection-page').on('change', function () {
-                    appendPage($(this).val(), $(this).select2('data'));
+                    appendPage($(this).val(), $(this).select2('data').text);
                 });
 
                 modalBody.append(self.editor);
+                $('.modal-footer button').attr('disabled', false);
             }
         });
     },
