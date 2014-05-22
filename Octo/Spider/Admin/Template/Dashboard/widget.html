@@ -1,0 +1,33 @@
+<div class="col-lg-12">
+    <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+        <header role="heading">
+            <h2><i class="fa fa-fw fa-bug "></i> Dead Link Spider</h2>
+        </header>
+
+        <div role="content">
+            <div class="widget-body no-padding">
+                <table class="table table-bordered table-striped" width="100%">
+                    <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Linked From</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {for deadLinks}
+                    <tr>
+                        <td width="40%" style="overflow:hidden;text-overflow:ellipsis;">{@value.url}</td>
+                        <td width="40%" style="overflow:hidden;text-overflow:ellipsis;">{@value.parent_url}</td>
+                        <td width="10%" style="overflow:hidden;text-overflow:ellipsis;">{@value.http_response_code}</td>
+                    </tr>
+                    {/for}
+                    </tbody>
+                </table>
+                <div class="bar-holder">
+                    <div style="text-align:right;margin-top:1em;"><a class="btn btn-default" href="javascript:void(0);">Scan Now</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
