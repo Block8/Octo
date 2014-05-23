@@ -7,8 +7,10 @@
 namespace Octo\Spider\Store\Base;
 
 use PDOException;
+use b8\Cache;
 use b8\Database;
 use b8\Database\Query;
+use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\Spider\Model\SpiderDeadLink;
@@ -35,6 +37,7 @@ trait SpiderDeadLinkStoreBase
         return $this->getById($value, $useConnection);
     }
 
+
     /**
     * @param $value
     * @param string $useConnection Connection type to use.
@@ -54,7 +57,6 @@ trait SpiderDeadLinkStoreBase
 
         try {
             $query->execute();
-
             return $query->fetch();
         } catch (PDOException $ex) {
             throw new StoreException('Could not get SpiderDeadLink by Id', 0, $ex);

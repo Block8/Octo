@@ -7,7 +7,6 @@
 namespace Octo\System\Model\Base;
 
 use b8\Store\Factory;
-use Octo\Store;
 
 /**
  * User Base Model
@@ -119,7 +118,6 @@ trait UserBase
         return $rtn;
     }
 
-
     /**
     * Get the value of DateAdded / date_added.
     *
@@ -147,6 +145,7 @@ trait UserBase
 
         return $rtn;
     }
+
 
     /**
     * Set the value of Id / id.
@@ -263,12 +262,10 @@ trait UserBase
     /**
     * Set the value of DateAdded / date_added.
     *
-    * Must not be null.
     * @param $value \DateTime
     */
     public function setDateAdded($value)
     {
-        $this->validateNotNull('DateAdded', $value);
         $this->validateDate('DateAdded', $value);
 
         if ($this->data['date_added'] === $value) {
@@ -282,12 +279,10 @@ trait UserBase
     /**
     * Set the value of Active / active.
     *
-    * Must not be null.
     * @param $value int
     */
     public function setActive($value)
     {
-        $this->validateNotNull('Active', $value);
         $this->validateInt('Active', $value);
 
         if ($this->data['active'] === $value) {

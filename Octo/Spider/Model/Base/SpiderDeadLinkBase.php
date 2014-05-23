@@ -6,6 +6,8 @@
 
 namespace Octo\Spider\Model\Base;
 
+use b8\Store\Factory;
+
 /**
  * SpiderDeadLink Base Model
  */
@@ -109,6 +111,7 @@ trait SpiderDeadLinkBase
 
         return $rtn;
     }
+
 
     /**
     * Set the value of Id / id.
