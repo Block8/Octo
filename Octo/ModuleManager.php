@@ -34,7 +34,12 @@ class ModuleManager
     
     public function isEnabled($module)
     {
-        return isset($this->modules[$module]);
+    	foreach($this->modules as $modules) {
+    		if(in_array($module, $modules)) {
+    			return true;
+    		}
+    	}
+        return false;
     }
 
     public function initialiseModules()

@@ -380,6 +380,20 @@ class PageController extends Controller
         die(json_encode($rtn));
     }
 
+    // Get meta information about a set of pages described by Id.
+    public function metadata()
+    {
+        $pageIds = json_decode($this->getParam('q', '[]'));
+        $rtn = ['results' => [], 'more' => false];
+        foreach($pageIds as $pageId) {
+            $page = $this->pageStore->getById($pageId);
+            if($page) {
+                $rtn['results'][] = ['id' => $page->getId(), 'text' => $page->getCurrentVersion()->getTitle()];
+            }
+        }
+        die(json_encode($rtn));
+    }
+
     public function sort()
     {
         $positions = $this->getParam('positions', []);

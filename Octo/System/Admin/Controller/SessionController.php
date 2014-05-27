@@ -42,7 +42,6 @@ class SessionController extends Controller
             $user = Store::get($this->userStoreName)->$ugMethod($this->getParam('email'));
 
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
-                Event::trigger('loginSuccess', $user);
                 $_SESSION['user_id'] = $user->getId();
 
                 $url = '/' . $this->config->get('site.admin_uri');
@@ -50,7 +49,7 @@ class SessionController extends Controller
                 if (isset($_SESSION['previous_url'])) {
                     $url = $_SESSION['previous_url'];
                 }
-                
+
                 header('Location: ' . $url);
                 die;
             } else {

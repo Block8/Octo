@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\Controller;
+namespace Octo\System\Controller;
 
 use Octo\Block;
 use Octo\Controller;
@@ -23,7 +23,6 @@ class SearchController extends Controller
     {
         $query = $this->getParam('q', '');
         $results = $this->searchStore->search($query);
-
         $results = array_map([$this, 'render'], $results);
 
         $view = Template::getPublicTemplate('Search/results');
