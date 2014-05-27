@@ -3,6 +3,7 @@
 define('APP_PATH', getcwd() . '/');
 define('CMS_BASE_PATH', dirname(__FILE__) . '/');
 define('CMS_PATH', CMS_BASE_PATH . 'Octo/');
+
 define('IS_CONSOLE', true);
 
 require_once(CMS_PATH . 'bootstrap.php');
@@ -12,7 +13,18 @@ $items = glob(CMS_PATH.'*/Command/*.php');
 
 foreach ($items as $item) {
     $command = str_replace([CMS_BASE_PATH, '/', '.php'], ['', '\\', ''], $item);
+    echo $command."     ";
     $application->add(new $command());
+}
+
+// Add commands found in the application namespace
+foreach (glob(APP_PATH."*", GLOB_ONLYDIR) as $path) {
+    $items = glob($path.'/*/Command/*.php');
+    foreach ($items as $item) {
+        $command = str_replace([APP_PATH, '/', '.php'], ['', '\\', ''], $item);
+        echo $command."     ";
+        $application->add(new $command());
+    }
 }
 
 $application->run();
