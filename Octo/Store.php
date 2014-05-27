@@ -83,4 +83,35 @@ abstract class Store extends \b8\Store
 
         return $rtn;
     }
+
+    public function getPaginatedResults($modelName, $table, $page, $perPage, array $criteria)
+    {
+        $query = new Database\Query($modelName, 'read');
+        $query->select('*')->from($table);
+
+        $criteriaContainer = new Database\Query\Criteria();
+
+        foreach ($criteria as $where) {
+            if ($where instanceof Database\Query\Criteria) {
+                $criteriaContainer->add($where);
+            } else {
+                $thisCriteria = new Database\Query\Criteria();
+                $thisCriteria->where($where);
+
+                $criteriaContainer->add($thisCriteria);
+            }
+        }
+
+        // Make the pagination zero-indexed:
+        $page -= 1;
+        $offset = ($page - 1) * $perPage;
+
+        $query->offset($offset);
+        $query->limit($perPage);
+
+        $query->where($criteriaContainer);
+
+        $query->execute();
+        return $query->fetchAll();
+    }
 }
