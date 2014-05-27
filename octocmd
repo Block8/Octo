@@ -13,7 +13,6 @@ $items = glob(CMS_PATH.'*/Command/*.php');
 
 foreach ($items as $item) {
     $command = str_replace([CMS_BASE_PATH, '/', '.php'], ['', '\\', ''], $item);
-    echo $command."     ";
     $application->add(new $command());
 }
 
@@ -22,7 +21,6 @@ foreach (glob(APP_PATH."*", GLOB_ONLYDIR) as $path) {
     $items = glob($path.'/*/Command/*.php');
     foreach ($items as $item) {
         $command = str_replace([APP_PATH, '/', '.php'], ['', '\\', ''], $item);
-        echo $command."     ";
         $application->add(new $command());
     }
 }
