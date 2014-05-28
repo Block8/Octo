@@ -37,6 +37,27 @@ class ContactStore extends Octo\Store
         return 0;
     }
 
+    /**
+     * Return all users eligible to receive marketing messages
+     */
+    public function getMarketingProspects()
+    {
+        $query = "SELECT * FROM contact WHERE marketing_optin = 1 AND is_blocked = 0";
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Contact($item);
+            };
+            $rtn = array_map($map, $res);
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
+
     public function findContact(array $details)
     {
         $database = Database::getConnection('read');
