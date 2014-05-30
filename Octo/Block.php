@@ -199,11 +199,19 @@ abstract class Block
 
         if ($rtn === false) {
             return '';
-        } elseif (is_string($rtn)) {
-            return $rtn;
-        } else {
-            return $this->view->render();
         }
+
+        if (!is_string($rtn)) {
+            $rtn = $this->view->render();
+        }
+
+        if (!empty($rtn) && isset($this->templateParams['wrapper'])) {
+            $wrapper = Template::getPublicTemplate('Block/' . $this->templateParams['wrapper']);
+            $wrapper->content = $rtn;
+            $rtn = $wrapper->render();
+        }
+
+        return $rtn;
     }
 
     abstract public function renderNow();
