@@ -111,6 +111,20 @@ class News extends Block
             throw new NotFoundException('News item not found: ' . $slug);
         }
 
+        if (!isset($this->dataStore['breadcrumb']) || !is_array($this->dataStore['breadcrumb'])) {
+            $this->dataStore['breadcrumb'] = [];
+        }
+
+        foreach ($this->dataStore['breadcrumb'] as &$breadcrumb) {
+            $breadcrumb['active'] = false;
+        }
+
+        $this->dataStore['breadcrumb'][] = [
+            'uri' => $item->getFullUrl(),
+            'title' => $item->getTitle(),
+            'active' => true,
+        ];
+
         $content = $item->getContentItem()->getContent();
         $content = json_decode($content, true);
         $content = $content['content'];

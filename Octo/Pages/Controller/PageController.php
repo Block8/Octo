@@ -8,6 +8,7 @@ use b8\Exception\HttpException;
 use Octo\Block;
 use Octo\BlockManager;
 use Octo\Controller;
+use Octo\Event;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
 use Octo\System\Model\ContentItem;
@@ -47,6 +48,8 @@ class PageController extends Controller
     protected $uriExtension;
 
     protected $blockManager;
+
+    public $breadcrumb = [];
 
     public function init()
     {
@@ -89,6 +92,15 @@ class PageController extends Controller
         if (!is_null($this->uriExtension) && !$blockManager->uriExtensionsHandled()) {
             throw new NotFoundException('Page not found: ' . $path);
         }
+
+        $data = [
+            'page' => $this->page,
+            'version' => $this->version,
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
 
         return $output;
     }

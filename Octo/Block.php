@@ -55,6 +55,8 @@ abstract class Block
      */
     protected $pageVersion;
 
+    protected $dataStore;
+
 
     public static function getBlocks()
     {
@@ -173,10 +175,6 @@ abstract class Block
 
     public function render()
     {
-        if (defined('USE_DEFERRED_RENDERING')) {
-            return $this->renderDeferred();
-        }
-
         $parts = explode('\\', get_class($this));
         $class = array_pop($parts);
 
@@ -197,6 +195,11 @@ abstract class Block
 
         $rtn = $this->renderNow();
 
+        if (method_exists($this, 'renderDeferred')) {
+            $manager = Event::getEventManager();
+            $manager->registerListener('PageLoaded', [$this, 'renderDeferred']);
+        }
+
         if ($rtn === false) {
             return '';
         }
@@ -215,11 +218,6 @@ abstract class Block
     }
 
     abstract public function renderNow();
-
-    public function renderDeferred()
-    {
-        throw new \Exception('Deferred rendering is not yet supported.');
-    }
 
     public function setRequest(Request &$request)
     {
@@ -249,5 +247,10 @@ abstract class Block
     public function setPageVersion(PageVersion &$pageVersion)
     {
         $this->pageVersion =& $pageVersion;
+    }
+
+    public function setDataStore(array &$dataStore)
+    {
+        $this->dataStore =& $dataStore;
     }
 }

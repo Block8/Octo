@@ -37,4 +37,9 @@ class Event
 
         return self::$manager->triggerEvent($event, $data);
     }
+
+    public static function getEventManager()
+    {
+        return self::$manager;
+    }
 }

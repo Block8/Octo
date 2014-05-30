@@ -4,6 +4,7 @@ namespace Octo\Pages\Block;
 
 use b8\Database;
 use Octo\Block;
+use Octo\Event;
 use Octo\Page\Model\Page;
 use Octo\Store;
 use Octo\Template;
@@ -25,13 +26,20 @@ class Breadcrumb extends Block
         $this->pageStore = Store::get('Page');
     }
 
+    public function renderDeferred(&$data)
+    {
+        $this->view->items = $this->dataStore['breadcrumb'];
+        $data['output'] = str_replace('{@@@octo.breadcrumb@@@}', $this->view->render(), $data['output']);
+    }
+
+
     public function renderNow()
     {
-        if (!isset($this->page)) {
-            return;
+        if (!isset($this->dataStore['breadcrumb']) || !count($this->dataStore['breadcrumb'])) {
+            $this->dataStore['breadcrumb'] = $this->getAncestors();
         }
 
-        $this->view->items = $this->getAncestors();
+        return '{@@@octo.breadcrumb@@@}';
     }
 
     protected function getAncestors()

@@ -95,7 +95,7 @@ abstract class Store extends \b8\Store
     public function query($page, $perPage, array $order = [], array $criteria = [], array $bind = [])
     {
         $query = new Database\Query($this->modelName, 'read');
-        $query->select('*')->from($this->tableName);
+        $query->select($this->tableName . '.*')->from($this->tableName);
 
         $page -= 1; // Make the pagination zero-indexed
         $offset = $page * $perPage;
