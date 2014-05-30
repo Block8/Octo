@@ -83,7 +83,7 @@ class PageController extends Controller
         } catch (NotFoundException $e) {
             throw new NotFoundException('Page not found: ' . $path);
         } catch (Exception $e) {
-            throw new HttpException\ServerErrorException('System Error', 0, $e);
+            throw $e;
         }
 
         if (!is_null($this->uriExtension) && !$blockManager->uriExtensionsHandled()) {
