@@ -22,6 +22,11 @@ class News extends Block
      */
     protected static $scope = 'news';
 
+    /**
+     * @var \Octo\Articles\Store\ArticleStore
+     */
+    protected $newsStore;
+
     public static function getInfo()
     {
         return [
@@ -33,6 +38,8 @@ class News extends Block
 
     public function renderNow()
     {
+        $this->newsStore = Store::get('Article');
+
         if (!empty($this->uri)) {
             return $this->renderNewsItem($this->uri);
         } else {
@@ -47,19 +54,42 @@ class News extends Block
             $this->view = Template::getPublicTemplate($template);
         }
 
-        $limit = 100;
+        $limit = 10;
 
         if (!empty($this->templateParams['count'])) {
-            $limit = $this->templateParams['count'];
+            $limit = (int)$this->templateParams['count'];
         }
 
         if (!empty($this->content['perPage'])) {
-            $limit = $this->content['perPage'];
+            $limit = (int)$this->content['perPage'];
         }
 
         $category = !empty($this->content['category']) ? $this->content['category'] : null;
 
-        $news = Store::get('Article')->getRecent($category, $limit, static::$scope);
+        $pagination = [
+            'current' => (int)$this->request->getParam('p', 1),
+            'limit' => $limit,
+            'uri' => $this->page->getUri() . '?',
+        ];
+
+        $criteria = [];
+        $params = [];
+
+        $criteria[] = 'c.scope = :scope';
+        $params[':scope'] = static::$scope;
+
+        if (!is_null($category)) {
+            $criteria[] = 'category_id = :category_id';
+            $params[':category_id'] = $category;
+        }
+
+        $query = $this->newsStore->query($pagination['current'], $limit, ['publish_date', 'DESC'], $criteria, $params);
+        $query->join('category', 'c', 'c.id = article.category_id');
+        $pagination['total'] = $query->getCount();
+
+        $query->execute();
+
+        $news = $query->fetchAll();
         $base = $this->request->getPath();
 
         if ($base == '/') {
@@ -68,13 +98,14 @@ class News extends Block
 
         $this->view->articles = $news;
         $this->view->base = $base;
+        $this->view->pagination = $pagination;
 
         return $news;
     }
 
     public function renderNewsItem($slug)
     {
-        $item = Store::get('Article')->getBySlug($slug);
+        $item = $this->newsStore->getBySlug($slug);
 
         if (!$item) {
             throw new NotFoundException('News item not found: ' . $slug);
