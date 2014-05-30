@@ -19,14 +19,27 @@
                     <tr>
                         <td width="40%" style="overflow:hidden;text-overflow:ellipsis;">{@value.url}</td>
                         <td width="40%" style="overflow:hidden;text-overflow:ellipsis;">{@value.parent_url}</td>
-                        <td width="10%" style="overflow:hidden;text-overflow:ellipsis;">{@value.http_response_code}</td>
+                        <td width="10%" style="overflow:hidden;text-overflow:ellipsis;">
+                            {if value.http_response_code = 404}
+                            Page Not Found
+                            {/if}
+
+                            {if value.http_response_code = 500}
+                            Server Error
+                            {/if}
+
+                            {if value.http_response_code = 0}
+                            Connect Error
+                            {/if}
+
+                            {if value.http_response_code = 9001}
+                            Blacklisted
+                            {/if}
+                        </td>
                     </tr>
                     {/for}
                     </tbody>
                 </table>
-                <div class="bar-holder">
-                    <div style="text-align:right;margin-top:1em;"><a class="btn btn-default" href="javascript:void(0);">Scan Now</a></div>
-                </div>
             </div>
         </div>
     </div>

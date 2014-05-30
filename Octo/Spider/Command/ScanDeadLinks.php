@@ -18,14 +18,15 @@ use Octo\Spider\Model\SpiderDeadLink;
 
 class ScanDeadLinks extends Command
 {
-    protected $scanQueue = array();
-    protected $deadLinks = array();
+    protected $scanQueue = [];
+    protected $deadLinks = [];
     protected $pageStore;
     protected $deadLinkStore;
     protected $oldDeadLinks;
     protected $siteRoot;
     protected $stdOut;
     protected $maximumDepth = 5;
+    protected $blacklist = [];
 
     protected function configure()
     {
@@ -38,6 +39,7 @@ class ScanDeadLinks extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->siteRoot = Config::getInstance()->get('site.url')."/";
+        $this->blacklist = Config::getInstance()->get('site.spider.blacklist', []);
         $this->stdOut = $output;
         $this->pageStore = Store::get('Page');
         $this->deadLinkStore = Store::get('SpiderDeadLink');
@@ -114,7 +116,40 @@ class ScanDeadLinks extends Command
                 $ahref = $doc->getElementsByTagName('a');
                 if ($depth < $this->maximumDepth) {
                     foreach ($ahref as $link) {
-                        $linkUrl = $this->rel2abs($link->getAttribute('href'), $baseUrl);
+                        $href = (string)$link->getAttribute('href');
+
+                        if (substr($href, 0, 7) == 'mailto:') {
+                            continue;
+                        }
+
+                        if (substr($href, 0, 4) == 'tel:') {
+                            continue;
+                        }
+
+                        if (substr($href, 0, 4) == 'sms:') {
+                            continue;
+                        }
+
+                        $linkUrl = $this->rel2abs($href, $baseUrl);
+
+                        // Check the resulting link against our URL blacklist:
+                        $badLink = false;
+                        foreach ($this->blacklist as $blockedUrl) {
+                            if (substr($linkUrl, 0, strlen($blockedUrl)) == $blockedUrl) {
+                                $badLink = true;
+                            }
+                        }
+
+                        if ($badLink) {
+                            $this->deadLinks[] = [
+                                'url' => $linkUrl,
+                                'parent_url' => $baseUrl,
+                                'http_response_code' => 9001,
+                            ];
+
+                            continue;
+                        }
+
                         if (!in_array($linkUrl, $this->scanQueue)) {
                             $this->scanQueue[] = $linkUrl;
                             $this->crawlPage($linkUrl, $baseUrl, ($depth + 1));
@@ -144,6 +179,7 @@ class ScanDeadLinks extends Command
         $data = curl_exec($curlHandle);
         $httpCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         curl_close($curlHandle);
+
         if ($httpCode >= 400 || $httpCode == 0) {
             throw new \Exception("HTTP Error", $httpCode);
         }
@@ -157,27 +193,34 @@ class ScanDeadLinks extends Command
         if (parse_url($rel, PHP_URL_SCHEME) != '') {
             return strtok($rel, '#');
         }
+
         if (!isset($rel[0])) {
             return $this->siteRoot;
         }
+
         if ($rel[0]=='#' || $rel[0]=='?') {
             return strtok($base.$rel, '#');
         }
-        extract(parse_url($base));
-        $path = preg_replace('#/[^/]*$#', '', $path);
+
+        $url = parse_url($base);
+        $path = preg_replace('#/[^/]*$#', '', $url['path']);
+
         if ($rel[0] == '/') {
             $path = '';
         }
+
         if (parse_url($base, PHP_URL_PORT) != '') {
-            $abs = "$host:".parse_url($base, PHP_URL_PORT)."$path/$rel";
+            $abs = $url['host'] . ':' .parse_url($base, PHP_URL_PORT)."$path/$rel";
         } else {
-            $abs = "$host$path/$rel";
+            $abs = $url['host'] . "$path/$rel";
         }
+
         $re = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
         for ($n=1; $n>0; $abs=preg_replace($re, '/', $abs, -1, $n)) {
         }
-        if ($scheme == "http" || $scheme == "https") {
-            return strtok($scheme.'://'.$abs, "#");
+
+        if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {
+            return strtok($url['scheme'].'://'.$abs, '#');
         } else {
             return $this->siteRoot;
         }
