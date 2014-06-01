@@ -74,6 +74,10 @@ class UserController extends Controller
                     $user->setValues($params);
                     $user->setDateAdded(new \DateTime());
                     $user = $this->userStore->save($user);
+                    
+                    $data = [$user, $params];
+                    Event::trigger('userSaved', $data);
+                    list($user, $params) = $data;
 
                     $permission = new Permission;
                     $permission->setUserId($user->getId());
