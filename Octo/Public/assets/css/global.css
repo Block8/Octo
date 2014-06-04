@@ -18,7 +18,8 @@
  * - CUSTOM STYLES
  */
 #content {
-    overflow: auto;
+    /* Causes menu items to be cropped */
+    /* overflow: auto; */
 }
 
 th, td {
