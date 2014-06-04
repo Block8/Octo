@@ -20,10 +20,8 @@ class Form extends b8\Form
      */
     public function getView($view)
     {
-        $template = Template::getAdminTemplate('Form/' . $view, 'System');
-        if ($template) {
-            $view = Template::getAdminTemplate('Form/' . $view, 'System');
-            return $view;
+        if (Template::exists('Form/' . $view)) {
+            return Template::getAdminTemplate('Form/' . $view, 'System');
         }
 
         return new View($view, B8_PATH . 'Form/View/');
