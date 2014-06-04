@@ -27,7 +27,8 @@ class PageStore extends Octo\Store
      */
     public function getHomepage($useConnection = 'read')
     {
-        $query = 'SELECT * FROM page WHERE parent_id IS NULL';
+        // $query = 'SELECT * FROM page WHERE parent_id IS NULL';
+        $query = 'SELECT * FROM page WHERE uri="/"';
         $stmt = Database::getConnection($useConnection)->prepare($query);
 
         if ($stmt->execute()) {

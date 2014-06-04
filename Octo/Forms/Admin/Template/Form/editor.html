@@ -109,6 +109,30 @@ $(document).ready(function() {
             $(this).width($(this).width());
         });
         return ui;
+    }
+
+    var fieldTypes = {
+        "": {title: 'Please select...', options: false},
+
+        // Built in types:
+        name: {title: 'Name', required: true, contact: true, options: false},
+        email: {title: 'Email Address', required: true, contact: true, options: false},
+        phone: {title: 'Phone', required: true, contact: true, options: false},
+        address: {title: 'Address', required: true, contact: true, options: false},
+        gender: {title: 'Gender', required: true, contact: true, options: false},
+        title: {title: 'Title', required: true, contact: true, options: false},
+        date_of_birth: {title: 'Date of Birth', required: true, contact: true, options: false},
+        company: {title: 'Company', required: true, contact: true, options: false},
+        marketing_optin: {title: 'Marketing Opt-in', required: true, contact: true, options: false},
+        message: {title: 'Message', required: true, contact: false, options: false},
+
+        // Custom fields:
+        text: {title: 'Text', required: false, contact: false, options: false},
+        text_area: {title: 'Text Box', required: false, contact: false, options: false},
+        select: {title: 'Dropdown', required: false, contact: false, options: true},
+        radio: {title: 'Radio Buttons', required: false, contact: false, options: true},
+        checkbox: {title: 'Check box', required: false, contact: false, options: false},
+        textblock: {title: 'Text Block', required: false, contact: false, options: false}
     };
 
     $('#form-fields tbody').sortable({
