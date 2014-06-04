@@ -3,9 +3,11 @@ window.basicCkEditor = {
         [ 'Source' ],
         [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
         [ 'Link', 'Unlink' ],
-        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ]
+        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
+        [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
+    extraPlugins: 'scayt,undo',
     resizeEnabled: false,
     height: '200px'
 };
@@ -15,9 +17,11 @@ window.smallCkEditor = {
         [ 'Source' ],
         [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
         [ 'Link', 'Unlink' ],
-        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ]
+        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
+        [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
+    extraPlugins: 'scayt,undo',
     resizeEnabled: false,
     height: '100px'
 };
@@ -30,11 +34,12 @@ window.fullCkEditor = {
         [ 'Link', 'Unlink' ],
         [ 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
-        [ 'cmsimage', 'cmsfile', 'Youtube', 'Table' ]
+        [ 'cmsimage', 'cmsfile', 'Youtube', 'Table' ],
+        [ 'Scayt' ]
     ],
     removePlugins: 'elementspath,image',
     resizeEnabled: false,
-    extraPlugins: 'youtube,cmsfile,cmsimage',
+    extraPlugins: 'youtube,cmsfile,cmsimage,scayt,undo',
     alllowedContent: true,
     height: '200px',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
