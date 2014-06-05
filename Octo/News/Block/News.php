@@ -96,6 +96,7 @@ class News extends Block
             $base = '';
         }
 
+        $this->view->uri = $this->page->getUri();
         $this->view->articles = $news;
         $this->view->base = $base;
         $this->view->pagination = $pagination;
