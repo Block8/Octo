@@ -155,7 +155,6 @@ class NewsController extends Controller
                     $article->setValues($this->getParams());
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
-                    $article->setCreatedDate(new \DateTime());
                     $article->setUpdatedDate(new \DateTime());
 
                     if (trim($this->getParam('summary')) == '') {
