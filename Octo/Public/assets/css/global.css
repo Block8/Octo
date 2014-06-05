@@ -19,7 +19,8 @@
  */
 #content {
     /* Causes menu items to be cropped */
-    /* overflow: auto; */
+    overflow: auto;
+    padding-bottom:320px;
 }
 
 th, td {
