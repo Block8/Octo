@@ -102,8 +102,10 @@ class NewsController extends Controller
                     $article->setContentItemId($hash);
                     $article->setCreatedDate(new \DateTime());
                     $article->setUpdatedDate(new \DateTime());
-                    $article->setSummary($article->generateSummary());
                     $article->setSlug($article->generateSlug());
+                    if (empty($this->getParam('summary'))) {
+                        $article->setSummary($article->generateSummary());
+                    }
 
                     Event::trigger('before' . $this->articleType . 'Save', $article);
                     $article = $this->articleStore->save($article);
