@@ -92,8 +92,7 @@ class MediaController extends Controller
      */
     public function download($fileId)
     {
-        $file = File::getById($fileId);
-
+        $file = $this->fileStore->getById($fileId);
         $download = new FileDownload();
         $download->setFileId($file->getId());
         $download->setDownloaded(new \DateTime);
