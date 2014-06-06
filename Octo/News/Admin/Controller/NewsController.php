@@ -70,9 +70,43 @@ class NewsController extends Controller
         $this->addBreadcrumb($this->articleType, '/' . $this->lowerArticleType);
     }
 
+    /**
+     * List Articles Blog or News
+     *
+     * @return void
+     * @author Leszek Pietrzak
+     *
+     */
     public function index()
     {
-        $this->view->articles = $this->articleStore->getAllForCategoryScope($this->scope);
+        //IMHO limit should be included in url, easy to set by user
+        $pagination = [
+            'current' => (int)$this->request->getParam('p', 1),
+            'limit' => 20,
+            'uri' => $this->request->getPath() . '?',
+        ];
+
+        $category = !empty($this->content['category']) ? $this->content['category'] : null;
+
+        $criteria = [];
+        $params = [];
+
+        $criteria[] = 'c.scope = :scope';
+        $params[':scope'] = $this->scope;
+
+        if (!is_null($category)) {
+            $criteria[] = 'category_id = :category_id';
+            $params[':category_id'] = $category;
+        }
+
+        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'DESC'], $criteria, $params);
+        $query->join('category', 'c', 'c.id = article.category_id');
+
+        $pagination['total'] = $query->getCount();
+        $query->execute();
+
+        $this->view->pagination = $pagination;
+        $this->view->articles = $query->fetchAll();
     }
 
     public function add()
