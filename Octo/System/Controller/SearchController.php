@@ -34,12 +34,14 @@ class SearchController extends Controller
 
     public function render($item)
     {
-        $parts = explode('\\', get_class($item));
-        $class = array_pop($parts);
+        if (!is_null($item)) {
+            $parts = explode('\\', get_class($item));
+            $class = array_pop($parts);
 
-        $view = Template::getPublicTemplate('Search/Type/' . $class);
-        $view->result = $item;
+            $view = Template::getPublicTemplate('Search/Type/' . $class);
+            $view->result = $item;
 
-        return $view->render();
+            return $view->render();
+        }
     }
 }
