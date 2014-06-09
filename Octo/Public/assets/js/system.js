@@ -207,3 +207,8 @@ function pagePicker(id, label, value)
 
     return section;
 }
+
+//Need jQuery
+$('.btn-delete').on('click', function () {
+    return confirm('Are you sure?');
+});
