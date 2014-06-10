@@ -67,7 +67,7 @@ class NewsController extends Controller
         $this->lowerArticleType = 'article';
 
         $this->setTitle($this->articleType);
-        $this->addBreadcrumb($this->articleType, '/' . $this->lowerArticleType);
+        $this->addBreadcrumb($this->articleType, '/' . $this->scope);
     }
 
     public function index()
@@ -78,7 +78,7 @@ class NewsController extends Controller
     public function add()
     {
         $this->setTitle('Add ' . $this->articleType);
-        $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->lowerArticleType . '/add');
+        $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->scope . '/add');
 
         if ($this->request->getMethod() == 'POST') {
             $form = $this->newsForm($this->getParams());
@@ -132,7 +132,7 @@ class NewsController extends Controller
     {
         $article = $this->articleStore->getById($newsId);
         $this->setTitle($article->getTitle());
-        $this->addBreadcrumb($article->getTitle(), $this->lowerArticleType . '/edit/' . $newsId);
+        $this->addBreadcrumb($article->getTitle(), '/' . $this->scope. '/edit/' . $newsId);
 
         $this->view->title = $article->getTitle();
 
