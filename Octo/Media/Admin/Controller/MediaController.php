@@ -135,6 +135,7 @@ class MediaController extends Controller
                 exit;
             }
         }
+        $this->view->scope = $scope;
     }
 
     public function edit($scope, $fileId)

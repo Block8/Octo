@@ -1,5 +1,5 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-picture-o"></i> Upload</h1>
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-picture-o"></i> Upload</h1>
 </div>
 
 <div class="span12" style="margin-top: 60px;">
@@ -18,6 +18,16 @@
             <th colspan="2">Uploaded files</th>
         </tr>
     </thead>
+    <tfoot>
+    <tr>
+        <td colspan="2">
+            <div class="pull-right">
+                <a href="/{@adminUri}/media/manage/{@scope}{@queryStringAppend}">Manage {@scope}</a> |
+                <a class="btn-default btn" href="/{@adminUri}/media/add/{@scope}{@queryStringAppend}"><i class="fa fa-plus"></i> Upload more {@scope}</a>
+            </div>
+        </td>
+    </tr>
+    </tfoot>
 	<tbody>
     </tbody>
 </table>
