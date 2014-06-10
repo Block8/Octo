@@ -5,21 +5,19 @@
         </header>
 
         <div role="content">
-            <div class="widget-body no-padding">
-                <table class="table table-bordered table-striped" width="100%">
-                    <thead>
-                    <tr>
-                        <th>URL</th>
-                        <th>Linked From</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {for deadLinks}
-                    <tr>
-                        <td width="40%" style="overflow:hidden;text-overflow:ellipsis;">{@value.url}</td>
-                        <td width="40%" style="overflow:hidden;text-overflow:ellipsis;">{@value.parent_url}</td>
-                        <td width="10%" style="overflow:hidden;text-overflow:ellipsis;">
+            <div class="widget-body no-padding" style="font-size:11px;" id="dead-link-spider">
+                <div role="content-fluid">
+                <div class="row">
+                    <div class="col-md-5"><h4>URL</h4></div>
+                    <div class="col-md-5"><h4>Linked From</h4></div>
+                    <div class="col-md-2"><h4>Status</h4></div>
+                </div>
+
+                {for deadLinks}
+                <div class="row" styles="padding:2px;">
+                    <div class="col-md-5" style="">{@value.url}</div>
+                        <div class="col-md-5" style="">{@value.parent_url}</div>
+                            <div class="col-md-2" style="">
                             {if value.http_response_code = 404}
                             Page Not Found
                             {/if}
@@ -35,11 +33,11 @@
                             {if value.http_response_code = 9001}
                             Blacklisted
                             {/if}
-                        </td>
-                    </tr>
+                        </div>
+                </div>
                     {/for}
-                    </tbody>
-                </table>
+
+                </div>
             </div>
         </div>
     </div>
