@@ -4,6 +4,7 @@ namespace Octo\Analytics\Admin\Controller;
 
 use \DateTime;
 use Octo\Admin\Controller;
+use Octo\Admin\Menu;
 use Octo\Store;
 use Octo\Analytics\Model\GaPageView;
 use Octo\Analytics\Store\GaPageViewStore;
