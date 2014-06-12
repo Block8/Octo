@@ -58,7 +58,10 @@ class TemplateFunctions extends Listener
         $template->addFunction('var_dump', function ($args, Template $view) {
             ob_start();
             var_dump($view->getVariable($args['variable']));
+            $rtn = ob_get_contents();
             ob_end_clean();
+
+            return $rtn;
         });
     }
 
