@@ -25,6 +25,15 @@ class AnalyticsController extends Controller
      */
     protected $gaSummaryViewStore;
 
+    public static function registerMenus(Menu $menu)
+    {
+        $root = $menu->addRoot('Analytics', '/analytics', true)->setIcon('chart');
+        $root->addChild(new Menu\Item('Metric', '/analytics/metric'));
+        $root->addChild(new Menu\Item('Responsive', '/analytics/responsive'));
+        $root->addChild(new Menu\Item('Top Pages', '/analytics/top-pages'));
+        $root->addChild(new Menu\Item('Responsive', '/analytics/top-unique-pages'));
+    }
+
     public function init()
     {
         $this->gaTopPageStore = Store::get('GaTopPage');
