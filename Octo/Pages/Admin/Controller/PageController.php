@@ -367,14 +367,21 @@ class PageController extends Controller
         $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
     }
 
-    public function autocomplete()
+    public function autocomplete($identifier = 'id')
     {
         $pages = $this->pageStore->search($this->getParam('q', ''));
 
         $rtn = ['results' => [], 'more' => false];
 
         foreach ($pages as $page) {
-            $rtn['results'][] = ['id' => $page->getId(), 'text' => $page->getCurrentVersion()->getTitle()];
+
+            $id = $page->getId();
+
+            if ($identifier == 'uri') {
+                $id = $page->getUri();
+            }
+
+            $rtn['results'][] = ['id' => $id, 'text' => $page->getCurrentVersion()->getTitle()];
         }
 
         die(json_encode($rtn));

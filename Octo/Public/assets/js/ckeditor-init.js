@@ -2,7 +2,7 @@ window.basicCkEditor = {
     toolbar: [
         [ 'Source' ],
         [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
-        [ 'Link', 'Unlink' ],
+        [ 'octolink' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
@@ -16,7 +16,7 @@ window.smallCkEditor = {
     toolbar: [
         [ 'Source' ],
         [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
-        [ 'Link', 'Unlink' ],
+        [ 'octolink' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
@@ -34,12 +34,12 @@ window.fullCkEditor = {
         [ 'Link', 'Unlink' ],
         [ 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
-        [ 'cmsimage', 'cmsfile', 'Youtube', 'Table' ],
+        [ 'octolink', 'cmsimage', 'cmsfile', 'Youtube', 'Table' ],
         [ 'Scayt' ]
     ],
     removePlugins: 'elementspath,image',
     resizeEnabled: false,
-    extraPlugins: 'youtube,cmsfile,cmsimage,scayt,undo',
+    extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     alllowedContent: true,
     height: '200px',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
