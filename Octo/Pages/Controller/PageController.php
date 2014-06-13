@@ -18,12 +18,12 @@ use Octo\Template;
 class PageController extends Controller
 {
     /**
-     * @var \Octo\Page\Store\PageStore
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 
     /**
-     * @var \Octo\Page\Store\PageVersionStore
+     * @var \Octo\Pages\Store\PageVersionStore
      */
     protected $versionStore;
 
@@ -33,12 +33,12 @@ class PageController extends Controller
     protected $content;
 
     /**
-     * @var \Octo\Page\Model\Page
+     * @var \Octo\Pages\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Page\Model\PageVersion
+     * @var \Octo\Pages\Model\PageVersion
      */
     protected $version;
 
