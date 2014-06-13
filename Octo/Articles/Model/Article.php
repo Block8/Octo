@@ -44,8 +44,36 @@ class Article extends Octo\Model
         $category = $this->categoryStore->getById($this->getCategoryId());
 
         $slug = $this->getParentSlugs($category) . '/' . $slug;
-        return $slug;
+
+        //check if it is unique
+        $uniqueId = '';
+        while(!$this->isUniqueSlug($slug . $uniqueId))
+        {
+            $uniqueId = '-' . substr(sha1(uniqid('', true)), 0, 5);
+        }
+
+        return $slug . $uniqueId;
     }
+
+    /**
+     * @return bool check if Slug for the article based on category is unique
+     */
+    public function isUniqueSlug($slug)
+    {
+        $articleStore = Store::get('Article');
+
+        try {
+            $rtn = $articleStore->getBySlug($slug);
+        } catch (StoreException $se) {
+            $rtn = false;
+
+        }
+
+        return !$rtn;
+    }
+
+
+
 
     /**
      * @return string Slug for the article based on category
