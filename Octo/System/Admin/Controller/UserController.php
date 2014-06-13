@@ -106,7 +106,7 @@ class UserController extends Controller
         $user = $this->userStore->getById($userId);
 
         $this->setTitle('Edit User: ' . $user->getName());
-        $this->addBreadcrumb($user->getName(), '/user/edit');
+        $this->addBreadcrumb($user->getName(), '/user/edit/' . $userId);
 
         if ($this->request->getMethod() == 'POST') {
             $form = $this->userForm($this->getParams(), 'edit');

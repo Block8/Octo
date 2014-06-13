@@ -90,6 +90,8 @@ class PageController extends Controller
             return $this->createPage();
         }
 
+        $this->addBreadcrumb('Add Page', '/page/add');
+
         $form = new FormElement();
         $form->setMethod('POST');
         $form->setAction('/' . $this->config->get('site.admin_uri') . '/page/add');
@@ -202,7 +204,7 @@ class PageController extends Controller
         $latest = $this->versionStore->save($latest);
 
         $this->setTitle('Edit: ' . $latest->getTitle());
-        $this->addBreadcrumb($latest->getTitle());
+        $this->addBreadcrumb($latest->getTitle(), '/page/edit/' . $pageId);
 
 
         $blocks = $this->parseTemplate($latest->getTemplate());
