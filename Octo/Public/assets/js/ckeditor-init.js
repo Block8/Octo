@@ -55,4 +55,9 @@ $(document).ready(function() {
     $('textarea.ckeditor.advanced').ckeditor(window.fullCkEditor);
 
     $("table.dnd").tableDnD();
+
+    // Dirty IE fix for CKEditor in Bootstrap 3 Modal Windows.
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {};
+
+
 });
