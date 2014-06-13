@@ -30,13 +30,13 @@ function fileSizeSI(a,b,c,d,e){
 $(document).ready(function()
 {
 	var uploader = new plupload.Uploader({
-		runtimes : 'html5,flash,gears,silverlight,browserplus',
+		runtimes : 'html5,html4',
 		browse_button : 'select-files',
 		drop_element : 'upload-container',
 		max_file_size : '10mb',
 		url : window.location.href,
-		flash_swf_url : '/assets/backoffice/js/plupload/plupload.flash.swf',
-		silverlight_xap_url : '/assets/backoffice/js/plupload/plupload.silverlight.xap',
+		flash_swf_url : '/assets/backoffice/js/plupload/Moxie.swf',
+		silverlight_xap_url : '/assets/backoffice/js/plupload/Moxie.xap',
 		filters : []
 	});
 
