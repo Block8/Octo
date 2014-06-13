@@ -153,7 +153,7 @@ class PageController extends Controller
         // Create an ID for the page, which will also create a temporary URI for it:
         $page->generateId();
 
-        /** @var \Octo\Page\Model\Page $page */
+        /** @var \Octo\Pages\Model\Page $page */
         $page = $this->pageStore->saveByInsert($page);
 
         // Set up the current version of the page:
