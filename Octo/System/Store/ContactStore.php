@@ -115,4 +115,11 @@ class ContactStore extends Octo\Store
             return [];
         }
     }
+
+
+    public function getUnsubscribeHash($id, $email) {
+        $hashSecret = 'z!Fx~36N66>io3Bskhjsfsjd8JjCd4+Ld-s2^ca{19Q/5u';
+        return sha1($id . $email . $hashSecret);
+    }
+
 }

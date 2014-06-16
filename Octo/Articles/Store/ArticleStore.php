@@ -37,6 +37,8 @@ class ArticleStore extends Octo\Store
         return $query->execute()->fetchAll();
     }
 
+
+
     /**
      * Get the most recent articles for a category
      *

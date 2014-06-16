@@ -67,18 +67,52 @@ class NewsController extends Controller
         $this->lowerArticleType = 'article';
 
         $this->setTitle($this->articleType);
-        $this->addBreadcrumb($this->articleType, '/' . $this->lowerArticleType);
+        $this->addBreadcrumb($this->articleType, '/' . $this->scope);
     }
 
+    /**
+     * List Articles Blog or News
+     *
+     * @return void
+     * @author Leszek Pietrzak
+     *
+     */
     public function index()
     {
-        $this->view->articles = $this->articleStore->getAllForCategoryScope($this->scope);
+        //IMHO limit should be included in url, easy to set by user
+        $pagination = [
+            'current' => (int)$this->request->getParam('p', 1),
+            'limit' => 20,
+            'uri' => $this->request->getPath() . '?',
+        ];
+
+        $category = !empty($this->content['category']) ? $this->content['category'] : null;
+
+        $criteria = [];
+        $params = [];
+
+        $criteria[] = 'c.scope = :scope';
+        $params[':scope'] = $this->scope;
+
+        if (!is_null($category)) {
+            $criteria[] = 'category_id = :category_id';
+            $params[':category_id'] = $category;
+        }
+
+        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'DESC'], $criteria, $params);
+        $query->join('category', 'c', 'c.id = article.category_id');
+
+        $pagination['total'] = $query->getCount();
+        $query->execute();
+
+        $this->view->pagination = $pagination;
+        $this->view->articles = $query->fetchAll();
     }
 
     public function add()
     {
         $this->setTitle('Add ' . $this->articleType);
-        $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->lowerArticleType . '/add');
+        $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->scope . '/add');
 
         if ($this->request->getMethod() == 'POST') {
             $form = $this->newsForm($this->getParams());
@@ -132,7 +166,7 @@ class NewsController extends Controller
     {
         $article = $this->articleStore->getById($newsId);
         $this->setTitle($article->getTitle());
-        $this->addBreadcrumb($article->getTitle(), $this->lowerArticleType . '/edit/' . $newsId);
+        $this->addBreadcrumb($article->getTitle(), '/' . $this->scope. '/edit/' . $newsId);
 
         $this->view->title = $article->getTitle();
 

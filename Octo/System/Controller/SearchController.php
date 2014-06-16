@@ -10,7 +10,7 @@ use Octo\Template;
 class SearchController extends Controller
 {
     /**
-     * @var \Octo\Store\SearchStore
+     * @var \Octo\System\Store\SearchStore
      */
     protected $searchStore;
 
