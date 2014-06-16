@@ -3,6 +3,9 @@ window.blockEditors.PageCollection = PageBlock.extend({
     pageList: null,
 
     edit: function (modalBody, blockContent) {
+        if(!blockContent) {
+            blockContent = {};
+        }
         var current = '';
         self.pageList = $('<ul style="list-style: none;padding-left:0px;"></ul>');
 
