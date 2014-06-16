@@ -2,7 +2,7 @@ CKEDITOR.plugins.add( 'cmsimage', {
     icons: 'cmsimage',
     init: function( editor ) {
         editor.addCommand( 'cmsimageDialog', new CKEDITOR.dialogCommand( 'cmsimageDialog', {
-            allowedContent: 'img{id,alt,width,height,src}'
+            allowedContent: 'img{id,alt,width,height,src,class}'
         } ) );
         editor.ui.addButton( 'cmsimage', {
             label: 'Insert Image',
@@ -57,18 +57,25 @@ CKEDITOR.plugins.add( 'cmsimage', {
                                     type: 'text',
                                     id: 'alt',
                                     label: 'Alt/title text (optional):<br /><br />'
+                                },
+                                {
+                                    type: 'text',
+                                    id: 'imgclass',
+                                    label: 'Responsive image (default):<br /><br />',
+                                    default: 'img-responsive'
                                 }
                             ]
                         }
                     ],
                     onOk: function(e) {
-                        var dialog = this;
-                        var image = editor.document.createElement('img');
-                        var id = dialog.getValueOf( 'fields', 'image' );
+                        var dialog   = this;
+                        var image    = editor.document.createElement('img');
+                        var id       = dialog.getValueOf( 'fields', 'image' );
 
-                        var width = dialog.getValueOf( 'fields', 'width' );
-                        var height = dialog.getValueOf( 'fields', 'height' );
-                        var alt = dialog.getValueOf( 'fields', 'alt' );
+                        var width    = dialog.getValueOf( 'fields', 'width' );
+                        var height   = dialog.getValueOf( 'fields', 'height' );
+                        var alt      = dialog.getValueOf( 'fields', 'alt' );
+                        var imgclass = dialog.getValueOf( 'fields', 'imgclass' );
 
                         if (width != '') {
                             image.setAttribute( 'width', width );
@@ -78,6 +85,9 @@ CKEDITOR.plugins.add( 'cmsimage', {
                         }
                         if (alt != '') {
                             image.setAttribute( 'alt', alt );
+                        }
+                        if (imgclass != '') {
+                            image.setAttribute( 'class', imgclass );
                         }
 
                         image.setAttribute( 'src', '/media/render/' + id + '/' );

@@ -90,6 +90,8 @@ class PageController extends Controller
             return $this->createPage();
         }
 
+        $this->addBreadcrumb('Add Page', '/page/add');
+
         $form = new FormElement();
         $form->setMethod('POST');
         $form->setAction('/' . $this->config->get('site.admin_uri') . '/page/add');
@@ -151,7 +153,7 @@ class PageController extends Controller
         // Create an ID for the page, which will also create a temporary URI for it:
         $page->generateId();
 
-        /** @var \Octo\Page\Model\Page $page */
+        /** @var \Octo\Pages\Model\Page $page */
         $page = $this->pageStore->saveByInsert($page);
 
         // Set up the current version of the page:
@@ -202,7 +204,7 @@ class PageController extends Controller
         $latest = $this->versionStore->save($latest);
 
         $this->setTitle('Edit: ' . $latest->getTitle());
-        $this->addBreadcrumb($latest->getTitle());
+        $this->addBreadcrumb($latest->getTitle(), '/page/edit/' . $pageId);
 
 
         $blocks = $this->parseTemplate($latest->getTemplate());
@@ -367,14 +369,21 @@ class PageController extends Controller
         $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
     }
 
-    public function autocomplete()
+    public function autocomplete($identifier = 'id')
     {
         $pages = $this->pageStore->search($this->getParam('q', ''));
 
         $rtn = ['results' => [], 'more' => false];
 
         foreach ($pages as $page) {
-            $rtn['results'][] = ['id' => $page->getId(), 'text' => $page->getCurrentVersion()->getTitle()];
+
+            $id = $page->getId();
+
+            if ($identifier == 'uri') {
+                $id = $page->getUri();
+            }
+
+            $rtn['results'][] = ['id' => $id, 'text' => $page->getCurrentVersion()->getTitle()];
         }
 
         die(json_encode($rtn));

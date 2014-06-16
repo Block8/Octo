@@ -94,7 +94,9 @@ class CategoriesController extends Controller
             $type['plural'] = $scope_name;
 
             $this->setTitle('Add ' . $type['singular']);
-            $this->addBreadcrumb($scope_name, '/categories/add/' . $scope . '/base');
+            $this->addBreadcrumb($scope_name, '/categories/manage/' . $scope . '/base');
+            $this->addBreadcrumb('Add ' . $type['singular'], '/categories/add/' . $scope . '/base');
+
         } else {
             $type['singular'] = 'Category';
             $type['plural'] = 'Categories';
@@ -161,23 +163,25 @@ class CategoriesController extends Controller
     {
         $scope_name = ucwords($scope);
 
+        $category = $this->categoryStore->getById($categoryId);
+
         $type = [];
         if ((bool) $useBase) {
             $type['singular'] = StringUtilities::singularize($scope_name);
             $type['plural'] = $scope_name;
 
             $this->setTitle('Edit ' . $type['singular']);
-            $this->addBreadcrumb($scope_name, '/categories/edit/' . $scope . '/base');
+            $this->addBreadcrumb($scope_name, '/categories/manage/' . $scope . '/base');
+            $this->addBreadcrumb($category->getName(), '/categories/edit/' . $scope . '/' . $categoryId . '/base');
         } else {
             $type['singular'] = 'Category';
             $type['plural'] = 'Categories';
 
             $this->setTitle($scope_name . ' Categories');
             $this->addBreadcrumb($scope_name, '/' . $scope);
-            $this->addBreadcrumb('Categories', '/categories/edit/' . $scope);
+            $this->addBreadcrumb('Categories', '/categories/manage/' . $scope);
+            $this->addBreadcrumb($category->getName(), '/categories/edit/' . $scope . '/' . $categoryId);
         }
-
-        $category = $this->categoryStore->getById($categoryId);
 
         $this->view->type = $type;
 

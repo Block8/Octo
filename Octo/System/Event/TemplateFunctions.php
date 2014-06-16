@@ -55,6 +55,14 @@ class TemplateFunctions extends Listener
         $template->set('adminUri', $config->get('site.admin_uri'));
         $template->set('config', $config);
         $template->addFunction('pagination', array($this, 'handlePagination'));
+        $template->addFunction('var_dump', function ($args, Template $view) {
+            ob_start();
+            var_dump($view->getVariable($args['variable']));
+            $rtn = ob_get_contents();
+            ob_end_clean();
+
+            return $rtn;
+        });
     }
 
     /**
