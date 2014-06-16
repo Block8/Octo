@@ -1,7 +1,8 @@
 window.basicCkEditor = {
     toolbar: [
         [ 'Source' ],
-        [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
+        [ 'Styles' ],
+        [ 'Bold', 'Italic', 'Underline' ],
         [ 'octolink' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
@@ -15,7 +16,8 @@ window.basicCkEditor = {
 window.smallCkEditor = {
     toolbar: [
         [ 'Source' ],
-        [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
+        [ 'Styles' ],
+        [ 'Bold', 'Italic', 'Underline' ],
         [ 'octolink' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
@@ -29,8 +31,8 @@ window.smallCkEditor = {
 window.fullCkEditor = {
     toolbar: [
         [ 'Source' ],
-        [ 'Format', 'Styles' ],
-        [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
+        [ 'Styles' ],
+        [ 'Bold', 'Italic', 'Underline' ],
         [ 'Link', 'Unlink' ],
         [ 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
