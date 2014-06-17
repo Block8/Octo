@@ -99,7 +99,7 @@ class NewsController extends Controller
             $params[':category_id'] = $category;
         }
 
-        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'DESC'], $criteria, $params);
+        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'ASC'], $criteria, $params);
         $query->join('category', 'c', 'c.id = article.category_id');
 
         $pagination['total'] = $query->getCount();

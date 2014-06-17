@@ -26,7 +26,7 @@ class ArticleStore extends Octo\Store
      * @param string $order
      * @return array
      */
-    public function getAllForCategoryScope($scope, $order = 'name', $direction = 'ASC')
+    public function getAllForCategoryScope($scope, $order = 'publish_date', $direction = 'ASC')
     {
         $query = new Query('Octo\Articles\Model\Article');
         $query->select('a.*')->from('article', 'a')->join('category', 'c', 'c.id = a.category_id');
