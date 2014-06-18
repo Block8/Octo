@@ -46,6 +46,7 @@ class TemplateFunctions extends Listener
 
             return $_SESSION['user']->canAccess($uri);
         });
+
     }
 
     public function globalTemplateFunctions(Template &$template)
@@ -63,6 +64,11 @@ class TemplateFunctions extends Listener
 
             return $rtn;
         });
+        $template->addFunction('is_mobile', function ($args, &$view) {
+                $mobileDetect = new \Mobile_Detect();
+
+                return $mobileDetect->isMobile();
+            });
     }
 
     /**
