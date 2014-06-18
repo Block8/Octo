@@ -72,8 +72,46 @@ class Article extends Octo\Model
         return !$rtn;
     }
 
+    /**
+     * Get the parent categories' slugs for an article *recursive*
+     *
+     * @param $category
+     * @param string $separator
+     * @param array $visited
+     * @return string
+     */
+    protected function getParentSlugs($category, $separator = '/', $visited = array())
+    {
+        $slug = '';
+        $parent = $category->getParent();
 
+        if( ($parent != null) && !in_array($parent, $visited) )
+        {
+            $visited[] = $parent;
+            $slug .= $this->getParentSlugs($parent, $separator = '/', $visited = array());
+        }
 
+        $slug .= $separator . StringUtilities::generateSlug($category->getName());;
+
+        return $slug;
+    }
+
+    /**
+     * Get the parent categories' slugs for an article in reverse order *recursive*
+     *
+     * @param $category
+     * @param string $slug
+     * @return string
+     */
+    protected function getParentSlugsReverse($category, $slug = '')
+    {
+        $slug .= '/' . StringUtilities::generateSlug($category->getName());
+        if ($category->getParent() == null) {
+            return $slug;
+        } else {
+            return $this->getParentSlugs($category->getParent(), $slug);
+        }
+    }
 
     /**
      * @return string Slug for the article based on category
@@ -87,22 +125,6 @@ class Article extends Octo\Model
         return $summary;
     }
 
-    /**
-     * Get the parent categories' slugs for an article *recursive*
-     *
-     * @param $category
-     * @param string $slug
-     * @return string
-     */
-    protected function getParentSlugs($category, $slug = '')
-    {
-        $slug .= '/' . StringUtilities::generateSlug($category->getName());
-        if ($category->getParent() == null) {
-            return $slug;
-        } else {
-            return $this->getParentSlugs($category->getParent(), $slug);
-        }
-    }
 
     public function getFullUrl()
     {
