@@ -3,7 +3,9 @@
 namespace Octo\System\Controller;
 
 use Octo\Block;
+use Octo\BlockManager;
 use Octo\Controller;
+use Octo\Event;
 use Octo\Store;
 use Octo\Template;
 
@@ -29,7 +31,31 @@ class SearchController extends Controller
         $view->query = $query;
         $view->results = $results;
 
-        return $view->render();
+        $dataStore = [
+            'breadcrumb' => [
+                ['uri' => '/search', 'title' => 'Search', 'active' => false],
+                ['uri' => '/search?q=' . $query, 'title' => $query, 'active' => true]
+            ]
+        ];
+
+        $blockManager = new BlockManager();
+        $blockManager->setDataStore($dataStore);
+        $blockManager->setRequest($this->request);
+        $blockManager->setResponse($this->response);
+        $blockManager->attachToTemplate($view);
+
+        $output = $view->render();
+
+        $data = [
+            'page' => null,
+            'version' => null,
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
     }
 
     public function render($item)

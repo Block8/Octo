@@ -204,4 +204,9 @@ class BlockManager
     {
         return $this->dataStore;
     }
+
+    public function setDataStore(array $data)
+    {
+        $this->dataStore = $data;
+    }
 }

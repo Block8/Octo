@@ -45,21 +45,24 @@ class Breadcrumb extends Block
     protected function getAncestors()
     {
         $rtn = [];
-        $rtn[] = [
-            'uri' => $this->page->getUri(),
-            'title' => $this->page->getCurrentVersion()->getShortTitle(),
-            'active' => true,
-        ];
 
-        $page = $this->page;
-
-        while ($page->getParentId()) {
-            $page = $page->getParent();
-
+        if (isset($this->page)) {
             $rtn[] = [
-                'uri' => $page->getUri(),
-                'title' => $page->getCurrentVersion()->getShortTitle(),
+                'uri' => $this->page->getUri(),
+                'title' => $this->page->getCurrentVersion()->getShortTitle(),
+                'active' => true,
             ];
+
+            $page = $this->page;
+
+            while ($page->getParentId()) {
+                $page = $page->getParent();
+
+                $rtn[] = [
+                    'uri' => $page->getUri(),
+                    'title' => $page->getCurrentVersion()->getShortTitle(),
+                ];
+            }
         }
 
         return array_reverse($rtn);
