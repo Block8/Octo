@@ -147,7 +147,7 @@ function imagePicker(id, label, value)
     input.select2({
         placeholder: "Search for an image",
         minimumInputLength: 1,
-        width: '560px',
+        width: '100%',
         ajax: {
             url: '/'+window.adminUri+'/media/autocomplete/images',
             dataType: 'json',
