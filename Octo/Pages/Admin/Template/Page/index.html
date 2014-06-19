@@ -16,16 +16,22 @@
             {if item.hasChildren}{if item.id != parentId}<a href="/{@adminUri}/page?parent={@item.id}">{/if}{/if}
             {@item.CurrentVersion.title}
             {if item.hasChildren}{if item.id != parentId}</a>{/if}{/if}
+
+            {if item.isLocked}<br><span class="label label-warning"><i class="fa fa-lock"></i> Locked for editing by {@item.latestVersion.User.name}</span>{/if}
+
         </td>
         <td><a href="{@item.uri}">{@item.uri}</a></td>
-        <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
-        <td>{date_format date: item.CurrentVersion.updated_date}</td>
+        <td>
+            {if item.latestVersion.User}{@item.latestVersion.User.name}{/if}
+        </td>
+        <td>{date_format date: item.latestVersion.updated_date}</td>
         <td width="2%">
             {if item.parent_id}
             <i class="fa fa-fw fa-move handler"></i>
             {/if}
         </td>
         <td>
+            {ifnot item.isLocked}
             <div class="btn-group">
                 {if (can_access uri: "/page/edit")}
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/page/edit/{@item.id}">Edit</a>
@@ -40,6 +46,7 @@
                 </ul>
                 {/if}
             </div>
+            {/ifnot}
         </td>
     </tr>
     {/for}

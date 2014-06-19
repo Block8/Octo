@@ -201,6 +201,7 @@ class PageController extends Controller
         }
 
         $latest->setUpdatedDate(new \DateTime());
+        $latest->setUser($this->currentUser);
         $latest = $this->versionStore->save($latest);
 
         $this->setTitle('Edit: ' . $latest->getTitle());
@@ -284,6 +285,19 @@ class PageController extends Controller
         return $blocks;
     }
 
+    public function editPing($pageId)
+    {
+        $page = $this->pageStore->getById($pageId);
+
+        if ($page) {
+            $latest = $page->getLatestVersion();
+            $latest->setUpdatedDate(new \DateTime());
+            $this->versionStore->save($latest);
+        }
+
+        die('OK');
+    }
+
     public function save($pageId)
     {
         $content = $this->getParam('content', null);
@@ -330,6 +344,7 @@ class PageController extends Controller
             $latest = $this->pageStore->getLatestVersion($page);
             $latest->setValues($pageData);
             $latest->setUpdatedDate(new \DateTime());
+            $latest->setUser($this->currentUser);
 
             $this->versionStore->save($latest);
         }

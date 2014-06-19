@@ -24,6 +24,9 @@ class Page extends Octo\Model
         parent::__construct($initialData);
         $this->getters['hasChildren'] = 'hasChildren';
         $this->cache = Cache::getCache(Cache::TYPE_APC);
+
+        $this->getters['isLocked'] = 'getIsLocked';
+        $this->getters['latestVersion'] = 'getLatestVersion';
     }
 
     public function hasChildren()
@@ -55,5 +58,25 @@ class Page extends Octo\Model
 
             $this->setUri($uri);
         }
+    }
+
+    public function getLatestVersion()
+    {
+        return Store::get('Page')->getLatestVersion($this);
+    }
+
+    public function getIsLocked()
+    {
+        $latest = $this->getLatestVersion();
+
+        if ($latest->getUserId() == $_SESSION['user_id']) {
+            return false;
+        }
+
+        if ($latest->getUpdatedDate() > new \DateTime('-1 min')) {
+            return true;
+        }
+
+        return false;
     }
 }

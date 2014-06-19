@@ -42,6 +42,8 @@
 <script>
     $(document).ready(function ()
     {
+        PageLock.setup();
+
         var editor = new window.pageEditor();
         editor.id = '{@page.id}';
         editor.content = {@pageContent};
@@ -133,4 +135,42 @@
             dialog.modal('show');
         });
     });
+
+
+
+    var PageLock = {
+        pingTimer: null,
+        activityTimer: null,
+
+        setup: function () {
+            $(window).on('keypress', PageLock.onActivity);
+            $(window).on('mousemove', PageLock.onActivity);
+
+            $('div.well').on('mousemove', PageLock.onActivity);
+
+            PageLock.pingTimer = setInterval(PageLock.ping, 5000);
+            PageLock.activityTimer = setTimeout(PageLock.onInactiveTimeout, 60000 * 1);
+        },
+
+        ping: function () {
+            $.get('/{@adminUri}/page/edit-ping/{@page.id}');
+        },
+
+        onActivity: function () {
+            if (PageLock.activityTimer) {
+                clearTimeout(PageLock.activityTimer);
+            }
+
+            if (PageLock.unlockTimer) {
+                clearTimeout(PageLock.unlockTimer);
+            }
+
+            PageLock.activityTimer = setTimeout(PageLock.onInactiveTimeout, 60000 * 1);
+        },
+
+        onInactiveTimeout: function () {
+            window.location.href = '/{@adminUri}/page';
+        }
+    }
+
 </script>
