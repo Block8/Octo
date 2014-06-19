@@ -149,7 +149,7 @@
             $('div.well').on('mousemove', PageLock.onActivity);
 
             PageLock.pingTimer = setInterval(PageLock.ping, 5000);
-            PageLock.activityTimer = setTimeout(PageLock.onInactiveTimeout, 60000 * 1);
+            PageLock.activityTimer = setTimeout(PageLock.onInactiveTimeout, 60000 * 15);
         },
 
         ping: function () {
@@ -165,7 +165,7 @@
                 clearTimeout(PageLock.unlockTimer);
             }
 
-            PageLock.activityTimer = setTimeout(PageLock.onInactiveTimeout, 60000 * 1);
+            PageLock.activityTimer = setTimeout(PageLock.onInactiveTimeout, 60000 * 15);
         },
 
         onInactiveTimeout: function () {
