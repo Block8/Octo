@@ -26,6 +26,8 @@ class NewsController extends Controller
      */
     protected $lowerArticleType;
 
+    protected $articleTypeMulti;
+
     /**
      * @var string Article type
      */
@@ -65,9 +67,10 @@ class NewsController extends Controller
         $this->scope = 'news';
         $this->articleType = 'Article';
         $this->lowerArticleType = 'article';
+        $this->articleTypeMulti = 'Articles';
 
-        $this->setTitle($this->articleType);
-        $this->addBreadcrumb($this->articleType, '/' . $this->scope);
+        $this->setTitle($this->articleTypeMulti);
+        $this->addBreadcrumb($this->articleTypeMulti, '/' . $this->scope);
     }
 
     /**
@@ -85,6 +88,9 @@ class NewsController extends Controller
             'limit' => 20,
             'uri' => $this->request->getPath() . '?',
         ];
+
+        $this->setTitle('Manage ' . $this->articleTypeMulti, ucwords($this->scope));
+
 
         $category = !empty($this->content['category']) ? $this->content['category'] : null;
 
@@ -111,7 +117,7 @@ class NewsController extends Controller
 
     public function add()
     {
-        $this->setTitle('Add ' . $this->articleType);
+        $this->setTitle('Add ' . $this->articleType, ucwords($this->scope));
         $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->scope . '/add');
 
         if ($this->request->getMethod() == 'POST') {
