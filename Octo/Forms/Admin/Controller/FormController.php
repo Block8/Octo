@@ -74,8 +74,9 @@ class FormController extends Controller
 
     public function add()
     {
-
+        $this->setTitle('Add Form');
         $this->addBreadcrumb('Add Form', '/form/add');
+
         if ($this->request->getMethod() == 'POST') {
             $form = new Form();
             $form->setValues($this->getParams());
@@ -94,6 +95,7 @@ class FormController extends Controller
         $form = $this->formStore->getById($formId);
 
         $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $form->getId());
+        $this->setTitle($form->getTitle(), 'Edit Form');
 
         if ($this->request->getMethod() == 'POST') {
             $form->setValues($this->getParams());
@@ -119,9 +121,9 @@ class FormController extends Controller
 
     public function submissions($formId)
     {
-
         $form = $this->formStore->getById($formId);
 
+        $this->setTitle('Submissions', $form->getTitle());
         $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $formId);
         $this->addBreadcrumb('Submissions', '/form/submissions/' . $formId);
 
@@ -137,6 +139,7 @@ class FormController extends Controller
 
         $this->addBreadcrumb($form->getTitle(), '/form/edit/' . $form->getId());
         $this->addBreadcrumb('Submissions', '/form/submissions/' . $form->getId());
+        $this->setTitle('View Submission', $form->getTitle());
 
         $extra = [];
 

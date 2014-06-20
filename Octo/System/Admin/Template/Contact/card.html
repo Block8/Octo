@@ -1,10 +1,10 @@
-<div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+<div class="box box-info" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
 
-    <header role="heading">
-        <h2>Contact</h2>
+    <div class="box-header" role="heading">
+        <h3 class="box-title">Contact</h3>
 
         {if (can_access uri: "/contact/block")}
-        <div class="widget-toolbar" role="menu">
+        <div class="box-tools pull-right" role="menu">
             {if contact.is_blocked}
             <a href="/{@adminUri}/contact/unblock/{@contact.id}" class="btn btn-success">Unblock</a>
             {/if}
@@ -14,18 +14,19 @@
             {/ifnot}
         </div>
         {/if}
-    </header>
+    </div>
 
     <div role="content">
 
-        <div class="widget-body no-padding">
+        <div class="box-body no-padding">
             {if contact.is_blocked}
             <div class="alert alert-warning" style="margin: 0">
+                <i class="fa fa-warning"></i>
                 This contact has been blocked from the site.
             </div>
             {/if}
 
-            <table class="table table-bordered table-striped">
+            <table class="table table-striped">
 
                 <tbody>
                 {if contact.title}

@@ -1,23 +1,17 @@
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-envelope "></i> Submission</h1>
-    </div>
-</div>
-
-<div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         {include template: "Contact/card"; variables: submission.Contact => contact}
     </div>
 
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         {if submission.message}
-        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-            <header role="heading">
-                <h2>Message</h2>
-            </header>
+        <div class="box box-primary">
+            <div class="box-header" role="heading">
+                <h3 class="box-title">Message</h3>
+            </div>
 
             <div role="content">
-                <div class="widget-body">
+                <div class="box-body">
                     {@submission.message}
                 </div>
             </div>
@@ -25,14 +19,14 @@
         {/if}
 
         {if extra}
-        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-            <header role="heading">
-                <h2>Other Fields</h2>
-            </header>
+        <div class="box box-success">
+            <div class="box-header" role="heading">
+                <h3 class="box-title">Other Fields</h3>
+            </div>
 
             <div role="content">
-                <div class="widget-body no-padding">
-                    <table class="table table-bordered table-striped">
+                <div class="box-body no-padding">
+                    <table class="table table-striped">
 
                         <tbody>
                         {for extra}
