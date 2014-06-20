@@ -64,7 +64,7 @@ class CategoriesController extends Controller
             $type['singular'] = 'Category';
             $type['plural'] = 'Categories';
 
-            $this->setTitle($scope_name . ' Categories');
+            $this->setTitle('Manage Categories', $scope_name);
             $this->addBreadcrumb($scope_name, '/' . $scope);
             $this->addBreadcrumb('Categories', '/categories/manage/' . $scope);
         }

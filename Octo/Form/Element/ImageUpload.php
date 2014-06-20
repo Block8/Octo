@@ -19,9 +19,9 @@ class ImageUpload extends Upload
     /**
      * @return string
      */
-    public function render()
+    public function render($viewFile = 'ImageUpload')
     {
-        return parent::render('ImageUpload');
+        return parent::render($viewFile);
     }
 
     /**

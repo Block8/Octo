@@ -103,7 +103,13 @@ abstract class Block
 
         $config = \b8\Config::getInstance();
         $moduleManager = $config->get('ModuleManager');
-        $modules = $moduleManager->getEnabled()[$config->get('site.namespace')];
+        $modules = $moduleManager->getEnabled();
+
+        if (!array_key_exists($config->get('site.namespace'), $modules)) {
+            return [];
+        }
+
+        $modules = $modules[$config->get('site.namespace')];
 
         foreach (glob(APP_PATH . $config->get('site.namespace'). '/*/Block') as $directory) {
             $module = basename(dirname($directory));

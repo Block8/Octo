@@ -1,40 +1,39 @@
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-folder-open"></i>
-        Manage {@type.plural}{if @parent}: {@parent.name}{/if}
-    </h1>
-    <a class="btn-default btn pull-right" href="/{@adminUri}/categories/add/{@scope}{if useBase}/base{/if}"><i class="fa fa-plus"></i> Add {@type.singular}</a>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
+        <a class="btn-default btn pull-right" href="/{@adminUri}/categories/add/{@scope}{if useBase}/base{/if}"><i class="fa fa-plus"></i> Add {@type.singular}</a>
+    </div>
 </div>
-
-<table class="table table-bordered table-striped">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th width="20%">Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-        {loop categories}
-		<tr>
-			<td>
-                {if item.has_children}<a href="?parent={@item.id}">{@item.name}</a>{/if}
-                {ifnot item.has_children}{@item.name}{/ifnot}
-            </td>
-			<td>
-                <div class="btn-group">
-					<a class="btn btn-default btn-sm" href="/{@adminUri}/categories/edit/{@scope}/{@item.id}{if useBase}/base{/if}">Edit</a>
-					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="/{@adminUri}/categories/edit/{@scope}/{@item.id}{if useBase}/base{/if}">Edit</a>
-						</li>
-						<li class="divider"></li>
-						<li>
-							<a href="/{@adminUri}/categories/delete/{@scope}/{@item.id}{if useBase}/base{/if}" class="btn-delete">Delete</a>
-						</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-        {/loop}
-	</tbody>
-</table>
+<br>
+<div class="box box-primary">
+    <div class="box-body no-padding">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th width="170px">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop categories}
+            <tr>
+                <td>
+                    {if item.has_children}<a href="?parent={@item.id}">{@item.name}</a>{/if}
+                    {ifnot item.has_children}{@item.name}{/ifnot}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="/{@adminUri}/categories/edit/{@scope}/{@item.id}{if useBase}/base{/if}">Edit</a>
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/{@adminUri}/categories/delete/{@scope}/{@item.id}{if useBase}/base{/if}" class="btn-delete">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            {/loop}
+            </tbody>
+        </table>
+    </div>
+</div>

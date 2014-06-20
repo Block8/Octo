@@ -3,7 +3,6 @@ namespace Octo\Admin;
 
 use b8;
 use b8\View;
-use Octo\Admin\Template;
 
 /**
  * Class Form
@@ -21,7 +20,7 @@ class Form extends b8\Form
     public function getView($view)
     {
         if (Template::exists('Form/' . $view)) {
-            return Template::getPublicTemplate('Form/' . $view);
+            return Template::getAdminTemplate('Form/' . $view);
         }
 
         return new View($view, B8_PATH . 'Form/View/');
