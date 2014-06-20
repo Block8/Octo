@@ -108,12 +108,7 @@
             });
 
             return false;
-        })
-    }
-
-    $(document).ready(function () {
-
-        registerEvents();
+        });
 
         $('#menu-items tbody').sortable({
             handle: '.handler',
@@ -132,6 +127,11 @@
                 savePositions(items);
             }
         });
+    }
+
+    $(document).ready(function () {
+
+        registerEvents();
 
         $('#new-page').select2({
             placeholder: "Search for a page",
@@ -194,9 +194,14 @@
                     row.append($('<td></td>').text(data.url));
                 }
 
-                row.append($('<td></td>').append('<button class="remove-item btn btn-danger btn-sm">Remove</button>'));
+                row.append('<td width="2%"><i class="fa fa-fw fa-arrows handler"></i></td>');
+                row.append($('<td></td>').append('<button class="remove-item btn btn-danger btn-sm">Delete</button>'));
 
                 $('#menu-items tbody').append(row);
+                registerEvents();
+                $('#new-title').val('');
+                $('#new-page').val('');
+                $('#new-link').val('');
             });
 
             return false;
