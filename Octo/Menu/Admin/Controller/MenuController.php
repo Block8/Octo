@@ -50,12 +50,15 @@ class MenuController extends Controller
 
     public function index()
     {
+        $this->setTitle('Manage Menus');
+
         $menus = $this->menuStore->getAll();
         $this->view->menus = $menus;
     }
 
     public function add()
     {
+        $this->setTitle('Add Menu', 'Menus');
         $this->addBreadcrumb('Add Menu', '/menu/add');
 
         if ($this->request->getMethod() == 'POST') {
@@ -77,6 +80,7 @@ class MenuController extends Controller
     public function edit($menuId)
     {
         $menu = $this->menuStore->getById($menuId);
+        $this->setTitle($menu->getName(), 'Manage Menus');
         $this->addBreadcrumb($menu->getName(), '/menu/edit/' . $menu->getId());
 
         if ($this->request->getMethod() == 'POST') {
@@ -148,6 +152,9 @@ class MenuController extends Controller
         }
 
         $menu = $this->menuStore->getById($menuId);
+        $this->setTitle($menu->getName(), 'Manage Menus');
+        $this->addBreadcrumb($menu->getName(), '/menu/items/' . $menu->getId());
+
         $items = $this->menuItemStore->getByMenuId($menuId, ['order' => [['position', 'ASC']]]);
 
         $this->view->menu = $menu;
