@@ -10,3 +10,11 @@
     overflow:hidden;
     text-overflow:ellipsis;
 }
+
+.tree ul {
+    list-style-type: none;
+}
+
+    .tree ul li div {
+        margin-right: 15px;
+    }
