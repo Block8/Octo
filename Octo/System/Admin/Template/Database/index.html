@@ -1,59 +1,57 @@
 
 <div class="row">
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    {if toRun.migrations}<a class="btn-default btn pull-right" href="/{@adminUri}/database/run-migrations"><i class="fa fa-play-circle"></i> Run Migrations Now</a>{/if}
-    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-cogs "></i> Database Manager</h1>
-</div>
-</div>
-
-<div class="row">
 {if toRun.migrations}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="alert alert-warning">
+        <div class="alert alert-info">
+            <i class="fa fa-info"></i>
             There are <strong>{@toRun.migrations}</strong> migrations to run, totalling <strong>{@toRun.queries}</strong> queries.
         </div>
     </div>
 {/if}
 </div>
 
-<div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
 
-    <header role="heading">
-        <h2>Database Migrations</h2>
-    </header>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Database Migrations</h3>
 
-    <div role="content">
-
-        <div class="widget-body no-padding">
-
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>Migration ID</th>
-                    <th>Date Run</th>
-                    <th width="20%">Queries</th>
-                </tr>
-                </thead>
-                <tbody>
-                {for migrations}
-                <tr>
-                    <td>{@key}</td>
-
-                    {if value.migration}
-                    <td>{@value.migration.date_run.formatted}</td>
+                <div class="box-tools pull-right">
+                    {if toRun.migrations}
+                    <a class="btn-default btn" href="/{@adminUri}/database/run-migrations"><i class="fa fa-play-circle"></i> Run Migrations Now</a>
+                    <a class="btn-default btn" href="/{@adminUri}/database/mark-as-run"><i class="fa fa-play-circle"></i> Mark as Run</a>
                     {/if}
-                    {ifnot value.migration}
-                    <td><em>Not run yet</em></td>
-                    {/ifnot}
+                </div>
+            </div>
 
-                    <td>{@value.query_count}</td>
-                </tr>
-                {/for}
-                </tbody>
-            </table>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Migration ID</th>
+                        <th>Date Run</th>
+                        <th width="20%">Queries</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {for migrations}
+                    <tr>
+                        <td>{@key}</td>
 
+                        {if value.migration}
+                        <td>{@value.migration.date_run.formatted}</td>
+                        {/if}
+                        {ifnot value.migration}
+                        <td><em>Not run yet</em></td>
+                        {/ifnot}
+
+                        <td>{@value.query_count}</td>
+                    </tr>
+                    {/for}
+                    </tbody>
+                </table>
+            </div>
         </div>
-
     </div>
-
 </div>

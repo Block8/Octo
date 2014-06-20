@@ -175,9 +175,10 @@ abstract class Controller extends \b8\Controller
     /**
      * Set the title to display
      */
-    public function setTitle($title)
+    public function setTitle($title, $subtitle = null)
     {
         $this->layout->title = $title;
+        $this->layout->subtitle = $subtitle;
     }
 
     /**

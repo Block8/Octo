@@ -14,7 +14,7 @@ $(document).ready(function(e) {
             $('ul.nav-tabs#analytics li a').on('click', function(e) {
                 e.preventDefault();
                 var id = $(this).attr('href').replace('#', '');
-                $('#analytics_container div.widget-body').hide();
+                $('#analytics_container div.box-body').hide();
                 $('#' + id).fadeIn('slow');
             });
         }
@@ -22,7 +22,7 @@ $(document).ready(function(e) {
 });
 
 function renderTable(div, metric) {
-    var colors = ['greenDark', 'magenta', 'blue', 'orange', 'pink'];
+    var colors = ['green', 'aqua', 'yellow', 'red', 'blue'];
 
     $.ajax({
         url: '/' + window.adminUri + '/analytics/' + metric
@@ -33,8 +33,8 @@ function renderTable(div, metric) {
             var item = data[i];
             var row = '<div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">' +
                 '<span class="text">' + item.name + '<span class="pull-right">' + item.metric + ' views</span> </span>' +
-                '<div class="progress">' +
-                '<div class="progress-bar bg-color-' + colors[i] + '" style="width: ' + item.percentage + '%;"></div>' +
+                '<div class="progress progress-striped sm" style="margin-bottom: 10px">' +
+                '<div class="progress-bar progress-bar-' + colors[i] + '" style="width: ' + item.percentage + '%;"></div>' +
                 '</div></div>';
 
             div.append(row);
@@ -96,7 +96,7 @@ function renderChart(chart, metric) {
 
 function renderResponsivePie(chart) {
     var points = [];
-    var colors = ['#496949', '#6E3671', '#57889C'];
+    var colors = ['rgb(0,192,239)', 'rgb(243,156,18)', 'rgb(0,166,90)'];
 
     $.ajax({
         url: '/' + window.adminUri + '/analytics/responsive'

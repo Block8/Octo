@@ -139,14 +139,22 @@ class Item
 
         $rtn = '<li class="'.$this->getClass().'">';
 
-        if ($this->hasVisibleChildren() || $this->isRoot()) {
+        $hasVisibleChildren = $this->hasVisibleChildren();
+
+        if ($hasVisibleChildren || $this->isRoot()) {
 
             $icon = ($this->icon ? '<i class="fa fa-lg fa-fw fa-' . $this->icon . '"></i> ' : '');
             $rtn .= '<a href="'.$this->getLink().'">';
-            $rtn .= $icon. '<span class="menu-item-parent">' . $this->title . '</span></a>';
+            $rtn .= $icon. '<span class="menu-item-parent">' . $this->title . '</span>';
 
-            if ($this->hasVisibleChildren()) {
-                $rtn .= '<ul>';
+            if ($hasVisibleChildren) {
+                $rtn .= '<i class="fa fa-angle-left pull-right"></i>';
+            }
+
+            $rtn .= '</a>';
+
+            if ($hasVisibleChildren) {
+                $rtn .= '<ul class="treeview-menu">';
                 foreach ($this->children as $child) {
                     $rtn .= $child;
                 }
@@ -154,7 +162,7 @@ class Item
             }
 
         } else {
-            $rtn .= '<a href="'.$this->getLink().'"><span class="menu-item-parent">' . $this->title . '</span></a>';
+            $rtn .= '<a href="'.$this->getLink().'"><i class="fa fa-angle-double-right"></i> ' . $this->title . '</a>';
         }
 
         return $rtn;
@@ -164,11 +172,17 @@ class Item
     {
         $hasChildren = $this->hasVisibleChildren();
 
-        if (!$this->isActive()) {
-            return '';
+        $rtn = '';
+
+        if ($hasChildren) {
+            $rtn .= 'treeview ';
         }
 
-        return $hasChildren ? 'open' : 'active';
+        if ($this->isActive()) {
+            $rtn .= 'active ';
+        }
+
+        return $rtn;
     }
 
     public function isActive()

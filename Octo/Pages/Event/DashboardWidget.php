@@ -20,10 +20,11 @@ class DashboardWidget extends Listener
         $store = Store::get('Page');
 
         $stats[] = [
-            'title' => 'Total Pages',
+            'title' => 'Pages',
             'count' => number_format($store->getTotal()),
-            'icon' => 'sitemap',
-            'color' => 'greenDark',
+            'icon' => 'ios7-copy-outline',
+            'color' => 'yellow',
+            'link' => '/page',
         ];
     }
 

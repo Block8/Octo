@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $this->setTitle(Config::getInstance()->get('site.name') . ': Dashboard');
+        $this->setTitle('Dashboard', $this->config->get('site.name'));
         $this->addBreadcrumb('Dashboard', '/');
 
         $dashboardOverridden = !Event::trigger('DashboardOverride', $this->view);

@@ -1,36 +1,32 @@
+
+<!-- Small boxes (Stat box) -->
 <div class="row">
-    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
-        <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-home "></i> My Dashboard</h1>
-    </div>
+    {for statistics}
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-{@value.color}">
+            <div class="inner">
+                <h3>
+                    {@value.count}
+                </h3>
+                <p>
+                    {@value.title}
+                </p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-{@value.icon}"></i>
+            </div>
 
-    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8 hidden-xs">
-        <ul id="sparks" class="">
-            {for statistics}
-            <li class="sparks-info">
-                <h5> {@value.title} <span class="txt-color-{@value.color}"><i class="fa fa-{@value.icon}"></i>&nbsp;{@value.count}</span></h5>
-            </li>
-            {/for}
-            {if (can_access uri: "/form")}
-            {if forms}
-            <li class="sparks-info">
-                <h5> Contacts <span class="txt-color-blue"><i class="fa fa-user"></i>&nbsp;{@contacts}</span></h5>
-            </li>
+            <a href="/{@adminUri}{@value.link}" class="small-box-footer">
+                Jump to {@value.title} <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div><!-- ./col -->
+    {/for}
+</div><!-- /.row -->
 
-            <li class="sparks-info">
-                <h5> Submissions <span class="txt-color-purple"><i class="fa fa-envelope"></i>&nbsp;{@submissions}</span></h5>
-            </li>
-            {/if}
-            {/if}
-
-            {if pages}
-            <li class="sparks-info">
-                <h5> Total Pages <span class="txt-color-greenDark"><i class="fa fa-sitemap"></i>&nbsp;{@pages}</span></h5>
-            </li>
-            {/if}
-        </ul>
-    </div>
-</div>
-
+<div class="row">
 {for widgets}
     {@value.html}
 {/for}
+</div>
