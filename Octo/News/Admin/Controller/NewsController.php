@@ -284,6 +284,14 @@ class NewsController extends Controller
         $field->setClass('select2');
         $fieldset->addField($field);
 
+        if($this->scope == "news") {
+            $field = new Form\Element\Select('use_in_email');
+            $field->setOptions(['1'=>'Yes', '0'=>'No']);
+            $field->setRequired(false);
+            $field->setLabel('Publish in the email newsletter?');
+            $fieldset->addField($field);
+        }
+
         $field = new Form\Element\Text('publish_date');
         $field->setLabel('Published Date');
 
