@@ -205,6 +205,13 @@ class NewsController extends Controller
 
                     Event::trigger('before' . $this->articleType . 'Save', $article);
 
+                    $content = $article->getTitle();
+                    $content .= PHP_EOL . $article->getSummary();
+                    $content .= PHP_EOL . $contentItem->getContent();
+
+                    $data = ['model' => $article, 'content_id' => $article->getId(), 'content' => $content];
+                    Event::trigger('ContentPublished', $data);
+
                     $article = $this->articleStore->save($article);
 
                     $this->successMessage($article->getTitle() . ' was edited successfully.', true);
