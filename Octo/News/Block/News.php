@@ -47,6 +47,7 @@ class News extends Block
     public function renderNow()
     {
         $this->newsStore = Store::get('Article');
+        $this->categoryStore = Store::get('Category');
 
         if (!empty($this->uri)) {
             return $this->renderNewsItem($this->uri);
@@ -64,7 +65,6 @@ class News extends Block
     protected function getCategoryFromSlug($slug)
     {
         if (is_null($slug)) return $slug;
-        $this->categoryStore = Store::get('Category');
 
         $uriParts = explode('/', ltrim($this->uri, '/'));
         $probablyCategory = array_pop($uriParts);
