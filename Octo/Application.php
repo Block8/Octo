@@ -67,9 +67,7 @@ class Application extends \b8\Application
 
             if ($route['controller'] != 'session') {
                 if (!empty($_SESSION['user_id'])) {
-                    $this->setupUserProperties($route, $response, $denied);
-
-                    unset($_SESSION['user_id']);
+                    return $this->setupUserProperties($route, $response, $denied);
                 }
 
                 if ($request->isAjax()) {
@@ -82,7 +80,6 @@ class Application extends \b8\Application
                 }
 
                 return false;
-
             }
 
             return true;
@@ -101,7 +98,7 @@ class Application extends \b8\Application
     {
         $user = Store::get('User')->getByPrimaryKey($_SESSION['user_id']);
 
-        if ($user) {
+        if ($user && $user->getActive()) {
             $_SESSION['user'] = $user;
 
             $uri = '/';
@@ -140,10 +137,16 @@ class Application extends \b8\Application
         try {
             $rtn = parent::handleRequest();
         } catch (HttpException $ex) {
-            throw $ex;
+            if (defined('CMS_ENV') && CMS_ENV == 'development') {
+                throw $ex;
+            }
+
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
-            throw $ex;
+            if (defined('CMS_ENV') && CMS_ENV == 'development') {
+                throw $ex;
+            }
+
             $rtn = $this->handleHttpError(500);
         }
 

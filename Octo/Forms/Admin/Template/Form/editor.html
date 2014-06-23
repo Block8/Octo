@@ -1,68 +1,61 @@
-
 <div class="row">
     <div class="col-lg-12">
 
-        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-            <header role="heading">
-                <h2>Form Details</h2>
-            </header>
+        <div class="box box-primary" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+            <div class="box-header">
+                <h3 class="box-title">Form Details</h3>
+            </div>
 
             <div role="content">
 
-                <div class="widget-body no-padding">
+                <div class="box-body">
                     {if form.id}
-                    <form style="border: 0" action="/{@adminUri}/form/edit/{@form.id}" method="POST" class="smart-form">
-                    {/if}
+                    <form style="border: 0" action="/{@adminUri}/form/edit/{@form.id}" method="POST" class="form">
+                        {/if}
 
-                    {ifnot form.id}
-                    <form style="border: 0" action="/{@adminUri}/form/add" method="POST" class="smart-form">
-                    {/ifnot}
+                        {ifnot form.id}
+                        <form style="border: 0" action="/{@adminUri}/form/add" method="POST">
+                            {/ifnot}
 
-                        <input type="hidden" id="form-definition" name="definition" value="{@form.definition}">
+                            <input type="hidden" id="form-definition" name="definition" value="{@form.definition}">
 
-                        <fieldset>
-                            <section>
-                                <label class="label">Title</label>
-                                <label class="input">
-                                    <input name="title" type="text" class="input" value="{@form.title}">
-                                </label>
-                            </section>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="form-title">Title</label>
+                                    <input id="form-title" name="title" type="text" class="form-control" value="{@form.title}">
+                                </div>
 
-                            <section>
-                                <label class="label">Thank you message</label>
-                                <label class="textarea">
-                                    <textarea name="thankyou_message" class="ckeditor basic">{@form.thankyou_message}</textarea>
-                                </label>
-                            </section>
+                                <div class="form-group">
+                                    <label for="form-thankyou">Thank you message</label>
+                                    <textarea id="form-thankyou" name="thankyou_message" class="ckeditor basic">{@form.thankyou_message}</textarea>
+                                </div>
 
-                            <section>
-                                <label class="label">Email recipients (one email address per line)</label>
-                                <label class="textarea">
-                                    <textarea name="recipients">{@form.recipients}</textarea>
-                                </label>
-                            </section>
-                        </fieldset>
+                                <div class="form-group">
+                                    <label for="form-recipients">Email recipients (one email address per line)</label>
+                                    <textarea id="form-recipients" class="form-control" name="recipients">{@form.recipients}</textarea>
+                                </div>
+                            </fieldset>
 
-                        <footer>
-                            <button type="submit" class="btn btn-primary">
-                                Save Form
-                            </button>
-                        </footer>
-                    </form>
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    Save Form
+                                </button>
+                            </footer>
+                        </form>
 
                 </div>
             </div>
         </div>
 
-        <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+        <div class="box">
 
-            <header role="heading">
-                <h2>Fields</h2>
+            <div class="box-header">
+                <h3 class="box-title">Form Fields</h3>
 
-                <div class="widget-toolbar" role="menu">
+                <div class="box-tools pull-right" role="menu">
                     <button id="add-field" class="btn btn-success">Add Field</button>
                 </div>
-            </header>
+            </div>
 
             <div role="content">
 
@@ -73,7 +66,8 @@
                         <tr>
                             <th>Field name</th>
                             <th>Type</th>
-                            <th>Options</th>
+                            <th style="width: 30px">&nbsp;</th>
+                            <th style="width: 170px">Options</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -87,40 +81,25 @@
     </div>
 </div>
 
-
-<script src="/assets/backoffice/js/class.js"></script>
-<script src="/assets/backoffice/js/system.js"></script>
-
-
 <script>
 
-    $(document).ready(function() {
-        var definitionString = $('#form-definition').val();
+$(document).ready(function() {
+    var definitionString = $('#form-definition').val();
 
-        if (definitionString) {
-            var currentFields = JSON.parse(definitionString);
+    if (definitionString) {
+        var currentFields = JSON.parse(definitionString);
 
-            for (var i in currentFields) {
-                registerField(currentFields[i]);
-            }
+        for (var i in currentFields) {
+            registerField(currentFields[i]);
         }
+    }
 
-        var fixHelper = function(e, ui) {
-            ui.children().each(function() {
-                $(this).width($(this).width());
-            });
-            return ui;
-        };
-
-        $('#form-fields tbody').sortable({
-            axis: 'y',
-            items: '> tr',
-            helper: fixHelper,
-            update: function () {
-                updateDefinition();
-            }
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
         });
-    });
+        return ui;
+    }
 
     var fieldTypes = {
         "": {title: 'Please select...', options: false},
@@ -142,182 +121,213 @@
         text_area: {title: 'Text Box', required: false, contact: false, options: false},
         select: {title: 'Dropdown', required: false, contact: false, options: true},
         radio: {title: 'Radio Buttons', required: false, contact: false, options: true},
-        checkbox: {title: 'Check box', required: false, contact: false, options: false}
+        checkbox: {title: 'Check box', required: false, contact: false, options: false},
+        textblock: {title: 'Text Block', required: false, contact: false, options: false}
     };
 
-    $('#add-field').on('click', function () {
-        fieldEditor('Add', {});
+    $('#form-fields tbody').sortable({
+        axis: 'y',
+        items: '> tr',
+        helper: fixHelper,
+        update: function () {
+            updateDefinition();
+        }
+    });
+});
+
+var fieldTypes = {
+    "": {title: 'Please select...', options: false},
+
+    // Built in types:
+    name: {title: 'Name', required: true, contact: true, options: false},
+    email: {title: 'Email Address', required: true, contact: true, options: false},
+    phone: {title: 'Phone', required: true, contact: true, options: false},
+    address: {title: 'Address', required: true, contact: true, options: false},
+    gender: {title: 'Gender', required: true, contact: true, options: false},
+    title: {title: 'Title', required: true, contact: true, options: false},
+    date_of_birth: {title: 'Date of Birth', required: true, contact: true, options: false},
+    company: {title: 'Company', required: true, contact: true, options: false},
+    marketing_optin: {title: 'Marketing Opt-in', required: true, contact: true, options: false},
+    message: {title: 'Message', required: true, contact: false, options: false},
+
+    // Custom fields:
+    text: {title: 'Text', required: false, contact: false, options: false},
+    text_area: {title: 'Text Box', required: false, contact: false, options: false},
+    select: {title: 'Dropdown', required: false, contact: false, options: true},
+    radio: {title: 'Radio Buttons', required: false, contact: false, options: true},
+    checkbox: {title: 'Check box', required: false, contact: false, options: false},
+    textblock: {title: 'Text Block', required: false, contact: false, options: false}
+};
+
+$('#add-field').on('click', function () {
+    fieldEditor('Add', {});
+});
+
+function fieldEditor(actionLabel, values)
+{
+    var ftype = $('<select></select>').addClass('form-control select2');
+    var foptions = $('<textarea></textarea>').addClass('form-control');
+    var flabel = $('<input>').attr('type', 'text').addClass('form-control');
+    var frequired = $('<input>').attr('type', 'checkbox');
+
+    // Stupid SmartAdmin form labels:
+    var addFieldForm = $('<form></form>');
+    var addFieldButton = $('<button></button>').addClass('btn btn-success').text(actionLabel + ' Field');
+
+    var ftypeLabel2 = $('<div></div>').addClass('form-group').append($('<label>Field Type</label>')).append(ftype);
+    var foptionsLabel2 = $('<div></div>').addClass('form-group').append($('<label>Options (One per line)</label>')).append(foptions).hide();
+    var flabelLabel2 = $('<div></div>').addClass('form-group').append($('<label>Title</label>')).append(flabel);
+    var frequiredLabel = $('<div></div>').addClass('form-group').append($('<label>This field is required: </label>')).append(frequired);
+
+    // Field type options:
+    for (var type in fieldTypes) {
+        var title = fieldTypes[type].title;
+        var option = $('<option></option>').val(type).text(title);
+
+        option.data('options', fieldTypes[type].options);
+        option.data('contact', fieldTypes[type].contact);
+        option.data('required', fieldTypes[type].required);
+
+        ftype.append(option);
+    }
+
+    // Modify the form when you change field type:
+    ftype.on('change', function () {
+        if (ftype.children(':selected').data('options') == true) {
+            foptionsLabel2.show();
+            foptions.show();
+        } else {
+            foptionsLabel2.hide();
+            foptions.hide();
+        }
+
+        frequired.prop('checked', ftype.children(':selected').data('required'));
+
+        // Prevent wipe of a custom written title
+        var flag=false;
+        $.each(fieldTypes, function (i, obj) {
+            if(obj.title == flabel.val()) {
+                flag=true;
+            }
+        });
+        if(flag || flabel.val() == "") {
+            flabel.val(ftype.children(':selected').text());
+        }
     });
 
-    function fieldEditor(actionLabel, values)
-    {
-        var ftype = $('<select></select>').addClass('select2');
-        var foptions = $('<textarea></textarea>').addClass('form-control');
-        var flabel = $('<input>').attr('type', 'text');
-        var frequired = $('<input>').attr('type', 'checkbox');
-
-        // Stupid SmartAdmin form labels:
-        var addFieldForm = $('<form></form>').addClass('smart-form');
-        var addFieldButton = $('<button></button>').addClass('btn btn-success').text(actionLabel + ' Field');
-        var ftypeLabel1 = $('<label></label>').addClass('label').text('Field Type');
-        var ftypeLabel2 = $('<label></label>').addClass('input').append(ftype);
-        var foptionsLabel1 = $('<label></label>').addClass('label').text('Options (One per line)').hide();
-        var foptionsLabel2 = $('<label></label>').addClass('input').append(foptions).hide();
-        var flabelLabel1 = $('<label></label>').addClass('label').text('Title');
-        var flabelLabel2 = $('<label></label>').addClass('input').append(flabel);
-        var frequiredLabel = $('<label></label>').addClass('label').text(' This field is required').prepend(frequired);
-
-        // Field type options:
-        for (var type in fieldTypes) {
-            var title = fieldTypes[type].title;
-            var option = $('<option></option>').val(type).text(title);
-
-            option.data('options', fieldTypes[type].options);
-            option.data('contact', fieldTypes[type].contact);
-            option.data('required', fieldTypes[type].required);
-
-            ftype.append(option);
-        }
-
-        // Modify the form when you change field type:
-        ftype.on('change', function () {
-            if (ftype.children(':selected').data('options') == true) {
-                foptionsLabel1.show();
-                foptionsLabel2.show();
-                foptions.show();
-            } else {
-                foptionsLabel1.hide();
-                foptionsLabel2.hide();
-                foptions.hide();
-            }
-
-            frequired.prop('checked', ftype.children(':selected').data('required'));
-
-			// Prevent wipe of a custom written title
-            var flag=false;
-			$.each(fieldTypes, function (i, obj) {
-				if(obj.title == flabel.val()) {
-					flag=true;
-				}
-			});
-			if(flag || flabel.val() == "") {
-	            flabel.val(ftype.children(':selected').text());
-	        }
-        });
-        
-        // If we've been passed values, set them:
-        if (values.type) {
-            ftype.val(values.type);
-        }
-
-        if (values.options && values.options.length) {
-            foptions.val(values.options.join('\n'));
-            foptions.show();
-        }
-
-        if (values.label) {
-            flabel.val(values.label);
-        }
-
-        if (values.required) {
-            frequired.prop('checked', values.required);
-        }
-
-        // Build up the form and display the dialog:
-        addFieldForm.append($('<section></section>').append(ftypeLabel1, ftypeLabel2));
-        addFieldForm.append($('<section></section>').append(foptionsLabel1, foptionsLabel2));
-        addFieldForm.append($('<section></section>').append(flabelLabel1, flabelLabel2));
-        addFieldForm.append($('<section></section>').append(frequiredLabel));
-        //addFieldForm.append($('<section></section>').append(fcontactLabel));
-
-        var dialog = createDialog('add-field', {
-            title: actionLabel + ' Field',
-            body: addFieldForm,
-            button: addFieldButton,
-            show: true
-        });
-        
-        // Load the form with the correct initial parameter fields by triggering change on the DDLB
-		ftype.trigger('change');
-
-        addFieldButton.on('click', function () {
-            var tbl = $('#form-fields');
-            var tbody = tbl.find('tbody');
-            var definition = {
-                id: null,
-                type: ftype.val(),
-                label: flabel.val(),
-                required: frequired.prop('checked')
-            };
-
-            var optionsText = foptions.val();
-
-            if (optionsText.length) {
-                definition.options = optionsText.split('\n');
-            }
-
-            if (values.id) {
-            	// It's an edit of an existing field, so let's remove it (we'll add it again below)
-                tbody.find('tr.field_' + values.id).remove();
-                definition.id = values.id;
-            } else {
-                var count = tbody.find('tr.field_' + definition.type).length;
-                if (count == 0) {
-                    definition.id = definition.type;
-                } else {
-                    definition.id = definition.type + '_' + count;
-                }
-            }
-
-            registerField(definition);
-
-            dialog.on('hidden.bs.modal', function () {
-                dialog.remove();
-            });
-
-            dialog.modal('hide');
-        });
+    // If we've been passed values, set them:
+    if (values.type) {
+        ftype.val(values.type);
     }
 
-    function registerField(definition)
-    {
-        var tbody = $('#form-fields').find('tbody');
+    if (values.options && values.options.length) {
+        foptions.val(values.options.join('\n'));
+        foptions.show();
+    }
 
-        var editButton = $('<button>Edit</button>');
-        editButton.addClass('btn');
-        editButton.on('click', function () {
-            fieldEditor('Edit', $(this).parents('tr').data('definition'));
+    if (values.label) {
+        flabel.val(values.label);
+    }
+
+    if (values.required) {
+        frequired.prop('checked', values.required);
+    }
+
+    // Build up the form and display the dialog:
+    addFieldForm.append(ftypeLabel2);
+    addFieldForm.append(foptionsLabel2);
+    addFieldForm.append(flabelLabel2);
+    addFieldForm.append(frequiredLabel);
+
+    var dialog = createDialog('add-field', {
+        title: actionLabel + ' Field',
+        body: addFieldForm,
+        button: addFieldButton,
+        show: true
+    });
+
+    // Load the form with the correct initial parameter fields by triggering change on the DDLB
+    ftype.trigger('change');
+
+    addFieldButton.on('click', function () {
+        var tbl = $('#form-fields');
+        var tbody = tbl.find('tbody');
+        var definition = {
+            id: null,
+            type: ftype.val(),
+            label: flabel.val(),
+            required: frequired.prop('checked')
+        };
+
+        var optionsText = foptions.val();
+
+        if (optionsText.length) {
+            definition.options = optionsText.split('\n');
+        }
+
+        if (values.id) {
+            // It's an edit of an existing field, so let's remove it (we'll add it again below)
+            tbody.find('tr.field_' + values.id).remove();
+            definition.id = values.id;
+        } else {
+            var count = tbody.find('tr.field_' + definition.type).length;
+            if (count == 0) {
+                definition.id = definition.type;
+            } else {
+                definition.id = definition.type + '_' + count;
+            }
+        }
+
+        registerField(definition);
+
+        dialog.on('hidden.bs.modal', function () {
+            dialog.remove();
         });
 
-        var deleteButton = $('<button>Delete</button>');
-        deleteButton.addClass('btn btn-danger');
-        deleteButton.css({'margin-left':'1em'});
-        deleteButton.on('click', function () {
-            $(this).parents('tr').remove();
-            updateDefinition();
-        });
+        dialog.modal('hide');
+    });
+}
 
+function registerField(definition)
+{
+    var tbody = $('#form-fields').find('tbody');
 
-        var row = $('<tr></tr>');
-        row.data('definition', definition);
-        row.addClass('field_' + definition.id);
-        row.append($('<td></td>').text(definition.label));
-        row.append($('<td></td>').text(definition.type));
-        row.append($('<td></td>').append(editButton).append(deleteButton));
-        tbody.append(row);
+    var editButton = $('<button>Edit</button>');
+    editButton.addClass('btn');
+    editButton.on('click', function () {
+        fieldEditor('Edit', $(this).parents('tr').data('definition'));
+    });
 
+    var deleteButton = $('<button>Delete</button>');
+    deleteButton.addClass('btn btn-danger');
+    deleteButton.css({'margin-left':'1em'});
+    deleteButton.on('click', function () {
+        $(this).parents('tr').remove();
         updateDefinition();
-    }
+    });
 
-    function updateDefinition()
-    {
-        var tbody = $('#form-fields').find('tbody');
-        var definitions = [];
-        tbody.find('tr').each(function (idx, item) {
-            definitions.push($(item).data('definition'));
-        });
 
-        $('#form-definition').val(JSON.stringify(definitions));
-    }
+    var row = $('<tr></tr>');
+    row.data('definition', definition);
+    row.addClass('field_' + definition.id);
+    row.append($('<td></td>').text(definition.label));
+    row.append($('<td></td>').text(definition.type));
+    row.append($('<td></td>'));
+    row.append($('<td></td>').append(editButton).append(deleteButton));
+    tbody.append(row);
+
+    updateDefinition();
+}
+
+function updateDefinition()
+{
+    var tbody = $('#form-fields').find('tbody');
+    var definitions = [];
+    tbody.find('tr').each(function (idx, item) {
+        definitions.push($(item).data('definition'));
+    });
+
+    $('#form-definition').val(JSON.stringify(definitions));
+}
 
 </script>

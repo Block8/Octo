@@ -1,0 +1,20 @@
+.btn-delete {} /*for IDE suggestion*/
+#dead-link-spider div.row:nth-child(odd){
+    background-color: #f0f0f0;
+}
+#dead-link-spider div.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+#dead-link-spider div.row div{
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.tree ul {
+    list-style-type: none;
+}
+
+    .tree ul li div {
+        margin-right: 15px;
+    }

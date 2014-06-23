@@ -26,6 +26,8 @@ class NewsController extends Controller
      */
     protected $lowerArticleType;
 
+    protected $articleTypeMulti;
+
     /**
      * @var string Article type
      */
@@ -65,20 +67,58 @@ class NewsController extends Controller
         $this->scope = 'news';
         $this->articleType = 'Article';
         $this->lowerArticleType = 'article';
+        $this->articleTypeMulti = 'Articles';
 
-        $this->setTitle($this->articleType);
-        $this->addBreadcrumb($this->articleType, '/' . $this->lowerArticleType);
+        $this->setTitle($this->articleTypeMulti);
+        $this->addBreadcrumb($this->articleTypeMulti, '/' . $this->scope);
     }
 
+    /**
+     * List Articles Blog or News
+     *
+     * @return void
+     * @author Leszek Pietrzak
+     *
+     */
     public function index()
     {
-        $this->view->articles = $this->articleStore->getAllForCategoryScope($this->scope);
+        //IMHO limit should be included in url, easy to set by user
+        $pagination = [
+            'current' => (int)$this->request->getParam('p', 1),
+            'limit' => 20,
+            'uri' => $this->request->getPath() . '?',
+        ];
+
+        $this->setTitle('Manage ' . $this->articleTypeMulti, ucwords($this->scope));
+
+
+        $category = !empty($this->content['category']) ? $this->content['category'] : null;
+
+        $criteria = [];
+        $params = [];
+
+        $criteria[] = 'c.scope = :scope';
+        $params[':scope'] = $this->scope;
+
+        if (!is_null($category)) {
+            $criteria[] = 'category_id = :category_id';
+            $params[':category_id'] = $category;
+        }
+
+        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'ASC'], $criteria, $params);
+        $query->join('category', 'c', 'c.id = article.category_id');
+
+        $pagination['total'] = $query->getCount();
+        $query->execute();
+
+        $this->view->pagination = $pagination;
+        $this->view->articles = $query->fetchAll();
     }
 
     public function add()
     {
-        $this->setTitle('Add ' . $this->articleType);
-        $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->lowerArticleType . '/add');
+        $this->setTitle('Add ' . $this->articleType, ucwords($this->scope));
+        $this->addBreadcrumb('Add ' . $this->articleType, '/' . $this->scope . '/add');
 
         if ($this->request->getMethod() == 'POST') {
             $form = $this->newsForm($this->getParams());
@@ -102,8 +142,10 @@ class NewsController extends Controller
                     $article->setContentItemId($hash);
                     $article->setCreatedDate(new \DateTime());
                     $article->setUpdatedDate(new \DateTime());
-                    $article->setSummary($article->generateSummary());
                     $article->setSlug($article->generateSlug());
+                    if (empty($this->getParam('summary'))) {
+                        $article->setSummary($article->generateSummary());
+                    }
 
                     Event::trigger('before' . $this->articleType . 'Save', $article);
                     $article = $this->articleStore->save($article);
@@ -130,7 +172,7 @@ class NewsController extends Controller
     {
         $article = $this->articleStore->getById($newsId);
         $this->setTitle($article->getTitle());
-        $this->addBreadcrumb($article->getTitle(), $this->lowerArticleType . '/edit/' . $newsId);
+        $this->addBreadcrumb($article->getTitle(), '/' . $this->scope. '/edit/' . $newsId);
 
         $this->view->title = $article->getTitle();
 
@@ -153,7 +195,6 @@ class NewsController extends Controller
                     $article->setValues($this->getParams());
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
-                    $article->setCreatedDate(new \DateTime());
                     $article->setUpdatedDate(new \DateTime());
 
                     if (trim($this->getParam('summary')) == '') {
@@ -163,6 +204,13 @@ class NewsController extends Controller
                     $article->setSlug($article->generateSlug());
 
                     Event::trigger('before' . $this->articleType . 'Save', $article);
+
+                    $content = $article->getTitle();
+                    $content .= PHP_EOL . $article->getSummary();
+                    $content .= PHP_EOL . $contentItem->getContent();
+
+                    $data = ['model' => $article, 'content_id' => $article->getId(), 'content' => $content];
+                    Event::trigger('ContentPublished', $data);
 
                     $article = $this->articleStore->save($article);
 
@@ -193,7 +241,7 @@ class NewsController extends Controller
         $article = $this->articleStore->getById($newsId);
         $this->articleStore->delete($article);
         $this->successMessage($article->getTitle() . ' was deleted successfully.', true);
-        header('Location: /' . $this->config->get('site.admin_uri') . '/news/');
+        header('Location: /' . $this->config->get('site.admin_uri') . '/' . $this->scope);
     }
 
     public function newsForm($values = [], $type = 'add')
@@ -253,9 +301,9 @@ class NewsController extends Controller
         $field->setLabel('Published Date');
 
         if (!isset($values['publish_date'])) {
-            $values['publish_date'] = (new DateTime())->format('l j F Y');
+            $values['publish_date'] = (new DateTime())->format('Y-m-d');
         } else {
-            $values['publish_date'] = (new DateTime($values['publish_date']))->format('l j F Y');
+            $values['publish_date'] = (new DateTime($values['publish_date']))->format('Y-m-d');
         }
 
         $field->setClass('sa-datepicker');

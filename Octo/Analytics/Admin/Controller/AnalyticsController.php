@@ -4,6 +4,7 @@ namespace Octo\Analytics\Admin\Controller;
 
 use \DateTime;
 use Octo\Admin\Controller;
+use Octo\Admin\Menu;
 use Octo\Store;
 use Octo\Analytics\Model\GaPageView;
 use Octo\Analytics\Store\GaPageViewStore;
@@ -24,6 +25,15 @@ class AnalyticsController extends Controller
      * @var \Octo\Analytics\Store\GaSummaryViewStore
      */
     protected $gaSummaryViewStore;
+
+    public static function registerMenus(Menu $menu)
+    {
+        $root = $menu->addRoot('Analytics', '/analytics', true)->setIcon('chart');
+        $root->addChild(new Menu\Item('Metric', '/analytics/metric'));
+        $root->addChild(new Menu\Item('Responsive', '/analytics/responsive'));
+        $root->addChild(new Menu\Item('Top Pages', '/analytics/top-pages'));
+        $root->addChild(new Menu\Item('Responsive', '/analytics/top-unique-pages'));
+    }
 
     public function init()
     {

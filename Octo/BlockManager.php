@@ -45,6 +45,8 @@ class BlockManager
      */
     protected $uriExtensionsHandled = false;
 
+    protected $dataStore = [];
+
     /**
      * Constructor
      */
@@ -183,6 +185,8 @@ class BlockManager
             $block->setPageVersion($this->version);
         }
 
+        $block->setDataStore($this->dataStore);
+
         return $block;
     }
 
@@ -194,5 +198,15 @@ class BlockManager
     public function uriExtensionsHandled()
     {
         return $this->uriExtensionsHandled;
+    }
+
+    public function getDataStore()
+    {
+        return $this->dataStore;
+    }
+
+    public function setDataStore(array $data)
+    {
+        $this->dataStore = $data;
     }
 }

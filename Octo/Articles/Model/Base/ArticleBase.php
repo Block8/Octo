@@ -52,6 +52,12 @@ trait ArticleBase
         $this->data['slug'] = null;
         $this->getters['slug'] = 'getSlug';
         $this->setters['slug'] = 'setSlug';
+        $this->data['use_in_email'] = null;
+        $this->getters['use_in_email'] = 'getUseInEmail';
+        $this->setters['use_in_email'] = 'setUseInEmail';
+        $this->data['expiry_date'] = null;
+        $this->getters['expiry_date'] = 'getExpiryDate';
+        $this->setters['expiry_date'] = 'setExpiryDate';
 
         // Foreign keys:
         $this->getters['User'] = 'getUser';
@@ -203,6 +209,34 @@ trait ArticleBase
     public function getSlug()
     {
         $rtn = $this->data['slug'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of UseInEmail / use_in_email.
+    *
+    * @return int
+    */
+    public function getUseInEmail()
+    {
+        $rtn = $this->data['use_in_email'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ExpiryDate / expiry_date.
+    *
+    * @return \DateTime
+    */
+    public function getExpiryDate()
+    {
+        $rtn = $this->data['expiry_date'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
 
         return $rtn;
     }
@@ -397,6 +431,40 @@ trait ArticleBase
 
         $this->data['slug'] = $value;
         $this->setModified('slug');
+    }
+
+    /**
+    * Set the value of UseInEmail / use_in_email.
+    *
+    * @param $value int
+    */
+    public function setUseInEmail($value)
+    {
+        $this->validateInt('UseInEmail', $value);
+
+        if ($this->data['use_in_email'] === $value) {
+            return;
+        }
+
+        $this->data['use_in_email'] = $value;
+        $this->setModified('use_in_email');
+    }
+
+    /**
+    * Set the value of ExpiryDate / expiry_date.
+    *
+    * @param $value \DateTime
+    */
+    public function setExpiryDate($value)
+    {
+        $this->validateDate('ExpiryDate', $value);
+
+        if ($this->data['expiry_date'] === $value) {
+            return;
+        }
+
+        $this->data['expiry_date'] = $value;
+        $this->setModified('expiry_date');
     }
     /**
     * Get the User model for this Article by Id.

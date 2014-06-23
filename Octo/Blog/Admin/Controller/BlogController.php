@@ -43,6 +43,7 @@ class BlogController extends \Octo\News\Admin\Controller\NewsController
         $this->scope = 'blog';
         $this->articleType = 'Entry';
         $this->lowerArticleType = 'entry';
+        $this->articleTypeMulti = 'Entries';
 
         $this->setTitle('Blog');
         $this->addBreadcrumb('Blog', '/blog');

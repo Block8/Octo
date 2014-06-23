@@ -1,103 +1,76 @@
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-picture-o"></i> {@scope_name}{if title}: {@title}{/if}</h1>
-    <div class="pull-right header-buttons">
-        <a class="btn-default btn" href="/{@adminUri}/media/add/{@scope}{@queryStringAppend}"><i class="fa fa-plus"></i> Upload</a>
-    </div>
-</div>
-
 {if gallery}
 <div class="row">
-	<div class="superbox col-sm-12">
-        {loop files}
-		<div class="superbox-list" data-id="image-{@item.id}">
-			<img src="/media/render/{@item.id}/250/250" alt="{@item.title}" title="{@item.title}" class="superbox-img">
-		</div>
+    {loop files}
 
-        <div class="superbox-show" style="display: none;">
-            <img src="/media/render/{@item.id}/250/250" class="superbox-current-img">
-            <div id="imgInfoBox" class="superbox-imageinfo inline-block">
-                <h1>{@item.title}</h1>
-                <span>
-                    <p><em>{@item.filename}</em></p>
-                    <!-- <p class="superbox-img-description"></p> -->
-                    <p>
-                        <a href="/media/render/{@item.id}/2000/auto" class="btn btn-default btn-sm">View Large</a>&nbsp;&nbsp;
-                        <a href="/{@adminUri}/media/edit/{@scope}/{@item.id}" class="btn btn-primary btn-sm">Edit</a>&nbsp;&nbsp;
-                        <a href="/{@adminUri}/media/delete/{@scope}/{@item.id}" class="btn btn-danger btn-sm" class="btn-delete">Delete</a>
-                   </p>
-                </span>
+    <div class="col-lg-2">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title" style="min-height: 65px; max-height: 65px;">{@item.title}</h3>
             </div>
-            <div class="superbox-close txt-color-white"><i class="fa fa-times fa-lg"></i></div>
+
+            <div class="box-body no-padding">
+                <a href="/{@adminUri}/media/edit/{@scope}/{@item.id}"><img src="/media/render/{@item.id}/200/200" class="img-responsive"></a>
+            </div>
         </div>
-        {/loop}
-		<div class="superbox-float"></div>
-	</div>
+    </div>
+
+    {/loop}
 </div>
-
-<script type="text/javascript">
-$(document).ready( function() {
-    $('div.superbox-list img').on('click', function(e) {
-        var ourBox = $(this).parent().next('div.superbox-show');
-        if(!ourBox.is(':visible')) {
-            $('div.superbox-show').hide();
-            ourBox.show();
-        } else {
-            $('div.superbox-show').hide();
-        }
-    });
-
-    $('div.superbox-close').on('click', function() {
-        $(this).parent().hide();
-    });
-});
-</script>
 {/if}
 
 {ifnot gallery}
-<table class="table table-bordered table-striped" id="table-items">
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Filename</th>
-			<th>Uploaded By</th>
-			<th>Uploaded On</th>
-            {if reorder}<th width="2%"></th>{/if}
-			<th width="10%">Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-        {loop files}
-        <tr class="table-item" data-id="{@item.id}">
-            {if thumbnail}
-                <td align="center"><img src="/media/render/{@item.id}/100/100"></td>
-                <td><strong>Title:</strong> {@item.title}<br /><strong>Filename: </strong><a href="{@item.url}">{@item.filename}</a></td>
-            {/if}
-            {ifnot thumbnail}
-                <td>{@item.title}</td>
-                <td><a href="{@item.url}">{@item.filename}</a></td>
-            {/ifnot}
-            <td>{@item.User.name}</td>
-            <td>{date_format date: item.created_date}</td>
-            {if reorder}<td><i class="fa fa-fw fa-move handler"></i></td>{/if}
-			<td>
-                <div class="btn-group">
-					<a class="btn btn-default btn-sm" href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
-					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
-						</li>
-						<li class="divider"></li>
-						<li>
-							<a href="/{@adminUri}/media/delete/{@scope}/{@item.id}{@queryStringAppend}" class="btn-delete">Delete</a>
-						</li>
-					</ul>
-				</div>
-			</td>
-        </tr>
-        {/loop}
-	</tbody>
-</table>
+<div class="row">
+    <div class="col-lg-12">
+    <div class="box box-primary">
+        <div class="box-body no-padding">
+            <table class="table table-striped" id="table-items">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Filename</th>
+                    <th>Uploaded By</th>
+                    <th>Uploaded On</th>
+                    {if reorder}<th width="2%"></th>{/if}
+                    <th width="10%">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop files}
+                <tr class="table-item" data-id="{@item.id}">
+                    {if thumbnail}
+                    <td align="center"><img src="/media/render/{@item.id}/100/100"></td>
+                    <td><strong>Title:</strong> {@item.title}<br /><strong>Filename: </strong><a href="{@item.url}">{@item.filename}</a></td>
+                    {/if}
+                    {ifnot thumbnail}
+                    <td>{@item.title}</td>
+                    <td><a href="{@item.url}">{@item.filename}</a></td>
+                    {/ifnot}
+                    <td>{@item.User.name}</td>
+                    <td>{date_format date: item.created_date}</td>
+                    {if reorder}<td><i class="fa fa-fw fa-move handler"></i></td>{/if}
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-sm" href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
+                            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/{@adminUri}/media/delete/{@scope}/{@item.id}{@queryStringAppend}" class="btn-delete">Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</div>
 
 <script>
 $(document).ready(function(e) {

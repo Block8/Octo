@@ -11,7 +11,7 @@ use Octo\Template;
 class Navigation extends Block
 {
     /**
-     * @var Page
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 
@@ -57,6 +57,7 @@ class Navigation extends Block
             } else {
                 $this->view->items = [];
             }
+
         }
     }
 
@@ -75,7 +76,13 @@ class Navigation extends Block
 
     protected function getChildren(Page $page)
     {
-        $children = $this->pageStore->getByParentId($page->getId());
+        $options = [
+            'order' => [
+                ['position', 'ASC'],
+            ]
+        ];
+
+        $children = $this->pageStore->getByParentId($page->getId(), $options);
 
         if (count($children)) {
             return $children;

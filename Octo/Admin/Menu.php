@@ -36,7 +36,7 @@ class Menu
     public function __toString()
     {
 
-        $rtn = '<ul>';
+        $rtn = '<ul class="sidebar-menu">';
 
         foreach ($this->menu as $item) {
             $rtn .= $item;

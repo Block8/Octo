@@ -44,7 +44,73 @@ class Article extends Octo\Model
         $category = $this->categoryStore->getById($this->getCategoryId());
 
         $slug = $this->getParentSlugs($category) . '/' . $slug;
+
+        //check if it is unique
+        $uniqueId = '';
+        while(!$this->isUniqueSlug($slug . $uniqueId))
+        {
+            $uniqueId = '-' . substr(sha1(uniqid('', true)), 0, 5);
+        }
+
+        return $slug . $uniqueId;
+    }
+
+    /**
+     * @return bool check if Slug for the article based on category is unique
+     */
+    public function isUniqueSlug($slug)
+    {
+        $articleStore = Store::get('Article');
+
+        try {
+            $rtn = $articleStore->getBySlug($slug);
+        } catch (StoreException $se) {
+            $rtn = false;
+
+        }
+
+        return !$rtn;
+    }
+
+    /**
+     * Get the parent categories' slugs for an article *recursive*
+     *
+     * @param $category
+     * @param string $separator
+     * @param array $visited
+     * @return string
+     */
+    protected function getParentSlugs($category, $separator = '/', $visited = array())
+    {
+        $slug = '';
+        $parent = $category->getParent();
+
+        if( ($parent != null) && !in_array($parent, $visited) )
+        {
+            $visited[] = $parent;
+            $slug .= $this->getParentSlugs($parent, $separator = '/', $visited = array());
+        }
+
+        $slug .= $separator . StringUtilities::generateSlug($category->getName());;
+
         return $slug;
+    }
+
+    /**
+     * Get the parent categories' slugs for an article in reverse order *recursive*
+     *
+     * @param $category
+     * @param string $slug
+     * @return string
+     */
+    protected function getParentSlugsReverse($category, $slug = '')
+    {
+        $slug .= '/' . StringUtilities::generateSlug($category->getName());
+        if ($category->getParent() == null) {
+            return $slug;
+        } else {
+            return $this->getParentSlugs($category->getParent(), $slug);
+        }
     }
 
     /**
@@ -59,22 +125,6 @@ class Article extends Octo\Model
         return $summary;
     }
 
-    /**
-     * Get the parent categories' slugs for an article *recursive*
-     *
-     * @param $category
-     * @param string $slug
-     * @return string
-     */
-    protected function getParentSlugs($category, $slug = '')
-    {
-        $slug .= '/' . StringUtilities::generateSlug($category->getName());
-        if ($category->getParent() == null) {
-            return $slug;
-        } else {
-            return $this->getParentSlugs($category->getParent(), $slug);
-        }
-    }
 
     public function getFullUrl()
     {

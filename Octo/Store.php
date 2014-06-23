@@ -83,4 +83,53 @@ abstract class Store extends \b8\Store
 
         return $rtn;
     }
+
+    /**
+     * @param $page
+     * @param $perPage
+     * @param array $order
+     * @param array $criteria
+     * @param array $bind
+     * @return Database\Query
+     */
+    public function query($page, $perPage, array $order = [], array $criteria = [], array $bind = [])
+    {
+        $query = new Database\Query($this->modelName, 'read');
+        $query->select($this->tableName . '.*')->from($this->tableName);
+
+        $page -= 1; // Make the pagination zero-indexed
+        $offset = $page * $perPage;
+        $query->offset($offset);
+        $query->limit($perPage);
+
+        // Handle WHERE criteria:
+        if (count($criteria)) {
+            $criteriaContainer = new Database\Query\Criteria();
+
+            foreach ($criteria as $where) {
+                if ($where instanceof Database\Query\Criteria) {
+                    $criteriaContainer->add($where);
+                } else {
+                    $thisCriteria = new Database\Query\Criteria();
+                    $thisCriteria->where($where);
+
+                    $criteriaContainer->add($thisCriteria);
+                }
+            }
+
+            $query->where($criteriaContainer);
+        }
+
+        // Handle ORDER BY:
+        if (count($order)) {
+            $query->order($order[0], $order[1]);
+        }
+
+        // Handle bound parameters:
+        if (count($bind)) {
+            $query->bindAll($bind);
+        }
+
+        return $query;
+    }
 }

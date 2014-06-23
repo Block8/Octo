@@ -8,6 +8,8 @@ namespace Octo\System\Store;
 
 use b8\Database;
 use Octo;
+use Octo\Pages\Model;
+use Octo\Store as StoreFactory;
 
 /**
  * SearchIndex Store
@@ -37,8 +39,8 @@ class SearchIndexStore extends Octo\Store
             $res = $stmt->fetchAll(Database::FETCH_ASSOC);
 
             foreach ($res as $item) {
-                $model = '\\' . $item['model'];
-                $rtn[] = $model::getByPrimaryKey($item['content_id']);
+                $store = StoreFactory::get($item['model']);
+                $rtn[] = $store->getByPrimaryKey($item['content_id']);
             }
         }
 

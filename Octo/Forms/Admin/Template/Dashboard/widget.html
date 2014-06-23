@@ -1,0 +1,36 @@
+{if (can_access uri: "/form")}
+<div class="col-lg-6">
+    <div class="box box-success">
+        <div class="box-header">
+            <h3 class="box-title">Latest Form Submissions</h3>
+        </div>
+
+        <div class="box-body no-padding">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Date</th>
+                    <th width="1">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {for latestSubmissions}
+                <tr>
+                    <td>{@value.Contact.first_name} {@value.Contact.last_name}</td>
+                    <td>{@value.Contact.email}</td>
+                    <td>{@value.created_date.formatted}</td>
+                    <td>
+                        {if (can_access uri: "/form/submission")}
+                        <a class="btn btn-default btn-sm" href="/{@adminUri}/form/submission/{@value.id}">View</a>
+                        {/if}
+                    </td>
+                </tr>
+                {/for}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/if}

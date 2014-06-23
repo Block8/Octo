@@ -1,0 +1,68 @@
+<section class="control-group {@ccss}">
+    {if label}<label class="label">{@label}</label>{/if}
+
+	<label class="select {if error}state-error{/if}">
+	<select id="{@id}" class="{@css}" name="{@name}">
+        {for options}
+		<option value="{@key}"{if parent.value == key} selected="selected"{/if}>{@value}</option>
+        {/for}
+	</select>
+    </label>
+
+    {if error}
+    <em for="{@name}" class="invalid">{@error}</em>
+	{/if}
+</section>
+
+<table class="table table-bordered table-striped" id="{@id}selectedItems" {ifnot selectedItems}style="display: none;"{/ifnot}>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th width="10%">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--<tr>-->
+            <!--<td>tst</td>-->
+            <!--<td><button id="item_X" class="multiplePickerRemove remove-item btn btn-danger btn-sm">Delete</button></td>-->
+        <!--</tr>-->
+    </tbody>
+</table>
+<br />
+
+<script>
+$(document).ready(function(e) {
+   $('#{@id}').on('change', function() {
+      var value = $(this).val();
+
+      if (value != '') {
+          var text = $(this).find('option:selected').text();
+          var button = '<button id="item_' + value + '" class="multiplePickerRemove remove-item btn btn-danger btn-sm">Delete</button>';
+
+          var tr = $('<tr></tr>');
+          var textTD = $('<td>' + text + '</td>');
+          var buttonTD = $('<td></td>');
+          buttonTD.append(button);
+          tr.append(textTD).append(buttonTD);
+
+          $(button).on('click', function(e) {
+              e.preventDefault();
+              alert('test');
+              $(this).parents('tr').remove();
+          });
+
+          $('#{@id}selectedItems').show();
+          $(this).find("option[value='" + value + "']").remove();
+          $(this).val('');
+      }
+   });
+
+    $('.multiplePickerRemove').on('click', function(e) {
+        e.preventDefault();
+        alert('test');
+        $(this).parents('tr').remove();
+    });
+});
+
+    //$("#selectBox").append('<option value="option5">option5</option>');
+</script>

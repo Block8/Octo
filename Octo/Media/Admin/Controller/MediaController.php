@@ -56,7 +56,7 @@ class MediaController extends Controller
     public function init()
     {
         $this->setTitle('Media');
-        $this->addBreadcrumb('Media', '/media/upload');
+        $this->addBreadcrumb('Media', '/media/add');
 
         $this->fileStore = Store::get('File');
         $this->categoryStore = Store::get('Category');
@@ -64,12 +64,12 @@ class MediaController extends Controller
 
     /**
      * Upload files
-     *
-     * @return void
-     * @author James Inman
      */
     public function add($scope = '')
     {
+        $this->setTitle('Upload Media and Files');
+        $this->addBreadcrumb('Upload');
+
         Event::trigger($scope . 'Upload', $this);
 
         if ($this->request->getMethod() == 'POST') {
@@ -135,15 +135,17 @@ class MediaController extends Controller
                 exit;
             }
         }
+        $this->view->scope = $scope;
     }
 
     public function edit($scope, $fileId)
     {
         $file = $this->fileStore->getById($fileId);
+        $this->view->scope = $scope;
         $this->view->scope_name = StringUtilities::singularize(ucwords($scope));
 
-        $this->setTitle('Edit File: ' . $file->getTitle());
-        $this->addBreadcrumb(ucwords($scope), '/media/' . $scope . '/' . $fileId);
+        $this->setTitle($file->getTitle(), 'Manage ' . ucwords($scope));
+        $this->addBreadcrumb(ucwords($scope), '/media/manage/' . $scope . '/');
         $this->addBreadcrumb($file->getTitle(), '/media/edit/' . $scope . '/' . $fileId);
         $this->view->file = $file;
 
@@ -220,8 +222,8 @@ class MediaController extends Controller
     {
         $scope_name = ucwords($scope);
 
-        $this->setTitle($scope_name);
-        $this->addBreadcrumb($scope_name, '/' . $scope);
+        $this->setTitle('Manage ' . $scope_name, 'Media');
+        $this->addBreadcrumb($scope_name, '/media/manage/' . $scope);
 
         $this->view->scope = $scope;
         $this->view->scope_name = $scope_name;

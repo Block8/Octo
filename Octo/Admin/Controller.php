@@ -51,6 +51,10 @@ abstract class Controller extends \b8\Controller
         $this->layout->currentUser = $this->currentUser;
         $this->layout->menu = $this->menu;
 
+        if (file_exists(APP_PATH . 'public/assets/backoffice.css')) {
+            $this->layout->siteCss = true;
+        }
+
         if (file_exists(APP_PATH . 'public/assets/images/cms-logo.png')) {
             $this->layout->siteLogo = true;
         }
@@ -175,9 +179,10 @@ abstract class Controller extends \b8\Controller
     /**
      * Set the title to display
      */
-    public function setTitle($title)
+    public function setTitle($title, $subtitle = null)
     {
         $this->layout->title = $title;
+        $this->layout->subtitle = $subtitle;
     }
 
     /**

@@ -74,6 +74,10 @@ class UserController extends Controller
                     $user->setValues($params);
                     $user->setDateAdded(new \DateTime());
                     $user = $this->userStore->save($user);
+                    
+                    $data = [$user, $params];
+                    Event::trigger('userSaved', $data);
+                    list($user, $params) = $data;
 
                     $permission = new Permission;
                     $permission->setUserId($user->getId());
@@ -102,7 +106,7 @@ class UserController extends Controller
         $user = $this->userStore->getById($userId);
 
         $this->setTitle('Edit User: ' . $user->getName());
-        $this->addBreadcrumb($user->getName(), '/user/edit');
+        $this->addBreadcrumb($user->getName(), '/user/edit/' . $userId);
 
         if ($this->request->getMethod() == 'POST') {
             $form = $this->userForm($this->getParams(), 'edit');

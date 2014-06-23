@@ -8,6 +8,7 @@ use b8\Exception\HttpException;
 use Octo\Block;
 use Octo\BlockManager;
 use Octo\Controller;
+use Octo\Event;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
 use Octo\System\Model\ContentItem;
@@ -17,12 +18,12 @@ use Octo\Template;
 class PageController extends Controller
 {
     /**
-     * @var \Octo\Page\Store\PageStore
+     * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
 
     /**
-     * @var \Octo\Page\Store\PageVersionStore
+     * @var \Octo\Pages\Store\PageVersionStore
      */
     protected $versionStore;
 
@@ -32,12 +33,12 @@ class PageController extends Controller
     protected $content;
 
     /**
-     * @var \Octo\Page\Model\Page
+     * @var \Octo\Pages\Model\Page
      */
     protected $page;
 
     /**
-     * @var \Octo\Page\Model\PageVersion
+     * @var \Octo\Pages\Model\PageVersion
      */
     protected $version;
 
@@ -47,6 +48,8 @@ class PageController extends Controller
     protected $uriExtension;
 
     protected $blockManager;
+
+    public $breadcrumb = [];
 
     public function init()
     {
@@ -83,12 +86,21 @@ class PageController extends Controller
         } catch (NotFoundException $e) {
             throw new NotFoundException('Page not found: ' . $path);
         } catch (Exception $e) {
-            throw new HttpException\ServerErrorException('System Error', 0, $e);
+            throw $e;
         }
 
         if (!is_null($this->uriExtension) && !$blockManager->uriExtensionsHandled()) {
             throw new NotFoundException('Page not found: ' . $path);
         }
+
+        $data = [
+            'page' => $this->page,
+            'version' => $this->version,
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
 
         return $output;
     }

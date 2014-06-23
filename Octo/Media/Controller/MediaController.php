@@ -69,10 +69,15 @@ class MediaController extends Controller
         $files = $this->fileStore->getAllForScope($scope);
 //        File::$sleepable = array('id', 'url', 'title');
         foreach ($files as &$item) {
-            $imageData = getimagesize($item->getPath());
-            $item = $item->toArray(1);
-            $item['width'] = $imageData[0];
-            $item['height'] = $imageData[1];
+            if(file_exists($item->getPath())) {
+                $imageData = getimagesize($item->getPath());
+                $item = $item->toArray(1);
+                $item['width'] = $imageData[0];
+                $item['height'] = $imageData[1];
+            }
+            else {
+                $item = $item->toArray(1);
+            }
         }
         print json_encode($files);
         exit;
@@ -87,8 +92,7 @@ class MediaController extends Controller
      */
     public function download($fileId)
     {
-        $file = File::getById($fileId);
-
+        $file = $this->fileStore->getById($fileId);
         $download = new FileDownload();
         $download->setFileId($file->getId());
         $download->setDownloaded(new \DateTime);

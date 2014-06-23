@@ -9,7 +9,7 @@ use Octo\Store\CategoryStore;
 class Category extends Block
 {
     /**
-     * @var \Octo\Store\CategoryStore
+     * @var \Octo\Categories\Store\CategoryStore
      */
     protected $categoryStore;
 

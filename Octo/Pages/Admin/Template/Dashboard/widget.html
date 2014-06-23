@@ -1,0 +1,33 @@
+<div class="col-lg-6">
+    <div class="box box-warning">
+        <div class="box-header">
+            <h3 class="box-title">Recently Edited Pages</h3>
+        </div>
+
+        <div class="box-body no-padding">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Last Editor</th>
+                    <th>Last Update</th>
+                </tr>
+                </thead>
+                <tbody>
+                {for latestPages}
+                <tr>
+                    <td>
+                        {if (can_access uri: "/page/edit")}
+                        <a href="/{@adminUri}/page/edit/{@item.id}">{@item.CurrentVersion.title}</a>
+                        {/if}
+                        {ifnot (can_access uri: "/page/edit")}{@item.CurrentVersion.title}{/ifnot}
+                    </td>
+                    <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
+                    <td>{date_format date: item.CurrentVersion.updated_date}</td>
+                </tr>
+                {/for}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,170 +1,251 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
+    <meta charset="UTF-8">
     <title>{@title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <!-- Basic Styles -->
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/smartadmin-production.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/smartadmin-skins.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/backoffice/css/global.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
-    <!-- FAVICONS -->
-    <link rel="shortcut icon" href="/assets/backoffice/images/favicon/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/assets/backoffice/images/favicon/favicon.ico" type="image/x-icon">
+    <!-- bootstrap 3.0.2 -->
+    <link href="/assets/backoffice/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- font Awesome -->
+    <link href="/assets/backoffice/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons -->
+    <link href="/assets/backoffice/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Morris chart -->
+    <link href="/assets/backoffice/css/morris/morris.css" rel="stylesheet" type="text/css" />
+    <!-- jvectormap -->
+    <link href="/assets/backoffice/css/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    <!-- fullCalendar -->
+    <link href="/assets/backoffice/css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" />
+    <!-- Daterange picker -->
+    <link href="/assets/backoffice/css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link href="/assets/backoffice/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link href="/assets/backoffice/css/AdminLTE.css" rel="stylesheet" type="text/css" />
 
-    <!-- GOOGLE FONT -->
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+    <link href="/assets/backoffice/js/plugin/select2/select2.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/backoffice/js/plugin/select2/select2-bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <!-- Octo -->
+    <link href="/assets/backoffice/css/octo.css" rel="stylesheet" type="text/css" />
+
+    {if siteCss}
+    <link href="/assets/backoffice.css" rel="stylesheet" type="text/css">
+    {/if}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery 2.0.2 -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <!-- jQuery UI 1.10.3 -->
+    <script src="/assets/backoffice/js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="/assets/backoffice/js/bootstrap.min.js" type="text/javascript"></script>
+
+    <!-- Octo -->
+    <script src="/assets/backoffice/js/class.js"></script>
+    <script src="/assets/backoffice/js/system.js"></script>
 
     <script>window.adminUri = '{@adminUri}';</script>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <script> if (!window.jQuery) { document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');} </script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script> if (!window.jQuery.ui) { document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');} </script>
 </head>
+<body class="skin-blue">
 
-<body>
-<div class="pace hide">
-    <div class="pace-activity"></div>
+<header class="header">
+<a href="/{@adminUri}" class="logo">
+    <img src="/assets/images/cms-logo.png" alt="" style="max-width: 150px">
+</a>
+
+<!-- Header Navbar: style can be found in header.less -->
+<nav class="navbar navbar-static-top" role="navigation">
+<!-- Sidebar toggle button-->
+<a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+</a>
+<div class="navbar-right">
+<ul class="nav navbar-nav">
+
+<!-- User Account: style can be found in dropdown.less -->
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-user"></i>
+        <span>{@user.name} <i class="caret"></i></span>
+    </a>
+    <ul class="dropdown-menu">
+        <!-- User image -->
+        <li class="user-header bg-light-blue">
+            <img src="//www.gravatar.com/avatar/{hash value: user.email}?d=mm" class="img-circle" alt="User Image" />
+            <p>
+                {@user.name}
+                <small>Member since {@user.date_added.formatted}</small>
+            </p>
+        </li>
+        <!-- Menu Body --
+        <li class="user-body">
+            <div class="col-xs-4 text-center">
+                <a href="#">Followers</a>
+            </div>
+            <div class="col-xs-4 text-center">
+                <a href="#">Sales</a>
+            </div>
+            <div class="col-xs-4 text-center">
+                <a href="#">Friends</a>
+            </div>
+        </li -->
+        <!-- Menu Footer-->
+        <li class="user-footer">
+            <!-- div class="pull-left">
+                <a href="#" class="btn btn-default btn-flat">Profile</a>
+            </div -->
+            <div class="pull-right">
+                <a href="/{@adminUri}/session/logout" class="btn btn-default btn-flat">Sign out</a>
+            </div>
+        </li>
+    </ul>
+</li>
+</ul>
 </div>
-
-<header id="header">
-    <div id="logo-group">
-        <span id="logo">
-            {if siteLogo}
-            <img src="/assets/images/cms-logo.png" alt="">
-            {/if}
-
-            {ifnot siteLogo}
-            <img src="/assets/backoffice/img/logo.png" alt="">
-            {/ifnot}
-        </span>
-    </div>
-
-    <!-- we're not ready yet
-    <div id="project-context">
-
-        <span class="label">Pages:</span>
-        <span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">Recent pages <i class="fa fa-angle-down"></i></span>
-
-        <ul class="dropdown-menu">
-            <li>
-                <a href="">Home</a>
-            </li>
-            <li>
-                <a href="">About</a>
-            </li>
-        </ul>
-
-    </div> -->
-
-    <div class="pull-right">
-
-        <div id="hide-menu" class="btn-header pull-right">
-            <span> <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
-        </div>
-
-        <div class="btn-header transparent pull-right">
-            <span> <a href="/{@adminUri}/session/logout/" title="Sign Out"><i class="fa fa-sign-out"></i></a></span>
-        </div>
-
-        <div id="search-mobile" class="btn-header transparent pull-right">
-            <span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
-        </div>
-
-        <form action="#" class="header-search pull-right">
-            <input type="text" placeholder="Quick search" id="search-fld">
-            <button type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-            <a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
-        </form>
-
-    </div>
-
+</nav>
 </header>
+<div class="wrapper row-offcanvas row-offcanvas-left">
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="left-side sidebar-offcanvas">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="//www.gravatar.com/avatar/{hash value: user.email}?d=mm" class="img-circle" alt="{@user.name}" />
+            </div>
+            <div class="pull-left info">
+                <p>Hello, {@user.name}</p>
 
-<aside id="left-panel">
-
-    <div class="login-info">
-        <span> <img src="//www.gravatar.com/avatar/{hash value: user.email}?d=mm" alt="me" class="online" /> <a href="javascript:void(0);" id="show-shortcut">
-            {@user.name}
-        </a> </span>
-    </div>
-
-    <nav>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+        <!-- search form -->
+        <form action="/{@adminUri}/search" method="GET" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                            <span class="input-group-btn">
+                                <button type='submit' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+            </div>
+        </form>
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
         {@menu}
-    </nav>
-    <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
-
+    </section>
+    <!-- /.sidebar -->
 </aside>
 
-<div id="main" role="main">
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        {@title}
+        {if subtitle}
+        <small>{@subtitle}</small>
+        {/if}
+    </h1>
 
-    <div id="ribbon">
+    <ol class="breadcrumb">
+        <li>
+            <a href="/{@adminUri}">{@siteName}</a>
+        </li>
 
-        <ol class="breadcrumb">
-            <li>
-                <a href="/{@adminUri}">{@siteName}</a>
-            </li>
+        {for breadcrumb}
+        <li>
+            {if item.link}<a href="/{@adminUri}{@item.link}">{/if}{@item.title}{if item.link}</a>{/if}
+        </li>
+        {/for}
+    </ol>
+</section>
 
-            {for breadcrumb}
-            <li>
-                {if item.link}<a href="/{@adminUri}{@item.link}">{/if}{@item.title}{if item.link}</a>{/if}
-            </li>
-            {/for}
-        </ol>
+<!-- Main content -->
+<section class="content">
 
+    <div class="row">
+        <div class="col-lg-12">
+
+            {if GlobalMessage:error}
+            <div class="alert alert-danger fade in">
+                <i class="fa fa-ban"></i>
+                <strong>Error:</strong> {@GlobalMessage:error}
+            </div>
+            {/if}
+
+            {if GlobalMessage:success}
+            <div class="alert alert-success fade in">
+                <i class="fa fa-check"></i>
+                {@GlobalMessage:success}
+            </div>
+            {/if}
+
+            {if GlobalMessage:info}
+            <div class="alert alert-info fade in">
+                <i class="fa fa-info"></i>
+                {@GlobalMessage:info}
+            </div>
+            {/if}
+
+        </div>
     </div>
 
-    {if GlobalMessage:error}
-    <div class="alert alert-danger fade in">
-    	<strong>Error:</strong> {@GlobalMessage:error}
-    </div>
-    {/if}
 
-    {if GlobalMessage:success}
-    <div class="alert alert-success fade in">
-    	{@GlobalMessage:success}
-    </div>
-    {/if}
+{@content}
+</section><!-- /.content -->
+</aside><!-- /.right-side -->
+</div><!-- ./wrapper -->
 
-    {if GlobalMessage:info}
-    <div class="alert alert-info fade in">
-    	{@GlobalMessage:info}
-    </div>
-    {/if}
+<!-- add new calendar event modal -->
 
-	<div id="content">
+<!-- Morris.js charts -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="/assets/backoffice/js/plugins/morris/morris.min.js" type="text/javascript"></script>
+<!-- Sparkline -->
+<script src="/assets/backoffice/js/plugins/sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+<!-- jvectormap -->
+<script src="/assets/backoffice/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
+<script src="/assets/backoffice/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
+<!-- fullCalendar -->
+<script src="/assets/backoffice/js/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+<!-- jQuery Knob Chart -->
+<script src="/assets/backoffice/js/plugins/jqueryKnob/jquery.knob.js" type="text/javascript"></script>
+<!-- daterangepicker -->
+<script src="/assets/backoffice/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/assets/backoffice/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
+<!-- iCheck -->
+<script src="/assets/backoffice/js/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
 
-    {@content}
-
-    </div>
-
-</div>
-
-<script src="/assets/backoffice/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
-<script src="/assets/backoffice/js/bootstrap/bootstrap.min.js"></script>
-<script src="/assets/backoffice/js/notification/SmartNotification.min.js"></script>
-<script src="/assets/backoffice/js/smartwidgets/jarvis.widget.min.js"></script>
-<script src="/assets/backoffice/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
-<script src="/assets/backoffice/js/plugin/sparkline/jquery.sparkline.min.js"></script>
-<script src="/assets/backoffice/js/plugin/jquery-validate/jquery.validate.min.js"></script>
-<script src="/assets/backoffice/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+<!-- Select2 -->
 <script src="/assets/backoffice/js/plugin/select2/select2.min.js"></script>
-<script src="/assets/backoffice/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
-<script src="/assets/backoffice/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
-<script src="/assets/backoffice/js/plugin/smartclick/smartclick.js"></script>
-<script src="/assets/backoffice/js/smartadmin.js"></script>
-<script src="/assets/backoffice/js/smartadmin-extend.js"></script>
 
-<!-- Charts -->
+<!-- AdminLTE App -->
+<script src="/assets/backoffice/js/AdminLTE/app.js" type="text/javascript"></script>
+
+<!-- CKEditor -->
+<script src="/assets/backoffice/js/jquery.tablednd.js"></script>
+<script src="/assets/backoffice/ckeditor-4.3.2/ckeditor.js"></script>
+<script src="/assets/backoffice/ckeditor-4.3.2/adapters/jquery.js"></script>
+<script src="/assets/backoffice/js/ckeditor-init.js"></script>
+
+<!-- PLupload -->
+<script src="/assets/backoffice/js/plupload/plupload.full.min.js"></script>
+
+<!-- Octo -->
 <script src="/assets/backoffice/js/plugin/flot/jquery.flot.cust.js"></script>
 <script src="/assets/backoffice/js/plugin/flot/jquery.flot.resize.js"></script>
 <script src="/assets/backoffice/js/plugin/flot/jquery.flot.tooltip.js"></script>
@@ -172,15 +253,5 @@
 <script src="/assets/backoffice/js/analytics.js"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/assets/backoffice/js/excanvas.min.js"></script><![endif]-->
 
-<!-- CKEditor -->
-<script src="/assets/backoffice/ckeditor-4.3.2/ckeditor.js"></script>
-<script src="/assets/backoffice/ckeditor-4.3.2/adapters/jquery.js"></script>
-<script src="/assets/backoffice/js/ckeditor-init.js"></script>
-
-<!-- Generic CMS -->
-<script src="/assets/backoffice/js/jquery.tablednd.js"></script>
-<script src="/assets/backoffice/js/plupload/plupload.full.min.js"></script>
-
 </body>
-
 </html>

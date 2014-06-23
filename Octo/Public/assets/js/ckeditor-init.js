@@ -1,11 +1,14 @@
 window.basicCkEditor = {
     toolbar: [
         [ 'Source' ],
-        [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
-        [ 'Link', 'Unlink' ],
-        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ]
+        [ 'Styles' ],
+        [ 'Bold', 'Italic', 'Underline' ],
+        [ 'octolink' ],
+        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
+        [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
+    extraPlugins: 'scayt,undo',
     resizeEnabled: false,
     height: '200px'
 };
@@ -13,11 +16,14 @@ window.basicCkEditor = {
 window.smallCkEditor = {
     toolbar: [
         [ 'Source' ],
-        [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
-        [ 'Link', 'Unlink' ],
-        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ]
+        [ 'Styles' ],
+        [ 'Bold', 'Italic', 'Underline' ],
+        [ 'octolink' ],
+        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
+        [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
+    extraPlugins: 'scayt,undo',
     resizeEnabled: false,
     height: '100px'
 };
@@ -25,16 +31,17 @@ window.smallCkEditor = {
 window.fullCkEditor = {
     toolbar: [
         [ 'Source' ],
-        [ 'Format', 'Styles' ],
-        [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript' ],
+        [ 'Styles' ],
+        [ 'Bold', 'Italic', 'Underline' ],
         [ 'Link', 'Unlink' ],
         [ 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
-        [ 'cmsimage', 'cmsfile', 'Youtube', 'Table' ]
+        [ 'octolink', 'cmsimage', 'cmsfile', 'Youtube', 'Table' ],
+        [ 'Scayt' ]
     ],
     removePlugins: 'elementspath,image',
     resizeEnabled: false,
-    extraPlugins: 'youtube,cmsfile,cmsimage',
+    extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     alllowedContent: true,
     height: '200px',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
@@ -44,10 +51,50 @@ window.fullCkEditor = {
 
 CKEDITOR.config.allowedContent = true;
 
+CKEDITOR.on('dialogDefinition', function( ev ) {
+    var dialogName = ev.data.name;
+    var dialogDefinition = ev.data.definition;
+
+    if(dialogName === 'table' || dialogName == 'tableProperties' ) {
+        var infoTab = dialogDefinition.getContents('info');
+
+        //remove fields
+        var cellSpacing = infoTab.remove('txtCellSpace');
+        var cellPadding = infoTab.remove('txtCellPad');
+        var border = infoTab.remove('txtBorder');
+        var width = infoTab.remove('txtWidth');
+        var height = infoTab.remove('txtHeight');
+        var align = infoTab.remove('cmbAlign');
+
+        var advTab = dialogDefinition.getContents('advanced');
+        advTab.get('advCSSClasses')['default'] = 'table table-bordered'; //bootstrap table
+        advTab.get('advStyles')['default'] = ''; //bootstrap table
+
+    }
+    if(dialogName === 'image') {
+        var infoTab = dialogDefinition.getContents('info');
+        dialogDefinition.removeContents( 'Link' );
+        dialogDefinition.removeContents( 'advanced' );
+        infoTab.remove('txtWidth');
+        infoTab.remove('txtHeight');
+        infoTab.remove('txtBorder');
+        infoTab.remove('txtHSpace');
+        infoTab.remove('txtVSpace');
+        infoTab.remove('ratioLock');
+        infoTab.remove('cmbAlign');
+
+    }
+});
+
 $(document).ready(function() {
 	$('textarea.ckeditor.basic.small').ckeditor(window.smallCkEditor);
 	$('textarea.ckeditor.basic').ckeditor(window.basicCkEditor);
     $('textarea.ckeditor.advanced').ckeditor(window.fullCkEditor);
 
     $("table.dnd").tableDnD();
+
+    // Dirty IE fix for CKEditor in Bootstrap 3 Modal Windows.
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {};
+
+
 });

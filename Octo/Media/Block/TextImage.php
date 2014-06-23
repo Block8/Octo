@@ -13,7 +13,7 @@ class TextImage extends Text
 
     public function renderNow()
     {
-        $this->view->width = 500;
+        $this->view->width = 512;
         $this->view->height = 'auto';
 
         if (isset($this->templateParams['width'])) {

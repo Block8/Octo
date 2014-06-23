@@ -1,8 +1,6 @@
 <section class="form-group {@ccss} {if error}error{/if}">
     {if label}<label class="">{@label}</label>{/if}
-	<label class="textarea {if error}state-error{/if}">
-		<textarea rows="{@rows}" id="{@id}" class="form-control {@css}" name="{@name}" {if required} required{/if}>{@value}</textarea>
-    </label>
+	<textarea rows="{@rows}" id="{@id}" class="form-control {@css}" name="{@name}" {if required} required{/if}>{@value}</textarea>
 
 	{if error}
     <em for="{@name}" class="invalid">{@error}</em>

@@ -8,6 +8,8 @@ use Octo\Block;
 use Octo\Store;
 use Octo\Template;
 
+use Octo\Categories\Store\CategoryStore;
+
 class News extends Block
 {
     protected $hasUriExtensions = true;
@@ -22,6 +24,17 @@ class News extends Block
      */
     protected static $scope = 'news';
 
+    /**
+     * @var \Octo\Articles\Store\ArticleStore
+     */
+    protected $newsStore;
+
+
+    /**
+     * @var CategoryStore
+     */
+    protected $categoryStore;
+
     public static function getInfo()
     {
         return [
@@ -33,6 +46,9 @@ class News extends Block
 
     public function renderNow()
     {
+        $this->newsStore = Store::get('Article');
+        $this->categoryStore = Store::get('Category');
+
         if (!empty($this->uri)) {
             return $this->renderNewsItem($this->uri);
         } else {
@@ -40,45 +56,144 @@ class News extends Block
         }
     }
 
-    public function renderNewsList()
+    /**
+     * Get category_id from DB
+     * @param $slug
+     * @return int category_id
+     * @throws \b8\Exception\HttpException\NotFoundException
+     */
+    protected function getCategoryFromSlug($slug)
+    {
+        if (is_null($slug)) return $slug;
+
+        $uriParts = explode('/', ltrim($this->uri, '/'));
+        $probablyCategory = array_pop($uriParts);
+
+        $isCategory = $this->categoryStore->getByScopeAndSlug(static::$scope, $probablyCategory);
+
+        if (is_null($isCategory->getId()))
+        {
+            throw new NotFoundException('News/Blog item not found: ' . $slug);
+        }
+
+        return $isCategory->getId();
+    }
+
+
+    public function renderNewsList($slug = null)
     {
         if (!empty($this->templateParams['listTemplate'])) {
             $template = 'Block/' . static::$articleType . '/' . $this->templateParams['listTemplate'];
             $this->view = Template::getPublicTemplate($template);
         }
 
-        $limit = 100;
+        $limit = 10;
 
         if (!empty($this->templateParams['count'])) {
-            $limit = $this->templateParams['count'];
+            $limit = (int)$this->templateParams['count'];
         }
 
         if (!empty($this->content['perPage'])) {
-            $limit = $this->content['perPage'];
+            $limit = (int)$this->content['perPage'];
         }
 
-        $category = !empty($this->content['category']) ? $this->content['category'] : null;
+        $category = !empty($this->content['category']) ? $this->content['category'] : $this->getCategoryFromSlug($slug);
 
-        $news = Store::get('Article')->getRecent($category, $limit, static::$scope);
+        $pagination = [
+            'current' => (int)$this->request->getParam('p', 1),
+            'limit' => $limit,
+            'uri' => $this->page->getUri() . '?',
+        ];
+
+        $criteria = [];
+        $params = [];
+
+        $criteria[] = 'c.scope = :scope';
+        $params[':scope'] = static::$scope;
+
+        if (!is_null($category)) {
+            $subcategories = $this->getSubCategories($category);
+
+            if(!empty($subcategories))
+            {
+                $category .= "," . implode(',', $subcategories);
+            }
+
+            $criteria[] = 'category_id IN ('.$category.')';
+            //$params[':category_id'] = $categoryIds;
+        }
+
+        $query = $this->newsStore->query($pagination['current'], $limit, ['publish_date', 'DESC'], $criteria, $params);
+        $query->join('category', 'c', 'c.id = article.category_id');
+
+        $pagination['total'] = $query->getCount();
+
+        $query->execute();
+        $news = $query->fetchAll();
+
         $base = $this->request->getPath();
 
         if ($base == '/') {
             $base = '';
         }
 
+        $this->view->uri = $this->page->getUri();
         $this->view->articles = $news;
         $this->view->base = $base;
+        $this->view->pagination = $pagination;
 
         return $news;
     }
 
+    /**
+     * Get distinct sub categories
+     * @param $category_id
+     * @return array
+     */
+    protected function getSubCategories($category_id)
+    {
+        $allChildren = array();
+
+        $subChildren = $this->categoryStore->getAllForParent($category_id);
+
+        foreach ($subChildren as $child)
+        {
+            $childId = $child->getId();
+            $allChildren[$childId] = $childId;
+            $arr = $this->getSubCategories($childId);
+            if(count($arr)>0)
+            {
+                $allChildren = array_merge($this->getSubCategories($childId), $allChildren);
+            }
+        }
+
+        return $allChildren;
+    }
+
+
+
+
     public function renderNewsItem($slug)
     {
-        $item = Store::get('Article')->getBySlug($slug);
+        $item = $this->newsStore->getBySlug($slug);
 
         if (!$item) {
-            throw new NotFoundException('News item not found: ' . $slug);
+            return $this->renderNewsList($slug); //That might be a category
         }
+
+        if (!isset($this->dataStore['breadcrumb']) || !is_array($this->dataStore['breadcrumb'])) {
+            $this->dataStore['breadcrumb'] = [];
+        }
+
+        foreach ($this->dataStore['breadcrumb'] as &$breadcrumb) {
+            $breadcrumb['active'] = false;
+        }
+
+        $this->dataStore['breadcrumb'][] = [
+            'uri' => $item->getFullUrl(),
+            'title' => $item->getTitle(),
+            'active' => true,
+        ];
 
         $content = $item->getContentItem()->getContent();
         $content = json_decode($content, true);
