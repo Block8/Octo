@@ -294,9 +294,9 @@ class NewsController extends Controller
         $field->setLabel('Published Date');
 
         if (!isset($values['publish_date'])) {
-            $values['publish_date'] = (new DateTime())->format('l j F Y');
+            $values['publish_date'] = (new DateTime())->format('Y-m-d');
         } else {
-            $values['publish_date'] = (new DateTime($values['publish_date']))->format('l j F Y');
+            $values['publish_date'] = (new DateTime($values['publish_date']))->format('Y-m-d');
         }
 
         $field->setClass('sa-datepicker');

@@ -204,4 +204,18 @@ $(document).ready(function () {
     });
 
     $('.select2').select2();
+
+    $('.sa-datepicker').daterangepicker({
+        format: 'YYYY-MM-DD',
+        singleDatePicker: true,
+        timePicker: false
+    });
 });
+
+// Sortable
+var fixHelper = function(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+};
