@@ -95,7 +95,7 @@ class NavigationArticle extends Block
         if($this->page->getUri() == $keyToPut)
         {
             $topMenu[$position]['children'] = $categoriesMenu;
-            $topMenu[$position]['current'] = false;
+            $topMenu[$position]['current'] = true;
         } else {
 
             if(isset($categoriesMenu['children'])){

@@ -99,13 +99,6 @@ class News extends Block
 
         $category = !empty($this->content['category']) ? $this->content['category'] : $this->getCategoryFromSlug($slug);
 
-        $subcategories = $this->getSubCategories($category);
-
-        if(!empty($subcategories))
-        {
-            $category .= "," . implode(',', $subcategories);
-        }
-
         $pagination = [
             'current' => (int)$this->request->getParam('p', 1),
             'limit' => $limit,
@@ -119,6 +112,13 @@ class News extends Block
         $params[':scope'] = static::$scope;
 
         if (!is_null($category)) {
+            $subcategories = $this->getSubCategories($category);
+
+            if(!empty($subcategories))
+            {
+                $category .= "," . implode(',', $subcategories);
+            }
+
             $criteria[] = 'category_id IN ('.$category.')';
             //$params[':category_id'] = $categoryIds;
         }
