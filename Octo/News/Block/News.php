@@ -29,7 +29,6 @@ class News extends Block
      */
     protected $newsStore;
 
-
     /**
      * @var CategoryStore
      */
@@ -61,7 +60,6 @@ class News extends Block
             return $this->renderNewsList();
         }
     }
-
 
     public function renderNewsMailshot()
     {
@@ -120,7 +118,7 @@ class News extends Block
         $params[':scope'] = static::$scope;
 
         if (!is_null($category)) {
-            $subcategories = $this->getSubCategories($category);
+            $subcategories = $this->categoryStore->getSubCategories($category);
 
             if(!empty($subcategories))
             {
@@ -191,30 +189,7 @@ class News extends Block
     }
 
 
-    /**
-     * Get distinct sub categories id
-     * @param $category_id
-     * @return array
-     */
-    protected function getSubCategories($category_id)
-    {
-        $allChildren = array();
 
-        $subChildren = $this->categoryStore->getAllForParent($category_id);
-
-        foreach ($subChildren as $child)
-        {
-            $childId = $child->getId();
-            $allChildren[$childId] = $childId;
-            $arr = $this->getSubCategories($childId);
-            if(count($arr)>0)
-            {
-                $allChildren = array_merge($this->getSubCategories($childId), $allChildren);
-            }
-        }
-
-        return $allChildren;
-    }
 
     /**
      * Get category_id from DB

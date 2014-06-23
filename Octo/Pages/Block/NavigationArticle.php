@@ -74,10 +74,25 @@ class NavigationArticle extends Block
     {
         $parents = $this->categoryStore->getNamesAndScopeForParents($this->scope);
 
-        for ($i=0; $i<count($parents); $i++)
+        foreach ($parents as $key => $parent)
         {
-            $parents[$i]['uri'] = $this->page->getUri() . "/" . $parents[$i]['slug'];
+            $category = $parent['id'];
+
+            $subcategories = $this->categoryStore->getSubCategories($category);
+            if(!empty($subcategories))
+            {
+                $category .= "," . implode(',', $subcategories);
+            }
+            $articles = $this->articleStore->checkArticlesForSubCategories($category);
+
+            if (!count($articles))
+            {
+                unset($parents[$key]);
+            } else {
+                $parents[$key]['uri'] = $this->page->getUri() . "/" . $parents[$key]['slug'];
+            }
         }
+
         return $parents;
     }
 
@@ -122,7 +137,6 @@ class NavigationArticle extends Block
 
         return $slug;
     }
-
 
 
     /**
@@ -215,6 +229,18 @@ class NavigationArticle extends Block
         $children = $this->categoryStore->getAllForParent($category->getId());
 
         if (count($children)) {
+            //23 June 2014 - Hide categories without any article
+            foreach($children as $key => $child)
+            {
+                $hasArticles = $this->articleStore->getByCategoryId($child->getId());
+
+                if (!count($hasArticles))
+                {
+                    unset($children[$key]);
+                }
+            }
+
+            if (!count($children)) return null;
             return $children;
         }
 
@@ -252,6 +278,10 @@ class NavigationArticle extends Block
         return $rtn;
     }
 
+    /**
+     * Get Top - Article Scope Menu
+     * @return array
+     */
     protected function getTopMenu()
     {
         $this->ancestors = $this->getAncestors();

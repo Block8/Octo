@@ -209,4 +209,29 @@ ORDER BY c.parent_id ASC, " . $order;
         }
     }
 
+    /**
+     * Get distinct sub categories id
+     * @param $category_id
+     * @return array
+     */
+    public function getSubCategories($category_id)
+    {
+        $allChildren = array();
+
+        $subChildren = $this->getAllForParent($category_id);
+
+        foreach ($subChildren as $child)
+        {
+            $childId = $child->getId();
+            $allChildren[$childId] = $childId;
+            $arr = $this->getSubCategories($childId);
+            if(count($arr)>0)
+            {
+                $allChildren = array_merge($this->getSubCategories($childId), $allChildren);
+            }
+        }
+
+        return $allChildren;
+    }
+
 }

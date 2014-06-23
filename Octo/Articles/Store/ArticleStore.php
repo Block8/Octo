@@ -124,6 +124,19 @@ class ArticleStore extends Octo\Store
         return $ret;
     }
 
+    /**
+     * Check if there are any articles in subcategories
+     * @param $categories
+     * @return array
+     */
+    public function checkArticlesForSubCategories($categories)
+    {
+        $query = new Query('Octo\Articles\Model\Article');
+        $query->select('a.*')->from('article', 'a');
+        $query->where('a.category_id IN ('.$categories.')');
+        $query->limit(1);
 
+        return $query->execute()->fetchAll();
+    }
 
 }
