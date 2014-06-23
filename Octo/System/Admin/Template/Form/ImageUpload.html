@@ -1,5 +1,5 @@
-<section class="control-group {@ccss}{if error} error{/if}">
-    {if label}<label class="label">{@label}</label>{/if}
+<section class="form-group {@ccss}{if error} error{/if}">
+    {if label}<label class="">{@label}</label>{/if}
 
     {if imageId}
         <div class="image_form_container">
@@ -8,9 +8,7 @@
         </div>
     {/if}
 
-    <label class="input{if error} state-error{/if}">
-        <input id="{@id}" type="{@type}" {@multiple} class="{@css}{if error} invalid{/if}" name="{@name}" value="{@value}"{if pattern} pattern="{@pattern}"{/if}{if required} required{/if}>
-    </label>
+        <input id="{@id}" type="{@type}" {@multiple} class="form-control {@css}{if error} invalid{/if}" name="{@name}" value="{@value}"{if pattern} pattern="{@pattern}"{/if}{if required} required{/if}>
 
     {if error}
         <em for="{@name}" class="invalid">{@error}</em>

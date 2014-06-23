@@ -1,12 +1,11 @@
 <div class="col-lg-12">
-    <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-        <header role="heading">
-            <h2><i class="fa fa-fw fa-bug "></i> Dead Link Spider</h2>
-        </header>
+    <div class="box box-danger">
+        <div class="box-header">
+            <h3 class="box-title">Broken Links</h3>
+        </div>
 
-        <div role="content">
-            <div class="widget-body no-padding" style="font-size:11px;" id="dead-link-spider">
-                <div role="content-fluid">
+        <div class="box-body no-padding">
+            <div role="content-fluid">
                 <div class="row">
                     <div class="col-md-5"><h4>URL</h4></div>
                     <div class="col-md-5"><h4>Linked From</h4></div>
@@ -16,28 +15,27 @@
                 {for deadLinks}
                 <div class="row" styles="padding:2px;">
                     <div class="col-md-5" style="">{@value.url}</div>
-                        <div class="col-md-5" style="">{@value.parent_url}</div>
-                            <div class="col-md-2" style="">
-                            {if value.http_response_code = 404}
-                            Page Not Found
-                            {/if}
+                    <div class="col-md-5" style="">{@value.parent_url}</div>
+                    <div class="col-md-2" style="">
+                        {if value.http_response_code = 404}
+                        Page Not Found
+                        {/if}
 
-                            {if value.http_response_code = 500}
-                            Server Error
-                            {/if}
+                        {if value.http_response_code = 500}
+                        Server Error
+                        {/if}
 
-                            {if value.http_response_code = 0}
-                            Connect Error
-                            {/if}
+                        {if value.http_response_code = 0}
+                        Connect Error
+                        {/if}
 
-                            {if value.http_response_code = 9001}
-                            Blacklisted
-                            {/if}
-                        </div>
+                        {if value.http_response_code = 9001}
+                        Blacklisted
+                        {/if}
+                    </div>
                 </div>
-                    {/for}
+                {/for}
 
-                </div>
             </div>
         </div>
     </div>

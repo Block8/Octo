@@ -24,15 +24,17 @@ class DashboardWidget extends Listener
         $stats[] = [
             'title' => 'Contacts',
             'count' => number_format($contactStore->getTotal()),
-            'icon' => 'user',
-            'color' => 'blue',
+            'icon' => 'person-stalker',
+            'color' => 'aqua',
+            'link' => '/contact',
         ];
 
         $stats[] = [
             'title' => 'Submissions',
             'count' => number_format($submissionStore->getTotal()),
-            'icon' => 'envelope',
-            'color' => 'purple',
+            'icon' => 'email',
+            'color' => 'green',
+            'link' => '/form',
         ];
     }
 

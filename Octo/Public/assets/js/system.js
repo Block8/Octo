@@ -87,26 +87,23 @@ window.pageEditor = Class.extend({
 
 function textElement(id, label, value)
 {
-    var section = $('<section></section>').addClass('control-group');
-    var label1 = $('<label></label>').addClass('label').text(label);
+    var section = $('<div></div>').addClass('form-group');
+    var label1 = $('<label></label>').text(label);
     section.append(label1);
 
-    var label2 = $('<label></label>').addClass('input');
-    var input = $('<input>').attr('id', id).attr('type', 'text').val(value);
-    section.append(label2);
-    label2.append(input);
+    var input = $('<input>').addClass('form-control').attr('id', id).attr('type', 'text').val(value);
+    section.append(input);
 
     return section;
 }
 
 function selectElement(id, label, options, value)
 {
-    var section = $('<section></section>').addClass('control-group');
-    var label1 = $('<label></label>').addClass('label').text(label);
+    var section = $('<div></div>').addClass('form-group');
+    var label1 = $('<label></label>').text(label);
     section.append(label1);
 
-    var label2 = $('<label></label>').addClass('input');
-    var input = $('<select></select>').attr('id', id).attr('type', 'text');
+    var input = $('<select></select>').attr('id', id).attr('type', 'text').addClass('form-control');
 
     for (var i in options) {
         input.append($('<option></option>').val(i).text(options[i]));
@@ -114,8 +111,7 @@ function selectElement(id, label, options, value)
 
     input.val(value);
 
-    section.append(label2);
-    label2.append(input);
+    section.append(input);
     input.css('width', '100%');
     input.select2();
 
@@ -124,25 +120,19 @@ function selectElement(id, label, options, value)
 
 function imagePicker(id, label, value)
 {
-    var section = $('<section></section>').addClass('control-group');
-//    var label1 = $('<label></label>').addClass('label').text(label);
-//    section.append(label1);
-
-    var label2 = $('<label></label>').addClass('input');
-    var input = $('<input>').attr('id', id).attr('type', 'text');
+    var section = $('<div></div>').addClass('form-group');
+    var input = $('<input>').attr('id', id).attr('type', 'text').addClass('form-control');
     input.css('width', '100%');
-    section.append(label2);
 
     var img = $('<img>');
-    label2.append(img);
+    section.append(img);
 
     if (value) {
         img.attr('src', '/media/render/' + value + '/160/90');
     }
 
-    label2.append('<br /><br />');
-    label2.append(input);
-    input.css('width', '100%');
+    section.append('<br /><br />');
+    section.append(input);
 
     input.select2({
         placeholder: "Search for an image",
@@ -208,7 +198,24 @@ function pagePicker(id, label, value)
     return section;
 }
 
-//Need jQuery
-$('.btn-delete').on('click', function () {
-    return confirm('Are you sure?');
+$(document).ready(function () {
+    $('.btn-delete').on('click', function () {
+        return confirm('Are you sure?');
+    });
+
+    $('.select2').select2();
+
+    $('.sa-datepicker').daterangepicker({
+        format: 'YYYY-MM-DD',
+        singleDatePicker: true,
+        timePicker: false
+    });
 });
+
+// Sortable
+var fixHelper = function(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+};

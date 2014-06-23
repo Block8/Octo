@@ -23,4 +23,4 @@ test:
 failure:
     email:
         committer: true
-        cc: ["dan@block8.co.uk", "james@jamesinman.co.uk"]
+        cc: ["dan@block8.co.uk"]

@@ -26,6 +26,8 @@ class DatabaseController extends Controller
 
     public function index()
     {
+        $this->setTitle('Database Manager');
+
         $runner = new MigrationRunner();
         $migrationData = $runner->getMigrationData();
         krsort($migrationData);

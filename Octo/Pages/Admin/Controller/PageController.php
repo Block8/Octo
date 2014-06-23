@@ -90,6 +90,7 @@ class PageController extends Controller
             return $this->createPage();
         }
 
+        $this->setTitle('Add Page');
         $this->addBreadcrumb('Add Page', '/page/add');
 
         $form = new FormElement();
@@ -204,7 +205,7 @@ class PageController extends Controller
         $latest->setUser($this->currentUser);
         $latest = $this->versionStore->save($latest);
 
-        $this->setTitle('Edit: ' . $latest->getTitle());
+        $this->setTitle($latest->getTitle(), 'Manage Pages');
         $this->addBreadcrumb($latest->getTitle(), '/page/edit/' . $pageId);
 
 
