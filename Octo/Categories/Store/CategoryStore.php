@@ -164,6 +164,49 @@ ORDER BY c.parent_id ASC, " . $order;
         } else {
             return null;
         }
-
     }
+
+    public function getByScopeWithoutParent($scope)
+    {
+        $query = 'SELECT * FROM category WHERE scope = :scope AND parent_id IS NULL';
+        $stmt = Database::getConnection('read')->prepare($query);
+        $stmt->bindParam(':scope', $scope);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Category($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * Return the names and slug of all parent categories as an associative array
+     *
+     * @param string $scope
+     * @param string $order
+     * @return array
+     * @note Only works for one level of parents!
+     */
+    public function getNamesAndScopeForParents($scope, $order = 'name ASC')
+    {
+        $query = 'SELECT id, name AS title, slug FROM category WHERE scope = :scope AND parent_id IS NULL ORDER BY ' . $order;
+        $stmt = Database::getConnection('read')->prepare($query);
+        $stmt->bindParam(':scope', $scope);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            return $res;
+        } else {
+            return array();
+        }
+    }
+
 }
