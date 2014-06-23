@@ -1,0 +1,11 @@
+
+<ul>
+{for items}
+    <li class="{if value.active}active{/if}{if value.current} current{/if}{if value.children} parent{/if}">
+        <a href="{@value.uri}">{@value.title}</a>
+        {if value.children}
+            {include template: "Block/NavigationArticle"; variables: value.children => items}
+        {/if}
+    </li>
+{/for}
+</ul>

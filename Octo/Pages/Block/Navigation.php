@@ -57,6 +57,7 @@ class Navigation extends Block
             } else {
                 $this->view->items = [];
             }
+
         }
     }
 
