@@ -40,6 +40,25 @@ class PageStore extends Octo\Store
         return null;
     }
 
+    public function getAll()
+    {
+        $query = 'SELECT * FROM page';
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Page($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return array();
+        }
+    }
+
     /**
      * Get the total number of pages in the system.
      * @param string $useConnection
@@ -175,5 +194,9 @@ class PageStore extends Octo\Store
         }
 
         return null;
+    }
+
+    public function getModelsToIndex() {
+        return $this->getAll();
     }
 }

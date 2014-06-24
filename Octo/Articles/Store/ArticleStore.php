@@ -85,4 +85,24 @@ class ArticleStore extends Octo\Store
 
         return [];
     }
+
+    public function getModelsToIndex()
+    {
+        $query = 'SELECT * FROM article';
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Article($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return array();
+        }
+    }
+
 }
