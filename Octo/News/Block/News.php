@@ -29,7 +29,6 @@ class News extends Block
      */
     protected $newsStore;
 
-
     /**
      * @var CategoryStore
      */
@@ -49,6 +48,12 @@ class News extends Block
         $this->newsStore = Store::get('Article');
         $this->categoryStore = Store::get('Category');
 
+
+        if (isset($this->templateParams['context']) && $this->templateParams['context'] == 'mailshot')
+        {
+            return $this->renderNewsMailshot();
+        }
+
         if (!empty($this->uri)) {
             return $this->renderNewsItem($this->uri);
         } else {
@@ -56,29 +61,30 @@ class News extends Block
         }
     }
 
-    /**
-     * Get category_id from DB
-     * @param $slug
-     * @return int category_id
-     * @throws \b8\Exception\HttpException\NotFoundException
-     */
-    protected function getCategoryFromSlug($slug)
+    public function renderNewsMailshot()
     {
-        if (is_null($slug)) return $slug;
 
-        $uriParts = explode('/', ltrim($this->uri, '/'));
-        $probablyCategory = array_pop($uriParts);
+        $template = 'Block/' . static::$articleType . '/' . 'Mailshot';
+        $this->view = Template::getPublicTemplate($template);
 
-        $isCategory = $this->categoryStore->getByScopeAndSlug(static::$scope, $probablyCategory);
 
-        if (is_null($isCategory->getId()))
-        {
-            throw new NotFoundException('News/Blog item not found: ' . $slug);
+        $startDate = date("Y-m-01", strtotime("last month"));
+        $endDate = date("Y-m-t", strtotime("last month"));
+
+        $news = $this->newsStore->getNewsforMailshot($startDate, $endDate);
+
+        $base = $this->request->getPath();
+
+        if ($base == '/') {
+            $base = '';
         }
 
-        return $isCategory->getId();
-    }
+        $this->view->uri = $this->page->getUri();
+        $this->view->articles = $news;
+        $this->view->base = $base;
 
+        return $news;
+    }
 
     public function renderNewsList($slug = null)
     {
@@ -112,7 +118,7 @@ class News extends Block
         $params[':scope'] = static::$scope;
 
         if (!is_null($category)) {
-            $subcategories = $this->getSubCategories($category);
+            $subcategories = $this->categoryStore->getSubCategories($category);
 
             if(!empty($subcategories))
             {
@@ -144,34 +150,6 @@ class News extends Block
 
         return $news;
     }
-
-    /**
-     * Get distinct sub categories
-     * @param $category_id
-     * @return array
-     */
-    protected function getSubCategories($category_id)
-    {
-        $allChildren = array();
-
-        $subChildren = $this->categoryStore->getAllForParent($category_id);
-
-        foreach ($subChildren as $child)
-        {
-            $childId = $child->getId();
-            $allChildren[$childId] = $childId;
-            $arr = $this->getSubCategories($childId);
-            if(count($arr)>0)
-            {
-                $allChildren = array_merge($this->getSubCategories($childId), $allChildren);
-            }
-        }
-
-        return $allChildren;
-    }
-
-
-
 
     public function renderNewsItem($slug)
     {
@@ -208,5 +186,32 @@ class News extends Block
 
         $this->view->item = $item;
         $this->view->content = $content;
+    }
+
+
+
+
+    /**
+     * Get category_id from DB
+     * @param $slug
+     * @return int category_id
+     * @throws \b8\Exception\HttpException\NotFoundException
+     */
+    protected function getCategoryFromSlug($slug)
+    {
+        if (is_null($slug)) return $slug;
+
+
+        $uriParts = explode('/', ltrim($this->uri, '/'));
+        $probablyCategory = array_pop($uriParts);
+
+        $isCategory = $this->categoryStore->getByScopeAndSlug(static::$scope, $probablyCategory);
+
+        if (is_null($isCategory->getId()))
+        {
+            throw new NotFoundException('News/Blog item not found: ' . $slug);
+        }
+
+        return $isCategory->getId();
     }
 }
