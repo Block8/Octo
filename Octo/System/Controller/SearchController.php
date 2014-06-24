@@ -33,6 +33,7 @@ class SearchController extends Controller
 
         $dataStore = [
             'breadcrumb' => [
+                ['uri' => '/', 'title' => 'Home', 'active' => false],
                 ['uri' => '/search', 'title' => 'Search', 'active' => false],
                 ['uri' => '/search?q=' . $query, 'title' => $query, 'active' => true]
             ]

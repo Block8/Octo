@@ -29,7 +29,6 @@ class News extends Block
      */
     protected $newsStore;
 
-
     /**
      * @var CategoryStore
      */
