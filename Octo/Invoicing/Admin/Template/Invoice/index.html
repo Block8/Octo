@@ -1,19 +1,8 @@
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-money"></i> Invoices</h1>
-    </div>
-</div>
-        
-<div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-    <header role="heading">
-        <h2>Invoices</h2>
-    </header>
-
-    <div role="content">
-
-
-        <div class="widget-body no-padding">
-<table class="table">
+    <div class="col-lg-12">
+        <div class="box box-primary">
+            <div class="box-body no-padding">
+<table class="table table-striped">
     <thead>
     <tr>
         <th width="1">ID</th>
@@ -94,9 +83,14 @@
     {/for}
     </tbody>
 </table>
-</div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <script>
+
+
+<script>
             $('.status-change').on('click', function () {
                 var invoiceRow = $(this).parents('tr');
                 var invoiceId = invoiceRow.data('invoice');

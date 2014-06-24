@@ -9,15 +9,15 @@
 <form style="border: 0" action="/{@adminUri}/invoice/add" method="POST">
 {/ifnot}
 
-<div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-    <header role="heading">
-        <h2>Invoice Details</h2>
-    </header>
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">Invoice Details</h3>
+    </div>
 
     <div role="content">
 
 
-        <div class="widget-body">
+        <div class="box-body">
             <fieldset class="form">
                 <div class="form-group">
                     <label class="control-label">Title:</label>
@@ -46,21 +46,21 @@
 </div>
 
 
-    <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+    <div class="box box-info">
 
-        <header role="heading">
-            <h2>Items</h2>
+        <div class="box-header">
+            <h3 class="box-title">Items</h3>
 
-            <div class="widget-toolbar" role="menu">
+            <div class="box-tools pull-right" role="menu">
                 <button id="add-item" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add Item</button>
             </div>
-        </header>
+        </div>
 
         <div role="content">
 
-            <div class="widget-body no-padding">
+            <div class="box-body no-padding">
 
-                <table class="table table-bordered table-striped" id="invoice-items">
+                <table class="table  table-striped" id="invoice-items">
                     <thead>
                     <tr>
                         <th>Item</th>

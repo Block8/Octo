@@ -75,6 +75,9 @@ class ProductController extends Controller
 
     public function init()
     {
+        $this->setTitle('Products');
+        $this->addBreadcrumb('Products', '/product');
+
         $this->productStore = Store::get('Item');
         $this->categoryStore = Store::get('Category');
         $this->itemFileStore = Store::get('ItemFile');
@@ -85,15 +88,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        $this->setTitle('Products');
-        $this->addBreadcrumb('Products', '/product');
-
+        $this->setTitle('Manage Products');
         $this->view->products = $this->productStore->getAll();
     }
 
     public function add()
     {
-        $this->setTitle('Products');
+        $this->setTitle('Add Product');
         $this->addBreadcrumb('Add Product', '/product/add');
         $this->view->form = $this->productForm();
 
@@ -153,8 +154,7 @@ class ProductController extends Controller
         $product = $this->productStore->getById($productId);
         $this->view->product = $product;
 
-        $this->setTitle($product->getTitle());
-        $this->addBreadcrumb('Products', '/product');
+        $this->setTitle($product->getTitle(), 'Products');
         $this->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
 
         if ($this->request->getMethod() == 'POST') {

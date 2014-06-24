@@ -15,24 +15,17 @@
 {/if}
 {ifnot ownLayout}
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-money"></i> Invoice</h1>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="col-lg-4 col-md-4">
                     {include template: "Contact/card"; variables: invoice.Contact => contact}
                 </div>
 
             <div class="col-lg-8 col-md-8">
-            <div class="jarviswidget jarviswidget-color-blueDark " data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
-                <header role="heading">
-                    <h2>{@invoice.title}</h2>
-                </header>
-
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">{@invoice.title}</h3>
+                </div>
                 <div role="content">
-                    <div class="widget-body">
+                    <div class="box-body">
 {/ifnot}
                         {if invoice.InvoiceStatus.code}
                         <div class="alert alert-{@invoice.InvoiceStatus.code}">{@invoice.InvoiceStatus.status}</div>

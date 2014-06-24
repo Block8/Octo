@@ -63,6 +63,7 @@ class InvoiceController extends Admin\Controller
 
     public function index()
     {
+        $this->setTitle('Manage Invoices');
         $this->view->invoices = $this->invoiceStore->getAll();
         $this->view->invoiceStatuses = $this->statusStore->getAll();
         $this->view->canPdf = SYSTEM_PDF_AVAILABLE;
@@ -70,6 +71,7 @@ class InvoiceController extends Admin\Controller
 
     public function add()
     {
+        $this->setTitle('Add Invoice', 'Invoicing');
         $this->addBreadcrumb('Add Invoice', '/invoice/add');
 
         if ($this->request->getMethod() == 'POST') {
@@ -104,6 +106,7 @@ class InvoiceController extends Admin\Controller
     public function edit($key)
     {
         $item = $this->invoiceStore->getByPrimaryKey($key);
+        $this->setTitle($item->getTitle(), 'Invoicing');
 
         if ($this->request->getMethod() == 'POST') {
             $title = $this->getParam('title', $item->getTitle());
@@ -168,6 +171,7 @@ class InvoiceController extends Admin\Controller
         $this->view->invoice = $this->invoiceStore->getByPrimaryKey($key);
         $this->view->invoiceItems = $this->lineItemStore->getByInvoiceId($key);
         $this->view->invoiceAdjustments = $this->adjustmentStore->getByInvoiceId($key);
+        $this->setTitle($this->view->invoice->getTitle(), 'Invoicing');
 
         foreach ($this->view->invoiceItems as $item) {
             if ($item->getQuantity() != 1) {

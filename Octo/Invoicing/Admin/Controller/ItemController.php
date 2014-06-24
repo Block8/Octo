@@ -41,16 +41,18 @@ class ItemController extends Admin\Controller
     public function init()
     {
         $this->store = Store::get('Item');
-        $this->addBreadcrumb('Items', '/item');
+        $this->addBreadcrumb('Invoice Items', '/item');
     }
 
     public function index()
     {
+        $this->setTitle('Manage Items', 'Invoicing');
         $this->view->items = $this->store->getAll();
     }
 
     public function add()
     {
+        $this->setTitle('Add Item', 'Invoicing');
         $this->addBreadcrumb('Add Item', '/item/add');
         $form = $this->editForm($this->getParams());
 
@@ -86,6 +88,7 @@ class ItemController extends Admin\Controller
     {
         $item = $this->store->getByPrimaryKey($key);
         $this->view->item = $item;
+        $this->setTitle($item->getTitle(), 'Edit Item');
         $this->addBreadcrumb('Edit Item', '/item/edit/' . $key);
 
         // Set up form:
