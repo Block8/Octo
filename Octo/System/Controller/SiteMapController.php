@@ -13,63 +13,26 @@ use Octo\Menu\Store\MenuItemStore;
 class SiteMapController extends Controller
 {
     /**
-     * @var \Octo\Articles\Store\ArticleStore
-     */
-    protected $articleStore;
-    /**
-     * @var CategoryStore
-     */
-    protected $categoryStore;
-    /**
-     * @var \Octo\System\Store\ContactStore
-     */
-    protected $contactStore;
-    /**
      * @var \Octo\Pages\Store\PageStore
      */
     protected $pageStore;
-
-    /**
-     * @var \Octo\Pages\Store\PageVersionStore
-     */
-    protected $versionStore;
-
-    /**
-     * @var array
-     */
-    protected $content;
-
     /**
      * @var \Octo\Pages\Model\Page
      */
     protected $page;
-
     /**
      * @var \Octo\Pages\Model\PageVersion
      */
     protected $version;
-
-    /**
-     * @var MenuStore
-     */
-    protected $menuStore;
     /**
      * @var MenuItemStore
      */
     protected $menuItemStore;
 
 
-
-
     public function init()
     {
         $this->pageStore     = Store::get('Page');
-        $this->versionStore  = Store::get('PageVersion');
-        $this->articleStore  = Store::get('Article');
-        $this->categoryStore = Store::get('Category');
-        $this->contactStore  = Store::get('Contact');
-
-        $this->menuStore = Store::get('MenuStore');
         $this->menuItemStore = new MenuItemStore();
     }
 
@@ -82,7 +45,6 @@ class SiteMapController extends Controller
         $start = count($this->ancestors);
         $maxDepth = 3;
 
-
         if (isset($this->ancestors[$start - 1])) {
             $items = $this->buildTree($this->ancestors[$start - 1], 0, $maxDepth);
 
@@ -91,7 +53,6 @@ class SiteMapController extends Controller
             } else {
                 return [];
             }
-
         }
     }
 
@@ -162,7 +123,6 @@ class SiteMapController extends Controller
         return false;
     }
 
-
     public function index()
     {
         $sitemap = array();
@@ -171,15 +131,13 @@ class SiteMapController extends Controller
         $topMenu = $this->menuItemStore->getForMenu(1);
 
         $record['uri'] = '/';
-        $record['active'] = false;
         $record['title'] = 'Home';
+        $record['active'] = false;
 
         $sitemap[] = $record;
 
-        foreach ($topMenu as $key=>$menuItem)
+        foreach ($topMenu as $menuItem)
         {
-            //var_dump($menuItem);
-
             $this->page = $this->pageStore->getById($menuItem->getPageId());
             $this->version = $this->page->getCurrentVersion();
 
@@ -229,9 +187,5 @@ class SiteMapController extends Controller
 
         return $output;
     }
-
-
-
-
 
 }
