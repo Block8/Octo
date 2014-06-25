@@ -86,8 +86,27 @@ class ArticleStore extends Octo\Store
         return [];
     }
 
+    public function getModelsToIndex()
+    {
+        $query = 'SELECT * FROM article';
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new Article($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return array();
+        }
+    }
+
     /**
-     * Return news for mailshots from range date
+     * Return news for mailshots from date range
      * @param $startDate
      * @param $endDate
      */
@@ -97,7 +116,7 @@ class ArticleStore extends Octo\Store
     }
 
     /**
-     * Return articles for a particular category scope, range date, for mailshots
+     * Return articles for a particular category scope, date range, for mailshots
      *
      * @param string $startDate
      * @param string $endDate

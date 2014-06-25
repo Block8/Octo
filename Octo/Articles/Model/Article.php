@@ -138,4 +138,19 @@ class Article extends Octo\Model
 
         return $baseUrl . $scopeUrl . $this->getSlug();
     }
+
+    /**
+     * Get IndexableContent - Returns a string containing any keywords we want to
+     * be considered by the search index as relevant.
+     *
+     * @return string
+     */
+    public function getIndexableContent()
+    {
+        $content = "";
+        $content .= $this->getTitle() . " ";
+        $content .= $this->getSummary() . " ";
+        $content .= json_decode($this->getContentItem()->getContent())->content;
+        return $content;
+    }
 }
