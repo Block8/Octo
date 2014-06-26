@@ -58,6 +58,15 @@ trait ArticleBase
         $this->data['expiry_date'] = null;
         $this->getters['expiry_date'] = 'getExpiryDate';
         $this->setters['expiry_date'] = 'setExpiryDate';
+        $this->data['guest_author_name'] = null;
+        $this->getters['guest_author_name'] = 'getGuestAuthorName';
+        $this->setters['guest_author_name'] = 'setGuestAuthorName';
+        $this->data['guest_company_name'] = null;
+        $this->getters['guest_company_name'] = 'getGuestCompanyName';
+        $this->setters['guest_company_name'] = 'setGuestCompanyName';
+        $this->data['guest_company_url'] = null;
+        $this->getters['guest_company_url'] = 'getGuestCompanyUrl';
+        $this->setters['guest_company_url'] = 'setGuestCompanyUrl';
 
         // Foreign keys:
         $this->getters['User'] = 'getUser';
@@ -237,6 +246,42 @@ trait ArticleBase
         if (!empty($rtn)) {
             $rtn = new \DateTime($rtn);
         }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of GuestAuthorName / guest_author_name.
+    *
+    * @return string
+    */
+    public function getGuestAuthorName()
+    {
+        $rtn = $this->data['guest_author_name'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of GuestCompanyName / guest_company_name.
+    *
+    * @return string
+    */
+    public function getGuestCompanyName()
+    {
+        $rtn = $this->data['guest_company_name'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of GuestCompanyUrl / guest_company_url.
+    *
+    * @return string
+    */
+    public function getGuestCompanyUrl()
+    {
+        $rtn = $this->data['guest_company_url'];
 
         return $rtn;
     }
@@ -465,6 +510,57 @@ trait ArticleBase
 
         $this->data['expiry_date'] = $value;
         $this->setModified('expiry_date');
+    }
+
+    /**
+    * Set the value of GuestAuthorName / guest_author_name.
+    *
+    * @param $value string
+    */
+    public function setGuestAuthorName($value)
+    {
+        $this->validateString('GuestAuthorName', $value);
+
+        if ($this->data['guest_author_name'] === $value) {
+            return;
+        }
+
+        $this->data['guest_author_name'] = $value;
+        $this->setModified('guest_author_name');
+    }
+
+    /**
+    * Set the value of GuestCompanyName / guest_company_name.
+    *
+    * @param $value string
+    */
+    public function setGuestCompanyName($value)
+    {
+        $this->validateString('GuestCompanyName', $value);
+
+        if ($this->data['guest_company_name'] === $value) {
+            return;
+        }
+
+        $this->data['guest_company_name'] = $value;
+        $this->setModified('guest_company_name');
+    }
+
+    /**
+    * Set the value of GuestCompanyUrl / guest_company_url.
+    *
+    * @param $value string
+    */
+    public function setGuestCompanyUrl($value)
+    {
+        $this->validateString('GuestCompanyUrl', $value);
+
+        if ($this->data['guest_company_url'] === $value) {
+            return;
+        }
+
+        $this->data['guest_company_url'] = $value;
+        $this->setModified('guest_company_url');
     }
     /**
     * Get the User model for this Article by Id.

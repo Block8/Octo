@@ -191,8 +191,13 @@ class NewsController extends Controller
                         $contentItem->setContent(json_encode(array('content' => $this->getParam('content'))));
                         $contentItem = $this->contentItemStore->saveByInsert($contentItem);
                     }
+                    /*hack for validateInt with empty values*/
+                    $formFilter = $this->getParams();
+                    if (empty($formFilter['author_id'])) {
+                        $formFilter['author_id'] = null;
+                    }
 
-                    $article->setValues($this->getParams());
+                    $article->setValues($formFilter);
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
                     $article->setUpdatedDate(new \DateTime());
@@ -279,17 +284,37 @@ class NewsController extends Controller
         $fieldset->addField($field);
 
         $field = new Form\Element\Select('author_id');
-        $field->setOptions($this->userStore->getNames());
-
+        if($this->scope == "blog") {
+            $field->setOptions(array(''=>'Guest Author (provide name below)') + $this->userStore->getNames());
+        }
+        else {
+            $field->setOptions($this->userStore->getNames());
+        }
         if (isset($values['user_id'])) {
             $field->setValue($values['user_id']);
         } else {
             $field->setValue($this->currentUser->getId());
         }
-
         $field->setClass('select2');
         $field->setLabel('Author');
         $fieldset->addField($field);
+
+        if($this->scope == "blog") {
+            $field = new Form\Element\Text('guest_author_name');
+            $field->setRequired(false);
+            $field->setLabel('Guest Author Name');
+            $fieldset->addField($field);
+
+            $field = new Form\Element\Text('guest_company_name');
+            $field->setRequired(false);
+            $field->setLabel('Guest Company Name');
+            $fieldset->addField($field);
+
+            $field = new Form\Element\Text('guest_company_url');
+            $field->setRequired(false);
+            $field->setLabel('Guest Company Website URL');
+            $fieldset->addField($field);
+        }
 
         $field = new Form\Element\Select('category_id');
         $field->setOptions($this->categoryStore->getNamesForScope($this->scope));
