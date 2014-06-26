@@ -58,7 +58,7 @@ class NavigationArticle extends Block
         $this->category = $this->getScopeAndCategoryIdFromUri();
 
         //Top categories for scope
-        $categoriesMenu = $this->getTopTreeForScope();
+        $categoriesMenu = $this->getTopTreeMenuForScope();
         if (!is_null($this->category))
         {
             //Add Subcategory
@@ -70,7 +70,7 @@ class NavigationArticle extends Block
         $this->view->items = $topMenu;
     }
 
-    protected function getTopTreeForScope()
+    protected function getTopTreeMenuForScope()
     {
         $parents = $this->categoryStore->getNamesAndScopeForParents($this->scope);
 
@@ -137,7 +137,6 @@ class NavigationArticle extends Block
 
         return $slug;
     }
-
 
     /**
      * Get category_id from DB and set scope
