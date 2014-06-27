@@ -153,6 +153,13 @@ class NavigationArticle extends Block
             $this->scope = $uriParts[1];
         }
 
+        if ($uriParts[1] == 'case-studies')
+        {
+            $this->scope = "case-study"; //Hack for scope case studies
+        } else {
+            $this->scope = $uriParts[1];
+        }
+
         if (count($uriParts) == 2) //Root category - blog/news/case-studies
         {
            return null;
