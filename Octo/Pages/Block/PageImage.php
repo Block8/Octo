@@ -8,7 +8,7 @@ class PageImage extends Block
 {
     public static function getInfo()
     {
-        return ['title' => 'Text', 'editor' => false, 'js' => []];
+        return ['title' => 'Page Image', 'editor' => false, 'js' => []];
     }
 
     public function renderNow()

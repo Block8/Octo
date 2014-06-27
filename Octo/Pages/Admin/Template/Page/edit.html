@@ -1,55 +1,57 @@
 <div class="row">
-    <div class="col-lg-3">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">Editable areas</h3>
-            </div>
+    <div class="col-lg-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#preview" data-toggle="tab"><i class="fa fa-search"></i> Page Preview</a></li>
 
-            <div class="box-body">
                 {if hasEditableBlocks}
                     {for blocks}
-                        {if value.editable}
-                            <button class="page-block-btn btn btn-block" data-type="{@item.type}" data-name="{@item.name}" data-id="{@item.id}">Edit: <strong>{@item.name}</strong></button>
+                        {if value.haseditable}
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {if item.icon}
+                                    <i class="fa fa-{@item.icon}"></i>
+                                    {/if}
+                                    Edit {@item.title} <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {for value.blocks}
+                                        <li role="presentation">
+                                            <a href="#tab_{@value.id}" data-toggle="tab" role="menuitem" tabindex="-1">{@value.name}</a>
+                                        </li>
+                                    {/for}
+                                </ul>
+                            </li>
                         {/if}
                     {/for}
                 {/if}
-            </div>
+            </ul>
 
-        </div>
-    </div>
-
-    <div class="col-lg-9">
-        <div class="box box-success">
-            <div class="box-header">
-                <h3 class="box-title">Page</h3>
-
-                <div class="box-tools pull-right">
-                    <button id="edit-page-details" class="btn">Edit Page Details</button>
-                    <a class="btn btn-success" href="/{@adminUri}/page/publish/{@page.id}">Publish Page</a>
+            <div class="tab-content">
+                <div class="tab-pane active" id="preview">
+                    <iframe id="page-preview" src="/page/preview/{@page.id}?version={@latest.id}" style="width: 100%; height: 450px; border: 0"></iframe>
                 </div>
-            </div>
 
-            <div class="box-body">
-                <iframe id="page-preview" src="/page/preview/{@page.id}?version={@latest.id}" style="width: 100%; height: 450px; border: 0"></iframe>
+                {if hasEditableBlocks}
+                    {for blocks}
+                        {if value.haseditable}
+                            {for value.blocks}
+                                <div class="tab-pane" id="tab_{@value.id}">
+                                    <h3>Edit {@value.name}</h3>
+                                    {@value.editor}
+                                </div>
+                            {/for}
+                        {/if}
+                    {/for}
+                {/if}
+
             </div>
         </div>
     </div>
 </div>
 
-
-
-<!-- Include block editor JS -->
-<script src="/assets/backoffice/js/class.js"></script>
-<script src="/assets/backoffice/js/block.js"></script>
-<script src="/assets/backoffice/js/system.js"></script>
-
-{for blockTypes}
-    {if value.editor}
-        {for value.js}
-            <script src="{@value}"></script>
-        {/for}
-    {/if}
-{/for}
+<button id="edit-page-details" class="btn">Edit Page Details</button>
+<a class="btn btn-success" href="/{@adminUri}/page/publish/{@page.id}">Publish Page</a>
 
 <script>
     $(document).ready(function ()
@@ -71,32 +73,18 @@
         editor.templates = {@templates};
         editor.pages = {@pages};
 
-        $('.page-block-btn').click(function() {
-            var block = $(this);
-            var saveButton = $('<button>Save</button>').addClass('btn btn-success');
-            var dialog = createDialog('block-editor', {allowClose: true, title: 'Edit ' + block.data('name'), button: saveButton});
-            var blockEditor = new window.blockEditors[block.data('type')]();
-            var content = null;
+        $('.block-save').on('click', function () {
+            var form = $(this).parents('form');
+            var formId = form.attr('id').replace('block_', '');
+            var serialized = form.serializeArray();
+            var content = {};
 
-            if (block.data('id') in editor.content) {
-                content = editor.content[block.data('id')];
+            for (var i in serialized) {
+                content[serialized[i].name] = serialized[i].value;
             }
 
-            blockEditor.edit(dialog.find('.modal-body'), content);
-
-            // Set up the save functionality:
-            saveButton.on('click', function () {
-                editor.content[block.data('id')] = blockEditor.save();
-                editor.saveContent();
-
-                dialog.on('hidden.bs.modal', function () {
-                    dialog.remove();
-                });
-
-                dialog.modal('hide');
-            });
-
-            dialog.modal('show');
+            editor.content[formId] = content;
+            editor.saveContent();
         });
 
         $('#edit-page-details').click(function ()
