@@ -193,10 +193,6 @@ class NewsController extends Controller
                     }
                     /*hack for validateInt with empty values*/
                     $formFilter = $this->getParams();
-                    if (empty($formFilter['author_id'])) {
-                        $formFilter['author_id'] = null;
-                    }
-
                     $article->setValues($formFilter);
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
@@ -284,12 +280,8 @@ class NewsController extends Controller
         $fieldset->addField($field);
 
         $field = new Form\Element\Select('author_id');
-        if($this->scope == "blog") {
-            $field->setOptions(array(''=>'Guest Author (provide name below)') + $this->userStore->getNames());
-        }
-        else {
-            $field->setOptions($this->userStore->getNames());
-        }
+        $field->setOptions($this->userStore->getNames());
+
         if (isset($values['user_id'])) {
             $field->setValue($values['user_id']);
         } else {
