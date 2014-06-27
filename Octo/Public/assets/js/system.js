@@ -65,10 +65,9 @@ window.pageEditor = Class.extend({
     page: {},
 
     saveContent: function () {
-        $('.pace').removeClass('hide');
-
         $.post('/'+window.adminUri+'/page/save/' + this.id, {content: JSON.stringify(this.content)}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
+            $('a[href=#preview]').tab('show');
             $('.pace').addClass('hide');
         });
     },
@@ -78,6 +77,7 @@ window.pageEditor = Class.extend({
 
         $.post('/'+window.adminUri+'/page/save/' + this.id, {page: this.page}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
+            $('a[href=#preview]').tab('show');
             $('.pace').addClass('hide');
         });
     }
@@ -209,6 +209,85 @@ $(document).ready(function () {
         format: 'YYYY-MM-DD',
         singleDatePicker: true,
         timePicker: false
+    });
+
+
+    $('.octo-image-picker').each(function () {
+        var input = $(this);
+        var img = $('<img>');
+        img.insertAfter(input).css({'margin': '10px 0'}).hide();
+
+        input.select2({
+            placeholder: "Search for an image",
+            allowClear: true,
+            minimumInputLength: 1,
+            width: '100%',
+            initSelection : function(element, callback) {
+
+                if (input.val()) {
+                    img.attr('src', '/media/render/' + input.val() + '/160/90');
+                    img.show();
+
+                    $.getJSON('/'+window.adminUri+'/media/autocomplete/images?q=' + input.val(), function (data) {
+                        if (data.results[0]) {
+                            callback(data.results[0]);
+                        }
+                    });
+                }
+
+            },
+            ajax: {
+                url: '/'+window.adminUri+'/media/autocomplete/images',
+                dataType: 'json',
+                data: function(term) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function(data) {
+                    return data;
+                }
+            }
+        });
+
+        input.on('change', function () {
+            img.attr('src', '/media/render/' + $(this).val() + '/160/90');
+            img.show();
+        });
+    });
+
+    $('.octo-page-picker').each(function () {
+        var input = $(this);
+
+        input.select2({
+            placeholder: "Search for a page",
+            minimumInputLength: 1,
+            allowClear: true,
+            width: '100%',
+            initSelection : function(element, callback) {
+
+                if (input.val()) {
+                    $.getJSON('/'+window.adminUri+'/page/autocomplete?q=' + input.val(), function (data) {
+                        if (data.results[0]) {
+                            callback(data.results[0]);
+                        }
+                    });
+                }
+
+            },
+            ajax: {
+                url: '/'+window.adminUri+'/page/autocomplete',
+                dataType: 'json',
+                data: function(term) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function(data) {
+                    return data;
+                }
+            }
+        });
     });
 });
 

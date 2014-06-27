@@ -3,6 +3,9 @@
 namespace Octo\Pages\Block;
 
 use b8\Database;
+use b8\Form\Element\Button;
+use Octo\Admin\Form;
+use Octo\Admin\Template as AdminTemplate;
 use Octo\Block;
 use Octo\Page\Model\Page;
 use Octo\Store;
@@ -18,10 +21,37 @@ class PageCollection extends Block
     public static function getInfo()
     {
         return [
-            'title' => 'Page Collection',
-            'editor' => true,
-            'js' => ['/assets/backoffice/js/block/pagecollection.js'],
+            'title' => 'Page Collections',
+            'icon' => 'sitemap',
+            'editor' => ['\Octo\Pages\Block\PageCollection', 'getEditorForm']
         ];
+    }
+
+    public static function getEditorForm($item)
+    {
+        $form = new Form();
+        $form->setId('block_' . $item['id']);
+
+        $formSelect = \b8\Form\Element\Text::create('page', 'Add a Page');
+        $formSelect->setId('block_pagecollection_parent_' . $item['id']);
+        $formSelect->setClass('octo-page-picker');
+        $form->addField($formSelect);
+
+        $saveButton = new Button();
+        $saveButton->setValue('Save ' . $item['name']);
+        $saveButton->setClass('block-save btn btn-success');
+        $form->addField($saveButton);
+
+        if (empty($item['content'])) {
+            $item['content'] = [];
+        }
+
+        $template = AdminTemplate::getAdminTemplate('BlockEditor/PageCollection');
+        $template->form = $form;
+        $template->blockContent = json_encode($item['content']);
+        $template->blockId = $item['id'];
+
+        return $template->render();
     }
 
     public function init()

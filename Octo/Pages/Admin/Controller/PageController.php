@@ -209,31 +209,52 @@ class PageController extends Controller
         $this->addBreadcrumb($latest->getTitle(), '/page/edit/' . $pageId);
 
 
-        $blocks = $this->parseTemplate($latest->getTemplate());
-        $blockTypes = Block::getBlocks();
+        $pageBlocks = $this->parseTemplate($latest->getTemplate());
+        $blocks = Block::getBlocks();
 
         $hasEditableBlocks = false;
 
-        foreach ($blocks as &$block) {
-            if (!isset($blockTypes[$block['type']])) {
+
+        $pageContent = [];
+
+        if ($latest->getContentItemId()) {
+            $pageContent = json_decode($latest->getContentItem()->getContent(), true);
+        }
+
+        foreach ($pageBlocks as &$block) {
+            if (!isset($blocks[$block['type']])) {
                 $block['editable'] = false;
                 continue;
             }
 
-            if (!array_key_exists('editable', $block)) {
-                $block['editable'] = false;
+            $blocks[$block['type']]['blocks'][] =& $block;
 
-                if (isset($blockTypes[$block['type']]['editor']) && $blockTypes[$block['type']]['editor']) {
-                    $block['editable'] = true;
-                    $hasEditableBlocks = true;
-                }
+            if (array_key_exists('editable', $block) && !$block['editable']) {
+                $block['editable'] = false;
+                continue;
+            }
+
+            if (isset($blocks[$block['type']]['editor']) && is_callable($blocks[$block['type']]['editor'])) {
+                $block['editable'] = true;
+            } else {
+                $block['editable'] = false;
+            }
+
+            if (array_key_exists($block['id'], $pageContent)) {
+                $block['content'] = $pageContent[$block['id']];
+            }
+
+            if ($block['editable']) {
+                $hasEditableBlocks = true;
+                $blocks[$block['type']]['haseditable'] = true;
+                $block['editor'] = $blocks[$block['type']]['editor']($block);
             }
         }
+
 
         $this->view->page = $page;
         $this->view->latest = $latest;
         $this->view->blocks = $blocks;
-        $this->view->blockTypes = $blockTypes;
         $this->view->hasEditableBlocks = $hasEditableBlocks;
         $this->view->templates = json_encode($this->getTemplates());
         $this->view->pages = json_encode($this->pageStore->getParentPageOptions());
