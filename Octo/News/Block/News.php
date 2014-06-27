@@ -4,6 +4,9 @@ namespace Octo\News\Block;
 
 use b8\Config;
 use b8\Exception\HttpException\NotFoundException;
+use b8\Form\Element\Button;
+use b8\Form\Element\Select;
+use Octo\Admin\Form;
 use Octo\Block;
 use Octo\Store;
 use Octo\Template;
@@ -37,10 +40,55 @@ class News extends Block
     public static function getInfo()
     {
         return [
-            'title' => self::$articleType . ' Archive',
-            'editor' => true,
-            'js' => ['/assets/backoffice/js/block/' . self::$articleType . '.js']
+            'title' => static::$articleType,
+            'editor' => ['\Octo\News\Block\News', 'getEditorForm'],
+            'icon' => 'bullhorn',
         ];
+    }
+
+    public static function getEditorForm($item)
+    {
+        $form = new Form();
+        $form->setId('block_' . $item['id']);
+
+        $store = Store::get('Category');
+        $rtn = $store->getAllForScope(static::$scope);
+
+        $categories = [];
+        foreach ($rtn as $category) {
+            $categories[$category->getId()] = $category->getName();
+        }
+
+        $categoryField = Select::create('category', 'Category');
+        $categoryField->setId('block_articles_category_' . $item['id']);
+        $categoryField->setOptions($categories);
+        $categoryField->setClass('select2');
+        $form->addField($categoryField);
+
+        $perpage = Select::create('perPage', 'Items Per Page');
+        $perpage->setId('block_articles_perpage_' . $item['id']);
+        $perpage->setClass('select2');
+
+        $perpage->setOptions([
+            0 => 'All',
+            5 => 5,
+            10 => 10,
+            15 => 15,
+            25 => 25,
+            50 => 50,
+        ]);
+        $form->addField($perpage);
+
+        $saveButton = new Button();
+        $saveButton->setValue('Save ' . $item['name']);
+        $saveButton->setClass('block-save btn btn-success');
+        $form->addField($saveButton);
+
+        if (isset($item['content']) && is_array($item['content'])) {
+            $form->setValues($item['content']);
+        }
+
+        return $form;
     }
 
     public function renderNow()

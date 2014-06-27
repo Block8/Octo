@@ -3,6 +3,8 @@
 namespace Octo\Pages\Block;
 
 use b8\Database;
+use b8\Form\Element\Button;
+use Octo\Admin\Form;
 use Octo\Block;
 use Octo\Pages\Model\Page;
 use Octo\Store;
@@ -18,19 +20,37 @@ class SectionCollection extends Block
     public static function getInfo()
     {
         return [
-            'title' => 'Section Collection',
-            'editor' => true,
-            'js' => ['/assets/backoffice/js/block/sectioncollection.js'],
+            'title' => 'Section Collections',
+            'icon' => 'sitemap',
+            'editor' => ['\Octo\Pages\Block\SectionCollection', 'getEditorForm']
         ];
     }
 
-    public function init()
+    public static function getEditorForm($item)
     {
-        $this->pageStore = Store::get('Page');
+        $form = new Form();
+        $form->setId('block_' . $item['id']);
+
+        $formSelect = \b8\Form\Element\Text::create('parent', 'Parent Page');
+        $formSelect->setId('block_sectioncollection_parent_' . $item['id']);
+        $formSelect->setClass('octo-page-picker');
+        $form->addField($formSelect);
+
+        $saveButton = new Button();
+        $saveButton->setValue('Save ' . $item['name']);
+        $saveButton->setClass('block-save btn btn-success');
+        $form->addField($saveButton);
+
+        if (isset($item['content']) && is_array($item['content'])) {
+            $form->setValues($item['content']);
+        }
+
+        return $form;
     }
 
     public function renderNow()
     {
+        $this->pageStore = Store::get('Page');
         $this->limit = 25;
 
         if (array_key_exists('limit', $this->templateParams)) {

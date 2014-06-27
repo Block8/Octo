@@ -219,6 +219,7 @@ $(document).ready(function () {
 
         input.select2({
             placeholder: "Search for an image",
+            allowClear: true,
             minimumInputLength: 1,
             width: '100%',
             initSelection : function(element, callback) {
@@ -245,8 +246,7 @@ $(document).ready(function () {
                 },
                 results: function(data) {
                     return data;
-                },
-                allowClear: true
+                }
             }
         });
 
@@ -254,7 +254,41 @@ $(document).ready(function () {
             img.attr('src', '/media/render/' + $(this).val() + '/160/90');
             img.show();
         });
-    })
+    });
+
+    $('.octo-page-picker').each(function () {
+        var input = $(this);
+
+        input.select2({
+            placeholder: "Search for a page",
+            minimumInputLength: 1,
+            allowClear: true,
+            width: '100%',
+            initSelection : function(element, callback) {
+
+                if (input.val()) {
+                    $.getJSON('/'+window.adminUri+'/page/autocomplete?q=' + input.val(), function (data) {
+                        if (data.results[0]) {
+                            callback(data.results[0]);
+                        }
+                    });
+                }
+
+            },
+            ajax: {
+                url: '/'+window.adminUri+'/page/autocomplete',
+                dataType: 'json',
+                data: function(term) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function(data) {
+                    return data;
+                }
+            }
+        });
+    });
 });
 
 // Sortable

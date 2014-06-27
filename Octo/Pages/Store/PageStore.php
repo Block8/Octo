@@ -165,7 +165,7 @@ class PageStore extends Octo\Store
     {
         $query = 'SELECT p.* FROM page p
             LEFT JOIN page_version v ON v.id = p.current_version_id
-            WHERE title LIKE \'%'.$query.'%\' OR short_title LIKE \'%'.$query.'%\'';
+            WHERE (title LIKE \'%'.$query.'%\' OR short_title LIKE \'%'.$query.'%\' OR p.id = \''.$query.'\')';
 
         $stmt = Database::getConnection('read')->prepare($query);
 

@@ -4,6 +4,9 @@ namespace Octo\Pages\Block;
 
 use b8\Cache;
 use b8\Config;
+use b8\Form\Element\Button;
+use b8\Form\Element\Text as TextInput;
+use Octo\Admin\Form;
 use Octo\Block;
 use Octo\Page\Model\Page;
 use Octo\Store;
@@ -17,11 +20,32 @@ class Feed extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Feed', 'editor' => true, 'js' => ['/assets/backoffice/js/block/feed.js']];
+        return [
+            'title' => 'Feeds',
+            'icon' => 'rss',
+            'editor' => ['\Octo\Pages\Block\Feed', 'getEditorForm']
+        ];
     }
 
-    public function init()
+    public static function getEditorForm($item)
     {
+        $form = new Form();
+        $form->setId('block_' . $item['id']);
+
+        $url = TextInput::create('url', 'Feed URL (Atom or RSS)');
+        $url->setId('block_feed_url_' . $item['id']);
+        $form->addField($url);
+
+        $saveButton = new Button();
+        $saveButton->setValue('Save ' . $item['name']);
+        $saveButton->setClass('block-save btn btn-success');
+        $form->addField($saveButton);
+
+        if (isset($item['content']) && is_array($item['content'])) {
+            $form->setValues($item['content']);
+        }
+
+        return $form;
     }
 
     public function renderNow()
