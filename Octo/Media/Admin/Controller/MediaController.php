@@ -218,7 +218,7 @@ class MediaController extends Controller
     /**
      * @param $scope Scope of files to view
      */
-    public function manage($scope)
+    public function manage($scope = '')
     {
         $scope_name = ucwords($scope);
 
