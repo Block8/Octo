@@ -10,7 +10,7 @@ use Octo\BlockManager;
 use Octo\Event;
 use Octo\Menu\Store\MenuItemStore;
 
-class SiteMapController extends Controller
+class SitemapController extends Controller
 {
     /**
      * @var \Octo\Pages\Store\PageStore
@@ -135,7 +135,6 @@ class SiteMapController extends Controller
         $record['active'] = false;
 
         $sitemap[] = $record;
-
         foreach ($topMenu as $menuItem)
         {
             $this->page = $this->pageStore->getById($menuItem->getPageId());
