@@ -10,7 +10,7 @@ use Octo;
 
 /**
  * Category Model
- * @uses Octo\Categories\Model\Base\CategoryBaseBase
+ * @uses Octo\Categories\Model\Base\CategoryBase
  */
 class Category extends Octo\Model
 {

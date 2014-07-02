@@ -73,7 +73,6 @@ class NavigationArticle extends Block
     protected function getTopTreeMenuForScope()
     {
         $parents = $this->categoryStore->getNamesAndScopeForParents($this->scope);
-
         foreach ($parents as $key => $parent)
         {
             $category = $parent['id'];
@@ -145,7 +144,6 @@ class NavigationArticle extends Block
     protected function getScopeAndCategoryIdFromUri()
     {
         $uriParts = $this->request->getPathParts();
-
         if ($uriParts[1] == 'blogs')
         {
             $this->scope = "blog"; //Hack for scope blog(s)
@@ -156,8 +154,6 @@ class NavigationArticle extends Block
         if ($uriParts[1] == 'case-studies')
         {
             $this->scope = "case-study"; //Hack for scope case studies
-        } else {
-            $this->scope = $uriParts[1];
         }
 
         if (count($uriParts) == 2) //Root category - blog/news/case-studies
