@@ -116,7 +116,6 @@ abstract class Store extends \b8\Store
                     $criteriaContainer->add($thisCriteria);
                 }
             }
-
             $query->where($criteriaContainer);
         }
 
