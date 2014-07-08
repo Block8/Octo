@@ -112,8 +112,6 @@ class Shop extends Block
 
         if (!$product) {
             throw new NotFoundException;
-        } else {
-            $this->view->product = $product;
         }
 
         if (isset($this->dataStore['breadcrumb']) || is_array($this->dataStore['breadcrumb'])) {
@@ -131,9 +129,9 @@ class Shop extends Block
         }
 
         $this->view = Template::getPublicTemplate('Block/ShopProduct');
+        $this->view->product = $product;
         $this->view->page = $this->page;
         $this->view->category = $category;
-
         $this->view->variants = $this->setupVariants($product);
         $this->view->related = $this->setupRelatedProducts($product);
     }
