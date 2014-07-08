@@ -1,0 +1,47 @@
+<div class="mini-basket block">
+    <div class="header">Your Basket</div>
+
+    <div id="shop-basket-items">
+
+
+        <div class="item-row">
+            <div class="ir-title"><strong>Total</strong></div>
+            <div class="ir-price"><strong>&pound;19.96</strong></div>
+        </div>
+    </div>
+
+    <a href="/checkout" class="btn btn-yellow">Checkout now</a>
+</div>
+
+<script>
+
+    $(document).ready(refreshBasket);
+    $(document).on('basketUpdated', refreshBasket);
+
+    function refreshBasket() {
+        var container = $('#shop-basket-items');
+
+        $.getJSON('/checkout', function (data) {
+            container.empty();
+
+            if (!data.items || data.items.length == 0) {
+                container.html('<p>Your basket is empty.</p>');
+            }
+
+            for (var i in data.items) {
+                var item = $('<div></div>').addClass('item-row');
+                item.append($('<div></div>').addClass('ir-title').append('<span>'+data.items[i].quantity+'</span> ').append(data.items[i].description));
+                item.append($('<div></div>').addClass('ir-price').append('&pound;' + data.items[i].line_price));
+
+                container.append(item);
+            }
+
+            var totalRow = $('<div></div>').addClass('item-row');
+            totalRow.append($('<div></div>').addClass('ir-title').append('<strong>Total:</strong> '));
+            totalRow.append($('<div></div>').addClass('ir-price').append('<strong>&pound;'+data.total+'</strong> '));
+            container.append(totalRow);
+        });
+
+    }
+
+</script>

@@ -35,6 +35,16 @@ class CheckoutController extends Controller
 
         $view->basketTotal = $basketTotal;
 
+        if ($this->request->isAjax() || $this->request->getParam('ajax')) {
+            $return = [
+                'basket' => $basket->toArray(),
+                'items' => array_map(function ($item) { return $item->toArray(); }, $items),
+                'total' => $basketTotal,
+            ];
+
+            return json_encode($return);
+        }
+
         return $view->render();
     }
 

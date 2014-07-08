@@ -33,7 +33,7 @@ class Shop extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Product', 'editor' => false, 'js' => []];
+        return ['title' => 'Shop', 'editor' => false, 'js' => []];
     }
 
     public function init()
