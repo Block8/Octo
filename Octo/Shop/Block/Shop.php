@@ -87,6 +87,15 @@ class Shop extends Block
         $categorySlug = $this->uriParts[0];
         $category = $this->categoryStore->getByScopeAndSlug('shop', $categorySlug);
 
+        if (isset($this->dataStore['breadcrumb']) || is_array($this->dataStore['breadcrumb'])) {
+            array_pop($this->dataStore['breadcrumb']);
+            $this->dataStore['breadcrumb'][] = [
+                'uri' => $this->page->uri . "/" . $categorySlug,
+                'title' => $category->getName(),
+                'active' => true,
+            ];
+        }
+
         $this->view = Template::getPublicTemplate('Block/ShopProductList');
         $this->view->page = $this->page;
         $this->view->category = $category;
@@ -99,17 +108,31 @@ class Shop extends Block
         $category = $this->categoryStore->getByScopeAndSlug('shop', $categorySlug);
 
         $productSlug = $this->uriParts[1];
-
-        $this->view = Template::getPublicTemplate('Block/ShopProduct');
-        $this->view->page = $this->page;
-        $this->view->category = $category;
-        $product  = $this->productStore->getBySlug($productSlug);
+        $product = $this->productStore->getBySlug($productSlug);
 
         if (!$product) {
             throw new NotFoundException;
         } else {
             $this->view->product = $product;
         }
+
+        if (isset($this->dataStore['breadcrumb']) || is_array($this->dataStore['breadcrumb'])) {
+            array_pop($this->dataStore['breadcrumb']);
+            $this->dataStore['breadcrumb'][] = [
+                'uri' => $this->page->uri . "/" . $categorySlug,
+                'title' => $category->getName(),
+                'active' => true,
+            ];
+            $this->dataStore['breadcrumb'][] = [
+                'uri' => $this->page->uri . "/" . $categorySlug . "/" . $productSlug,
+                'title' => $product->getTitle(),
+                'active' => true,
+            ];
+        }
+
+        $this->view = Template::getPublicTemplate('Block/ShopProduct');
+        $this->view->page = $this->page;
+        $this->view->category = $category;
 
         $this->view->variants = $this->setupVariants($product);
         $this->view->related = $this->setupRelatedProducts($product);
