@@ -84,11 +84,13 @@ class ShopService
         $description = $item->getTitle();
         $itemPrice = $item->getPrice();
 
-        foreach ($itemData['variants'] as $variantData) {
-            $variant = $this->variantStore->getById($variantData['variant']);
-            $title = $variant->getVariant()->getTitle();
-            $description .= ' [' . $title . ': ' . $variant->getVariantOption()->getOptionTitle() . '] ';
-            $itemPrice += $variantData['adjustment'];
+        if (isset($itemData['variants'])) {
+            foreach ($itemData['variants'] as $variantData) {
+                $variant = $this->variantStore->getById($variantData['variant']);
+                $title = $variant->getVariant()->getTitle();
+                $description .= ' [' . $title . ': ' . $variant->getVariantOption()->getOptionTitle() . '] ';
+                $itemPrice += $variantData['adjustment'];
+            }
         }
 
         $linePrice = $itemPrice * $quantity;
