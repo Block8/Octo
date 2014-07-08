@@ -4,6 +4,9 @@ namespace Octo\News\Block;
 
 use b8\Config;
 use b8\Exception\HttpException\NotFoundException;
+use b8\Form\Element\Button;
+use b8\Form\Element\Select;
+use Octo\Admin\Form;
 use Octo\Block;
 use Octo\Store;
 use Octo\Template;
@@ -29,7 +32,6 @@ class News extends Block
      */
     protected $newsStore;
 
-
     /**
      * @var CategoryStore
      */
@@ -38,16 +40,67 @@ class News extends Block
     public static function getInfo()
     {
         return [
-            'title' => self::$articleType . ' Archive',
-            'editor' => true,
-            'js' => ['/assets/backoffice/js/block/' . self::$articleType . '.js']
+            'title' => static::$articleType,
+            'editor' => ['\Octo\News\Block\News', 'getEditorForm'],
+            'icon' => 'bullhorn',
         ];
+    }
+
+    public static function getEditorForm($item)
+    {
+        $form = new Form();
+        $form->setId('block_' . $item['id']);
+
+        $store = Store::get('Category');
+        $rtn = $store->getAllForScope(static::$scope);
+
+        $categories = [];
+        foreach ($rtn as $category) {
+            $categories[$category->getId()] = $category->getName();
+        }
+
+        $categoryField = Select::create('category', 'Category');
+        $categoryField->setId('block_articles_category_' . $item['id']);
+        $categoryField->setOptions($categories);
+        $categoryField->setClass('select2');
+        $form->addField($categoryField);
+
+        $perpage = Select::create('perPage', 'Items Per Page');
+        $perpage->setId('block_articles_perpage_' . $item['id']);
+        $perpage->setClass('select2');
+
+        $perpage->setOptions([
+            0 => 'All',
+            5 => 5,
+            10 => 10,
+            15 => 15,
+            25 => 25,
+            50 => 50,
+        ]);
+        $form->addField($perpage);
+
+        $saveButton = new Button();
+        $saveButton->setValue('Save ' . $item['name']);
+        $saveButton->setClass('block-save btn btn-success');
+        $form->addField($saveButton);
+
+        if (isset($item['content']) && is_array($item['content'])) {
+            $form->setValues($item['content']);
+        }
+
+        return $form;
     }
 
     public function renderNow()
     {
         $this->newsStore = Store::get('Article');
         $this->categoryStore = Store::get('Category');
+
+
+        if (isset($this->templateParams['context']) && $this->templateParams['context'] == 'mailshot')
+        {
+            return $this->renderNewsMailshot();
+        }
 
         if (!empty($this->uri)) {
             return $this->renderNewsItem($this->uri);
@@ -56,29 +109,30 @@ class News extends Block
         }
     }
 
-    /**
-     * Get category_id from DB
-     * @param $slug
-     * @return int category_id
-     * @throws \b8\Exception\HttpException\NotFoundException
-     */
-    protected function getCategoryFromSlug($slug)
+    public function renderNewsMailshot()
     {
-        if (is_null($slug)) return $slug;
 
-        $uriParts = explode('/', ltrim($this->uri, '/'));
-        $probablyCategory = array_pop($uriParts);
+        $template = 'Block/' . static::$articleType . '/' . 'Mailshot';
+        $this->view = Template::getPublicTemplate($template);
 
-        $isCategory = $this->categoryStore->getByScopeAndSlug(static::$scope, $probablyCategory);
 
-        if (is_null($isCategory->getId()))
-        {
-            throw new NotFoundException('News/Blog item not found: ' . $slug);
+        $startDate = date("Y-m-01", strtotime("last month"));
+        $endDate = date("Y-m-t", strtotime("last month"));
+
+        $news = $this->newsStore->getNewsforMailshot($startDate, $endDate);
+
+        $base = $this->request->getPath();
+
+        if ($base == '/') {
+            $base = '';
         }
 
-        return $isCategory->getId();
-    }
+        $this->view->uri = $this->page->getUri();
+        $this->view->articles = $news;
+        $this->view->base = $base;
 
+        return $news;
+    }
 
     public function renderNewsList($slug = null)
     {
@@ -112,7 +166,7 @@ class News extends Block
         $params[':scope'] = static::$scope;
 
         if (!is_null($category)) {
-            $subcategories = $this->getSubCategories($category);
+            $subcategories = $this->categoryStore->getSubCategories($category);
 
             if(!empty($subcategories))
             {
@@ -144,34 +198,6 @@ class News extends Block
 
         return $news;
     }
-
-    /**
-     * Get distinct sub categories
-     * @param $category_id
-     * @return array
-     */
-    protected function getSubCategories($category_id)
-    {
-        $allChildren = array();
-
-        $subChildren = $this->categoryStore->getAllForParent($category_id);
-
-        foreach ($subChildren as $child)
-        {
-            $childId = $child->getId();
-            $allChildren[$childId] = $childId;
-            $arr = $this->getSubCategories($childId);
-            if(count($arr)>0)
-            {
-                $allChildren = array_merge($this->getSubCategories($childId), $allChildren);
-            }
-        }
-
-        return $allChildren;
-    }
-
-
-
 
     public function renderNewsItem($slug)
     {
@@ -208,5 +234,32 @@ class News extends Block
 
         $this->view->item = $item;
         $this->view->content = $content;
+    }
+
+
+
+
+    /**
+     * Get category_id from DB
+     * @param $slug
+     * @return int category_id
+     * @throws \b8\Exception\HttpException\NotFoundException
+     */
+    protected function getCategoryFromSlug($slug)
+    {
+        if (is_null($slug)) return $slug;
+
+
+        $uriParts = explode('/', ltrim($this->uri, '/'));
+        $probablyCategory = array_pop($uriParts);
+
+        $isCategory = $this->categoryStore->getByScopeAndSlug(static::$scope, $probablyCategory);
+
+        if (is_null($isCategory->getId()))
+        {
+            throw new NotFoundException('News/Blog item not found: ' . $slug);
+        }
+
+        return $isCategory->getId();
     }
 }

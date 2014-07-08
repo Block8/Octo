@@ -19,6 +19,10 @@ class Blog extends News
 
     public static function getInfo()
     {
-        return ['title' => 'Blog Archive', 'editor' => true, 'js' => ['/assets/backoffice/js/block/blog.js']];
+        $info = parent::getInfo();
+        $info['icon'] = 'list-alt';
+        $info['editor'] = ['\Octo\Blog\Block\Blog', 'getEditorForm'];
+
+        return $info;
     }
 }

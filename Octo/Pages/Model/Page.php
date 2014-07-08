@@ -79,4 +79,11 @@ class Page extends Octo\Model
 
         return false;
     }
+
+    public function getIndexableContent()
+    {
+        $content = $this->getLatestVersion()->getContentItem()->getContent();
+        return $content;
+    }
+
 }

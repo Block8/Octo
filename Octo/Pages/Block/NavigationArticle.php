@@ -58,7 +58,7 @@ class NavigationArticle extends Block
         $this->category = $this->getScopeAndCategoryIdFromUri();
 
         //Top categories for scope
-        $categoriesMenu = $this->getTopTreeForScope();
+        $categoriesMenu = $this->getTopTreeMenuForScope();
         if (!is_null($this->category))
         {
             //Add Subcategory
@@ -70,14 +70,28 @@ class NavigationArticle extends Block
         $this->view->items = $topMenu;
     }
 
-    protected function getTopTreeForScope()
+    protected function getTopTreeMenuForScope()
     {
         $parents = $this->categoryStore->getNamesAndScopeForParents($this->scope);
-
-        for ($i=0; $i<count($parents); $i++)
+        foreach ($parents as $key => $parent)
         {
-            $parents[$i]['uri'] = $this->page->getUri() . "/" . $parents[$i]['slug'];
+            $category = $parent['id'];
+
+            $subcategories = $this->categoryStore->getSubCategories($category);
+            if(!empty($subcategories))
+            {
+                $category .= "," . implode(',', $subcategories);
+            }
+            $articles = $this->articleStore->checkArticlesForSubCategories($category);
+
+            if (!count($articles))
+            {
+                unset($parents[$key]);
+            } else {
+                $parents[$key]['uri'] = $this->page->getUri() . "/" . $parents[$key]['slug'];
+            }
         }
+
         return $parents;
     }
 
@@ -123,8 +137,6 @@ class NavigationArticle extends Block
         return $slug;
     }
 
-
-
     /**
      * Get category_id from DB and set scope
      * @return Category Model
@@ -132,12 +144,16 @@ class NavigationArticle extends Block
     protected function getScopeAndCategoryIdFromUri()
     {
         $uriParts = $this->request->getPathParts();
-
         if ($uriParts[1] == 'blogs')
         {
             $this->scope = "blog"; //Hack for scope blog(s)
         } else {
             $this->scope = $uriParts[1];
+        }
+
+        if ($uriParts[1] == 'case-studies')
+        {
+            $this->scope = "case-study"; //Hack for scope case studies
         }
 
         if (count($uriParts) == 2) //Root category - blog/news/case-studies
@@ -215,6 +231,18 @@ class NavigationArticle extends Block
         $children = $this->categoryStore->getAllForParent($category->getId());
 
         if (count($children)) {
+            //23 June 2014 - Hide categories without any article
+            foreach($children as $key => $child)
+            {
+                $hasArticles = $this->articleStore->getByCategoryId($child->getId());
+
+                if (!count($hasArticles))
+                {
+                    unset($children[$key]);
+                }
+            }
+
+            if (!count($children)) return null;
             return $children;
         }
 
@@ -252,6 +280,10 @@ class NavigationArticle extends Block
         return $rtn;
     }
 
+    /**
+     * Get Top - Article Scope Menu
+     * @return array
+     */
     protected function getTopMenu()
     {
         $this->ancestors = $this->getAncestors();

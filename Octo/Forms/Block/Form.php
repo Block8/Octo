@@ -4,6 +4,9 @@ namespace Octo\Forms\Block;
 
 use b8;
 use b8\Config;
+use b8\Form\Element\Button;
+use b8\Form\Element\Select;
+use Octo\Admin\Form as AdminForm;
 use b8\Form\Element\Submit;
 use Octo\Block;
 use Octo\Form as FormElement;
@@ -42,7 +45,42 @@ class Form extends Block
 
     public static function getInfo()
     {
-        return ['title' => 'Form', 'editor' => true, 'js' => ['/assets/backoffice/js/block/form.js']];
+        return [
+            'title' => 'Forms',
+            'icon' => 'edit',
+            'editor' => ['\Octo\Forms\Block\Form', 'getEditorForm']
+        ];
+    }
+
+    public static function getEditorForm($item)
+    {
+        $form = new AdminForm();
+        $form->setId('block_' . $item['id']);
+
+        $store = Store::get('Form');
+        $rtn = $store->getAll(0, 1000);
+
+        $forms = [];
+        foreach ($rtn as $frm) {
+            $forms[$frm->getId()] = $frm->getTitle();
+        }
+
+        $formSelect = Select::create('id', 'Form');
+        $formSelect->setId('block_form_form_' . $item['id']);
+        $formSelect->setOptions($forms);
+        $formSelect->setClass('select2');
+        $form->addField($formSelect);
+
+        $saveButton = new Button();
+        $saveButton->setValue('Save ' . $item['name']);
+        $saveButton->setClass('block-save btn btn-success');
+        $form->addField($saveButton);
+
+        if (isset($item['content']) && is_array($item['content'])) {
+            $form->setValues($item['content']);
+        }
+
+        return $form;
     }
 
     protected function init()

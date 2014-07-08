@@ -120,12 +120,12 @@ class MediaController extends Controller
                 }
 
                 $uploadDirectory = APP_PATH . 'public/uploads/';
-                $upload->copyTo($uploadDirectory . $file->getId() . '.' . $info['extension']);
+                $upload->copyTo($uploadDirectory . $file->getId() . '.' . $file->getExtension());
                 $file = $this->fileStore->saveByInsert($file);
 
                 Event::trigger($scope . 'FileSaved', $file);
 
-                $url = '/uploads/' . $file->getId() . '.' . $info['extension'];
+                $url = '/uploads/' . $file->getId() . '.'  . $file->getExtension();
                 $data = array_merge($file->getDataArray(), array('url' => $url));
                 print json_encode($data);
                 exit;
@@ -218,7 +218,7 @@ class MediaController extends Controller
     /**
      * @param $scope Scope of files to view
      */
-    public function manage($scope)
+    public function manage($scope = '')
     {
         $scope_name = ucwords($scope);
 

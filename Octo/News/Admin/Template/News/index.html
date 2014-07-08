@@ -15,7 +15,7 @@
                         <th>Title</th>
                         <th>Category</th>
                         <th>Author</th>
-                        <th>Created</th>
+                        <th>Last Updated</th>
                         <th width="170px">Actions</th>
                     </tr>
                     </thead>
@@ -25,7 +25,7 @@
                         <td>{@item.title}</td>
                         <td>{@item.Category.name}</td>
                         <td>{@item.Author.name}</td>
-                        <td>{date_format date: item.created_date}</td>
+                        <td>{date_format date: item.updated_date}</td>
                         <td>
                             <div class="btn-group">
                                 <a class="btn btn-default btn-sm" href="/{@adminUri}/news/edit/{@item.id}">Edit</a>

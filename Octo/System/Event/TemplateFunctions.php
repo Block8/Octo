@@ -65,9 +65,12 @@ class TemplateFunctions extends Listener
             return $rtn;
         });
         $template->addFunction('is_mobile', function ($args, &$view) {
-                $mobileDetect = new \Mobile_Detect();
+                if (class_exists('\Mobile_Detect')) {
+                    $mobileDetect = new \Mobile_Detect();
+                    return $mobileDetect->isMobile();
+                }
 
-                return $mobileDetect->isMobile();
+                return false;
             });
     }
 

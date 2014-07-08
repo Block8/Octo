@@ -105,7 +105,7 @@ class NewsController extends Controller
             $params[':category_id'] = $category;
         }
 
-        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'ASC'], $criteria, $params);
+        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['title', 'ASC'], $criteria, $params);
         $query->join('category', 'c', 'c.id = article.category_id');
 
         $pagination['total'] = $query->getCount();
@@ -191,8 +191,9 @@ class NewsController extends Controller
                         $contentItem->setContent(json_encode(array('content' => $this->getParam('content'))));
                         $contentItem = $this->contentItemStore->saveByInsert($contentItem);
                     }
-
-                    $article->setValues($this->getParams());
+                    /*hack for validateInt with empty values*/
+                    $formFilter = $this->getParams();
+                    $article->setValues($formFilter);
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
                     $article->setUpdatedDate(new \DateTime());
@@ -286,16 +287,40 @@ class NewsController extends Controller
         } else {
             $field->setValue($this->currentUser->getId());
         }
-
         $field->setClass('select2');
         $field->setLabel('Author');
         $fieldset->addField($field);
+
+        if($this->scope == "blog") {
+            $field = new Form\Element\Text('guest_author_name');
+            $field->setRequired(false);
+            $field->setLabel('Guest Author Name');
+            $fieldset->addField($field);
+
+            $field = new Form\Element\Text('guest_company_name');
+            $field->setRequired(false);
+            $field->setLabel('Guest Company Name');
+            $fieldset->addField($field);
+
+            $field = new Form\Element\Text('guest_company_url');
+            $field->setRequired(false);
+            $field->setLabel('Guest Company Website URL');
+            $fieldset->addField($field);
+        }
 
         $field = new Form\Element\Select('category_id');
         $field->setOptions($this->categoryStore->getNamesForScope($this->scope));
         $field->setLabel('Category');
         $field->setClass('select2');
         $fieldset->addField($field);
+
+        if($this->scope == "news") {
+            $field = new Form\Element\Select('use_in_email');
+            $field->setOptions(['1'=>'Yes', '0'=>'No']);
+            $field->setRequired(false);
+            $field->setLabel('Publish in the email newsletter?');
+            $fieldset->addField($field);
+        }
 
         $field = new Form\Element\Text('publish_date');
         $field->setLabel('Published Date');
