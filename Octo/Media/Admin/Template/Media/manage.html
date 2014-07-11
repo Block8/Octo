@@ -47,7 +47,7 @@
                     {/ifnot}
                     <td>{@item.User.name}</td>
                     <td>{date_format date: item.created_date}</td>
-                    {if reorder}<td><i class="fa fa-fw fa-move handler"></i></td>{/if}
+                    {if reorder}<td><i class="fa fa-fw fa-arrows handler"></i></td>{/if}
                     <td>
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
