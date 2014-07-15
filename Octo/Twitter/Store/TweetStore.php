@@ -53,7 +53,7 @@ class TweetStore extends Octo\Store
      */
     public function getAllForScope($scope, $limit)
     {
-        $query = 'SELECT tweet.* FROM tweet WHERE scope = :scope';
+        $query = 'SELECT tweet.* FROM tweet WHERE scope = :scope ORDER BY posted DESC';
         if (isset($limit)) {
             $query .= ' LIMIT ' . $limit;
         }
