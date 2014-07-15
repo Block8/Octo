@@ -10,5 +10,6 @@ class MarketingOptin extends Checkbox
     {
         parent::__construct($name);
         $this->setCheckedValue(1);
+        $this->setValue(1);
     }
 }
