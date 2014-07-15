@@ -23,6 +23,14 @@ class Tweet extends Octo\Model
      */
     public function setTwitterId($value)
     {
-        parent::setTwitterId((string) $value);
+        $value = (string)$value;
+        $this->validateString('TwitterId', $value);
+
+        if ($this->data['twitter_id'] === $value) {
+            return;
+        }
+
+        $this->data['twitter_id'] = $value;
+        $this->setModified('twitter_id');
     }
 }
