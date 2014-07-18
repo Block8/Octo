@@ -9,7 +9,7 @@ use Octo\Template;
 use Octo\BlockManager;
 use Octo\Event;
 use Octo\Menu\Store\MenuItemStore;
-
+use b8\Config;
 class SitemapController extends Controller
 {
     /**
@@ -122,6 +122,35 @@ class SitemapController extends Controller
 
         return false;
     }
+
+    public function json()
+    {
+        $sitemap = array();
+        $topMenu = $this->menuItemStore->getForMenu(1);
+        $record['url'] = Config::getInstance()->get('site.url')."/";
+        $record['title'] = 'Home';
+        $sitemap[] = $record;
+
+        foreach ($topMenu as $menuItem)
+        {
+            $this->page = $this->pageStore->getById($menuItem->getPageId());
+            $this->version = $this->page->getCurrentVersion();
+
+            $record = array();
+            $record['url'] = Config::getInstance()->get('site.url')."/".$this->page->getUri();
+            $record['text'] = $this->version->getShortTitle();
+
+            $rtn = $this->getChildrenPages();
+
+            if(count($rtn))
+            {
+                $record['children'] = $rtn;
+            }
+            $sitemap[] = $record;
+        }
+        die(json_encode($sitemap));
+    }
+
 
     public function index()
     {
