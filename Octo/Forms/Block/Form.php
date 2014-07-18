@@ -122,7 +122,6 @@ class Form extends Block
             $type = str_replace('_', ' ', $field['type']);
             $type = ucwords($type);
             $type = str_replace(' ', '', $type);
-
             $class = FormElement::getFieldClass($type);
 
             if (!is_null($class)) {
