@@ -1,7 +1,11 @@
 {
     "name": "block8/octo",
-    "description": "Octo CMS",
+    "description": "Octo CMS - Simple, powerful and intuitive content management.",
     "minimum-stability": "dev",
+    "type"             : "library",
+    "keywords"         : ["php", "cms", "content management", "content management system", "wordpress", "joomla", "drupal"],
+    "homepage"         : "http://www.octocms.net/",
+    "license"          : "BSD-2-Clause",
 
     "authors": [
         {
