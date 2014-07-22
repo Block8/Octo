@@ -13,8 +13,8 @@
             "email": "james@jamesinman.co.uk"
         },
         {
-            "name": "Eric Harth",
-            "email": "ericharth@gmail.com"
+            "name": "George Gardiner",
+            "email": "george.gardiner@commonmode.co.uk"
         }
     ],
 
@@ -31,15 +31,5 @@
     "bin": [
         "octocmd",
         "Octo/Public/assets"
-    ],
-
-    "scripts": {
-        "post-update-cmd": [
-            "Octo\\Command\\ComposerCommand::runMigrations"
-        ],
-
-        "post-install-cmd": [
-            "Octo\\Command\\ComposerCommand::runMigrations"
-        ]
-    }
+    ]
 }
