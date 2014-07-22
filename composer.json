@@ -23,6 +23,12 @@
             "email": "george.gardiner@commonmode.co.uk"
         }
     ],
+    
+    "support": {
+        "email" : "hello+octo@block8.co.uk",
+        "issues": "https://github.com/Block8/Octo/issues",
+        "source": "https://github.com/Block8/Octo"
+    },
 
     "require": {
         "block8/b8framework": "dev-master",
