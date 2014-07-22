@@ -10,7 +10,9 @@
     "authors": [
         {
             "name": "Dan Cryer",
-            "email": "dan@block8.co.uk"
+            "email": "dan@block8.co.uk",
+            "homepage": "https://www.block8.co.uk",
+            "role": "Developer"
         },
         {
             "name": "James Inman",
