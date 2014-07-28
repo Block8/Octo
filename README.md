@@ -18,7 +18,7 @@ To get started:
 
 ### Third Party
 * [Bootstrap CSS](http://getbootstrap.com/) - CSS framework for the CMS and most sites based upon it
-* [SmartAdmin](https://wrapbootstrap.com/theme/smartadmin-responsive-webapp-WB0573SK0) - Bootstrap theme and extended CSS theme for the CMS admin area.
+* [Admin LTE](https://github.com/almasaeed2010/AdminLTE) - Bootstrap theme and extended CSS theme for the CMS admin area.
 * [File type icons](http://treetog.deviantart.com/art/File-Type-Icons-199693041) - File type icons
 * [Symfony/Console](https://github.com/symfony/console) - Foundation for creating console commands (in our case, `./octocmd`)
 * [PHP 5.5 Password Compat](https://github.com/ircmaxell/password_compat) - Polyfill for the PHP 5.5 `password_hash()` / `password_verify()` functionality.

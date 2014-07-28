@@ -1,22 +1,34 @@
 {
     "name": "block8/octo",
-    "description": "Octo CMS",
+    "description": "Octo CMS - Simple, powerful and intuitive content management.",
     "minimum-stability": "dev",
+    "type"             : "library",
+    "keywords"         : ["php", "cms", "content management", "content management system", "wordpress", "joomla", "drupal"],
+    "homepage"         : "http://www.octocms.net/",
+    "license"          : "BSD-2-Clause",
 
     "authors": [
         {
             "name": "Dan Cryer",
-            "email": "dan@block8.co.uk"
+            "email": "dan@block8.co.uk",
+            "homepage": "https://www.block8.co.uk",
+            "role": "Developer"
         },
         {
             "name": "James Inman",
             "email": "james@jamesinman.co.uk"
         },
         {
-            "name": "Eric Harth",
-            "email": "ericharth@gmail.com"
+            "name": "George Gardiner",
+            "email": "george.gardiner@commonmode.co.uk"
         }
     ],
+    
+    "support": {
+        "email" : "hello+octo@block8.co.uk",
+        "issues": "https://github.com/Block8/Octo/issues",
+        "source": "https://github.com/Block8/Octo"
+    },
 
     "require": {
         "block8/b8framework": "dev-master",
