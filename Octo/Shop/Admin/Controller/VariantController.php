@@ -27,11 +27,13 @@ class VariantController extends Controller
 
     public function index()
     {
+        $this->setTitle('Manage Variants');
         $this->view->variants = $this->variantStore->getAll();
     }
 
     public function add()
     {
+        $this->setTitle('Add Variant', 'Products');
         $this->addBreadcrumb('Add Variant', '/variant/add');
         $this->view->form = $this->variantForm();
 
