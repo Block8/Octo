@@ -29,17 +29,11 @@ class BuildSearchIndex extends Command
     /* command entrypoint */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $items = glob(CMS_PATH.'*/Model/*.php');
-        foreach ($items as $item) {
-            $model = str_replace([CMS_BASE_PATH, '/', '.php'], ['', '\\', ''], $item);
-            $systemModels[] = $model;
-        }
-        foreach (glob(APP_PATH."*", GLOB_ONLYDIR) as $path) {
-            $items = glob($path.'/*/Model/*.php');
-            foreach ($items as $item) {
-                $model = str_replace([APP_PATH, '/', '.php'], ['', '\\', ''], $item);
-                $systemModels[] = $model;
-            }
+        die(var_dump(Config::getInstance()->get('Octo.paths')));
+        $systemModels = [];
+
+        foreach (Config::getInstance()->get('app.namespaces') as $model => $namespace) {
+            $systemModels[] = $namespace . '\\Model\\' . $model;
         }
 
         foreach($systemModels as $model) {

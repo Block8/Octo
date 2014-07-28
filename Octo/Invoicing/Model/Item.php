@@ -68,4 +68,9 @@ class Item extends Octo\Model
 
         return $files;
     }
+
+    public function getIndexableContent()
+    {
+        return $this->getTitle() . ' ' . $this->getDescription();
+    }
 }

@@ -55,4 +55,8 @@ class ItemStore extends Octo\Store
             return [];
         }
     }
+
+    public function getModelsToIndex() {
+        return $this->getAll();
+    }
 }
