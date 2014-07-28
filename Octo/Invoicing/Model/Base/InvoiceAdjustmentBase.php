@@ -37,6 +37,9 @@ trait InvoiceAdjustmentBase
         $this->data['data'] = null;
         $this->getters['data'] = 'getData';
         $this->setters['data'] = 'setData';
+        $this->data['display_value'] = null;
+        $this->getters['display_value'] = 'getDisplayValue';
+        $this->setters['display_value'] = 'setDisplayValue';
 
         // Foreign keys:
         $this->getters['Invoice'] = 'getInvoice';
@@ -110,6 +113,18 @@ trait InvoiceAdjustmentBase
     public function getData()
     {
         $rtn = $this->data['data'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of DisplayValue / display_value.
+    *
+    * @return float
+    */
+    public function getDisplayValue()
+    {
+        $rtn = $this->data['display_value'];
 
         return $rtn;
     }
@@ -219,6 +234,23 @@ trait InvoiceAdjustmentBase
 
         $this->data['data'] = $value;
         $this->setModified('data');
+    }
+
+    /**
+    * Set the value of DisplayValue / display_value.
+    *
+    * @param $value float
+    */
+    public function setDisplayValue($value)
+    {
+        $this->validateFloat('DisplayValue', $value);
+
+        if ($this->data['display_value'] === $value) {
+            return;
+        }
+
+        $this->data['display_value'] = $value;
+        $this->setModified('display_value');
     }
     /**
     * Get the Invoice model for this InvoiceAdjustment by Id.

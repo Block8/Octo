@@ -124,8 +124,30 @@ class PageController extends Controller
         }
 
         $template = $this->getTemplate();
-        $this->getBlockManager($template);
-        return $template->render();
+        $blockManager = $this->getBlockManager($template);
+
+        try {
+            $output = $template->render();
+        } catch (NotFoundException $e) {
+            throw new NotFoundException('Page not found: ' . $path);
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        if (!is_null($this->uriExtension) && !$blockManager->uriExtensionsHandled()) {
+            throw new NotFoundException('Page not found: ' . $path);
+        }
+
+        $data = [
+            'page' => $this->page,
+            'version' => $this->version,
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
     }
 
     public function getTemplate()

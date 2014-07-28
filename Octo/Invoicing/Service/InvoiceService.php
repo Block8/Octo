@@ -13,6 +13,7 @@ use Octo\Invoicing\Store\InvoiceAdjustmentStore;
 use Octo\Invoicing\Store\ItemStore;
 use Octo\Invoicing\Store\LineItemStore;
 use Octo\System\Model\Contact;
+use Octo\Store;
 
 class InvoiceService
 {
@@ -220,5 +221,27 @@ class InvoiceService
     public function getItems(Invoice $invoice)
     {
         return $this->lineItemStore->getByInvoiceId($invoice->getId());
+    }
+
+    public function registerPayment(Invoice $invoice, $amount)
+    {
+        $amount = (float)$amount;
+        $alreadyPaid = (float)$invoice->getTotalPaid();
+        $totalPaid = $alreadyPaid + $amount;
+
+        $status = Invoice::STATUS_SENT;
+
+        if ($totalPaid < $invoice->getTotal()) {
+            $status = Invoice::STATUS_PART_PAID;
+        } elseif ($totalPaid > $invoice->getTotal()) {
+            $status = Invoice::STATUS_OVERPAID;
+        } else {
+            $status = Invoice::STATUS_PAID;
+        }
+
+        $status = Store::get('InvoiceStatus')->getById($status);
+
+        $invoice->setTotalPaid($totalPaid);
+        return $this->updateInvoiceStatus($invoice, $status);
     }
 }

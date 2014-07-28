@@ -30,10 +30,10 @@ trait RelatedItemBase
         $this->setters['related_item_id'] = 'setRelatedItemId';
 
         // Foreign keys:
-        $this->getters['RelatedItem'] = 'getRelatedItem';
-        $this->setters['RelatedItem'] = 'setRelatedItem';
         $this->getters['Item'] = 'getItem';
         $this->setters['Item'] = 'setItem';
+        $this->getters['RelatedItem'] = 'getRelatedItem';
+        $this->setters['RelatedItem'] = 'setRelatedItem';
     }
     /**
     * Get the value of Id / id.
@@ -135,54 +135,6 @@ trait RelatedItemBase
     * @uses \Octo\Invoicing\Model\Item
     * @return \Octo\Invoicing\Model\Item
     */
-    public function getRelatedItem()
-    {
-        $key = $this->getRelatedItemId();
-
-        if (empty($key)) {
-            return null;
-        }
-
-        return Factory::getStore('Item', 'Octo\Invoicing')->getById($key);
-    }
-
-    /**
-    * Set RelatedItem - Accepts an ID, an array representing a Item or a Item model.
-    *
-    * @param $value mixed
-    */
-    public function setRelatedItem($value)
-    {
-        // Is this an instance of Item?
-        if ($value instanceof \Octo\Invoicing\Model\Item) {
-            return $this->setRelatedItemObject($value);
-        }
-
-        // Is this an array representing a Item item?
-        if (is_array($value) && !empty($value['id'])) {
-            return $this->setRelatedItemId($value['id']);
-        }
-
-        // Is this a scalar value representing the ID of this foreign key?
-        return $this->setRelatedItemId($value);
-    }
-
-    /**
-    * Set RelatedItem - Accepts a Item model.
-    *
-    * @param $value \Octo\Invoicing\Model\Item
-    */
-    public function setRelatedItemObject(\Octo\Invoicing\Model\Item $value)
-    {
-        return $this->setRelatedItemId($value->getId());
-    }
-    /**
-    * Get the Item model for this RelatedItem by Id.
-    *
-    * @uses \Octo\Invoicing\Store\ItemStore::getById()
-    * @uses \Octo\Invoicing\Model\Item
-    * @return \Octo\Invoicing\Model\Item
-    */
     public function getItem()
     {
         $key = $this->getItemId();
@@ -223,5 +175,53 @@ trait RelatedItemBase
     public function setItemObject(\Octo\Invoicing\Model\Item $value)
     {
         return $this->setItemId($value->getId());
+    }
+    /**
+    * Get the Item model for this RelatedItem by Id.
+    *
+    * @uses \Octo\Invoicing\Store\ItemStore::getById()
+    * @uses \Octo\Invoicing\Model\Item
+    * @return \Octo\Invoicing\Model\Item
+    */
+    public function getRelatedItem()
+    {
+        $key = $this->getRelatedItemId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('Item', 'Octo\Invoicing')->getById($key);
+    }
+
+    /**
+    * Set RelatedItem - Accepts an ID, an array representing a Item or a Item model.
+    *
+    * @param $value mixed
+    */
+    public function setRelatedItem($value)
+    {
+        // Is this an instance of Item?
+        if ($value instanceof \Octo\Invoicing\Model\Item) {
+            return $this->setRelatedItemObject($value);
+        }
+
+        // Is this an array representing a Item item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setRelatedItemId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setRelatedItemId($value);
+    }
+
+    /**
+    * Set RelatedItem - Accepts a Item model.
+    *
+    * @param $value \Octo\Invoicing\Model\Item
+    */
+    public function setRelatedItemObject(\Octo\Invoicing\Model\Item $value)
+    {
+        return $this->setRelatedItemId($value->getId());
     }
 }

@@ -19,4 +19,7 @@ class Invoice extends Octo\Model
     const STATUS_PAID = 3;
     const STATUS_WRITTEN_OFF = 4;
     const STATUS_REFUNDED = 5;
+    const STATUS_OVERDUE = 6;
+    const STATUS_PART_PAID = 7;
+    const STATUS_OVERPAID = 8;
 }

@@ -24,6 +24,18 @@ class GatewayEvents extends Listener
         $view->itemCount = count($data['items']);
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
+        $view->uniqueid = md5($invoice->getId());
+
+        /** @var \Octo\Invoicing\Model\InvoiceAdjustment[] $adjustments */
+        $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
+
+        $view->donation = 0;
+
+        foreach ($adjustments as $adjustment) {
+            if ($adjustment->getScope() == 'donation') {
+                $view->donation = $adjustment->getDisplayValue();
+            }
+        }
 
         $data['payment_options'][] = $view->render();
     }

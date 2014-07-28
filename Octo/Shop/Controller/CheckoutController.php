@@ -4,6 +4,7 @@ namespace Octo\Shop\Controller;
 
 use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
+use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
@@ -17,10 +18,15 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        $basketId = $_COOKIE['basket_id'];
+        $basketId = null;
+
+        if (array_key_exists('basket_id', $_COOKIE)) {
+            $basketId = $_COOKIE['basket_id'];
+        }
 
         $shopService = $this->getShopService();
         $basket = $shopService->getBasket($basketId);
+
         $items = Store::get('LineItem')->getByBasketId($basket->getId());
 
         $view = Template::getPublicTemplate('Checkout/basket');
@@ -45,7 +51,18 @@ class CheckoutController extends Controller
             return json_encode($return);
         }
 
-        return $view->render();
+        $blockManager = $this->getBlockManager($view);
+
+        $output = $view->render();
+
+        $data = [
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
     }
 
     public function details($basketId)
@@ -91,6 +108,14 @@ class CheckoutController extends Controller
                 $shippingAddress
             );
 
+            $data = [
+                'invoice' => $invoice,
+                'params' => $this->getParams(),
+                'invoice_service' => $invoiceService,
+            ];
+
+            Event::trigger('CheckoutDetailsSubmit', $data);
+
             header('Location: /checkout/invoice/' . $invoice->getId());
             die;
         }
@@ -99,7 +124,18 @@ class CheckoutController extends Controller
         $view = Template::getPublicTemplate('Checkout/details');
         $view->form = $form;
 
-        return $view->render();
+        $blockManager = $this->getBlockManager($view);
+
+        $output = $view->render();
+
+        $data = [
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
     }
 
     public function invoice($invoiceId)
@@ -113,6 +149,7 @@ class CheckoutController extends Controller
         $view = Template::getPublicTemplate('Checkout/invoice');
         $view->invoice = $invoice;
         $view->items = $this->getInvoiceService()->getItems($invoice);
+        $view->adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
 
@@ -126,7 +163,18 @@ class CheckoutController extends Controller
 
         $view->paymentOptions = $invoiceData['payment_options'];
 
-        return $view->render();
+        $blockManager = $this->getBlockManager($view);
+
+        $output = $view->render();
+
+        $data = [
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
     }
 
     public function thanks($invoiceId)
@@ -143,7 +191,18 @@ class CheckoutController extends Controller
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
 
-        return $view->render();
+        $blockManager = $this->getBlockManager($view);
+
+        $output = $view->render();
+
+        $data = [
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
     }
 
     protected function getContactDetails()
@@ -228,14 +287,16 @@ class CheckoutController extends Controller
         $name->setCheckedValue(1);
         $name->setValue(1);
         $fieldset->addField($name);
-
         $name = new FormElement\Element\Address('shipping_address');
         $fieldset->addField($name);
 
+        $fieldset = new Form\FieldSet('review_and_submit');
+        $form->addField($fieldset);
         $name = new Form\Element\Submit();
         $name->setValue('Continue &raquo;');
-        $name->setClass('btn-success');
         $fieldset->addField($name);
+
+        Event::trigger('CheckoutDetailsForm', $form);
 
         return $form;
     }
@@ -258,5 +319,62 @@ class CheckoutController extends Controller
         $lineStore = Store::get('LineItem');
 
         return new InvoiceService($invoiceStore, $adjustmentStore, $itemStore, $lineStore);
+    }
+
+    public function getBlockManager(&$template)
+    {
+        $dataStore = [
+            'breadcrumb' => [
+                ['uri' => '/checkout', 'title' => 'Checkout', 'active' => true],
+            ]
+        ];
+
+        $blockManager = new BlockManager();
+        $blockManager->setDataStore($dataStore);
+        $blockManager->setRequest($this->request);
+        $blockManager->setResponse($this->response);
+        $blockManager->attachToTemplate($template);
+
+        return $blockManager;
+    }
+
+    public function updateLineItem($itemId)
+    {
+        $quantity = $this->getParam('quantity', null);
+        $remove = $this->getParam('remove', null);
+
+        $lineStore = Store::get('LineItem');
+
+        /** @type \Octo\Invoicing\Model\LineItem $lineItem */
+        $lineItem = $lineStore->getById($itemId);
+
+        if ($lineItem && !is_null($quantity)) {
+            $lineItem->setQuantity((int)$quantity);
+            $lineItem->setLinePrice($lineItem->getItemPrice() * $lineItem->getQuantity());
+            $lineStore->save($lineItem);
+        }
+
+        if ($lineItem && !is_null($remove)) {
+            $lineStore->delete($lineItem);
+        }
+
+        $items = $lineStore->getByBasketId($lineItem->getBasketId());
+        $basketTotal = 0;
+
+        foreach ($items as $item) {
+            $basketTotal += $item->getLinePrice();
+        }
+
+        die(json_encode([
+            'line_price' => number_format($lineItem->getLinePrice(), 2),
+            'basket_total' => number_format($basketTotal, 2),
+        ]));
+    }
+
+    public function clearBasket()
+    {
+        setcookie('basket_id', '', time() - 1, '/');
+        header('Location: /');
+        die;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Octo\GatewayStripe\Controller;
+namespace Octo\GatewayRSM2000\Controller;
 
 use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
@@ -13,47 +13,29 @@ use Octo\Shop\Store\ShopBasketStore;
 use Octo\Shop\Service\ShopService;
 use Octo\Store;
 use Octo\Template;
-use Stripe;
-use Stripe_CardError;
-use Stripe_Charge;
 
 class RsmGatewayController extends Controller
 {
-    public function charge($invoiceId)
+    public function success()
     {
-        /**
-         * @var \Octo\Invoicing\Store\InvoiceStore
-         */
+        /** @type \Octo\Invoicing\Store\InvoiceStore */
         $invoiceStore = Store::get('Invoice');
 
-        /**
-         * @var \Octo\Invoicing\Model\Invoice
-         */
-        $invoice = $invoiceStore->getById($invoiceId);
+        /** @type \Octo\Invoicing\Model\Invoice */
+        $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
 
-        Stripe::setApiKey("sk_test_mwc25DIIgxtbQFk3MFrbn9eA");
-
-        try {
-            $charge = Stripe_Charge::create(array(
-                    "amount" => $invoice->getTotal() * 100, // amount in cents, again
-                    "currency" => "gbp",
-                    "card" => $this->getParam('stripeToken'),
-                    "description" => $invoice->getContact()->getEmail())
-            );
-        } catch(Stripe_CardError $e) {
-            header('Location: /checkout/invoice/' . $invoice->getId() . '?declined=1');
-            die;
+        if ($invoice) {
+            $this->getInvoiceService()->registerPayment($invoice, $this->getParam('purchase'));
+            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
         }
 
-        $invoice->setTotalPaid($invoice->getTotal());
-        $invoice->setInvoiceStatusId(Invoice::STATUS_PAID);
-        $invoice->setReference($charge->id);
-        $invoice->setUpdatedDate(new \DateTime());
-
-        $invoiceStore->save($invoice);
-
-        header('Location: /checkout/thanks/' . $invoice->getId());
+        header('Location: /checkout/failed');
         die;
+    }
+
+    public function failed()
+    {
+
     }
 
     protected function getInvoiceService()

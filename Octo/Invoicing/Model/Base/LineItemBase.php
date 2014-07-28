@@ -43,14 +43,17 @@ trait LineItemBase
         $this->data['basket_id'] = null;
         $this->getters['basket_id'] = 'getBasketId';
         $this->setters['basket_id'] = 'setBasketId';
+        $this->data['meta_data'] = null;
+        $this->getters['meta_data'] = 'getMetaData';
+        $this->setters['meta_data'] = 'setMetaData';
 
         // Foreign keys:
-        $this->getters['Basket'] = 'getBasket';
-        $this->setters['Basket'] = 'setBasket';
         $this->getters['Invoice'] = 'getInvoice';
         $this->setters['Invoice'] = 'setInvoice';
         $this->getters['Item'] = 'getItem';
         $this->setters['Item'] = 'setItem';
+        $this->getters['Basket'] = 'getBasket';
+        $this->setters['Basket'] = 'setBasket';
     }
     /**
     * Get the value of Id / id.
@@ -144,6 +147,18 @@ trait LineItemBase
     public function getBasketId()
     {
         $rtn = $this->data['basket_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of MetaData / meta_data.
+    *
+    * @return string
+    */
+    public function getMetaData()
+    {
+        $rtn = $this->data['meta_data'];
 
         return $rtn;
     }
@@ -286,53 +301,22 @@ trait LineItemBase
         $this->data['basket_id'] = $value;
         $this->setModified('basket_id');
     }
-    /**
-    * Get the ShopBasket model for this LineItem by Id.
-    *
-    * @uses \Octo\Shop\Store\ShopBasketStore::getById()
-    * @uses \Octo\Shop\Model\ShopBasket
-    * @return \Octo\Shop\Model\ShopBasket
-    */
-    public function getBasket()
-    {
-        $key = $this->getBasketId();
-
-        if (empty($key)) {
-            return null;
-        }
-
-        return Factory::getStore('ShopBasket', 'Octo\Shop')->getById($key);
-    }
 
     /**
-    * Set Basket - Accepts an ID, an array representing a ShopBasket or a ShopBasket model.
+    * Set the value of MetaData / meta_data.
     *
-    * @param $value mixed
+    * @param $value string
     */
-    public function setBasket($value)
+    public function setMetaData($value)
     {
-        // Is this an instance of ShopBasket?
-        if ($value instanceof \Octo\Shop\Model\ShopBasket) {
-            return $this->setBasketObject($value);
+        $this->validateString('MetaData', $value);
+
+        if ($this->data['meta_data'] === $value) {
+            return;
         }
 
-        // Is this an array representing a ShopBasket item?
-        if (is_array($value) && !empty($value['id'])) {
-            return $this->setBasketId($value['id']);
-        }
-
-        // Is this a scalar value representing the ID of this foreign key?
-        return $this->setBasketId($value);
-    }
-
-    /**
-    * Set Basket - Accepts a ShopBasket model.
-    *
-    * @param $value \Octo\Shop\Model\ShopBasket
-    */
-    public function setBasketObject(\Octo\Shop\Model\ShopBasket $value)
-    {
-        return $this->setBasketId($value->getId());
+        $this->data['meta_data'] = $value;
+        $this->setModified('meta_data');
     }
     /**
     * Get the Invoice model for this LineItem by Id.
@@ -429,5 +413,53 @@ trait LineItemBase
     public function setItemObject(\Octo\Invoicing\Model\Item $value)
     {
         return $this->setItemId($value->getId());
+    }
+    /**
+    * Get the ShopBasket model for this LineItem by Id.
+    *
+    * @uses \Octo\Shop\Store\ShopBasketStore::getById()
+    * @uses \Octo\Shop\Model\ShopBasket
+    * @return \Octo\Shop\Model\ShopBasket
+    */
+    public function getBasket()
+    {
+        $key = $this->getBasketId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('ShopBasket', 'Octo\Shop')->getById($key);
+    }
+
+    /**
+    * Set Basket - Accepts an ID, an array representing a ShopBasket or a ShopBasket model.
+    *
+    * @param $value mixed
+    */
+    public function setBasket($value)
+    {
+        // Is this an instance of ShopBasket?
+        if ($value instanceof \Octo\Shop\Model\ShopBasket) {
+            return $this->setBasketObject($value);
+        }
+
+        // Is this an array representing a ShopBasket item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setBasketId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setBasketId($value);
+    }
+
+    /**
+    * Set Basket - Accepts a ShopBasket model.
+    *
+    * @param $value \Octo\Shop\Model\ShopBasket
+    */
+    public function setBasketObject(\Octo\Shop\Model\ShopBasket $value)
+    {
+        return $this->setBasketId($value->getId());
     }
 }
