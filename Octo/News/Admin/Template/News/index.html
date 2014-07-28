@@ -15,6 +15,7 @@
                         <th>Title</th>
                         <th>Category</th>
                         <th>Author</th>
+                        <th>Published</th>
                         <th>Last Updated</th>
                         <th width="170px">Actions</th>
                     </tr>
@@ -25,6 +26,7 @@
                         <td>{@item.title}</td>
                         <td>{@item.Category.name}</td>
                         <td>{@item.Author.name}</td>
+                        <td>{date_format date: item.publish_date}</td>
                         <td>{date_format date: item.updated_date}</td>
                         <td>
                             <div class="btn-group">

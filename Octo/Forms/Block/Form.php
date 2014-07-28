@@ -15,6 +15,7 @@ use Octo\Forms\Model\Form as FormModel;
 use Octo\Forms\Model\Submission;
 use Octo\Store;
 use Octo\Template;
+use Octo\Event;
 
 class Form extends Block
 {
@@ -121,7 +122,6 @@ class Form extends Block
             $type = str_replace('_', ' ', $field['type']);
             $type = ucwords($type);
             $type = str_replace(' ', '', $type);
-
             $class = FormElement::getFieldClass($type);
 
             if (!is_null($class)) {
@@ -182,7 +182,8 @@ class Form extends Block
 
             $submission->setExtra($extra);
             $submission = $this->submissionStore->save($submission);
-
+            $params = array('formModel'=>$formModel, 'submission'=>$submission);
+            Event::trigger('formsSubmit', $params);
             $this->sendEmails($formModel, $submission);
         } catch (\Exception $ex) {
             return false;

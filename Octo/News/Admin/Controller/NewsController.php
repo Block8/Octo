@@ -105,7 +105,7 @@ class NewsController extends Controller
             $params[':category_id'] = $category;
         }
 
-        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['title', 'ASC'], $criteria, $params);
+        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'DESC'], $criteria, $params);
         $query->join('category', 'c', 'c.id = article.category_id');
 
         $pagination['total'] = $query->getCount();
@@ -267,6 +267,18 @@ class NewsController extends Controller
         $field->setLabel('Title');
         $fieldset->addField($field);
 
+        $field = new Form\Element\Text('publish_date');
+        $field->setLabel('Published Date');
+
+        if (!isset($values['publish_date'])) {
+            $values['publish_date'] = (new DateTime())->format('Y-m-d');
+        } else {
+            $values['publish_date'] = (new DateTime($values['publish_date']))->format('Y-m-d');
+        }
+
+        $field->setClass('sa-datepicker');
+        $fieldset->addField($field);
+
         $field = new Form\Element\TextArea('summary');
         $field->setRequired(false);
         $field->setRows(5);
@@ -321,18 +333,6 @@ class NewsController extends Controller
             $field->setLabel('Publish in the email newsletter?');
             $fieldset->addField($field);
         }
-
-        $field = new Form\Element\Text('publish_date');
-        $field->setLabel('Published Date');
-
-        if (!isset($values['publish_date'])) {
-            $values['publish_date'] = (new DateTime())->format('Y-m-d');
-        } else {
-            $values['publish_date'] = (new DateTime($values['publish_date']))->format('Y-m-d');
-        }
-
-        $field->setClass('sa-datepicker');
-        $fieldset->addField($field);
 
         $data = [&$form, &$values];
         Event::trigger($this->scope . 'Form', $data);
