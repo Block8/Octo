@@ -13,7 +13,7 @@ use Octo\System\Model\File;
 use Octo\Store;
 use Octo\Utilities\StringUtilities;
 
-class ProductController extends Controller
+class ShopController extends Controller
 {
 
     /**
@@ -49,20 +49,21 @@ class ProductController extends Controller
      */
     public static function registerMenus(Menu $menu)
     {
-        $products = $menu->addRoot('Products', '#')->setIcon('shopping-cart');
-        $add = new Menu\Item('Add Product', '/product/add');
+        $products = $menu->addRoot('Shop', '#')->setIcon('shopping-cart');
+        $add = new Menu\Item('Add Product', '/shop/add-product');
         $products->addChild($add);
-        $manage = new Menu\Item('Manage Products', '/product');
-        $manage->addChild(new Menu\Item('Edit Product', '/product/edit', true));
-        $manage->addChild(new Menu\Item('Delete Product', '/product/delete', true));
+        $manage = new Menu\Item('Manage Shop', '/shop');
+        $manage->addChild(new Menu\Item('View Products', '/shop/category', true));
+        $manage->addChild(new Menu\Item('Edit Product', '/shop/edit-product', true));
+        $manage->addChild(new Menu\Item('Delete Product', '/shop/delete-product', true));
+        $manage->addChild(new Menu\Item('Delete Product', '/shop/activate-product', true));
+        $manage->addChild(new Menu\Item('Delete Product', '/shop/deactivate-product', true));
+        $manage->addChild(new Menu\Item('Delete Product', '/shop/product-variants', true));
         $manage->addChild(new Menu\Item('Manage Product Images', '/media/manage/shop', true));
         $manage->addChild(new Menu\Item('Add Product Image', '/media/add/shop', true));
         $manage->addChild(new Menu\Item('Edit Product Image', '/media/edit/shop', true));
         $manage->addChild(new Menu\Item('Delete Product Image', '/media/delete/shop', true));
         $products->addChild($manage);
-
-        $categories = new Menu\Item('Manage Categories', '/categories/manage/shop');
-        $products->addChild($categories);
 
         $variants = new Menu\Item('Manage Variants', '/variant');
         $variants->addChild(new Menu\Item('Edit Variant', '/variant/edit', true));
@@ -75,8 +76,8 @@ class ProductController extends Controller
 
     public function init()
     {
-        $this->setTitle('Products');
-        $this->addBreadcrumb('Products', '/product');
+        $this->setTitle('Shop');
+        $this->addBreadcrumb('Shop', '/shop');
 
         $this->productStore = Store::get('Item');
         $this->categoryStore = Store::get('Category');
@@ -88,24 +89,23 @@ class ProductController extends Controller
 
     public function index()
     {
-        $category = $this->getParam('c', null);
-
-        if ($category) {
-            $cat = $this->categoryStore->getById($category);
-            $this->setTitle($cat->getName(), 'Manage Products');
-            $this->addBreadcrumb($cat->getName(), '/product?c=' . $category);
-
-            $this->view->products = $this->productStore->getByCategoryId($category, false);
-        } else {
-            $this->setTitle('Manage Products');
-            $this->view->products = $this->productStore->getAll(false);
-        }
+        $this->setTitle('Manage Shop');
+        $this->view->categories = $this->categoryStore->getAllForScope('shop');
     }
 
-    public function add()
+    public function category($categoryId)
+    {
+        $cat = $this->categoryStore->getById($categoryId);
+        $this->setTitle($cat->getName(), 'Manage Products');
+        $this->addBreadcrumb($cat->getName(), '/shop/category/' . $categoryId);
+
+        $this->view->products = $this->productStore->getByCategoryId($categoryId, false);
+    }
+
+    public function addProduct()
     {
         $this->setTitle('Add Product');
-        $this->addBreadcrumb('Add Product', '/product/add');
+        $this->addBreadcrumb('Add Product', '/shop/add-product');
         $this->view->form = $this->productForm();
 
         if ($this->request->getMethod() == 'POST') {
@@ -143,7 +143,7 @@ class ProductController extends Controller
                     }
 
                     $this->successMessage($product->getTitle() . ' was added successfully.', true);
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/product');
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the product. Please try again.'
@@ -160,13 +160,13 @@ class ProductController extends Controller
         }
     }
 
-    public function edit($productId)
+    public function editProduct($productId)
     {
         $product = $this->productStore->getById($productId);
         $this->view->product = $product;
 
         $this->setTitle($product->getTitle(), 'Products');
-        $this->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
+        $this->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
 
         if ($this->request->getMethod() == 'POST') {
             $values = array_merge(['id' => $productId], $this->getParams());
@@ -200,7 +200,7 @@ class ProductController extends Controller
                     $this->productStore->save($product);
 
                     $this->successMessage($product->getTitle() . ' was edited successfully.', true);
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/product');
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the product. Please try again.'
@@ -217,27 +217,43 @@ class ProductController extends Controller
         }
     }
 
-    public function delete($productId)
+    public function deleteProduct($productId)
     {
         $product = $this->productStore->getById($productId);
-        $product->setActive(0);
-        $this->productStore->save($product);
 
-        $this->successMessage($product->getTitle() . ' was deactivated successfully.', true);
-        header('Location: /' . $this->config->get('site.admin_uri') . '/product');
+        try {
+            $this->productStore->delete($product);
+            $this->successMessage($product->getTitle() . ' was deleted successfully.', true);
+        } catch (\Exception $ex) {
+            $product->setActive(0);
+            $this->productStore->save($product);
+            $this->successMessage($product->getTitle() . ' could not be deleted as orders have been placed for this item. The product has been deactivated.', true);
+        }
+
+        header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
     }
 
-    public function activate($productId)
+    public function activateProduct($productId)
     {
         $product = $this->productStore->getById($productId);
         $product->setActive(1);
         $this->productStore->save($product);
         $this->successMessage($product->getTitle() . ' was activated successfully.', true);
 
-        header('Location: /' . $this->config->get('site.admin_uri') . '/product');
+        header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
     }
 
-    public function variants($productId)
+    public function deactivateProduct($productId)
+    {
+        $product = $this->productStore->getById($productId);
+        $product->setActive(0);
+        $this->productStore->save($product);
+        $this->successMessage($product->getTitle() . ' was deactivated successfully.', true);
+
+        header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+    }
+
+    public function productVariants($productId)
     {
         $product = $this->productStore->getById($productId);
 
@@ -247,9 +263,9 @@ class ProductController extends Controller
         $this->view->items = $this->itemVariantStore->getAllForItem($productId);
 
         $this->setTitle($product->getTitle() . ' Variants');
-        $this->addBreadcrumb('Products', '/product');
-        $this->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
-        $this->addBreadcrumb('Variants', '/product/variants/' . $product->getId());
+        $this->addBreadcrumb('Products', '/shop');
+        $this->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
+        $this->addBreadcrumb('Variants', '/shop/product-variants/' . $product->getId());
 
         $variants = [];
         foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {
@@ -296,7 +312,7 @@ class ProductController extends Controller
             }
 
             $this->successMessage('The variants were updated succcessfully.', true);
-            header('Location: /' . $this->config->get('site.admin_uri') . '/product/variants/' . $productId);
+            header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-variants/' . $productId);
         }
     }
 
@@ -306,9 +322,9 @@ class ProductController extends Controller
         $form->setMethod('POST');
 
         if ($type == 'add') {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/product/add');
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/shop/add-product');
         } else {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/product/edit/' . $values['id']);
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/shop/edit-product/' . $values['id']);
         }
 
         $form->setClass('smart-form');

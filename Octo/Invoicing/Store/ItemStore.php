@@ -35,6 +35,7 @@ class ItemStore extends Octo\Store
         $query->select('*')->from('item');
         $query->where('category_id = :category_id' . ($activeOnly ? ' AND active = 1' : ''));
         $query->bind(':category_id', $categoryId);
+        $query->order('title', 'ASC');
 
         return $query->execute()->fetchAll();
     }

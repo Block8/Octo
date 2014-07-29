@@ -7,7 +7,6 @@
     <tr>
         <th>Title</th>
         <th>Price</th>
-        <th>Category</th>
         <th width="20%">Actions</th>
     </tr>
     </thead>
@@ -16,15 +15,14 @@
     <tr>
         <td>{@value.title} {ifnot value.active}<label class="label label-warning">Inactive</label>{/ifnot}</td>
         <td>&pound;{@value.price}</td>
-        <td><a href="/{@adminUri}/product?c={@value.category_id}">{@value.Category.name}</a></td>
         <td>
             <div class="btn-group">
-                {if (can_access uri: "/product/edit")}
-                <a class="btn btn-default btn-sm" href="/{@adminUri}/product/edit/{@value.id}">Edit</a>
+                {if (can_access uri: "/shop/edit-product")}
+                <a class="btn btn-default btn-sm" href="/{@adminUri}/shop/edit-product/{@value.id}">Edit</a>
                 {/if}
 
                 {ifnot value.active}
-                <a class="btn btn-success btn-sm" href="/{@adminUri}/product/activate/{@value.id}">Activate</a>
+                <a class="btn btn-success btn-sm" href="/{@adminUri}/shop/activate-product/{@value.id}">Activate</a>
                 {/ifnot}
 
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
@@ -41,15 +39,21 @@
                     </li>
                     {/if}
 
-                    {if (can_access uri: "/product/variants")}
+                    {if (can_access uri: "/shop/product-variants")}
                     <li>
-                        <a href="/{@adminUri}/product/variants/{@value.id}">Manage Variants</a>
+                        <a href="/{@adminUri}/shop/product-variants/{@value.id}">Manage Variants</a>
                     </li>
                     {/if}
 
-                    {if (can_access uri: "/product/delete")}
+                    {if (can_access uri: "/shop/deactivate-product")}
                     <li>
-                        <a href="/{@adminUri}/product/delete/{@value.id}" class="btn-delete">Delete</a>
+                        <a href="/{@adminUri}/shop/deactivate-product/{@value.id}" class="btn-delete">Deactivate</a>
+                    </li>
+                    {/if}
+
+                    {if (can_access uri: "/shop/delete-product")}
+                    <li>
+                        <a href="/{@adminUri}/shop/delete-product/{@value.id}" class="btn-delete">Delete</a>
                     </li>
                     {/if}
                 </ul>
