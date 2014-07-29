@@ -108,7 +108,7 @@ class Shop extends Block
         $category = $this->categoryStore->getByScopeAndSlug('shop', $categorySlug);
 
         $productSlug = $this->uriParts[1];
-        $product = $this->productStore->getBySlugAndCategory($productSlug, $category->getId());
+        $product = $this->productStore->getBySlugAndCategory($productSlug, $category->getId(), !(int)$this->request->getParam('preview', 0));
 
         if (!$product) {
             throw new NotFoundException;

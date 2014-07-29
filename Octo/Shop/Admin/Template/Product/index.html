@@ -14,7 +14,7 @@
     <tbody>
     {for products}
     <tr>
-        <td>{@value.title}</td>
+        <td>{@value.title} {ifnot value.active}<label class="label label-warning">Inactive</label>{/ifnot}</td>
         <td>&pound;{@value.price}</td>
         <td><a href="/{@adminUri}/product?c={@value.category_id}">{@value.Category.name}</a></td>
         <td>
@@ -23,13 +23,17 @@
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/product/edit/{@value.id}">Edit</a>
                 {/if}
 
+                {ifnot value.active}
+                <a class="btn btn-success btn-sm" href="/{@adminUri}/product/activate/{@value.id}">Activate</a>
+                {/ifnot}
+
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    {if (can_access uri: "/product/edit")}
+                    {ifnot value.active}
                     <li>
-                        <a href="/{@adminUri}/product/edit/{@value.id}">Edit</a>
+                        <a href="/{@value.Category.scope}/{@value.Category.slug}/{@value.slug}?preview=1" target="_blank">Preview</a>
                     </li>
-                    {/if}
+                    {/ifnot}
 
                     {if (can_access uri: "/media/manage/shop")}
                     <li>

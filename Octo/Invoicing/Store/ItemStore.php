@@ -17,20 +17,23 @@ class ItemStore extends Octo\Store
 {
     use Base\ItemStoreBase;
 
-    public function getAll()
+    public function getAll($activeOnly = true)
     {
         $query = new Query($this->getNamespace('Item') . '\Model\Item');
         $query->select('*')->from('item');
-        $query->where('active = 1');
+
+        if ($activeOnly) {
+            $query->where('active = 1');
+        }
 
         return $query->execute()->fetchAll();
     }
 
-    public function getByCategoryId($categoryId)
+    public function getByCategoryId($categoryId, $activeOnly = true)
     {
         $query = new Query($this->getNamespace('Item') . '\Model\Item');
         $query->select('*')->from('item');
-        $query->where('category_id = :category_id AND active = 1');
+        $query->where('category_id = :category_id' . ($activeOnly ? ' AND active = 1' : ''));
         $query->bind(':category_id', $categoryId);
 
         return $query->execute()->fetchAll();
@@ -67,7 +70,7 @@ class ItemStore extends Octo\Store
      * @throws StoreException
      * @return Item
      */
-    public function getBySlugAndCategory($value, $categoryId, $useConnection = 'read')
+    public function getBySlugAndCategory($value, $categoryId, $activeOnly = true, $useConnection = 'read')
     {
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
@@ -75,7 +78,7 @@ class ItemStore extends Octo\Store
 
         $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
         $query->select('*')->from('item')->limit(1);
-        $query->where('`slug` = :slug AND category_id = :category_id');
+        $query->where('`slug` = :slug AND category_id = :category_id' . ($activeOnly ? ' AND active = 1' : ''));
         $query->bind(':slug', $value);
         $query->bind(':category_id', $categoryId);
 

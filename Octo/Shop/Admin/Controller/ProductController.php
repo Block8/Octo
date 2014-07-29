@@ -95,10 +95,10 @@ class ProductController extends Controller
             $this->setTitle($cat->getName(), 'Manage Products');
             $this->addBreadcrumb($cat->getName(), '/product?c=' . $category);
 
-            $this->view->products = $this->productStore->getByCategoryId($category);
+            $this->view->products = $this->productStore->getByCategoryId($category, false);
         } else {
             $this->setTitle('Manage Products');
-            $this->view->products = $this->productStore->getAll();
+            $this->view->products = $this->productStore->getAll(false);
         }
     }
 
@@ -219,11 +219,21 @@ class ProductController extends Controller
     public function delete($productId)
     {
         $product = $this->productStore->getById($productId);
-        $product->setActive(false);
+        $product->setActive(0);
         $this->productStore->save($product);
 
-        $this->successMessage($product->getTitle() . ' was deleted successfully.', true);
-        header('Location: /' . $this->config->get('site.admin_uri') . '/product/');
+        $this->successMessage($product->getTitle() . ' was deactivated successfully.', true);
+        header('Location: /' . $this->config->get('site.admin_uri') . '/product');
+    }
+
+    public function activate($productId)
+    {
+        $product = $this->productStore->getById($productId);
+        $product->setActive(1);
+        $this->productStore->save($product);
+        $this->successMessage($product->getTitle() . ' was activated successfully.', true);
+
+        header('Location: /' . $this->config->get('site.admin_uri') . '/product');
     }
 
     public function variants($productId)
