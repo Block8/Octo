@@ -17,7 +17,7 @@ class ProductController extends Controller
 {
 
     /**
-     * @var \Octo\Shop\Store\ItemStore
+     * @var \Octo\Invoicing\Store\ItemStore
      */
     protected $productStore;
     /**
@@ -88,8 +88,18 @@ class ProductController extends Controller
 
     public function index()
     {
-        $this->setTitle('Manage Products');
-        $this->view->products = $this->productStore->getAll();
+        $category = $this->getParam('c', null);
+
+        if ($category) {
+            $cat = $this->categoryStore->getById($category);
+            $this->setTitle($cat->getName(), 'Manage Products');
+            $this->addBreadcrumb($cat->getName(), '/product?c=' . $category);
+
+            $this->view->products = $this->productStore->getByCategoryId($category);
+        } else {
+            $this->setTitle('Manage Products');
+            $this->view->products = $this->productStore->getAll();
+        }
     }
 
     public function add()

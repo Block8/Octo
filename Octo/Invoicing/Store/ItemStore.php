@@ -56,7 +56,34 @@ class ItemStore extends Octo\Store
         }
     }
 
-    public function getModelsToIndex() {
+    public function getModelsToIndex()
+    {
         return $this->getAll();
+    }
+
+    /**
+     * @param $value
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Item
+     */
+    public function getBySlugAndCategory($value, $categoryId, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
+        $query->select('*')->from('item')->limit(1);
+        $query->where('`slug` = :slug AND category_id = :category_id');
+        $query->bind(':slug', $value);
+        $query->bind(':category_id', $categoryId);
+
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Item by Slug', 0, $ex);
+        }
     }
 }

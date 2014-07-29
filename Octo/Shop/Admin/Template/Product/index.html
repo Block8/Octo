@@ -16,7 +16,7 @@
     <tr>
         <td>{@value.title}</td>
         <td>&pound;{@value.price}</td>
-        <td>{@value.Category.name}</td>
+        <td><a href="/{@adminUri}/product?c={@value.category_id}">{@value.Category.name}</a></td>
         <td>
             <div class="btn-group">
                 {if (can_access uri: "/product/edit")}
