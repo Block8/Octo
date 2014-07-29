@@ -127,6 +127,7 @@ class ProductController extends Controller
                     $product->setSlug(StringUtilities::generateSlug($product->getTitle()));
                     $product->setCreatedDate(new \DateTime());
                     $product->setUpdatedDate(new \DateTime());
+                    $product->setActive(0);
 
                     $product = $this->productStore->save($product);
 
