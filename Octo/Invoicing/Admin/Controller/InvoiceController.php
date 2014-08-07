@@ -38,7 +38,6 @@ class InvoiceController extends Admin\Controller
         $manage->addChild(new Menu\Item('Delete Invoice', '/invoice/delete', true));
         $thisMenu->addChild($manage);
 
-        $thisMenu->addChild(new Menu\Item('Reports', '/invoice/reports'));
     }
 
     /**
