@@ -38,6 +38,7 @@ class CheckoutController extends Controller
         foreach ($items as $item) {
             $basketTotal += $item->getLinePrice();
         }
+        $basketTotal = number_format($basketTotal, 2, '.', '');
 
         $view->basketTotal = $basketTotal;
 
@@ -367,7 +368,7 @@ class CheckoutController extends Controller
 
         die(json_encode([
             'line_price' => number_format($lineItem->getLinePrice(), 2),
-            'basket_total' => number_format($basketTotal, 2),
+            'basket_total' => number_format($basketTotal, 2, '.', ''),
         ]));
     }
 

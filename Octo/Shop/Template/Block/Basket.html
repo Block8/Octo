@@ -16,6 +16,11 @@
     function refreshBasket() {
         var container = $('#shop-basket-items');
 
+        $.ajaxSetup ({
+            // Disable caching of AJAX responses
+            cache: false
+        });
+
         $.getJSON('/checkout', function (data) {
             container.empty();
 
