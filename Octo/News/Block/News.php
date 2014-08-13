@@ -109,17 +109,23 @@ class News extends Block
         }
     }
 
+    /*Page with news to be send by Newsletter*/
     public function renderNewsMailshot()
     {
-
         $template = 'Block/' . static::$articleType . '/' . 'Mailshot';
+
         $this->view = Template::getPublicTemplate($template);
 
-
+        //Last 14 days
+        $endDate = new \DateTime();
+        $startDate = new \DateTime();
+        $startDate = $startDate->sub(new \DateInterval('P14D'));
+/*
         $startDate = date("Y-m-01", strtotime("last month"));
         $endDate = date("Y-m-t", strtotime("last month"));
+ */
 
-        $news = $this->newsStore->getNewsforMailshot($startDate, $endDate);
+        $news = $this->newsStore->getNewsforMailshot($startDate->format('Y-m-d'), $endDate->format('Y-m-d'));
 
         $base = $this->request->getPath();
 
