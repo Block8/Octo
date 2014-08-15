@@ -15,6 +15,7 @@ class PageImage extends Block
     {
         $this->view->width = 800;
         $this->view->height = 'auto';
+        $this->view->format = 'jpeg';
 
         if (isset($this->templateParams['width'])) {
             $this->view->width = $this->templateParams['width'];
@@ -22,6 +23,10 @@ class PageImage extends Block
 
         if (isset($this->templateParams['height'])) {
             $this->view->height = $this->templateParams['height'];
+        }
+
+        if (isset($this->templateParams['format'])) {
+            $this->view->format = $this->templateParams['format'];
         }
 
         $pageImage = $this->pageVersion->getImageId();

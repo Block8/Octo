@@ -31,7 +31,7 @@ class MediaController extends Controller
      * @param int $width
      * @param int $height
      */
-    public function render($fileId, $width = null, $height = null)
+    public function render($fileId, $width = null, $height = null, $type = 'jpeg')
     {
         $file = $this->fileStore->getById($fileId);
 
@@ -47,9 +47,9 @@ class MediaController extends Controller
             $height = $originalHeight;
         }
 
-        $output = (string)$image->render($width, $height);
+        $output = (string)$image->render($width, $height, $type);
 
-        header('Content-Type: image/jpeg');
+        header('Content-Type: image/'.$type);
         header('Content-Length: ' . strlen($output));
         header('Cache-Control: public');
         header('Pragma: cache');
