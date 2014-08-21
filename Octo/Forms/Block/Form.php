@@ -213,35 +213,34 @@ class Form extends Block
 
     protected function sendEmails(FormModel $form, Submission $submission)
     {
+        $config = Config::getInstance();
+        $mail = new \PHPMailer();
+        $mail->IsSMTP();
+        $mail->Host = $config->site['smtp_server'];
+        $mail->IsHTML(true);
+        $mail->Subject = 'Form Submission: ' . $form->getTitle();
+        $mail->CharSet = "UTF-8";
+
         $recipients = array_filter(explode("\n", $form->getRecipients()));
-
-        $sendTo = implode(', ', $recipients);
-
-        $subject = 'Form Submission: ' . $form->getTitle();
-        $headers = array(
-            'MIME-Version: 1.0',
-            'Content-type: text/html; charset=iso-8859-1',
-        );
+        foreach($recipients as $recipient) {
+            $mail->AddAddress($recipient);
+        }
 
         if ($submission->getContact() && $submission->getContact()->getEmail()) {
-            $headers[] = 'Reply-To: ' . $submission->getContact()->getEmail();
+            $mail->AddReplyTo($submission->getContact()->getEmail(), $submission->getContact()->getFirstName()." ".$submission->getContact()->getLastName());
         }
-
-        $config = Config::getInstance();
 
         if (isset($config->site['email_from'])) {
-            $headers[] = 'From: ' . $config->site['email_from'];
+            $mail->SetFrom($config->site['email_from']);
         }
         else {
-            $headers[] = 'From: ' . 'octo@block8.net';
+            $mail->SetFrom('octo@block8.net');
         }
 
         $message         = Template::getPublicTemplate('Emails/FormSubmission');
         $message->form   = $form;
         $message->submission = $submission;
-
-        mail($sendTo, $subject, $message->render(), implode("\r\n", $headers));
+        $mail->Body = $message->render();
+        $mail->send();
     }
-
-
 }
