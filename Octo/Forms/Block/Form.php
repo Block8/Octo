@@ -215,8 +215,10 @@ class Form extends Block
     {
         $config = Config::getInstance();
         $mail = new \PHPMailer();
-        $mail->IsSMTP();
-        $mail->Host = $config->site['smtp_server'];
+        if(isset($config->site['smtp_server'])) {
+            $mail->IsSMTP();
+            $mail->Host = $config->site['smtp_server'];
+        }
         $mail->IsHTML(true);
         $mail->Subject = 'Form Submission: ' . $form->getTitle();
         $mail->CharSet = "UTF-8";
