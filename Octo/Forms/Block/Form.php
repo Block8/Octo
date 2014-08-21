@@ -220,7 +220,7 @@ class Form extends Block
         $subject = 'Form Submission: ' . $form->getTitle();
         $headers = array(
             'MIME-Version: 1.0',
-            'Content-type: text/html; charset=utf-8',
+            'Content-type: text/html; charset=iso-8859-1',
         );
 
         if ($submission->getContact() && $submission->getContact()->getEmail()) {
@@ -232,6 +232,9 @@ class Form extends Block
         if (isset($config->site['email_from'])) {
             $headers[] = 'From: ' . $config->site['email_from'];
         }
+        else {
+            $headers[] = 'From: ' . 'octo@block8.net';
+        }
 
         $message         = Template::getPublicTemplate('Emails/FormSubmission');
         $message->form   = $form;
@@ -239,4 +242,6 @@ class Form extends Block
 
         mail($sendTo, $subject, $message->render(), implode("\r\n", $headers));
     }
+
+
 }

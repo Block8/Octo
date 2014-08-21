@@ -17,6 +17,17 @@ class TemplateFunctions extends Listener
 
     public function adminTemplateFunctions(Template &$template)
     {
+        $template->addFunction('can_access', function ($args, &$view) {
+            $uri = $view->getVariable($args['uri']);
+
+            return $_SESSION['user']->canAccess($uri);
+        });
+
+    }
+
+    public function globalTemplateFunctions(Template &$template)
+    {
+        $config = Config::getInstance();
         $template->addFunction('date_format', function ($args, &$view) {
             $date = $view->getVariable($args['date']);
 
@@ -40,19 +51,8 @@ class TemplateFunctions extends Listener
 
             return $date->format($format);
         });
-
-        $template->addFunction('can_access', function ($args, &$view) {
-            $uri = $view->getVariable($args['uri']);
-
-            return $_SESSION['user']->canAccess($uri);
-        });
-
-    }
-
-    public function globalTemplateFunctions(Template &$template)
-    {
-        $config = Config::getInstance();
-
+		
+		$template->set('date_now', new \DateTime());
         $template->set('adminUri', $config->get('site.admin_uri'));
         $template->set('config', $config);
         $template->addFunction('pagination', array($this, 'handlePagination'));
