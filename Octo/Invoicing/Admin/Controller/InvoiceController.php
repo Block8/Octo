@@ -153,6 +153,19 @@ class InvoiceController extends Admin\Controller
         $this->addBreadcrumb('Edit Invoice', '/invoice/edit/' . $key);
     }
 
+    public function editStatus($key)
+    {
+        $item = $this->invoiceStore->getByPrimaryKey($key);
+        $newStatusId = $this->getParam('invoice_status_id', null);
+        if (!empty($newStatusId)) {
+            $status = $this->statusStore->getById($newStatusId);
+            $item = $this->invoiceService->updateInvoiceStatus($item, $status);
+        }
+        $this->invoiceService->updateInvoiceItems($item, $this->getParam('items', []));
+        $this->response = new JsonResponse();
+        $this->response->setContent($item);
+    }
+
     public function delete($key)
     {
         $item = $this->invoiceStore->getByPrimaryKey($key);

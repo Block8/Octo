@@ -101,7 +101,7 @@
 
                 $('.pace').removeClass('hide');
 
-                $.post('/' + window.adminUri + '/invoice/edit/' + invoiceId, {invoice_status_id: newStatus}, function () {
+                $.post('/' + window.adminUri + '/invoice/editStatus/' + invoiceId, {invoice_status_id: newStatus}, function () {
                     $('.pace').addClass('hide');
                     var oldCode = statusButton.data('code');
                     statusButton.data('code', newCode);
