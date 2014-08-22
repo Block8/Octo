@@ -116,28 +116,58 @@ trait ItemStoreBase
         }
 
     }
+
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return Item
-    */
-    public function getBySlug($value, $useConnection = 'read')
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForSlug($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
         $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
-        $query->select('*')->from('item')->limit(1);
-        $query->where('`slug` = :slug');
+        $query->from('item')->where('`slug` = :slug');
         $query->bind(':slug', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Item by Slug', 0, $ex);
+        }
+    }
+
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Item[]
+     */
+    public function getBySlug($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
+        $query->from('item')->where('`slug` = :slug');
+        $query->bind(':slug', $value);
+
+        $this->handleQueryOptions($query, $options);
 
         try {
             $query->execute();
-            return $query->fetch();
+            return $query->fetchAll();
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Item by Slug', 0, $ex);
         }
+
     }
 }

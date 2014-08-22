@@ -79,7 +79,7 @@ class ShopService
     {
         $itemId = $itemData['item_id'];
         $quantity = $itemData['quantity'];
-
+        $metadata = $itemData['metadata'];
         $item = $this->itemStore->getById($itemId);
         $description = $item->getTitle();
         $itemPrice = $item->getPrice();
