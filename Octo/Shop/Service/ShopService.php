@@ -79,7 +79,7 @@ class ShopService
     {
         $itemId = $itemData['item_id'];
         $quantity = $itemData['quantity'];
-        $metadata = $itemData['metadata'];
+        $metadata = $itemData['meta_data'];
         $item = $this->itemStore->getById($itemId);
         $description = $item->getTitle();
         $itemPrice = $item->getPrice();
@@ -102,6 +102,7 @@ class ShopService
         $lineItem->setLinePrice(round($linePrice, 2));
         $lineItem->setBasket($basket);
         $lineItem->setDescription($description);
+        $lineItem->setMetaData($metadata);
 
         $lineItem = $this->lineStore->saveByInsert($lineItem);
 
