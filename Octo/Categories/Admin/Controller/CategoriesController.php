@@ -316,11 +316,11 @@ class CategoriesController extends Controller
 
         $field = new Form\Element\Select('parent_id');
         $field->setClass('select2');
-        $field->setLabel('Parent');
+        $field->setLabel('Parent (do not use it');
 
         $options = [];
         $options[] = '---';
-        $options = $options + $this->categoryStore->getNamesForParents('blog');
+        $options = $options + $this->categoryStore->getNamesForParents('shop');
         $field->setOptions($options);
         $field->setRequired(false);
 

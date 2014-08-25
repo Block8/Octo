@@ -80,4 +80,39 @@ class LineItemStore extends Octo\Store
             return false;
         }
     }
+
+    //LPP
+    /**
+     * @param $basketId
+     * @param $itemId
+     * @param $itemDescription
+     * @param array $options
+     * @param string $useConnection
+     * @return Octo\Invoicing\Model\LineItem
+     * @throws StoreException
+     */
+    public function getLineItemFromBasket($basketId, $itemId, $itemDescription, $options = [], $useConnection = 'read')
+    {
+        if (is_null($basketId) || is_null($itemId) || is_null($itemDescription)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('LineItem').'\Model\LineItem', $useConnection);
+        $query->from('line_item')->where('`basket_id` = :basket_id AND `description` = :description AND `item_id` = :item_id');
+        $query->limit(1);
+        $query->bind(':basket_id', $basketId);
+        $query->bind(':item_id', $itemId);
+        $query->bind(':description', $itemDescription);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get LineItem from Basket', 0, $ex);
+        }
+
+    }
+
 }
