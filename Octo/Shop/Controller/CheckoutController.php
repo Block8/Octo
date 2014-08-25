@@ -41,6 +41,7 @@ class CheckoutController extends Controller
         $basketTotal = number_format($basketTotal, 2, '.', '');
 
         $view->basketTotal = $basketTotal;
+        $view->itemsCount = count($items);
 
         if ($this->request->isAjax() || $this->request->getParam('ajax')) {
             $return = [
@@ -121,6 +122,7 @@ class CheckoutController extends Controller
             die;
         }
 
+        //TODO: LPP Check if basket is empty and redirect back.
         $form = $this->detailsForm($basketId);
         $view = Template::getPublicTemplate('Checkout/details');
         $view->form = $form;

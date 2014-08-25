@@ -26,6 +26,34 @@
 
             if (!data.items || data.items.length == 0) {
                 container.html('<p>Your basket is empty.</p>');
+
+                $('#basket-mobile-items').html('0');
+                $('#basket-mobile-total').html('0.00');
+
+                //disable button on checkout (clear and proceed)
+               if($('#checkout-proceed').length > 0)
+               {
+                   $('#checkout-proceed').fadeOut('fast');
+               }
+                if($('#clear-basket').length > 0)
+                {
+                    $('#clear-basket').fadeOut('fast');
+                }
+
+            } else {
+                //Update mobile basket
+                $('#basket-mobile-items').html(data.items.length);
+                $('#basket-mobile-total').html(data.total);
+
+                //enable button on checkout (clear and proceed)
+                if($('#checkout-proceed').length > 0)
+                {
+                    $('#checkout-proceed').fadeIn('fast');
+                }
+                if($('#clear-basket').length > 0)
+                {
+                    $('#clear-basket').fadeIn('fast');
+                }
             }
 
             for (var i in data.items) {
