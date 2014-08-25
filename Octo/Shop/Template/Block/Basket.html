@@ -5,7 +5,7 @@
 
     </div>
 
-    <a href="/checkout" class="btn btn-yellow" id="checkout-proceed">Checkout now</a>
+    <a href="/checkout" class="btn btn-yellow checkout-proceed">Checkout now</a>
 </div>
 
 <script>
@@ -31,9 +31,9 @@
                 $('#basket-mobile-total').html('0.00');
 
                 //disable button on checkout (clear and proceed)
-               if($('#checkout-proceed').length > 0)
+               if($('.checkout-proceed').length > 0)
                {
-                   $('#checkout-proceed').fadeOut('fast');
+                   $('.checkout-proceed').fadeOut('fast');
                }
                 if($('#clear-basket').length > 0)
                 {
@@ -46,9 +46,9 @@
                 $('#basket-mobile-total').html(data.total);
 
                 //enable button on checkout (clear and proceed)
-                if($('#checkout-proceed').length > 0)
+                if($('.checkout-proceed').length > 0)
                 {
-                    $('#checkout-proceed').fadeIn('fast');
+                    $('.checkout-proceed').fadeIn('fast');
                 }
                 if($('#clear-basket').length > 0)
                 {

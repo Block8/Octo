@@ -67,3 +67,43 @@
         </div>
     </div>
 </div>
+
+{if categories}
+<div class="row" style="margin-top:20px;">
+    <div class="col-xs-12">
+        <h3 class="box-title">Sub Categories</h3>
+        <div class="box box-primary">
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th width="170px">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop categories}
+                    <tr>
+                        <td>
+                            <a href="/{@adminUri}/shop/category/{@item.id}">{@item.name}</a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-default btn-sm" href="/{@adminUri}/categories/edit/shop/{@item.id}">Edit Category</a>
+                                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="/{@adminUri}/categories/delete/shop/{@item.id}" class="btn-delete">Delete Category</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}

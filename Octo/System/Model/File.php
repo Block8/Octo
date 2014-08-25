@@ -131,7 +131,6 @@ class File extends Octo\Model
 
         $files = [];
         foreach ($upload->getFiles() as $file) {
-            print 'Setting info: ';
             $files[] = static::setSingleFileInfo($file, $scope, $uploadDirectory);
         }
 
