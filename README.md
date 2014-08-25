@@ -1,7 +1,7 @@
 # Octo - Content Management System
 
 ## Using Octo for a new site
-You can find a working example site in the [Octo Skeleton](https://bitbucket.org/block8/octo-skeleton) project.
+You can find a working example site in the [Octo Skeleton](https://github.com/Block8/Octo-Skeleton) project.
 
 To get started:
 
