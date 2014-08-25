@@ -93,18 +93,32 @@ class ShopService
             }
         }
 
-        $linePrice = $itemPrice * $quantity;
+        //Check if line item already exist
+        //if exist receive, sum, update
+        $lineItemInBasket = $this->lineStore->getLineItemFromBasket($basket->getId(), $itemId ,$description);
+        if(!is_null($lineItemInBasket) && count($lineItemInBasket)>0)
+        {
+            $lineItemInBasket = $lineItemInBasket[0];
+            $lineItemInBasket->setQuantity($lineItemInBasket->getQuantity() + $quantity);
+            $linePrice = $itemPrice * $lineItemInBasket->getQuantity();
+            $lineItemInBasket->setLinePrice(round($linePrice, 2));
+            $lineItem = $this->lineStore->saveByUpdate($lineItemInBasket);
+        } else {
+            //else Save By Insert (new item)
 
-        $lineItem = new LineItem();
-        $lineItem->setItem($item);
-        $lineItem->setItemPrice($itemPrice);
-        $lineItem->setQuantity($quantity);
-        $lineItem->setLinePrice(round($linePrice, 2));
-        $lineItem->setBasket($basket);
-        $lineItem->setDescription($description);
-        $lineItem->setMetaData($metadata);
+            $linePrice = $itemPrice * $quantity;
 
-        $lineItem = $this->lineStore->saveByInsert($lineItem);
+            $lineItem = new LineItem();
+            $lineItem->setItem($item);
+            $lineItem->setItemPrice($itemPrice);
+            $lineItem->setQuantity($quantity);
+            $lineItem->setLinePrice(round($linePrice, 2));
+            $lineItem->setBasket($basket);
+            $lineItem->setDescription($description);
+            $lineItem->setMetaData($metadata);
+
+            $lineItem = $this->lineStore->saveByInsert($lineItem);
+        }
 
         return $lineItem;
     }
