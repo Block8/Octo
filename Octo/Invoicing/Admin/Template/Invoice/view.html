@@ -63,7 +63,7 @@
                         {/if}
 
                         {ifnot hasQuantity}
-                        <th>Amount</th>
+                        <th colspan="2">Amount</th>
                         {/ifnot}
                     </tr>
                 </thead>
@@ -82,9 +82,11 @@
                     {if hasQuantity}
                     <td style="text-align: right">&pound;{@value.item_price.currency}</td>
                     <td style="text-align: right">{@value.quantity}</td>
-                    {/if}
-
                     <td style="text-align: right">&pound;{@value.line_price.currency}</td>
+                    {/if}
+                    {ifnot hasQuantity}
+                    <td style="text-align: right" colspan="2">&pound;{@value.line_price.currency}</td>
+                    {/if}
                 </tr>
                 {/for}
                 </tbody>
