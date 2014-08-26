@@ -100,6 +100,7 @@ class ShopController extends Controller
         $this->addBreadcrumb($cat->getName(), '/shop/category/' . $categoryId);
 
         $this->view->products = $this->productStore->getByCategoryId($categoryId, false);
+        $this->view->categories = $this->categoryStore->getAllForParent($categoryId);
     }
 
     public function addProduct()

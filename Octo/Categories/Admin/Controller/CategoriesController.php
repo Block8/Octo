@@ -316,7 +316,7 @@ class CategoriesController extends Controller
 
         $field = new Form\Element\Select('parent_id');
         $field->setClass('select2');
-        $field->setLabel('Parent (do not use it');
+        $field->setLabel('Subcategory of (leave blank for root)');
 
         $options = [];
         $options[] = '---';

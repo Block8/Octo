@@ -328,6 +328,7 @@ class CheckoutController extends Controller
     {
         $dataStore = [
             'breadcrumb' => [
+                ['uri' => '/', 'title' => 'Shop', 'active' => false],
                 ['uri' => '/checkout', 'title' => 'Checkout', 'active' => true],
             ]
         ];
