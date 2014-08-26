@@ -378,8 +378,8 @@ class CheckoutController extends Controller
     public function clearBasket()
     {
         setcookie('basket_id', '', time() - 1, '/');
-        setcookie('basket_items', '', time() - 1, '/');
         setcookie('basket_total', '', time() - 1, '/');
+        setcookie('basket_items', '', time() - 1, '/');
         header('Location: /');
         die;
     }
