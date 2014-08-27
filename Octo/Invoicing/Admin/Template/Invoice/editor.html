@@ -119,7 +119,7 @@
                 item_title: "{@value.Item.title}",
                 description: "{@value.description}",
                 quantity: {@value.quantity},
-                item_price: {@value.item_price},
+                item_price: {@value.item_price.currency},
                 line_price: {@value.line_price}
             };
 
@@ -172,10 +172,10 @@
             quantity.val(values.quantity);
         }
         if (values.item_price) {
-            unitPrice.val(values.item_price);
+            unitPrice.val(values.item_price.toFixed(2));
         }
         if (values.line_price) {
-            amount.val(values.line_price);
+            amount.val(values.line_price.toFixed(2));
         }
 
         tr.append($('<td></td>').append(selectItem));
