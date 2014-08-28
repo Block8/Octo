@@ -14,6 +14,7 @@ use Octo\Shop\Store\ShopBasketStore;
 use Octo\Shop\Service\ShopService;
 use Octo\Store;
 use Octo\Template;
+use Octo\System\Model\Contact;
 
 class CheckoutController extends Controller
 {
@@ -78,62 +79,67 @@ class CheckoutController extends Controller
     {
 
         $this->contactStore = Store::get('Contact');
+        $form = $this->detailsForm($basketId);
 
         if ($this->request->getMethod() == 'POST')
         {
-            $contactDetails = $this->getContactDetails();
-            $contact = $this->contactStore->findContact($contactDetails);
-
-            if (is_null($contact)) {
-                $contact = new Contact();
+            $myParams = $this->getParams();
+            if(isset($myParams['same_as_billing']) && $myParams['same_as_billing'] == "1") {
+                $myParams['shipping_address'] = $myParams['billing_address'];
             }
+            $form->setValues($myParams);
+            if($form->validate()) {
+                $contactDetails = $this->getContactDetails();
+                $contact = $this->contactStore->findContact($contactDetails);
 
-            if ($contact->getIsBlocked()) {
-                header('Location: /');
+                if (is_null($contact)) {
+                    $contact = new Contact();
+                }
+
+                if ($contact->getIsBlocked()) {
+                    header('Location: /');
+                    die;
+                }
+
+                $contact->setValues($contactDetails);
+                $contact = $this->contactStore->save($contact);
+
+                $shopService = $this->getShopService();
+                $invoiceService = $this->getInvoiceService();
+
+                $basket = $shopService->getBasket($basketId);
+                $invoice = $shopService->createInvoiceForBasket($invoiceService, $basket, $contact);
+
+                $billingAddress = $this->request->getParam('billing_address', []);
+                $shippingAddress = $this->request->getParam('shipping_address', []);
+
+                if ($this->getParam('same_as_billing', false)) {
+                    $shippingAddress = $billingAddress;
+                }
+
+                $invoice = $invoiceService->updateInvoice(
+                    $invoice,
+                    $invoice->getTitle(),
+                    $invoice->getContact(),
+                    $invoice->getCreatedDate(),
+                    $invoice->getDueDate(),
+                    $billingAddress,
+                    $shippingAddress
+                );
+
+                $data = [
+                    'invoice' => $invoice,
+                    'params' => $this->getParams(),
+                    'invoice_service' => $invoiceService,
+                ];
+
+
+                Event::trigger('CheckoutDetailsSubmit', $data);
+
+                header('Location: /checkout/invoice/' . $invoice->getId());
                 die;
             }
-
-            $contact->setValues($contactDetails);
-            $contact = $this->contactStore->save($contact);
-
-            $shopService = $this->getShopService();
-            $invoiceService = $this->getInvoiceService();
-
-            $basket = $shopService->getBasket($basketId);
-            $invoice = $shopService->createInvoiceForBasket($invoiceService, $basket, $contact);
-
-            $billingAddress = $this->request->getParam('billing_address', []);
-            $shippingAddress = $this->request->getParam('shipping_address', []);
-
-            if ($this->getParam('same_as_billing', false)) {
-                $shippingAddress = $billingAddress;
-            }
-
-            $invoice = $invoiceService->updateInvoice(
-                $invoice,
-                $invoice->getTitle(),
-                $invoice->getContact(),
-                $invoice->getCreatedDate(),
-                $invoice->getDueDate(),
-                $billingAddress,
-                $shippingAddress
-            );
-
-            $data = [
-                'invoice' => $invoice,
-                'params' => $this->getParams(),
-                'invoice_service' => $invoiceService,
-            ];
-
-
-            Event::trigger('CheckoutDetailsSubmit', $data);
-
-            header('Location: /checkout/invoice/' . $invoice->getId());
-            die;
         }
-
-        //TODO: LPP Check if basket is empty and redirect back.
-        $form = $this->detailsForm($basketId);
         $view = Template::getPublicTemplate('Checkout/details');
         $view->form = $form;
 
