@@ -237,6 +237,22 @@ class CheckoutController extends Controller
         return $output;
     }
 
+    public function failed()
+    {
+        $view = Template::getPublicTemplate('Checkout/failed');
+        $blockManager = $this->getBlockManager($view);
+        $data = [
+            'output' => &$output,
+            'datastore' => $blockManager->getDataStore(),
+        ];
+
+        Event::trigger('PageLoaded', $data);
+
+        return $output;
+    }
+
+
+
     protected function getContactDetails()
     {
         $contact = [
