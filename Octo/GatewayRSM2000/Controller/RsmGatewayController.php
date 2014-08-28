@@ -37,7 +37,9 @@ class RsmGatewayController extends Controller
             $lineItemStore = Store::get('LineItem');
             $items = $lineItemStore->getByInvoiceId($invoice->getId());
             foreach($items as $item) {
-                $lineItemStore->emptyShopBasket($item->getBasketId());
+                if(isset($item->Basket)) {
+                    $lineItemStore->emptyShopBasket($item->Basket);
+                }
             }
 
 //add payed donation
