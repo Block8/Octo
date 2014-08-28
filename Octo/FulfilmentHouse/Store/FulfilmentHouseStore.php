@@ -23,4 +23,15 @@ class FulfilmentHouseStore extends Octo\Store
 
         return $query->execute()->fetchAll();
     }
+
+    public function getOptions()
+    {
+        $suppliers = $this->getAll();
+        $options = array();
+        foreach($suppliers as $supplier) {
+            $options[$supplier->id] = $supplier->name;
+        }
+        return $options;
+    }
+
 }

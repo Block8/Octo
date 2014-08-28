@@ -5,7 +5,7 @@ use b8\Form;
 use Octo\Admin;
 use Octo\Admin\Menu;
 use Octo\Admin\Form as FormElement;
-use HMUK\FulfilmentHouse\Model\FulfilmentHouse;
+use Octo\FulfilmentHouse\Model\FulfilmentHouse;
 use Octo\Event;
 use Octo\Store;
 

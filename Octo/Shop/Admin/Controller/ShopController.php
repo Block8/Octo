@@ -40,6 +40,11 @@ class ShopController extends Controller
      * @var \Octo\Shop\Store\ItemVariantStore
      */
     protected $itemVariantStore;
+    /**
+     * @var \Octo\FulfilmentHouse\Store\FulfilmentHouseStore
+     */
+    protected $supplierStore;
+
 
     /**
      * Return the menu nodes required for this controller
@@ -85,6 +90,12 @@ class ShopController extends Controller
         $this->variantStore = Store::get('Variant');
         $this->variantOptionStore = Store::get('VariantOption');
         $this->itemVariantStore = Store::get('ItemVariant');
+
+        $mm = $this->config->get('ModuleManager');
+        if($mm->isEnabled('FulfilmentHouse')) {
+            $this->supplierStore = Store::get('FulfilmentHouse');
+        }
+
     }
 
     public function index()
@@ -359,6 +370,16 @@ class ShopController extends Controller
         $field->setRequired(true);
         $field->setLabel('Price');
         $fieldset->addField($field);
+
+
+        $mm = $this->config->get('ModuleManager');
+        if($mm->isEnabled('FulfilmentHouse')) {
+            $field = new Form\Element\Select('fulfilment_house_id');
+            $field->setOptions($this->supplierStore->getOptions());
+            $field->setLabel('Supplier');
+            $field->setClass('select2');
+            $fieldset->addField($field);
+        }
 
         $field = new Form\Element\Text('expiry_date');
         $field->setRequired(false);

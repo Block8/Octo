@@ -13,7 +13,7 @@ use b8\Database\Query;
 use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
-use HMUK\FulfilmentHouse\Model\FulfilmentHouse;
+use Octo\FulfilmentHouse\Model\FulfilmentHouse;
 
 /**
  * FulfilmentHouse Base Store
@@ -23,7 +23,7 @@ trait FulfilmentHouseStoreBase
     protected function init()
     {
         $this->tableName = 'fulfilment_house';
-        $this->modelName = '\HMUK\FulfilmentHouse\Model\FulfilmentHouse';
+        $this->modelName = '\Octo\FulfilmentHouse\Model\FulfilmentHouse';
         $this->primaryKey = 'id';
     }
     /**

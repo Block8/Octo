@@ -431,9 +431,9 @@ trait ItemBase
     /**
     * Get the FulfilmentHouse model for this Item by Id.
     *
-    * @uses \HMUK\FulfilmentHouse\Store\FulfilmentHouseStore::getById()
-    * @uses \HMUK\FulfilmentHouse\Model\FulfilmentHouse
-    * @return \HMUK\FulfilmentHouse\Model\FulfilmentHouse
+    * @uses \Octo\FulfilmentHouse\Store\FulfilmentHouseStore::getById()
+    * @uses \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    * @return \Octo\FulfilmentHouse\Model\FulfilmentHouse
     */
     public function getFulfilmentHouse()
     {
@@ -443,7 +443,7 @@ trait ItemBase
             return null;
         }
 
-        return Factory::getStore('FulfilmentHouse', 'HMUK\FulfilmentHouse')->getById($key);
+        return Factory::getStore('FulfilmentHouse', 'Octo\FulfilmentHouse')->getById($key);
     }
 
     /**
@@ -454,7 +454,7 @@ trait ItemBase
     public function setFulfilmentHouse($value)
     {
         // Is this an instance of FulfilmentHouse?
-        if ($value instanceof \HMUK\FulfilmentHouse\Model\FulfilmentHouse) {
+        if ($value instanceof \Octo\FulfilmentHouse\Model\FulfilmentHouse) {
             return $this->setFulfilmentHouseObject($value);
         }
 
@@ -470,9 +470,9 @@ trait ItemBase
     /**
     * Set FulfilmentHouse - Accepts a FulfilmentHouse model.
     *
-    * @param $value \HMUK\FulfilmentHouse\Model\FulfilmentHouse
+    * @param $value \Octo\FulfilmentHouse\Model\FulfilmentHouse
     */
-    public function setFulfilmentHouseObject(\HMUK\FulfilmentHouse\Model\FulfilmentHouse $value)
+    public function setFulfilmentHouseObject(\Octo\FulfilmentHouse\Model\FulfilmentHouse $value)
     {
         return $this->setFulfilmentHouseId($value->getId());
     }
