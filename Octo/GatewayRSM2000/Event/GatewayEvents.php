@@ -30,9 +30,14 @@ class GatewayEvents extends Listener
         $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
 
         $view->donation = 0;
+        $view->gift_aid = 'N';
         foreach ($adjustments as $adjustment) {
             if ($adjustment->getScope() == 'donation') {
                 $view->donation = $adjustment->getDisplayValue();
+                if ($adjustment->getGiftAid())
+                {
+                    $view->gift_aid = 'Y';
+                }
             }
         }
 
