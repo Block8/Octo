@@ -59,6 +59,7 @@ class LineItemStore extends Octo\Store
 
     }
 
+    /*
     public function copyBasketToInvoice(\Octo\Shop\Model\ShopBasket $basket, Invoice $invoice)
     {
         $query = 'UPDATE line_item SET basket_id = NULL, invoice_id = :invoice_id WHERE basket_id = :basket_id';
@@ -80,6 +81,39 @@ class LineItemStore extends Octo\Store
             return false;
         }
     }
+    */
+
+    public function copyBasketToInvoice(\Octo\Shop\Model\ShopBasket $basket, Invoice $invoice)
+    {
+        $query = 'UPDATE line_item SET invoice_id = :invoice_id WHERE basket_id = :basket_id';
+        $stmt = Database::getConnection('write')->prepare($query);
+        $stmt->bindValue(':invoice_id', $invoice->getId());
+        $stmt->bindValue(':basket_id', $basket->getId());
+
+        if ($stmt->execute()) {
+            Event::trigger('InvoiceItemsUpdated', $invoice);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function emptyShopBasket(\Octo\Shop\Model\ShopBasket $basket) {
+        $query = 'UPDATE line_item SET basket_id = NULL WHERE basket_id = :basket_id';
+        $stmt = Database::getConnection('write')->prepare($query);
+        $stmt->bindValue(':basket_id', $basket->getId());
+        $stmt->execute();
+
+        $query = 'DELETE FROM shop_basket WHERE id = :basket_id';
+        $stmt = Database::getConnection('write')->prepare($query);
+        $stmt->bindValue(':basket_id', $basket->getId());
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     //LPP
     /**

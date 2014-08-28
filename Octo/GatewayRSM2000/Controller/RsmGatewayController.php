@@ -29,9 +29,17 @@ class RsmGatewayController extends Controller
         /** @type \Octo\Invoicing\Model\Invoice */
         $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
 
+
         if ($invoice) {
             $invoiceService = $this->getInvoiceService();
             $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
+
+            $lineItemStore = Store::get('LineItem');
+            $items = $lineItemStore->getByInvoiceId($invoice->getId());
+            foreach($items as $item) {
+                $lineItemStore->emptyShopBasket($item->getBasketId());
+            }
+
 //add payed donation
             die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
         }
