@@ -104,6 +104,12 @@
                     <td>{@contact.postcode}</td>
                 </tr>
                 {/if}
+                {if contact.country_code}
+                <tr>
+                    <th>Country Code</th>
+                    <td>{@country_name}</td>
+                </tr>
+                {/if}
                 </tbody>
 
             </table>

@@ -4,6 +4,7 @@ namespace Octo\Invoicing\Service;
 
 use DateTime;
 use Exception;
+use HMUK\Utilities\PostageCalculator;
 use Octo\Event;
 use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Model\InvoiceStatus;
@@ -17,6 +18,8 @@ use Octo\Store;
 
 class InvoiceService
 {
+    const CATEGORY_ECARDS = 6;      // TODO: Remove magic category number
+
     /**
      * @var \Octo\Invoicing\Store\InvoiceStore
      */
@@ -105,8 +108,28 @@ class InvoiceService
         $invoice->setDueDate($dueDate);
         $invoice->setUpdatedDate(new DateTime());
         $invoice->setContact($contact);
-        $invoice->setBillingAddress((is_array($billingAddress) ? json_encode($billingAddress) : null));
-        $invoice->setShippingAddress((is_array($shippingAddress) ? json_encode($shippingAddress) : null));
+        if (!is_null($shippingAddress) && is_array($shippingAddress)) {
+            $invoice->setCountryCode($shippingAddress['country_code']);
+        }
+
+        //add country name for shipping/billing display
+        if (isset($billingAddress['country_code']) && $billingAddress['country_code'] !== '')
+        {
+            $billingAddress['country_name'] = PostageCalculator::map($billingAddress['country_code']);
+        }
+        if (isset($shippingAddress['country_code']) && $shippingAddress['country_code'] !== '')
+        {
+            $shippingAddress['country_name'] = PostageCalculator::map($shippingAddress['country_code']);
+        }
+
+        //Save/update invoice from BackOffice without Addresses
+        if (is_array($billingAddress)){
+            $invoice->setBillingAddress(json_encode($billingAddress));
+        }
+        if (is_array($shippingAddress)){
+            $invoice->setShippingAddress(json_encode($shippingAddress));
+        }
+
 
         if (Event::trigger('BeforeInvoiceSave', $invoice)) {
             $invoice = $this->invoiceStore->saveByUpdate($invoice);
@@ -134,6 +157,7 @@ class InvoiceService
         $this->lineItemStore->clearItemsForInvoice($invoice);
 
         $invoiceSubTotal = 0;
+        $invoiceSubTotalWithoutEcards = 0;
         foreach ($itemDetails as $item) {
             if (empty($item['item_id'])) {
                 throw new Exception('Error updating invoice items: Missing item ID.');
@@ -166,11 +190,17 @@ class InvoiceService
 
             $lineItem->setLinePrice($lineItem->getItemPrice() * $lineItem->getQuantity());
             $invoiceSubTotal += $lineItem->getLinePrice();
+            if ($item->Item->getCategoryId() !== self::CATEGORY_ECARDS)
+            {
+                $invoiceSubTotalWithoutEcards += $lineItem->getLinePrice();
+            }
 
             $this->lineItemStore->save($lineItem);
         }
 
         $invoice->setSubtotal($invoiceSubTotal);
+        $invoice->setShippingCost(PostageCalculator::calculate($invoice->getCountryCode(), $invoiceSubTotalWithoutEcards));
+
         Event::trigger('InvoiceItemsUpdated', $invoice);
         $this->updateInvoiceTotal($invoice);
 
@@ -192,6 +222,7 @@ class InvoiceService
             $total += $adjustment->getValue();
         }
 
+        $total += $invoice->getShippingCost();
         $invoice->setTotal($total);
 
         return $invoice;
@@ -201,12 +232,20 @@ class InvoiceService
     {
         $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
         $invoiceSubTotal = 0;
+        $invoiceSubTotalWithoutEcards = 0;
 
-        foreach ($items as $item) {
+        foreach ($items as $item)
+        {
             $invoiceSubTotal += $item->getLinePrice();
+            if ($item->Item->getCategoryId() != self::CATEGORY_ECARDS)
+            {
+                $invoiceSubTotalWithoutEcards += $item->getLinePrice();
+            }
         }
 
         $invoice->setSubtotal($invoiceSubTotal);
+        $invoice->setShippingCost(PostageCalculator::calculate($invoice->getCountryCode(), $invoiceSubTotalWithoutEcards));
+
         $this->updateInvoiceTotal($invoice);
 
         if (Event::trigger('BeforeInvoiceSave', $invoice)) {
@@ -244,4 +283,18 @@ class InvoiceService
         $invoice->setTotalPaid($totalPaid);
         return $this->updateInvoiceStatus($invoice, $status);
     }
+
+    public function getTotalPayment(Invoice $invoice)
+    {
+        $totalPayment = $invoice->getSubtotal() + $invoice->getShippingCost();
+        $adjustments = $this->adjustmentStore->getByInvoiceId($invoice->getId());
+
+        foreach ($adjustments as $adjustment) {
+            $totalPayment += $adjustment->getDisplayValue();
+        }
+
+        return $totalPayment;
+    }
+
+
 }

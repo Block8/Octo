@@ -4,6 +4,7 @@ namespace Octo\Form\Element;
 use b8\Form\Element;
 use b8\Form\FieldSet;
 use b8\Form\Element\Text;
+use HMUK\Utilities\PostageCalculator;
 
 class Address extends FieldSet
 {
@@ -20,15 +21,23 @@ class Address extends FieldSet
             $postcode = $name . '[' . $postcode . ']';
         }
 
+        $countryCode = $name . '[country_code]';
+
         $address1 = Text::create($address1, 'Address 1', true);
         $address2 = Text::create($address2, 'Address 2', false);
         $town = Text::create($town, 'Town', true);
         $postcode = Text::create($postcode, 'Postcode', true);
 
+        $countryCode = Element\Select::create($countryCode, 'Country', true);
+        $countryCode->setOptions(PostageCalculator::$countries);
+        $countryCode->setValue(PostageCalculator::UK_COUNTRY_CODE);
+
+        //check why setvalue setted, but does not select
         $this->addField($address1);
         $this->addField($address2);
         $this->addField($town);
         $this->addField($postcode);
+        $this->addField($countryCode);
     }
 
     public function setRequired($required)

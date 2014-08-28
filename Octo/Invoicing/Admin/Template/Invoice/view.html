@@ -16,7 +16,7 @@
 {ifnot ownLayout}
             <div class="row">
                 <div class="col-lg-4 col-md-4">
-                    {include template: "Contact/card"; variables: invoice.Contact => contact}
+                    {include template: "Contact/card"; variables: invoice.Contact => contact, country_name => country_name}
                 </div>
 
             <div class="col-lg-8 col-md-8">
@@ -35,9 +35,10 @@
             <strong>{if invoice.Contact.company}{@invoice.Contact.company}{/if}
             {ifnot invoice.Contact.company}{@invoice.Contact.first_name} {@invoice.Contact.last_name}{/if}</strong><br>
             {if invoice.Contact.address.address1}{@invoice.Contact.address.address1}<br>{/if}
-            {if invoice.Contact.address.address1}{@invoice.Contact.address.address2}<br>{/if}
-            {if invoice.Contact.address.address1}{@invoice.Contact.address.town}<br>{/if}
-            {@invoice.Contact.postcode}
+            {if invoice.Contact.address.address2}{@invoice.Contact.address.address2}<br>{/if}
+            {if invoice.Contact.address.town}{@invoice.Contact.address.town}<br>{/if}
+            {if invoice.Contact.postcode}{@invoice.Contact.postcode}<br>{/if}
+            {if country_name}{@country_name}<br>{/if}
         </div>
 
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
@@ -103,6 +104,18 @@
                     <td class="amount" style="text-align: right">&pound;{@invoice.subtotal.currency}</td>
                 </tr>
 
+                <tr>
+                    {if hasQuantity}
+                    <td style="text-align: right" colspan="2"></td>
+                    {/if}
+                    {ifnot hasQuantity}
+                    <td style="text-align: right" colspan="1"></td>
+                    {/ifnot}
+                    <td class="title">Postage and packaging:</td>
+
+                    <td class="amount" style="text-align: right">&pound;{@invoice.shipping_cost.currency}</td>
+                </tr>
+
                 {for invoiceAdjustments}
                 <tr>
                     {if hasQuantity}
@@ -128,7 +141,7 @@
                         <strong>Total:</strong>
                     </td>
 
-                    <td class="amount" style="text-align: right"><strong>&pound;{@invoice.total.currency}</strong></td>
+                    <td class="amount" style="text-align: right"><strong>&pound;{@total_payment.currency}</strong></td>
                 </tr>
                 </tfoot>
 

@@ -18,6 +18,11 @@ class RsmGatewayController extends Controller
 {
     public function success()
     {
+/* $_POST
+'donation'
+'purchase' = total (subtotal + shipping_cost)
+*/
+
         /** @type \Octo\Invoicing\Store\InvoiceStore */
         $invoiceStore = Store::get('Invoice');
 
@@ -25,7 +30,9 @@ class RsmGatewayController extends Controller
         $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
 
         if ($invoice) {
-            $this->getInvoiceService()->registerPayment($invoice, $this->getParam('purchase'));
+            $invoiceService = $this->getInvoiceService();
+            $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
+//add payed donation
             die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
         }
 
