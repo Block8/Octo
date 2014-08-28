@@ -40,6 +40,9 @@ trait InvoiceAdjustmentBase
         $this->data['display_value'] = null;
         $this->getters['display_value'] = 'getDisplayValue';
         $this->setters['display_value'] = 'setDisplayValue';
+        $this->data['gift_aid'] = null;
+        $this->getters['gift_aid'] = 'getGiftAid';
+        $this->setters['gift_aid'] = 'setGiftAid';
 
         // Foreign keys:
         $this->getters['Invoice'] = 'getInvoice';
@@ -125,6 +128,18 @@ trait InvoiceAdjustmentBase
     public function getDisplayValue()
     {
         $rtn = $this->data['display_value'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of GiftAid / gift_aid.
+    *
+    * @return int
+    */
+    public function getGiftAid()
+    {
+        $rtn = $this->data['gift_aid'];
 
         return $rtn;
     }
@@ -251,6 +266,25 @@ trait InvoiceAdjustmentBase
 
         $this->data['display_value'] = $value;
         $this->setModified('display_value');
+    }
+
+    /**
+    * Set the value of GiftAid / gift_aid.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setGiftAid($value)
+    {
+        $this->validateNotNull('GiftAid', $value);
+        $this->validateInt('GiftAid', $value);
+
+        if ($this->data['gift_aid'] === $value) {
+            return;
+        }
+
+        $this->data['gift_aid'] = $value;
+        $this->setModified('gift_aid');
     }
     /**
     * Get the Invoice model for this InvoiceAdjustment by Id.

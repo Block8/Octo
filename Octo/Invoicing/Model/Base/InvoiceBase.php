@@ -58,6 +58,12 @@ trait InvoiceBase
         $this->data['shipping_address'] = null;
         $this->getters['shipping_address'] = 'getShippingAddress';
         $this->setters['shipping_address'] = 'setShippingAddress';
+        $this->data['shipping_cost'] = null;
+        $this->getters['shipping_cost'] = 'getShippingCost';
+        $this->setters['shipping_cost'] = 'setShippingCost';
+        $this->data['country_code'] = null;
+        $this->getters['country_code'] = 'getCountryCode';
+        $this->setters['country_code'] = 'setCountryCode';
 
         // Foreign keys:
         $this->getters['InvoiceStatus'] = 'getInvoiceStatus';
@@ -229,6 +235,30 @@ trait InvoiceBase
     public function getShippingAddress()
     {
         $rtn = $this->data['shipping_address'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ShippingCost / shipping_cost.
+    *
+    * @return float
+    */
+    public function getShippingCost()
+    {
+        $rtn = $this->data['shipping_cost'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of CountryCode / country_code.
+    *
+    * @return string
+    */
+    public function getCountryCode()
+    {
+        $rtn = $this->data['country_code'];
 
         return $rtn;
     }
@@ -465,6 +495,44 @@ trait InvoiceBase
 
         $this->data['shipping_address'] = $value;
         $this->setModified('shipping_address');
+    }
+
+    /**
+    * Set the value of ShippingCost / shipping_cost.
+    *
+    * Must not be null.
+    * @param $value float
+    */
+    public function setShippingCost($value)
+    {
+        $this->validateNotNull('ShippingCost', $value);
+        $this->validateFloat('ShippingCost', $value);
+
+        if ($this->data['shipping_cost'] === $value) {
+            return;
+        }
+
+        $this->data['shipping_cost'] = $value;
+        $this->setModified('shipping_cost');
+    }
+
+    /**
+    * Set the value of CountryCode / country_code.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setCountryCode($value)
+    {
+        $this->validateNotNull('CountryCode', $value);
+        $this->validateString('CountryCode', $value);
+
+        if ($this->data['country_code'] === $value) {
+            return;
+        }
+
+        $this->data['country_code'] = $value;
+        $this->setModified('country_code');
     }
     /**
     * Get the InvoiceStatus model for this Invoice by Id.

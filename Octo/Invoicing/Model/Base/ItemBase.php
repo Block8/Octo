@@ -52,8 +52,13 @@ trait ItemBase
         $this->data['slug'] = null;
         $this->getters['slug'] = 'getSlug';
         $this->setters['slug'] = 'setSlug';
+        $this->data['fulfilment_house_id'] = null;
+        $this->getters['fulfilment_house_id'] = 'getFulfilmentHouseId';
+        $this->setters['fulfilment_house_id'] = 'setFulfilmentHouseId';
 
         // Foreign keys:
+        $this->getters['FulfilmentHouse'] = 'getFulfilmentHouse';
+        $this->setters['FulfilmentHouse'] = 'setFulfilmentHouse';
         $this->getters['Category'] = 'getCategory';
         $this->setters['Category'] = 'setCategory';
     }
@@ -197,6 +202,18 @@ trait ItemBase
     public function getSlug()
     {
         $rtn = $this->data['slug'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of FulfilmentHouseId / fulfilment_house_id.
+    *
+    * @return int
+    */
+    public function getFulfilmentHouseId()
+    {
+        $rtn = $this->data['fulfilment_house_id'];
 
         return $rtn;
     }
@@ -393,6 +410,71 @@ trait ItemBase
 
         $this->data['slug'] = $value;
         $this->setModified('slug');
+    }
+
+    /**
+    * Set the value of FulfilmentHouseId / fulfilment_house_id.
+    *
+    * @param $value int
+    */
+    public function setFulfilmentHouseId($value)
+    {
+        $this->validateInt('FulfilmentHouseId', $value);
+
+        if ($this->data['fulfilment_house_id'] === $value) {
+            return;
+        }
+
+        $this->data['fulfilment_house_id'] = $value;
+        $this->setModified('fulfilment_house_id');
+    }
+    /**
+    * Get the FulfilmentHouse model for this Item by Id.
+    *
+    * @uses \Octo\FulfilmentHouse\Store\FulfilmentHouseStore::getById()
+    * @uses \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    * @return \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    */
+    public function getFulfilmentHouse()
+    {
+        $key = $this->getFulfilmentHouseId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('FulfilmentHouse', 'Octo\FulfilmentHouse')->getById($key);
+    }
+
+    /**
+    * Set FulfilmentHouse - Accepts an ID, an array representing a FulfilmentHouse or a FulfilmentHouse model.
+    *
+    * @param $value mixed
+    */
+    public function setFulfilmentHouse($value)
+    {
+        // Is this an instance of FulfilmentHouse?
+        if ($value instanceof \Octo\FulfilmentHouse\Model\FulfilmentHouse) {
+            return $this->setFulfilmentHouseObject($value);
+        }
+
+        // Is this an array representing a FulfilmentHouse item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setFulfilmentHouseId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setFulfilmentHouseId($value);
+    }
+
+    /**
+    * Set FulfilmentHouse - Accepts a FulfilmentHouse model.
+    *
+    * @param $value \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    */
+    public function setFulfilmentHouseObject(\Octo\FulfilmentHouse\Model\FulfilmentHouse $value)
+    {
+        return $this->setFulfilmentHouseId($value->getId());
     }
     /**
     * Get the Category model for this Item by Id.
