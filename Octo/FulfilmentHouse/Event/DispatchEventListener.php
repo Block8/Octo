@@ -27,33 +27,48 @@ class DispatchEventListener extends Listener
 
         if($invoice->getInvoiceStatusId() == Invoice::STATUS_PAID) {
             $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
-            $uniqueSuppliers = array();
+            $uniqueSuppliers[] = array();
             foreach($items as $item) {
-                echo $item->description." ";
-                if(isset($item->fulfilment_house_id) && is_numeric($item->fulfilment_house_id)) {
-                    if(!is_array($uniqueSuppliers[$item->fulfilment_house_id])) {
-                        $uniqueSuppliers[$item->fulfilment_house_id] = array();
+                if(is_numeric($item->Item->getFulfilmentHouseId())) {
+                    if(!isset($uniqueSuppliers[$item->Item->getFulfilmentHouseId()])) {
+                        $uniqueSuppliers[$item->Item->getFulfilmentHouseId()] = array();
                     }
-                    $uniqueSuppliers[$item->fulfilment_house_id][] = $item;
+                    $uniqueSuppliers[$item->Item->getFulfilmentHouseId()][] = $item;
                 }
             }
 
             foreach($uniqueSuppliers as $supplier_id=>$items) {
+                echo $supplier_id;
                 $this->instructSupplier($this->supplierStore->getByPrimaryKey($supplier_id), $items, $invoice);
             }
         }
     }
 
     public function instructSupplier($supplier, $items, $invoice) {
-        $itemList = "<table><thead><tr><th>Item Ordered</th><th>Quantity Ordered</th></tr></thead>";
+        if(!isset($supplier)) {
+            return;
+        }
+        $itemList = "<table width='100%'><thead><tr><th>Item</th><th>Quantity</th></tr></thead>";
         foreach($items as $item) {
-            $itemList.="<tr><td>".$item->description."</td><td>".$item->quantity."</td>";
+            $itemList.="<tr><td>".$item->getDescription()."</td><td>".$item->getQuantity()."</td>";
         }
         $itemList.="</table>";
-        $shippingAddress = $invoice->shipping_address;
-        $message = $supplier->emailCopy;
+        $shipping = json_decode($invoice->getShippingAddress(), true);
+        $shippingAddress = "";
+        $shippingAddress.=$shipping['address1']."<br />";
+        $shippingAddress.=$shipping['address2']."<br />";
+        $shippingAddress.=$shipping['town']."<br />";
+        $shippingAddress.=$shipping['postcode']."<br />";
+        $shippingAddress.=$shipping['country_name'];
+
+        $customerName = $invoice->Contact->first_name." ".$invoice->Contact->first_name;
+
+        $message = $supplier->getEmailCopy();
         $message = str_replace("{items}", $itemList, $message);
         $message = str_replace("{shipping_address}", $shippingAddress, $message);
+        $message = str_replace("{invoice_number}", $invoice->getId(), $message);
+        $message = str_replace("{customer_name}", $customerName, $message);
+
         $config = Config::getInstance();
         $mail = new \PHPMailer();
         $mail->IsHTML(true);
@@ -69,14 +84,14 @@ class DispatchEventListener extends Listener
         else {
             $mail->SetFrom('octoshop@block8.net');
         }
-        if(isset($supplier->email_1)) {
-            $mail->addAddress($supplier->email_1);
+        if($supplier->getEmail1()) {
+            $mail->addAddress($supplier->getEmail1());
         }
-        if(isset($supplier->email_2)) {
-            $mail->addAddress($supplier->email_2);
+        if($supplier->getEmail2()) {
+            $mail->addAddress($supplier->getEmail2());
         }
-        if(isset($supplier->email_3)) {
-            $mail->addAddress($supplier->email_3);
+        if($supplier->getEmail3()) {
+            $mail->addAddress($supplier->getEmail3());
         }
         $mail->Body = $message;
         $mail->send();

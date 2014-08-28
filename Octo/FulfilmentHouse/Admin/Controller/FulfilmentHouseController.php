@@ -156,7 +156,7 @@ class FulfilmentHouseController extends Admin\Controller
         $fieldset->addField(Form\Element\Text::create('email_1', 'Instruction Email Address #1', true));
         $fieldset->addField(Form\Element\Text::create('email_2', 'Instruction Email Address #2', false));
         $fieldset->addField(Form\Element\Text::create('email_3', 'Instruction Email Address #3', false));
-        $fieldset->addField(Form\Element\TextArea::create('email_copy', 'Email Copy To Send', true));
+        $fieldset->addField(Form\Element\TextArea::create('email_copy', 'Email Copy To Send', true, 'ckeditor advanced'));
 
         $field = new Form\Element\Submit();
         $field->setValue('Save Supplier');
