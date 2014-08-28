@@ -1,0 +1,50 @@
+{ifnot hideButton}
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
+        <a class="btn-default btn pull-right" href="/{@adminUri}/categories/add/shop"><i class="fa fa-plus"></i> Add Supplier</a>
+    </div>
+</div>
+{/ifnot}
+
+<div class="row" style="margin-top:20px;">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            {if boxTitle}
+            <div class="box-heading">
+                <h3 class="box-title">{@boxTitle}</h3>
+            </div>
+            {/if}
+
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th width="170px">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop suppliers}
+                    <tr>
+                        <td>
+                            <a href="/{@adminUri}/fulfilment-house/edit/{@item.id}">{@item.name}</a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-default btn-sm" href="/{@adminUri}/fulfilment-house/edit/{@item.id}">Edit Supplier</a>
+                                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="/{@adminUri}/fulfilment-house/delete/{@item.id}" class="btn-delete">Delete Supplier</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

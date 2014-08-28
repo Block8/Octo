@@ -58,6 +58,9 @@ trait ContactBase
         $this->data['is_blocked'] = null;
         $this->getters['is_blocked'] = 'getIsBlocked';
         $this->setters['is_blocked'] = 'setIsBlocked';
+        $this->data['country_code'] = null;
+        $this->getters['country_code'] = 'getCountryCode';
+        $this->setters['country_code'] = 'setCountryCode';
 
         // Foreign keys:
     }
@@ -217,6 +220,18 @@ trait ContactBase
     public function getIsBlocked()
     {
         $rtn = $this->data['is_blocked'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of CountryCode / country_code.
+    *
+    * @return string
+    */
+    public function getCountryCode()
+    {
+        $rtn = $this->data['country_code'];
 
         return $rtn;
     }
@@ -449,5 +464,22 @@ trait ContactBase
 
         $this->data['is_blocked'] = $value;
         $this->setModified('is_blocked');
+    }
+
+    /**
+    * Set the value of CountryCode / country_code.
+    *
+    * @param $value string
+    */
+    public function setCountryCode($value)
+    {
+        $this->validateString('CountryCode', $value);
+
+        if ($this->data['country_code'] === $value) {
+            return;
+        }
+
+        $this->data['country_code'] = $value;
+        $this->setModified('country_code');
     }
 }
