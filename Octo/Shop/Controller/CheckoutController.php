@@ -240,8 +240,6 @@ class CheckoutController extends Controller
     public function failed()
     {
         $view = Template::getPublicTemplate('Checkout/failed');
-        var_dump($this->getParams());
-
         $blockManager = $this->getBlockManager($view);
         $output = $view->render();
         $data = [
