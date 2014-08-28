@@ -6,6 +6,7 @@
 
 namespace Octo\System\Model;
 
+use HMUK\Utilities\PostageCalculator;
 use Octo;
 
 /**
@@ -58,4 +59,17 @@ class Contact extends Octo\Model
 
         return $value;
     }
+
+    public function getCountryName()
+    {
+        $value = $this->data['country_code'];
+
+        if (is_string($value)) {
+            $value = PostageCalculator::map($value);
+        }
+
+        return $value;
+    }
+
+
 }

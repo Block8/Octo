@@ -5,6 +5,7 @@ namespace Octo\Invoicing\Admin\Controller;
 use b8\Form;
 use b8\Http\Response\JsonResponse;
 use b8\Http\Response\RedirectResponse;
+use HMUK\Utilities\PostageCalculator;
 use Octo\Admin;
 use Octo\Admin\Menu;
 use Octo\Admin\Form as FormElement;
@@ -22,6 +23,9 @@ class InvoiceController extends Admin\Controller
      */
     protected $invoiceService;
 
+    /**
+     * @var \Octo\Invoicing\Store\InvoiceStore
+     */
     protected $invoiceStore;
 
     /**
@@ -107,7 +111,8 @@ class InvoiceController extends Admin\Controller
         $item = $this->invoiceStore->getByPrimaryKey($key);
         $this->setTitle($item->getTitle(), 'Invoicing');
 
-        if ($this->request->getMethod() == 'POST') {
+        if ($this->request->getMethod() == 'POST'){
+
             $title = $this->getParam('title', $item->getTitle());
             $contact = Store::get('Contact')->getById($this->getParam('contact_id', $item->getContactId()));
             $invoiceDate = $this->getParam('created_date', null);
@@ -161,7 +166,11 @@ class InvoiceController extends Admin\Controller
             $status = $this->statusStore->getById($newStatusId);
             $item = $this->invoiceService->updateInvoiceStatus($item, $status);
         }
-        $this->invoiceService->updateInvoiceItems($item, $this->getParam('items', []));
+        $items = $this->getParam('items', null);
+        if (!empty($items))
+        {
+            $this->invoiceService->updateInvoiceItems($item, $items); //fix damaging invoices?
+        }
         $this->response = new JsonResponse();
         $this->response->setContent($item);
     }
@@ -180,7 +189,11 @@ class InvoiceController extends Admin\Controller
 
     public function view($key, $format = null)
     {
-        $this->view->invoice = $this->invoiceStore->getByPrimaryKey($key);
+        $invoice = $this->invoiceStore->getByPrimaryKey($key);
+
+        $this->view->invoice = $invoice;
+        $this->view->total_payment = $this->getInvoiceService()->getTotalPayment($invoice);
+        $this->view->country_name = PostageCalculator::map($this->view->invoice->getCountryCode());
         $this->view->invoiceItems = $this->lineItemStore->getByInvoiceId($key);
         $this->view->invoiceAdjustments = $this->adjustmentStore->getByInvoiceId($key);
         $this->setTitle($this->view->invoice->getTitle(), 'Invoicing');
@@ -215,4 +228,15 @@ class InvoiceController extends Admin\Controller
             die();
         }
     }
+
+    protected function getInvoiceService()
+    {
+        $invoiceStore = Store::get('Invoice');
+        $adjustmentStore = Store::get('InvoiceAdjustment');
+        $itemStore = Store::get('Item');
+        $lineStore = Store::get('LineItem');
+
+        return new InvoiceService($invoiceStore, $adjustmentStore, $itemStore, $lineStore);
+    }
+
 }

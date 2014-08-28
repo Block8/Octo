@@ -4,6 +4,7 @@ namespace Octo\Shop\Controller;
 
 use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
+use HMUK\Utilities\PostageCalculator;
 use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
@@ -16,6 +17,12 @@ use Octo\Template;
 
 class CheckoutController extends Controller
 {
+    /**
+     * @var \Octo\System\Store\ContactStore
+     */
+    protected $contactStore;
+
+
     public function index()
     {
         $basketId = null;
@@ -69,9 +76,11 @@ class CheckoutController extends Controller
 
     public function details($basketId)
     {
+
         $this->contactStore = Store::get('Contact');
 
-        if ($this->request->getMethod() == 'POST') {
+        if ($this->request->getMethod() == 'POST')
+        {
             $contactDetails = $this->getContactDetails();
             $contact = $this->contactStore->findContact($contactDetails);
 
@@ -116,6 +125,7 @@ class CheckoutController extends Controller
                 'invoice_service' => $invoiceService,
             ];
 
+
             Event::trigger('CheckoutDetailsSubmit', $data);
 
             header('Location: /checkout/invoice/' . $invoice->getId());
@@ -143,18 +153,31 @@ class CheckoutController extends Controller
 
     public function invoice($invoiceId)
     {
+        /** @var $invoice \Octo\Invoicing\Model\Invoice; $invoice */
         $invoice = Store::get('Invoice')->getById($invoiceId);
+
 
         if (is_null($invoice)) {
             throw new NotFoundException('There is no invoice with ID: ' . $invoiceId);
         }
 
         $view = Template::getPublicTemplate('Checkout/invoice');
+        /** @var $adjustments \Octo\Invoicing\Model\InvoiceAdjustment */
+        $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
+
         $view->invoice = $invoice;
         $view->items = $this->getInvoiceService()->getItems($invoice);
-        $view->adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
+        $view->adjustments = $adjustments;
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
+
+        $donations = 0;
+
+        foreach($adjustments as $donation)
+        {
+            $donations += floatval($donation->getDisplayValue());
+        }
+        $view->total = $invoice->getSubtotal() + $invoice->getShippingCost() + $donations;
 
         $invoiceData = [
             'payment_options' => [],
@@ -227,10 +250,13 @@ class CheckoutController extends Controller
         // Use the billing address as the contact address:
         $billingAddress = $this->request->getParam('billing_address', []);
         $postcode = $billingAddress['postcode'];
+        $countryCode = $billingAddress['country_code'];
         unset($billingAddress['postcode']);
+        unset($billingAddress['country_code']);
 
         $contact['address'] = $billingAddress;
         $contact['postcode'] = $postcode;
+        $contact['country_code'] = $countryCode;
 
         return array_filter($contact);
     }
