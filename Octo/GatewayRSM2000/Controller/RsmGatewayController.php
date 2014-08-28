@@ -37,15 +37,13 @@ class RsmGatewayController extends Controller
             $lineItemStore = Store::get('LineItem');
             $items = $lineItemStore->getByInvoiceId($invoice->getId());
             foreach($items as $item) {
-                echo $item->description;
-                echo '<br />';
-                if(isset($item->Basket)) {
+                if(is_numeric($item->Basket->getId())) {
                     $lineItemStore->emptyShopBasket($item->Basket);
                 }
             }
 
 //add payed donation
-            // die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
+            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
         }
 
         header('Location: /checkout/failed');

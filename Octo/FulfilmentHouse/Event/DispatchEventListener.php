@@ -38,7 +38,6 @@ class DispatchEventListener extends Listener
             }
 
             foreach($uniqueSuppliers as $supplier_id=>$items) {
-                echo $supplier_id;
                 $this->instructSupplier($this->supplierStore->getByPrimaryKey($supplier_id), $items, $invoice);
             }
         }
