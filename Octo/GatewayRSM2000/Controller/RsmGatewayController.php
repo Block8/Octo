@@ -12,6 +12,7 @@ use Octo\Invoicing\Service\InvoiceService;
 use Octo\Shop\Store\ShopBasketStore;
 use Octo\Shop\Service\ShopService;
 use Octo\Store;
+use Octo\System\Model\Log;
 use Octo\Template;
 
 class RsmGatewayController extends Controller
@@ -24,7 +25,6 @@ class RsmGatewayController extends Controller
 
         /** @type \Octo\Invoicing\Model\Invoice */
         $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
-
 
         if ($invoice) {
             $invoiceService = $this->getInvoiceService();
@@ -47,10 +47,47 @@ class RsmGatewayController extends Controller
         die;
     }
 
+    /* $_POST 'accountno', Array of errors and error codes errors[0][code] errors[0][message]*/
     public function failed()
     {
+        $message = '';
+        $class = 'warning';
+        $errorCode = $this->getParam('errors[0][code]', null);
 
+        //Error: 1014 - Unique ID has been used before. /Invoice is paid?
+        if (!empty($errorCode) && (int)$errorCode == 1014)
+        {
+            $invoice_id = $this->getParam('uniqueid', null);
+
+            if (!empty($invoice_id))
+            {
+                /** @type \Octo\Invoicing\Store\InvoiceStore */
+                $invoiceStore = Store::get('Invoice');
+
+                /** @type \Octo\Invoicing\Model\Invoice */
+                $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
+
+
+                if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid()))
+                {
+                    $class = 'success';
+                    $message = 'That invoice is marked as paid.';
+                }
+
+            }
+
+        }
+        echo '<div class="alert alert-'.$class.'" role="alert">'.$message.'</div>';
     }
+
+    protected function logRSM2000Errors($errorCode, $errorMessage)
+    {
+        $log = Log::create(Log::TYPE_ERROR, 'rsm2000', $errorMessage);
+        $log->setUser($errorCode);
+        $log->setLink('rsm-gateway/failed');
+        $log->save();
+    }
+
 
     protected function getInvoiceService()
     {
