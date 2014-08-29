@@ -47,26 +47,34 @@ class RsmGatewayController extends Controller
         die;
     }
 
-    /* $_POST 'accountno', Array of errors and error codes errors[0][code] errors[0][message]*/
+    /* $_POST 'acccountno', Array of errors and error codes errors[0][code] errors[0][message]*/
     public function failed()
     {
-        $message = '';
+        $message = 'There were some problem.';
         $class = 'warning';
-        $errorCode = $this->getParam('errors[0][code]', null);
+        $errors = $this->getParam('errors', null);
+
+        if (!empty($errors) && count($errors)>0)
+        {
+            $errorCode = $errors[0]['code'];
+            $errorMessage = $errors[0]['message'];
+        }
+
+        $invoice_id = $this->getParam('acccountno', null);
+
+        if (!empty($errorCode))
+        {
+            $this->logRSM2000Errors($invoice_id, $errorCode .': '.$errorMessage);
+        }
 
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
-        if (!empty($errorCode) && (int)$errorCode == 1014)
+        if (!empty($errorCode) && ((int)$errorCode == 1014) && !empty($invoice_id))
         {
-            $invoice_id = $this->getParam('uniqueid', null);
-
-            if (!empty($invoice_id))
-            {
                 /** @type \Octo\Invoicing\Store\InvoiceStore */
                 $invoiceStore = Store::get('Invoice');
 
                 /** @type \Octo\Invoicing\Model\Invoice */
-                $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
-
+                $invoice = $invoiceStore->getById($invoice_id);
 
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid()))
                 {
@@ -74,16 +82,20 @@ class RsmGatewayController extends Controller
                     $message = 'That invoice is marked as paid.';
                 }
 
-            }
-
         }
         echo '<div class="alert alert-'.$class.'" role="alert">'.$message.'</div>';
     }
 
-    protected function logRSM2000Errors($errorCode, $errorMessage)
+    /**
+     * Log errors from RSM2000 to DB
+     * @param int $invoice_id
+     * @param string $errorMessage
+     */
+    protected function logRSM2000Errors($invoice_id=0, $errorMessage='')
     {
         $log = Log::create(Log::TYPE_ERROR, 'rsm2000', $errorMessage);
-        $log->setUser($errorCode);
+        $log->setUser(1);
+        $log->setScopeId($invoice_id);
         $log->setLink('rsm-gateway/failed');
         $log->save();
     }
