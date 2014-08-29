@@ -14,6 +14,13 @@ class Shop extends Block
      * @var \Octo\Invoicing\Store\ItemStore
      */
     protected $itemStore;
+
+    //TODO: Will fix it later
+    /**
+     * @var \Octo\Invoicing\Store\ItemStore
+     */
+    protected $productStore;
+
     /**
      * @var \Octo\Shop\Store\ItemVariantStore
      */
@@ -167,8 +174,17 @@ class Shop extends Block
         $relatedItems = $this->relatedItemStore->getByItemID($product->getId());
         $products = [];
 
-        foreach ($relatedItems as $item) {
-            $products[] = $item->getRelatedItem();
+        if (count($relatedItems) > 0)
+        {
+            foreach ($relatedItems as $item) {
+                $products[] = $item->getRelatedItem();
+            }
+        } else {
+        //if there is no related products //as 01/09/2014 pick random
+            $related = $this->productStore->getAll(true);
+
+            shuffle($related);
+            $products = array_slice($related, 0, 4);
         }
 
         return $products;
