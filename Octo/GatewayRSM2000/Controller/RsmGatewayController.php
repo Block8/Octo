@@ -16,13 +16,9 @@ use Octo\Template;
 
 class RsmGatewayController extends Controller
 {
+    /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function success()
     {
-/* $_POST
-'donation'
-'purchase' = total (subtotal + shipping_cost)
-*/
-
         /** @type \Octo\Invoicing\Store\InvoiceStore */
         $invoiceStore = Store::get('Invoice');
 
@@ -33,7 +29,9 @@ class RsmGatewayController extends Controller
         if ($invoice) {
             $invoiceService = $this->getInvoiceService();
             $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
+            //TODO: Add paid donation
 
+            //Clear Basket
             $lineItemStore = Store::get('LineItem');
             $items = $lineItemStore->getByInvoiceId($invoice->getId());
             foreach($items as $item) {
@@ -42,7 +40,6 @@ class RsmGatewayController extends Controller
                 }
             }
 
-//add payed donation
             die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
         }
 
