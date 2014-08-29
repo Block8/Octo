@@ -422,6 +422,9 @@ class CheckoutController extends Controller
         ]));
     }
 
+    /**
+     * Clear Basket information from user Cookie
+     */
     public function clearBasket()
     {
         setcookie('basket_id', '', time() - 1, '/');
