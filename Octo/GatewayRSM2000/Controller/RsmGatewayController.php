@@ -36,7 +36,6 @@ class RsmGatewayController extends Controller
         if ($invoice) {
             $invoiceService = $this->getInvoiceService();
             $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
-            //TODO: Add paid donation
 
             //Clear Basket
             $this->lineItemStore = Store::get('LineItem');
@@ -77,7 +76,6 @@ class RsmGatewayController extends Controller
 
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
         if (!empty($errorCode) && ((int)$errorCode == 1014) && !empty($invoice_id)) {
-                /** @type \Octo\Invoicing\Store\InvoiceStore */
                 $this->invoiceStore = Store::get('Invoice');
 
                 /** @type \Octo\Invoicing\Model\Invoice */
