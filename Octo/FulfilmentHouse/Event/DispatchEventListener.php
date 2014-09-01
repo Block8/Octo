@@ -12,6 +12,7 @@ use Octo\Template;
 
 class DispatchEventListener extends Listener
 {
+    /** @var \Octo\Invoicing\Store\LineItemStore */
     protected $lineItemStore;
     protected $supplierStore;
 

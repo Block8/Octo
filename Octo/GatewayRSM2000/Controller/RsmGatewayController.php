@@ -17,6 +17,9 @@ use Octo\Template;
 
 class RsmGatewayController extends Controller
 {
+    /** @var \Octo\Invoicing\Store\LineItemStore */
+    protected $lineItemStore;
+
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function success()
     {
@@ -32,9 +35,10 @@ class RsmGatewayController extends Controller
             //TODO: Add paid donation
 
             //Clear Basket
-            $lineItemStore = Store::get('LineItem');
-            $items = $lineItemStore->getByInvoiceId($invoice->getId());
+            $this->lineItemStore = Store::get('LineItem');
+            $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
             foreach($items as $item) {
+
                 if(is_numeric($item->Basket->getId())) {
                     $lineItemStore->emptyShopBasket($item->Basket);
                 }
@@ -54,30 +58,26 @@ class RsmGatewayController extends Controller
         $class = 'warning';
         $errors = $this->getParam('errors', null);
 
-        if (!empty($errors) && count($errors)>0)
-        {
+        if (!empty($errors) && count($errors)>0) {
             $errorCode = $errors[0]['code'];
             $errorMessage = $errors[0]['message'];
         }
 
         $invoice_id = $this->getParam('acccountno', null);
 
-        if (!empty($errorCode))
-        {
+        if (!empty($errorCode)) {
             $this->logRSM2000Errors($invoice_id, $errorCode .': '.$errorMessage);
         }
 
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
-        if (!empty($errorCode) && ((int)$errorCode == 1014) && !empty($invoice_id))
-        {
+        if (!empty($errorCode) && ((int)$errorCode == 1014) && !empty($invoice_id)) {
                 /** @type \Octo\Invoicing\Store\InvoiceStore */
                 $invoiceStore = Store::get('Invoice');
 
                 /** @type \Octo\Invoicing\Model\Invoice */
                 $invoice = $invoiceStore->getById($invoice_id);
 
-                if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid()))
-                {
+                if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
                     $class = 'success';
                     $message = 'That invoice is marked as paid.';
                 }

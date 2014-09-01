@@ -7,9 +7,11 @@ use Octo\Event\Listener;
 use Octo\Event\Manager;
 use Octo\Shop\Model\ItemFile;
 use Octo\Store;
+use Octo\Invoicing\Model\Item;
 
 class ProductEditListener extends Listener
 {
+    /** @var \Octo\Invoicing\Store\ItemStore */
     protected $productStore;
 
     public function registerListeners(Manager $manager)
@@ -26,12 +28,16 @@ class ProductEditListener extends Listener
 
     public function setupMediaDisplay(&$instance)
     {
-        $product = end($instance->getRequest()->getPathParts());
+        //Need some variable, before passing it to end();
+        $newArray = $instance->getRequest()->getPathParts();
+        $product = end($newArray);
 
         $this->productStore = Store::get('Item');
-        $product = $this->productStore->getBySlug($product);
+        /** @type \Octo\Invoicing\Model\Item[] $item */
+        $item = $this->productStore->getBySlug($product);
 
-        if ($product) {
+        if ($item[0] instanceof Item) {
+            $product = $item[0];
             $instance->popBreadcrumb();
             $instance->popBreadcrumb();
             $instance->addBreadcrumb('Products', '/product');
