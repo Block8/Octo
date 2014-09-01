@@ -73,13 +73,12 @@ class RsmGatewayController extends Controller
 
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
         if (!empty($errorCode) && !empty($invoice_id)) {
-                $this->invoiceStore = Store::get('Invoice');
+            $this->invoiceStore = Store::get('Invoice');
 
-                /** @type \Octo\Invoicing\Model\Invoice */
-                $invoice = $this->invoiceStore->getById($invoice_id);
+            /** @type \Octo\Invoicing\Model\Invoice */
+            $invoice = $this->invoiceStore->getById($invoice_id);
 
             if ((int)$errorCode == 1014) {
-
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
                     //$class = 'success';
                     //$message = 'That invoice is marked as paid.';
