@@ -40,10 +40,12 @@ class RsmGatewayController extends Controller
 
             //Clear Basket
             $this->lineItemStore = Store::get('LineItem');
+            /** @type \Octo\Invoicing\Model\LineItem[]  $items */
             $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
-            foreach($items as $item) {
 
-                if(is_numeric($item->Basket->getId())) {
+            foreach($items as $item) {
+                $basket = $item->getBasket();
+                if(!empty($basket) && is_numeric($basket->getId())) {
                     $this->lineItemStore->emptyShopBasket($item->Basket);
                 }
             }

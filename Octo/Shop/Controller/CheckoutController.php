@@ -77,17 +77,17 @@ class CheckoutController extends Controller
 
     public function details($basketId)
     {
-
         $this->contactStore = Store::get('Contact');
         $form = $this->detailsForm($basketId);
 
-        if ($this->request->getMethod() == 'POST')
-        {
+        if ($this->request->getMethod() == 'POST') {
             $myParams = $this->getParams();
+
             if(isset($myParams['same_as_billing']) && $myParams['same_as_billing'] == "1") {
                 $myParams['shipping_address'] = $myParams['billing_address'];
             }
             $form->setValues($myParams);
+
             if($form->validate()) {
                 $contactDetails = $this->getContactDetails();
                 $contact = $this->contactStore->findContact($contactDetails);
@@ -159,16 +159,15 @@ class CheckoutController extends Controller
 
     public function invoice($invoiceId)
     {
-        /** @var $invoice \Octo\Invoicing\Model\Invoice; $invoice */
+        /** @var \Octo\Invoicing\Model\Invoice $invoice */
         $invoice = Store::get('Invoice')->getById($invoiceId);
-
 
         if (is_null($invoice)) {
             throw new NotFoundException('There is no invoice with ID: ' . $invoiceId);
         }
 
         $view = Template::getPublicTemplate('Checkout/invoice');
-        /** @var $adjustments \Octo\Invoicing\Model\InvoiceAdjustment */
+        /** @var \Octo\Invoicing\Model\InvoiceAdjustment $adjustments */
         $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
 
         $view->invoice = $invoice;
