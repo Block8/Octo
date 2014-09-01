@@ -19,15 +19,19 @@ class RsmGatewayController extends Controller
 {
     /** @var \Octo\Invoicing\Store\LineItemStore */
     protected $lineItemStore;
+    /**
+     * @var \Octo\Invoicing\Store\InvoiceStore
+     */
+    protected $invoiceStore;
 
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function success()
     {
         /** @type \Octo\Invoicing\Store\InvoiceStore */
-        $invoiceStore = Store::get('Invoice');
+        $this->invoiceStore = Store::get('Invoice');
 
         /** @type \Octo\Invoicing\Model\Invoice */
-        $invoice = $invoiceStore->getById($this->getParam('uniqueid'));
+        $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
 
         if ($invoice) {
             $invoiceService = $this->getInvoiceService();
@@ -72,10 +76,10 @@ class RsmGatewayController extends Controller
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
         if (!empty($errorCode) && ((int)$errorCode == 1014) && !empty($invoice_id)) {
                 /** @type \Octo\Invoicing\Store\InvoiceStore */
-                $invoiceStore = Store::get('Invoice');
+                $this->invoiceStore = Store::get('Invoice');
 
                 /** @type \Octo\Invoicing\Model\Invoice */
-                $invoice = $invoiceStore->getById($invoice_id);
+                $invoice = $this->invoiceStore->getById($invoice_id);
 
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
                     //$class = 'success';
