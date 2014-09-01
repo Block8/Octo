@@ -40,7 +40,7 @@ class RsmGatewayController extends Controller
             foreach($items as $item) {
 
                 if(is_numeric($item->Basket->getId())) {
-                    $lineItemStore->emptyShopBasket($item->Basket);
+                    $this->lineItemStore->emptyShopBasket($item->Basket);
                 }
             }
 
