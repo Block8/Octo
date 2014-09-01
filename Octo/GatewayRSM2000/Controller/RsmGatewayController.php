@@ -72,11 +72,13 @@ class RsmGatewayController extends Controller
         }
 
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
-        if (!empty($errorCode) && ((int)$errorCode == 1014) && !empty($invoice_id)) {
+        if (!empty($errorCode) && !empty($invoice_id)) {
                 $this->invoiceStore = Store::get('Invoice');
 
                 /** @type \Octo\Invoicing\Model\Invoice */
                 $invoice = $this->invoiceStore->getById($invoice_id);
+
+            if ((int)$errorCode == 1014) {
 
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
                     //$class = 'success';
@@ -89,6 +91,12 @@ class RsmGatewayController extends Controller
                     $class = 'warning';
                     $message = 'Payment gateway will not process this transaction anymore.';
                 }
+            } elseif ((int)$errorCode == 3001) {
+            //3001: User cancelled transaction.
+                $class = 'warning';
+                $message = 'You cancelled transaction.<br/>';
+                $message .= '<a href="/checkout">Go to Checkout</a>';
+            }
 
         }
         echo '<div class="alert alert-'.$class.'" role="alert">'.$message.'</div>';
