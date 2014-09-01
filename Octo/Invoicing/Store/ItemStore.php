@@ -29,6 +29,7 @@ class ItemStore extends Octo\Store
         return $query->execute()->fetchAll();
     }
 
+    //LPP. Should have expiry_date
     public function getByCategoryId($categoryId, $activeOnly = true)
     {
         $query = new Query($this->getNamespace('Item') . '\Model\Item');

@@ -152,7 +152,6 @@ ORDER BY c.parent_id ASC, " . $order;
 
     public function getByScopeAndSlug($scope, $slug)
     {
-
         $query = 'SELECT * FROM category WHERE scope = :scope AND slug = :slug LIMIT 1';
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);
