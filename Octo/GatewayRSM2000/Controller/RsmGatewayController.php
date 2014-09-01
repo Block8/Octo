@@ -63,14 +63,11 @@ class RsmGatewayController extends Controller
         $class = 'warning';
         $errors = $this->getParam('errors', null);
 
+        $invoice_id = $this->getParam('acccountno', null);
+
         if (!empty($errors) && count($errors)>0) {
             $errorCode = $errors[0]['code'];
             $errorMessage = $errors[0]['message'];
-        }
-
-        $invoice_id = $this->getParam('acccountno', null);
-
-        if (!empty($errorCode)) {
             $this->logRSM2000Errors($invoice_id, $errorCode .': '.$errorMessage);
         }
 
@@ -87,6 +84,10 @@ class RsmGatewayController extends Controller
 
                     //Redirect to thanks page, as it looks like the invoice is paid.
                     die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
+                } else {
+                    //UniqueId cannot be use, Invoice not paid
+                    $class = 'warning';
+                    $message = 'Payment gateway will not process this transaction anymore.';
                 }
 
         }
