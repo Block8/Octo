@@ -78,8 +78,11 @@ class RsmGatewayController extends Controller
                 $invoice = $invoiceStore->getById($invoice_id);
 
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
-                    $class = 'success';
-                    $message = 'That invoice is marked as paid.';
+                    //$class = 'success';
+                    //$message = 'That invoice is marked as paid.';
+
+                    //Redirect to thanks page, as it looks like the invoice is paid.
+                    die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
                 }
 
         }
