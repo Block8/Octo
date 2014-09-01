@@ -16,6 +16,9 @@ class Category extends Octo\Model
 {
     use Base\CategoryBase;
 
+    /**
+     * @var \Octo\Categories\Store\CategoryStore
+     */
     protected $categoryStore;
 
     public function __construct($initialData = array())

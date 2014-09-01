@@ -38,6 +38,12 @@ class Shop extends Block
      */
     protected $uriParts = [];
 
+    /**
+     * @var \Octo\Categories\Store\CategoryStore
+     */
+    protected $categoryStore;
+
+
     public static function getInfo()
     {
         return ['title' => 'Shop', 'editor' => false, 'js' => []];
