@@ -27,7 +27,6 @@ class RsmGatewayController extends Controller
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function success()
     {
-        /** @type \Octo\Invoicing\Store\InvoiceStore */
         $this->invoiceStore = Store::get('Invoice');
 
         /** @type \Octo\Invoicing\Model\Invoice */
