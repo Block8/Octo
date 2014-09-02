@@ -88,14 +88,14 @@ class RsmGatewayController extends Controller
                 } else {
                     //UniqueId cannot be use, Invoice not paid
                     $class = 'warning';
-                    $message = 'Payment gateway will not process this transaction anymore.<br/>';
-                    $message .= '<a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a>';
+                    $message = '<p>Payment gateway will not process this transaction anymore.</p>';
+                    $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
                 }
             } elseif ((int)$errorCode == 3001) {
             //3001: User cancelled transaction.
                 $class = 'warning';
-                $message = 'You cancelled transaction.<br/>';
-                $message .= '<a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a>';
+                $message = '<p>You cancelled transaction.</p>';
+                $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
             }
 
         }
