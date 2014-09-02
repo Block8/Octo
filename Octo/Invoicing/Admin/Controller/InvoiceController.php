@@ -150,7 +150,7 @@ class InvoiceController extends Admin\Controller
             }
 
             header('Location: /' . $this->config->get('site.admin_uri') . '/invoice/view/' . $item->getId());
-            die;
+            exit();
         }
 
         $this->view->item = $item;

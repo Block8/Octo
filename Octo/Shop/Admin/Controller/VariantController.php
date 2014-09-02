@@ -50,6 +50,7 @@ class VariantController extends Controller
 
                     $this->successMessage($variant->getTitle() . ' was added successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/variant');
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the variant. Please try again.'
@@ -84,6 +85,7 @@ class VariantController extends Controller
 
                     $this->successMessage($variant->getTitle() . ' was edited successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/variant');
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error editing the variant. Please try again.'

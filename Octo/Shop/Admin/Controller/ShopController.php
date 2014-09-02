@@ -155,7 +155,8 @@ class ShopController extends Controller
                     }
 
                     $this->successMessage($product->getTitle() . ' was added successfully.', true);
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+                    header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the product. Please try again.'
@@ -213,6 +214,7 @@ class ShopController extends Controller
 
                     $this->successMessage($product->getTitle() . ' was edited successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the product. Please try again.'

@@ -163,6 +163,7 @@ class MediaController extends Controller
                     Event::trigger($scope . 'MediaEditPostSave', $this);
 
                     header('Location: /' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
+                    exit();
                 } catch (\Exception $e) {
                     $this->errorMessage('There was an error editing the file. Please try again.');
                 }

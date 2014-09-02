@@ -88,6 +88,7 @@ class UserController extends Controller
                     $this->successMessage($params['name'] . ' was added successfully.', true);
 
                     header('Location: /' . $this->config->get('site.admin_uri') . '/user');
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error adding the user. Please try again.');
                 }
@@ -137,6 +138,7 @@ class UserController extends Controller
                     $this->successMessage($params['name'] . ' was edited successfully.', true);
 
                     header('Location: /' . $this->config->get('site.admin_uri') . '/user');
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the user. Please try again.');
                 }

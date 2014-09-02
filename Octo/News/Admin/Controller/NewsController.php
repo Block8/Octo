@@ -152,6 +152,7 @@ class NewsController extends Controller
 
                     $this->successMessage($article->getTitle() . ' was added successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/' . $this->scope);
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error adding the ' . $this->lowerArticleType . '. Please try again.'
@@ -217,6 +218,7 @@ class NewsController extends Controller
 
                     $this->successMessage($article->getTitle() . ' was edited successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/' . $this->scope);
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error editing the ' . $this->lowerArticleType . '. Please try again.'

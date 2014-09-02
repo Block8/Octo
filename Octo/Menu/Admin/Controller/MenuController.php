@@ -71,6 +71,7 @@ class MenuController extends Controller
                 $menu = $this->menuStore->saveByInsert($menu);
                 $this->successMessage($menu->getName() . ' was added successfully.', true);
                 header('Location: /' . $this->config->get('site.admin_uri') . '/menu/edit/' . $menu->getId());
+                exit();
             }
         }
 
@@ -92,6 +93,7 @@ class MenuController extends Controller
                 $menu = $this->menuStore->save($menu);
                 $this->successMessage($menu->getName() . ' was edited successfully.', true);
                 header('Location: /' . $this->config->get('site.admin_uri') . '/menu');
+                exit();
             }
         }
 
