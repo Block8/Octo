@@ -110,6 +110,7 @@ class VariantOptionController extends Controller
                     $adminUri = $this->config->get('site.admin_uri');
                     $redirect = $adminUri . '/variant-option/manage/' . $variantOption->getVariantId();
                     header('Location: /' . $redirect);
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage(
                         'There was an error editing the variant option. Please try again.'
@@ -136,6 +137,7 @@ class VariantOptionController extends Controller
 
         $adminUri = $this->config->get('site.admin_uri');
         header('Location: /' . $adminUri . '/variant-option/manage/' . $variantOption->getVariantId());
+        exit();
     }
 
     public function variantOptionForm($values = [], $type = 'add')

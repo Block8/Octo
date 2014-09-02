@@ -119,6 +119,7 @@ class ProductEditListener extends Listener
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
         $redirect = Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug();
+
         header('Location: /' . $redirect);
         exit;
     }

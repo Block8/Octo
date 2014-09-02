@@ -256,6 +256,7 @@ class CategoriesController extends Controller
         } else {
             header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
         }
+        exit();
     }
 
     public function positions()

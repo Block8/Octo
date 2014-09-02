@@ -245,6 +245,7 @@ class NewsController extends Controller
         $this->articleStore->delete($article);
         $this->successMessage($article->getTitle() . ' was deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/' . $this->scope);
+        exit();
     }
 
     public function newsForm($values = [], $type = 'add')

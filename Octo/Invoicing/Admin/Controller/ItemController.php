@@ -132,6 +132,7 @@ class ItemController extends Admin\Controller
 
         $this->successMessage('Item deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/item/');
+        exit();
     }
 
     public function editForm($values = [], $type = 'add')

@@ -110,6 +110,7 @@ class VariantController extends Controller
 
         $this->successMessage($variant->getTitle() . ' was deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/variant/');
+        exit();
     }
 
     public function variantForm($values = [], $type = 'add')

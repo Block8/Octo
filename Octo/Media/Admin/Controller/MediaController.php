@@ -268,7 +268,8 @@ class MediaController extends Controller
 
         Event::trigger($scope . 'DeleteFile', $this);
 
-        header('Location: /' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
+        header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
+        exit();
     }
 
     /**

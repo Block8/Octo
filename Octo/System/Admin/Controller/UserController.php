@@ -157,6 +157,7 @@ class UserController extends Controller
         $this->userStore->delete($user);
         $this->successMessage($user->getName() . ' was deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/user/');
+        exit();
     }
 
     protected function userForm($values, $type = 'add')

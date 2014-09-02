@@ -61,9 +61,9 @@ class ShopController extends Controller
         $manage->addChild(new Menu\Item('View Products', '/shop/category', true));
         $manage->addChild(new Menu\Item('Edit Product', '/shop/edit-product', true));
         $manage->addChild(new Menu\Item('Delete Product', '/shop/delete-product', true));
-        $manage->addChild(new Menu\Item('Delete Product', '/shop/activate-product', true));
-        $manage->addChild(new Menu\Item('Delete Product', '/shop/deactivate-product', true));
-        $manage->addChild(new Menu\Item('Delete Product', '/shop/product-variants', true));
+        $manage->addChild(new Menu\Item('Activate Product', '/shop/activate-product', true));
+        $manage->addChild(new Menu\Item('Deactivate Product', '/shop/deactivate-product', true));
+        $manage->addChild(new Menu\Item('Variants Product', '/shop/product-variants', true));
         $manage->addChild(new Menu\Item('Manage Product Images', '/media/manage/shop', true));
         $manage->addChild(new Menu\Item('Add Product Image', '/media/add/shop', true));
         $manage->addChild(new Menu\Item('Edit Product Image', '/media/edit/shop', true));
@@ -245,8 +245,10 @@ class ShopController extends Controller
         }
 
         header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+        exit();
     }
 
+    //activate-product
     public function activateProduct($productId)
     {
         $product = $this->productStore->getById($productId);
@@ -255,6 +257,7 @@ class ShopController extends Controller
         $this->successMessage($product->getTitle() . ' was activated successfully.', true);
 
         header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+        exit();
     }
 
     public function deactivateProduct($productId)
@@ -265,6 +268,7 @@ class ShopController extends Controller
         $this->successMessage($product->getTitle() . ' was deactivated successfully.', true);
 
         header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category/' . $product->getCategoryId());
+        exit();
     }
 
     public function productVariants($productId)
@@ -327,6 +331,7 @@ class ShopController extends Controller
 
             $this->successMessage('The variants were updated succcessfully.', true);
             header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-variants/' . $productId);
+            exit();
         }
     }
 

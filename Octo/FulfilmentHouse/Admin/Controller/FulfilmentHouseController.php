@@ -124,6 +124,7 @@ class FulfilmentHouseController extends Admin\Controller
 
                     $this->successMessage($supplier->getName() . ' was updated successfully.', true);
                     header('Location: /backoffice/fulfilment-house');
+                    exit();
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error updating the supplier. Please try again.');
                 }
