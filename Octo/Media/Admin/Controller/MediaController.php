@@ -23,6 +23,10 @@ class MediaController extends Controller
      */
     protected $categoryStore;
 
+    /**
+     * @var \Octo\Invoicing\Store\ItemStore
+     */
+    protected $itemStore;
 
     /**
      * Return the menu nodes required for this controller
@@ -217,10 +221,8 @@ class MediaController extends Controller
         return $form;
     }
 
-    /**
-     * @param $scope Scope of files to view
-     */
-    public function manage($scope = '')
+
+    public function manage($scope = '', $slug=null)
     {
         $scope_name = ucwords($scope);
 
@@ -229,7 +231,12 @@ class MediaController extends Controller
 
         $this->view->scope = $scope;
         $this->view->scope_name = $scope_name;
-        $this->view->files = $this->fileStore->getAllForScope($scope);
+
+        if (!empty($slug)){
+            $this->view->files = $this->fileStore->getAllForProduct($scope, $slug);
+        } else {
+            $this->view->files = $this->fileStore->getAllForScope($scope);
+        }
 
         if ($scope == 'images') {
             $this->view->gallery = true;

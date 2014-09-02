@@ -43,6 +43,36 @@ class FileStore extends Octo\Store
         }
     }
 
+    public function getAllForProduct($scope, $slug)
+    {
+        $query = 'SELECT file.* FROM file
+                  LEFT OUTER JOIN item_file
+                  ON item_file.file_id = file.id
+                  LEFT OUTER JOIN item
+                  ON item.id = item_file.item_id
+                  WHERE scope = :scope
+                  AND item.slug = :slug
+         ORDER BY file.title';
+
+        $stmt = Database::getConnection('read')->prepare($query);
+        $stmt->bindParam(':scope', $scope);
+        $stmt->bindParam(':slug', $slug);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new File($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
+
+
     /**
      * @param $scope
      * @param string $order
