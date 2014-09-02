@@ -36,7 +36,7 @@ class ProductEditListener extends Listener
         /** @type \Octo\Invoicing\Model\Item[] $item */
         $item = $this->productStore->getBySlug($product);
 
-        if (isset($tem[0]) && $item[0] instanceof Item) {
+        if ($item[0] instanceof Item) {
             $product = $item[0];
             $instance->popBreadcrumb();
             $instance->popBreadcrumb();
@@ -126,7 +126,7 @@ class ProductEditListener extends Listener
     public function setupFileForm(&$formParts)
     {
         list($form, $values) = $formParts;
-        $form->setAction($form->getAction() . '?item_id=' . $_GET['item_id']);
+        $form->setAction($form->getAction() . '?item_id=' . (int)$_GET['item_id']);
         $formParts = [$form, $values];
 
         return true;
