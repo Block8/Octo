@@ -15,6 +15,16 @@ use Octo\System\Model\File;
 class MediaController extends Controller
 {
     /**
+     * @var \Octo\System\Store\FileStore
+     */
+    protected $fileStore;
+    /**
+     * @var \Octo\Categories\Store\CategoryStore
+     */
+    protected $categoryStore;
+
+
+    /**
      * Return the menu nodes required for this controller
      *
      * @param Menu $menu
@@ -37,15 +47,6 @@ class MediaController extends Controller
         $edit = new Menu\Item('Edit File', '/media/edit/files', true);
         $files->addChild($edit);
     }
-
-    /**
-     * @var \Octo\System\Store\FileStore
-     */
-    protected $fileStore;
-    /**
-     * @var \Octo\Categories\Store\CategoryStore
-     */
-    protected $categoryStore;
 
     /**
      * Setup initial menu

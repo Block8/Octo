@@ -36,7 +36,7 @@ class ProductEditListener extends Listener
         /** @type \Octo\Invoicing\Model\Item[] $item */
         $item = $this->productStore->getBySlug($product);
 
-        if ($item[0] instanceof Item) {
+        if (isset($tem[0]) && $item[0] instanceof Item) {
             $product = $item[0];
             $instance->popBreadcrumb();
             $instance->popBreadcrumb();
