@@ -33,6 +33,9 @@ class GatewayEvents extends Listener
         }
         $view->country_code = $country_code;
 
+        $config = Config::getInstance();
+        $view->rsm = $config->get('rsm');
+
         /** @var \Octo\Invoicing\Model\InvoiceAdjustment[] $adjustments */
         $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
 

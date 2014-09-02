@@ -1,5 +1,5 @@
-<form id="widget_data_form" action="https://rsm3.rsmsecure.com/demo/cpterminal/Widget.php" target="cp_widget" method="post" class="auto-form">
-    <input type="hidden" name="vendorid" value="8953">
+<form id="widget_data_form" action="{@rsm.widget_url}" target="cp_widget" method="post" class="auto-form">
+    <input type="hidden" name="vendorid" value="{@rsm.vendor_id}">
     <input type="hidden" name="firstname" value="{@invoice.Contact.first_name}">
     <input type="hidden" name="surname" value="{@invoice.Contact.last_name}">
     <input type="hidden" name="address1" value="{@billingAddress.address1}">
