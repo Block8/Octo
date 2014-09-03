@@ -234,8 +234,12 @@ class MediaController extends Controller
 
         if (!empty($slug)){
             $this->view->files = $this->fileStore->getAllForProduct($scope, $slug);
+
         } else {
             $this->view->files = $this->fileStore->getAllForScope($scope);
+            if($scope == 'shop') {
+               $this->view->thumbnail = true;
+            }
         }
 
         if ($scope == 'images') {
@@ -275,8 +279,8 @@ class MediaController extends Controller
 
         Event::trigger($scope . 'DeleteFile', $this);
 
-        header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
-        exit();
+        //header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
+        //exit();
     }
 
     /**

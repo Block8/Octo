@@ -40,8 +40,8 @@ class ProductEditListener extends Listener
             $product = $item[0];
             $instance->popBreadcrumb();
             $instance->popBreadcrumb();
-            $instance->addBreadcrumb('Products', '/product');
-            $instance->addBreadcrumb($product->getTitle(), '/product/edit/' . $product->getId());
+            $instance->addBreadcrumb('Products', '/shop');
+            $instance->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
             $instance->addBreadcrumb('Images', '/media/manage/shop/' . $product->getSlug());
             $instance->view->title = $product->getTitle();
             $instance->view->thumbnail = true;
@@ -118,6 +118,7 @@ class ProductEditListener extends Listener
     {
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
+
         $redirect = Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug();
 
         header('Location: /' . $redirect);
