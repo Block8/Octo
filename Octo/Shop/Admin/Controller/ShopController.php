@@ -114,6 +114,27 @@ class ShopController extends Controller
         $this->view->categories = $this->categoryStore->getAllForParent($categoryId);
     }
 
+
+    /**
+     * Check if title is unique for product in category
+     * @param $title
+     * @param $category
+     * @param null $itemId
+     * @return bool
+     */
+    protected function isUniqueSlugInCategory($title, $category, $itemId = null)
+    {
+        $slug = StringUtilities::generateSlug($title);
+
+        $isUnique = $this->productStore->getBySlugAndCategory($slug, $category, false);
+
+        if(!empty($isUnique) && !empty($itemId)) {
+            return $isUnique->getId() == $itemId;
+        }
+
+        return empty($isUnique);
+    }
+
     public function addProduct()
     {
         $this->setTitle('Add Product');
@@ -123,6 +144,13 @@ class ShopController extends Controller
         if ($this->request->getMethod() == 'POST') {
             $form = $this->productForm($this->getParams());
 
+            $isUniqueTitle = $this->isUniqueSlugInCategory($this->getParam('title'), $this->getParam('category_id'));
+
+            if(!$isUniqueTitle) {
+                $this->errorMessage('There is already a product with the same title in this category. Please try again.');
+                $this->view->form = $form->render();
+                return;
+            }
             if ($form->validate()) {
                 try {
                     $product = new Item();
@@ -185,6 +213,12 @@ class ShopController extends Controller
             $values = array_merge(['id' => $productId], $this->getParams());
             $form = $this->productForm($values, 'edit');
 
+            $isUniqueTitle = $this->isUniqueSlugInCategory($values['title'], $values['category_id'], $values['id']);
+            if(!$isUniqueTitle) {
+                $this->errorMessage('There is already a product with the same title in this category. Please try again.');
+                $this->view->form = $form->render();
+                return;
+            }
             if ($form->validate()) {
                 try {
                     $params = $this->getParams();
