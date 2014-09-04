@@ -8,7 +8,7 @@ class Phone extends Text
     public function __construct($name = null)
     {
         parent::__construct($name);
-        $this->setPattern('([0-9 ]+)');
+        $this->setPattern('([0-9 ]{9,})');
     }
 
     public function setValue($value)

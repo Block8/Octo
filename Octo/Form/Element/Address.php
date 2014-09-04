@@ -6,6 +6,7 @@ use b8\Form\FieldSet;
 use b8\Form\Element\Text;
 use HMUK\Utilities\PostageCalculator;
 
+
 class Address extends FieldSet
 {
     public function __construct($name = null)
@@ -26,13 +27,18 @@ class Address extends FieldSet
         $address1 = Text::create($address1, 'Address 1', true);
         $address2 = Text::create($address2, 'Address 2', false);
         $town = Text::create($town, 'Town', true);
-        $postcode = Text::create($postcode, 'Postcode', true);
+        //$postcode = Text::create($postcode, 'Postcode', true);
+
+        $postcode = new Element\Text($postcode);
+        $postcode->setRequired(true);
+        $postcode->setLabel('Postcode');
+        $postcode->setPattern('^[A-Za-z0-9- ]{5,10}$');
 
         $countryCode = Element\Select::create($countryCode, 'Country', true);
         $countryCode->setOptions(PostageCalculator::$countries);
+        //check why setvalue set, but does not select
         $countryCode->setValue(PostageCalculator::UK_COUNTRY_CODE);
 
-        //check why setvalue setted, but does not select
         $this->addField($address1);
         $this->addField($address2);
         $this->addField($town);
