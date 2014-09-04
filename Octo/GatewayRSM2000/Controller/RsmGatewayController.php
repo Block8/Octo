@@ -58,7 +58,7 @@ class RsmGatewayController extends Controller
     /* $_POST 'acccountno', Array of errors and error codes errors[0][code] errors[0][message]*/
     public function failed()
     {
-        $message = 'There were some problem.';
+        $message = 'There was a problem.';
         $class = 'warning';
         $errors = $this->getParam('errors', null);
 
