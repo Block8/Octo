@@ -20,7 +20,7 @@ class DashboardWidget extends Listener
     {
         $contactStore = Store::get('Contact');
         $submissionStore = Store::get('Submission');
-
+        /* TODO: Put back when contact management widget is added
         $stats[] = [
             'title' => 'Contacts',
             'count' => number_format($contactStore->getTotal()),
@@ -28,7 +28,7 @@ class DashboardWidget extends Listener
             'color' => 'aqua',
             'link' => '/contact',
         ];
-
+        */
         $stats[] = [
             'title' => 'Submissions',
             'count' => number_format($submissionStore->getTotal()),
