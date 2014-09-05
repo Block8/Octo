@@ -35,7 +35,9 @@
                         {/if}
                     </td>
                     <td>
+                        {if item.CurrentVersion.title != "eCard"}
                         {ifnot item.isLocked}
+
                         <div class="btn-group">
                             {if (can_access uri: "/page/edit")}
                             <a class="btn btn-default btn-sm" href="/{@adminUri}/page/edit/{@item.id}">Edit</a>
@@ -50,7 +52,9 @@
                             </ul>
                             {/if}
                         </div>
+
                         {/ifnot}
+                        {/if}
                     </td>
                     </tr>
                     {/for}

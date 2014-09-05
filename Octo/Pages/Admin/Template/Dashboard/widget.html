@@ -15,6 +15,7 @@
                 </thead>
                 <tbody>
                 {for latestPages}
+                {if item.CurrentVersion.title != "eCard"}
                 <tr>
                     <td>
                         {if (can_access uri: "/page/edit")}
@@ -25,6 +26,7 @@
                     <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
                     <td>{date_format date: item.CurrentVersion.updated_date}</td>
                 </tr>
+                {/if}
                 {/for}
                 </tbody>
             </table>
