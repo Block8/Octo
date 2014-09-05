@@ -131,12 +131,12 @@ class MediaController extends Controller
                 }
 
                 $uploadDirectory = APP_PATH . 'public/uploads/';
-                $upload->copyTo($uploadDirectory . $file->getId() . '.' . $file->getExtension());
+                $upload->copyTo($uploadDirectory . $file->getId() . '.' . strtolower($file->getExtension()));
                 $file = $this->fileStore->saveByInsert($file);
 
                 Event::trigger($scope . 'FileSaved', $file);
 
-                $url = '/uploads/' . $file->getId() . '.'  . $file->getExtension();
+                $url = '/uploads/' . $file->getId() . '.'  . strtolower($file->getExtension());
                 $data = array_merge($file->getDataArray(), array('url' => $url));
                 print json_encode($data);
                 exit;
@@ -311,7 +311,6 @@ class MediaController extends Controller
                 $this->errorMessage('Image was not unlinked.', true);
             }
         }
-
 
         header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope . '/' . $productSlug);
         exit();
