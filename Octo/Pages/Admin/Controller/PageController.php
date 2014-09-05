@@ -240,7 +240,7 @@ class PageController extends Controller
                 $block['editable'] = false;
             }
 
-            if (array_key_exists($block['id'], $pageContent)) {
+            if (isset($block['id']) && array_key_exists($block['id'], $pageContent)) {
                 $block['content'] = $pageContent[$block['id']];
             }
 
