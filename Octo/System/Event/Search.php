@@ -26,7 +26,8 @@ class Search extends Listener
     public function addToSearchIndex(&$data)
     {
         $class = get_class($data['model']);
-        $class = end(explode('\\', $class));
+        $exploded = explode('\\', $class);
+        $class = end($exploded);
         $this->searchStore->updateSearchIndex($class, $data['content_id'], $data['content']);
 
         return true;
