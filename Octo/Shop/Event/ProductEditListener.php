@@ -50,7 +50,7 @@ class ProductEditListener extends Listener
             $uri = Config::getInstance()->get('site.admin_uri');
             $productId = $product->getId();
             $instance->view->reorderSaveUrl = '/' . $uri . '/product/update-image-positions?item_id=' . $productId;
-            $instance->view->queryStringAppend = '?item_id=' . $product->getId();
+            $instance->view->queryStringAppend = '?item_id=' . $product->getId() .'&amp;slug='.end($newArray);
         }
 
         return true;

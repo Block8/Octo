@@ -25,9 +25,19 @@ class FileStore extends Octo\Store
      */
     public function getAllForScope($scope, $order = 'title ASC')
     {
-        $query = 'SELECT * FROM file WHERE scope = :scope ORDER BY ' . $order;
+        $query = 'SELECT * FROM file WHERE scope ';
+
+        if ($scope == 'images') {
+            $query .= ' <> "files" '; //scopes: images, shop, category
+        } else {
+            $query .= ' = :scope ';
+        }
+        $query .= ' ORDER BY ' . $order;
+
         $stmt = Database::getConnection('read')->prepare($query);
-        $stmt->bindParam(':scope', $scope);
+        if ($scope != 'images') {
+            $stmt->bindParam(':scope', $scope);
+        }
 
         if ($stmt->execute()) {
             $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -46,16 +56,15 @@ class FileStore extends Octo\Store
     public function getAllForProduct($scope, $slug)
     {
         $query = 'SELECT file.* FROM file
-                  LEFT OUTER JOIN item_file
+                  JOIN item_file
                   ON item_file.file_id = file.id
-                  LEFT OUTER JOIN item
+                  JOIN item
                   ON item.id = item_file.item_id
-                  WHERE scope = :scope
                   AND item.slug = :slug
+                  WHERE scope <> "files"
          ORDER BY file.title';
 
         $stmt = Database::getConnection('read')->prepare($query);
-        $stmt->bindParam(':scope', $scope);
         $stmt->bindParam(':slug', $slug);
 
         if ($stmt->execute()) {
@@ -78,12 +87,21 @@ class FileStore extends Octo\Store
      * @param string $order
      * @return array
      */
-    public function search($scope, $query)
+    public function search($scope, $q)
     {
-        $query = 'SELECT * FROM file WHERE scope = :scope AND (title LIKE \'%'.$query.'%\' OR id = \''.$query.'\')';
+        $query = 'SELECT * FROM file WHERE scope ';
+
+        if ($scope != 'files') {
+            $query .= ' <> "files" '; //scopes: images, shop, category
+        } else {
+            $query .= ' = :scope ';
+        }
+        $query .= ' AND (title LIKE \'%'.$q.'%\' OR id = \''.$q.'\')';
 
         $stmt = Database::getConnection('read')->prepare($query);
-        $stmt->bindParam(':scope', $scope);
+        if ($scope != 'files') {
+            $stmt->bindParam(':scope', $scope);
+        }
 
         if ($stmt->execute()) {
             $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);

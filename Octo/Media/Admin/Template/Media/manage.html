@@ -2,7 +2,7 @@
 <div class="row">
     {loop files}
 
-    <div class="col-lg-2">
+    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title" style="min-height: 65px; max-height: 65px;">{@item.title}</h3>
@@ -56,23 +56,81 @@
                                 <li>
                                     <a href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
                                 </li>
+                                <li>
+                                    <a href="/{@adminUri}/media/unlinkimage/{@scope}/{@item.slug}/{@item.id}{@queryStringAppend}">Unlink image</a>
+                                </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="/{@adminUri}/media/delete/{@scope}/{@item.id}{@queryStringAppend}" class="btn-delete">Delete</a>
+                                    <a href="/{@adminUri}/media/delete/{@scope}/{@item.id}{@queryStringAppend}" class="btn-delete">(!) Delete</a>
                                 </li>
                             </ul>
                         </div>
                     </td>
                 </tr>
                 {/loop}
+
                 </tbody>
             </table>
         </div>
     </div>
+
+</div>
+
+</div><!--row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <button class="btn btn-primary pull-right" id="edit-product-images">Add image to product</button>
     </div>
 </div>
 
 <script>
+    $(function() {
+
+        /*
+        Modal window with comboBox to select image , preview, and assing to product
+         */
+        $('#edit-product-images').click(function ()
+        {
+            var saveButton = $('<button>Save</button>').addClass('btn btn-success');
+            var dialog = createDialog('product-image-editor', {allowClose: true, title: 'Add image to product', button: saveButton});
+
+            var form = $('<form></form>').addClass('smart-form');
+            var fieldset = $('<fieldset></fieldset>');
+            form.append(fieldset);
+
+            fieldset.append(imagePicker('product-image', 'Image'));
+
+            dialog.find('.modal-body').append(form);
+
+            // Set up the save functionality:
+            saveButton.on('click', function () {
+
+                var productSlug = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+                var imageId = $('#product-image').val();
+
+                addImageToProduct(productSlug, imageId);
+
+                dialog.on('hidden.bs.modal', function () {
+                    dialog.remove();
+                });
+
+                dialog.modal('hide');
+            });
+
+            dialog.modal('show');
+        });
+
+
+        function addImageToProduct(productSlug, imageId) {
+
+            $.get('/'+window.adminUri+'/media/addImageToProductSlug/'+productSlug+'/'+imageId, {}, function (data) {
+               location.reload();
+            });
+        }
+
+    });
+
 $(document).ready(function(e) {
     $('#table-items tbody').sortable({
         handle: '.handler',

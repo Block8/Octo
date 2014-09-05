@@ -11,6 +11,7 @@ use Octo\Admin\Menu;
 use Octo\Event;
 use Octo\Utilities\StringUtilities;
 use Octo\System\Model\File;
+use Octo\Shop\Model\ItemFile;
 
 class MediaController extends Controller
 {
@@ -27,6 +28,11 @@ class MediaController extends Controller
      * @var \Octo\Invoicing\Store\ItemStore
      */
     protected $itemStore;
+
+    /**
+     * @var \Octo\Shop\Store\ItemFileStore
+     */
+    protected $itemFileStore;
 
     /**
      * Return the menu nodes required for this controller
@@ -277,11 +283,41 @@ class MediaController extends Controller
 
         $this->successMessage($file->getTitle() . ' was deleted successfully.', true);
 
+        if ($scope == 'images') {
+            header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
+            exit();
+        }
+
         Event::trigger($scope . 'DeleteFile', $this);
 
-        //header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope);
-        //exit();
+
     }
+
+//Unlink image from product
+    public function unlinkImage($scope, $fileId)
+    {
+        $productSlug = $this->getParam('slug', null);
+        $itemId = $this->getParam('item_id', null);
+
+        $this->itemFileStore = Store::get('ItemFile');
+        $file = $this->itemFileStore->getByItemIdAndFileId($itemId, $fileId);
+
+        if (!empty($file)) {
+            $ret = $this->itemFileStore->delete($file);
+
+            if ($ret) {
+                $this->successMessage('Image was unlinked successfully.', true);
+            } else {
+                $this->errorMessage('Image was not unlinked.', true);
+            }
+        }
+
+
+        header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope . '/' . $productSlug);
+        exit();
+    }
+
+
 
     /**
      * @param $fileId
@@ -323,4 +359,32 @@ class MediaController extends Controller
         print json_encode($files);
         exit;
     }
+
+    /**
+     * Ajax from Admin
+     */
+    public function addImageToProductSlug($productSlug=null, $imageId=null)
+    {
+
+        if ($this->request->isAjax() && !empty($productSlug) && !empty($imageId))
+        {
+            $this->itemFileStore = Store::get('ItemFile');
+            $this->itemStore = Store::get('Item');
+
+            /** @type \Octo\Invoicing\Model\Item[] $item */
+            $products = $this->itemStore->getBySlug($productSlug);
+
+            foreach ($products as $product) {
+                $itemFile = new ItemFile();
+                $itemFile->setItemId($product->getId());
+                $itemFile->setFileId($imageId);
+                $ret[] = $this->itemFileStore->save($itemFile);
+            }
+        } else {
+            die(var_dump($productSlug, $imageId));
+        }
+        die('success');
+    }
+
+
 }
