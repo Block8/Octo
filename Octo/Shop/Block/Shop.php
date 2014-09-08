@@ -112,7 +112,13 @@ class Shop extends Block
         $this->view = Template::getPublicTemplate('Block/ShopProductList');
         $this->view->page = $this->page;
         $this->view->category = $category;
-        $this->view->products = $this->productStore->getByCategoryId($category->getId());
+
+        $products = [];
+        if ($category->getActive()) {
+            $products = $this->productStore->getByCategoryId($category->getId());
+        }
+
+        $this->view->products = $products;
     }
 
     protected function renderProduct()
