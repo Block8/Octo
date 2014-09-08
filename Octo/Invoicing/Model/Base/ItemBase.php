@@ -57,10 +57,10 @@ trait ItemBase
         $this->setters['fulfilment_house_id'] = 'setFulfilmentHouseId';
 
         // Foreign keys:
-        $this->getters['FulfilmentHouse'] = 'getFulfilmentHouse';
-        $this->setters['FulfilmentHouse'] = 'setFulfilmentHouse';
         $this->getters['Category'] = 'getCategory';
         $this->setters['Category'] = 'setCategory';
+        $this->getters['FulfilmentHouse'] = 'getFulfilmentHouse';
+        $this->setters['FulfilmentHouse'] = 'setFulfilmentHouse';
     }
     /**
     * Get the value of Id / id.
@@ -429,54 +429,6 @@ trait ItemBase
         $this->setModified('fulfilment_house_id');
     }
     /**
-    * Get the FulfilmentHouse model for this Item by Id.
-    *
-    * @uses \Octo\FulfilmentHouse\Store\FulfilmentHouseStore::getById()
-    * @uses \Octo\FulfilmentHouse\Model\FulfilmentHouse
-    * @return \Octo\FulfilmentHouse\Model\FulfilmentHouse
-    */
-    public function getFulfilmentHouse()
-    {
-        $key = $this->getFulfilmentHouseId();
-
-        if (empty($key)) {
-            return null;
-        }
-
-        return Factory::getStore('FulfilmentHouse', 'Octo\FulfilmentHouse')->getById($key);
-    }
-
-    /**
-    * Set FulfilmentHouse - Accepts an ID, an array representing a FulfilmentHouse or a FulfilmentHouse model.
-    *
-    * @param $value mixed
-    */
-    public function setFulfilmentHouse($value)
-    {
-        // Is this an instance of FulfilmentHouse?
-        if ($value instanceof \Octo\FulfilmentHouse\Model\FulfilmentHouse) {
-            return $this->setFulfilmentHouseObject($value);
-        }
-
-        // Is this an array representing a FulfilmentHouse item?
-        if (is_array($value) && !empty($value['id'])) {
-            return $this->setFulfilmentHouseId($value['id']);
-        }
-
-        // Is this a scalar value representing the ID of this foreign key?
-        return $this->setFulfilmentHouseId($value);
-    }
-
-    /**
-    * Set FulfilmentHouse - Accepts a FulfilmentHouse model.
-    *
-    * @param $value \Octo\FulfilmentHouse\Model\FulfilmentHouse
-    */
-    public function setFulfilmentHouseObject(\Octo\FulfilmentHouse\Model\FulfilmentHouse $value)
-    {
-        return $this->setFulfilmentHouseId($value->getId());
-    }
-    /**
     * Get the Category model for this Item by Id.
     *
     * @uses \Octo\Categories\Store\CategoryStore::getById()
@@ -523,5 +475,53 @@ trait ItemBase
     public function setCategoryObject(\Octo\Categories\Model\Category $value)
     {
         return $this->setCategoryId($value->getId());
+    }
+    /**
+    * Get the FulfilmentHouse model for this Item by Id.
+    *
+    * @uses \Octo\FulfilmentHouse\Store\FulfilmentHouseStore::getById()
+    * @uses \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    * @return \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    */
+    public function getFulfilmentHouse()
+    {
+        $key = $this->getFulfilmentHouseId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('FulfilmentHouse', 'Octo\FulfilmentHouse')->getById($key);
+    }
+
+    /**
+    * Set FulfilmentHouse - Accepts an ID, an array representing a FulfilmentHouse or a FulfilmentHouse model.
+    *
+    * @param $value mixed
+    */
+    public function setFulfilmentHouse($value)
+    {
+        // Is this an instance of FulfilmentHouse?
+        if ($value instanceof \Octo\FulfilmentHouse\Model\FulfilmentHouse) {
+            return $this->setFulfilmentHouseObject($value);
+        }
+
+        // Is this an array representing a FulfilmentHouse item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setFulfilmentHouseId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setFulfilmentHouseId($value);
+    }
+
+    /**
+    * Set FulfilmentHouse - Accepts a FulfilmentHouse model.
+    *
+    * @param $value \Octo\FulfilmentHouse\Model\FulfilmentHouse
+    */
+    public function setFulfilmentHouseObject(\Octo\FulfilmentHouse\Model\FulfilmentHouse $value)
+    {
+        return $this->setFulfilmentHouseId($value->getId());
     }
 }

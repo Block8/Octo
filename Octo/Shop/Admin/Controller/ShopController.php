@@ -101,7 +101,7 @@ class ShopController extends Controller
     public function index()
     {
         $this->setTitle('Manage Shop');
-        $this->view->categories = $this->categoryStore->getAllForScope('shop');
+        $this->view->categories = $this->categoryStore->getAllForScope('shop', 'active DESC, name ASC');
     }
 
     public function category($categoryId)
@@ -432,7 +432,7 @@ class ShopController extends Controller
             $field = new ImageUpload('images[]');
             $field->setRequired(true);
             $field->setMultiple();
-            $field->setLabel('Images');
+            $field->setLabel('Images (upload new images from your computer)');
             $fieldset->addField($field);
         }
 

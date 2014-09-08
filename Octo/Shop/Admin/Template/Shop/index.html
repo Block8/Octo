@@ -27,7 +27,7 @@
                     {loop categories}
                     <tr>
                         <td>
-                            <a href="/{@adminUri}/shop/category/{@item.id}">{@item.name}</a>
+                            <a href="/{@adminUri}/shop/category/{@item.id}">{@item.name}</a> {if item.active = "0"}(not active){/if}
                         </td>
                         <td>
                             <div class="btn-group">
@@ -37,6 +37,16 @@
                                     <li>
                                         <a href="/{@adminUri}/categories/delete/shop/{@item.id}" class="btn-delete">Delete Category</a>
                                     </li>
+                                    {if item.active = "0"}
+                                    <li>
+                                        <a href="/{@adminUri}/categories/activate/{@item.id}" class="btn-activate">Activate Category</a>
+                                    </li>
+                                    {/if}
+                                    {ifnot item.active = "0"}
+                                    <li>
+                                        <a href="/{@adminUri}/categories/deactivate/{@item.id}" class="btn-deactivate">Deactivate Category</a>
+                                    </li>
+                                    {/ifnot}
                                 </ul>
                             </div>
                         </td>

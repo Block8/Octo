@@ -346,4 +346,29 @@ class CategoriesController extends Controller
         $form->setValues($values);
         return $form;
     }
+
+
+    //activate category
+    public function activate($categoryId)
+    {
+        $category = $this->categoryStore->getById($categoryId);
+        $category->setActive(1);
+        $this->categoryStore->save($category);
+        $this->successMessage($category->getName() . ' was activated successfully.', true);
+
+        header('Location: /' . $this->config->get('site.admin_uri') . '/shop/');
+        exit();
+    }
+
+    public function deactivate($categoryId)
+    {
+        $category = $this->categoryStore->getById($categoryId);
+        $category->setActive(0);
+        $this->categoryStore->save($category);
+        $this->successMessage($category->getName()  . ' was deactivated successfully.', true);
+
+        header('Location: /' . $this->config->get('site.admin_uri') . '/shop/');
+        exit();
+    }
+
 }
