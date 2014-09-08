@@ -24,10 +24,17 @@ class Address extends FieldSet
 
         $countryCode = $name . '[country_code]';
 
-        $address1 = Text::create($address1, 'Address 1', true);
         $address2 = Text::create($address2, 'Address 2', false);
-        $town = Text::create($town, 'Town', true);
-        //$postcode = Text::create($postcode, 'Postcode', true);
+
+        $address1 = new Element\Text($address1);
+        $address1->setRequired(true);
+        $address1->setLabel('Address 1');
+        $address1->setPattern('.{2,100}');
+
+        $town = new Element\Text($town);
+        $town->setRequired(true);
+        $town->setLabel('Town');
+        $town->setPattern('^[A-Za-z0-9- ]{2,40}$');
 
         $postcode = new Element\Text($postcode);
         $postcode->setRequired(true);

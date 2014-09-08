@@ -19,8 +19,18 @@ class Name extends FieldSet
             $lastname = $name . '[last_name]';
         }
 
-        $this->addField(Text::create($firstname, 'First name', true));
-        $this->addField(Text::create($lastname, 'Last name', true));
+        $firstname = new Element\Text($firstname);
+        $firstname->setRequired(true);
+        $firstname->setLabel('First name');
+        $firstname->setPattern('.{1,40}');
+
+        $lastname = new Element\Text($lastname);
+        $lastname->setRequired(true);
+        $lastname->setLabel('Last name');
+        $lastname->setPattern('.{1,40}');
+
+        $this->addField($firstname);
+        $this->addField($lastname);
     }
 
     public function setRequired($required)

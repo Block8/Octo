@@ -291,11 +291,13 @@ class CheckoutController extends Controller
         $fieldset->setLabel('Your details');
         $form->addField($fieldset);
 
+        //RSM2000 2-10
         $name = new FormElement\Element\Title('title');
         $name->setLabel('Title');
         $name->setRequired(true);
         $fieldset->addField($name);
 
+        //RSM2000 1-40 Alpha hyphens and single quotes
         $name = new FormElement\Element\Name('name');
         $name->setRequired(true);
         $name->setLabel('Name');
