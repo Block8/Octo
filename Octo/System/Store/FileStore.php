@@ -53,19 +53,19 @@ class FileStore extends Octo\Store
         }
     }
 
-    public function getAllForProduct($scope, $slug)
+    public function getAllForProduct($productId)
     {
         $query = 'SELECT file.* FROM file
                   JOIN item_file
                   ON item_file.file_id = file.id
                   JOIN item
                   ON item.id = item_file.item_id
-                  AND item.slug = :slug
+                  AND item.id = :id
                   WHERE scope <> "files"
          ORDER BY file.title';
 
         $stmt = Database::getConnection('read')->prepare($query);
-        $stmt->bindParam(':slug', $slug);
+        $stmt->bindParam(':id', $productId);
 
         if ($stmt->execute()) {
             $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);

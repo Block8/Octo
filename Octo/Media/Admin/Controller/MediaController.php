@@ -228,7 +228,7 @@ class MediaController extends Controller
     }
 
 
-    public function manage($scope = '', $slug=null)
+    public function manage($scope = '', $what = '', $productId = null)
     {
         $scope_name = ucwords($scope);
 
@@ -238,8 +238,8 @@ class MediaController extends Controller
         $this->view->scope = $scope;
         $this->view->scope_name = $scope_name;
 
-        if (!empty($slug)){
-            $this->view->files = $this->fileStore->getAllForProduct($scope, $slug);
+        if (!empty($what) && !empty($productId)){
+            $this->view->files = $this->fileStore->getAllForProduct($productId);
 
         } else {
             $this->view->files = $this->fileStore->getAllForScope($scope);
@@ -296,7 +296,7 @@ class MediaController extends Controller
 //Unlink image from product
     public function unlinkImage($scope, $fileId)
     {
-        $productSlug = $this->getParam('slug', null);
+        $redirect = $this->getParam('redirect', null);
         $itemId = $this->getParam('item_id', null);
 
         $this->itemFileStore = Store::get('ItemFile');
@@ -312,7 +312,7 @@ class MediaController extends Controller
             }
         }
 
-        header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope . '/' . $productSlug);
+        header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/media/manage/' . $scope . '/' . $redirect);
         exit();
     }
 
@@ -362,28 +362,26 @@ class MediaController extends Controller
     /**
      * Ajax from Admin
      */
-    public function addImageToProductSlug($productSlug=null, $imageId=null)
+    public function addImageToProductSlug($productId=null, $imageId=null)
     {
 
-        if ($this->request->isAjax() && !empty($productSlug) && !empty($imageId))
+        if ($this->request->isAjax() && !empty($productId) && !empty($imageId))
         {
             $this->itemFileStore = Store::get('ItemFile');
             $this->itemStore = Store::get('Item');
 
-            /** @type \Octo\Invoicing\Model\Item[] $item */
-            $products = $this->itemStore->getBySlug($productSlug);
+            /** @type \Octo\Invoicing\Model\Item $item */
+            $product = $this->itemStore->getById($productId);
 
-            foreach ($products as $product) {
-                $itemFile = new ItemFile();
-                $itemFile->setItemId($product->getId());
-                $itemFile->setFileId($imageId);
-                $ret[] = $this->itemFileStore->save($itemFile);
-            }
+            $itemFile = new ItemFile();
+            $itemFile->setItemId($product->getId());
+            $itemFile->setFileId($imageId);
+            $ret[] = $this->itemFileStore->save($itemFile);
+
         } else {
-            die(var_dump($productSlug, $imageId));
+            die(var_dump($productId, $imageId));
         }
         die('success');
     }
-
 
 }

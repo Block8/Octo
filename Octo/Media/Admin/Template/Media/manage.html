@@ -57,7 +57,7 @@
                                     <a href="/{@adminUri}/media/edit/{@scope}/{@item.id}{@queryStringAppend}">Edit</a>
                                 </li>
                                 <li>
-                                    <a href="/{@adminUri}/media/unlinkimage/{@scope}/{@item.slug}/{@item.id}{@queryStringAppend}">Unlink image</a>
+                                    <a href="/{@adminUri}/media/unlinkimage/{@scope}/{@item.id}{@queryStringAppend}">Unlink image</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
@@ -106,10 +106,10 @@
             // Set up the save functionality:
             saveButton.on('click', function () {
 
-                var productSlug = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+                var productId = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
                 var imageId = $('#product-image').val();
 
-                addImageToProduct(productSlug, imageId);
+                addImageToProduct(productId, imageId);
 
                 dialog.on('hidden.bs.modal', function () {
                     dialog.remove();
@@ -122,9 +122,9 @@
         });
 
 
-        function addImageToProduct(productSlug, imageId) {
+        function addImageToProduct(productId, imageId) {
 
-            $.get('/'+window.adminUri+'/media/addImageToProductSlug/'+productSlug+'/'+imageId, {}, function (data) {
+            $.get('/'+window.adminUri+'/media/addImageToProductSlug/'+productId+'/'+imageId, {}, function (data) {
                location.reload();
             });
         }

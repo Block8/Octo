@@ -33,16 +33,17 @@ class ProductEditListener extends Listener
         $product = end($newArray);
 
         $this->productStore = Store::get('Item');
-        /** @type \Octo\Invoicing\Model\Item[] $item */
-        $item = $this->productStore->getBySlug($product);
+        /** @type \Octo\Invoicing\Model\Item $item */
+        $item = $this->productStore->getById($product);
 
-        if (!empty($item) && $item[0] instanceof Item) {
-            $product = $item[0];
+        if (!empty($item) && $item instanceof Item) {
+            $product = $item;
             $instance->popBreadcrumb();
-            $instance->popBreadcrumb();
-            $instance->addBreadcrumb('Products', '/shop');
+            $instance->popBreadcrumb(); //removes /Media/add
+            $instance->addBreadcrumb('Shop', '/shop');
+            $instance->addBreadcrumb($product->getCategory()->getName(), '/shop/category/'.$product->getCategory()->getId());
             $instance->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
-            $instance->addBreadcrumb('Images', '/media/manage/shop/' . $product->getSlug());
+            $instance->addBreadcrumb('Images', '/media/manage/shop/product/' . $product->getId());
             $instance->view->title = $product->getTitle();
             $instance->view->thumbnail = true;
             $instance->view->reorder = true;
@@ -50,7 +51,7 @@ class ProductEditListener extends Listener
             $uri = Config::getInstance()->get('site.admin_uri');
             $productId = $product->getId();
             $instance->view->reorderSaveUrl = '/' . $uri . '/product/update-image-positions?item_id=' . $productId;
-            $instance->view->queryStringAppend = '?item_id=' . $product->getId() .'&amp;slug='.end($newArray);
+            $instance->view->queryStringAppend = '?item_id=' . $product->getId() .'&amp;redirect=product/'.end($newArray);
         }
 
         return true;
@@ -95,7 +96,7 @@ class ProductEditListener extends Listener
     {
         $this->productStore = Store::get('Item');
         $product = $this->productStore->getById($instance->getParam('item_id'));
-        $redirect = Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/' . $product->getSlug();
+        $redirect = Config::getInstance()->get('site.admin_uri') . '/media/manage/shop/product/' . $product->getId();
         header('Location: /' . $redirect);
         exit;
     }
