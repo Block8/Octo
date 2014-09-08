@@ -43,6 +43,11 @@ class CategoryStore extends Octo\Store
         }
 
         $query .= 'WHERE c.scope = :scope AND c.parent_id IS NULL ';
+
+        if ($requiresPresence) {
+            $query .= "AND c.active = 1 ";
+        }
+
         $query .= 'GROUP BY c.id ';
         if ($requiresPresence) {
             $query .= "HAVING COUNT($table.id) > 0 ";
