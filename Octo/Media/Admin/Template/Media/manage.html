@@ -29,7 +29,7 @@
                     <th>Title</th>
                     <th>Filename</th>
                     <th>Uploaded By</th>
-                    <th>Uploaded On</th>
+                    <th>Uploaded/Added On</th>
                     {if reorder}<th width="2%"></th>{/if}
                     <th width="10%">Actions</th>
                 </tr>
@@ -46,7 +46,7 @@
                     <td><a href="{@item.url}">{@item.filename}</a></td>
                     {/ifnot}
                     <td>{@item.User.name}</td>
-                    <td>{date_format date: item.created_date}</td>
+                    <td>{date_format date: item.created_date; format: short}</td>
                     {if reorder}<td><i class="fa fa-fw fa-arrows handler"></i></td>{/if}
                     <td>
                         <div class="btn-group">
