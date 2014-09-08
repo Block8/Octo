@@ -93,6 +93,8 @@ class News extends Block
 
     public function renderNow()
     {
+        $this->setupTemplateFunctions();
+
         $this->newsStore = Store::get('Article');
         $this->categoryStore = Store::get('Category');
 
@@ -268,4 +270,19 @@ class News extends Block
 
         return $isCategory->getId();
     }
+
+
+    public function setupTemplateFunctions()
+    {
+        $this->view->addFunction(
+            'date_format',
+            function ($args, &$view) {
+                $date = $view->getVariable($args['date']);
+                return $date->format('d/m/Y');
+            }
+        );
+    }
+
+
+
 }
