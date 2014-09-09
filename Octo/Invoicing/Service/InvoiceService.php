@@ -130,7 +130,6 @@ class InvoiceService
             $invoice->setShippingAddress(json_encode($shippingAddress));
         }
 
-
         if (Event::trigger('BeforeInvoiceSave', $invoice)) {
             $invoice = $this->invoiceStore->saveByUpdate($invoice);
         }
@@ -284,6 +283,11 @@ class InvoiceService
         return $this->updateInvoiceStatus($invoice, $status);
     }
 
+    /**
+     * Get Total payment include subTotal, shipping costs and donations
+     * @param Invoice $invoice
+     * @return float
+     */
     public function getTotalPayment(Invoice $invoice)
     {
         $totalPayment = $invoice->getSubtotal() + $invoice->getShippingCost();
