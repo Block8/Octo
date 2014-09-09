@@ -8,6 +8,7 @@ use Octo\Admin\Menu;
 use Octo\Form\Element\ImageUpload;
 use Octo\Invoicing\Model\Item;
 use Octo\Shop\Model\ItemFile;
+use Octo\Shop\Model\ItemRelated;
 use Octo\Shop\Model\ItemVariant;
 use Octo\System\Model\File;
 use Octo\Store;
@@ -44,6 +45,10 @@ class ShopController extends Controller
      * @var \Octo\FulfilmentHouse\Store\FulfilmentHouseStore
      */
     protected $supplierStore;
+    /**
+     * @var \Octo\Shop\Store\ItemRelatedStore
+     */
+    protected $itemRelatedStore;
 
 
     /**
@@ -90,6 +95,7 @@ class ShopController extends Controller
         $this->variantStore = Store::get('Variant');
         $this->variantOptionStore = Store::get('VariantOption');
         $this->itemVariantStore = Store::get('ItemVariant');
+        $this->itemRelatedStore = Store::get('ItemRelated');
 
         $mm = $this->config->get('ModuleManager');
         if($mm->isEnabled('FulfilmentHouse')) {
@@ -362,7 +368,7 @@ class ShopController extends Controller
                 }
             }
 
-            $this->successMessage('The variants were updated succcessfully.', true);
+            $this->successMessage('The variants were updated successfully.', true);
             header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-variants/' . $productId);
             exit();
         }
@@ -376,61 +382,51 @@ class ShopController extends Controller
     {
         $product = $this->productStore->getById($productId);
 
-        $this->view->product = $product;
-        $this->view->availableVariants = $this->variantStore->getVariantsNotUsedByProduct($productId);
-
-        $this->view->items = $this->itemVariantStore->getAllForItem($productId);
-
         $this->setTitle('Manage related products for: ' . $product->getCategory()->getName() .' / '. $product->getTitle());
         $this->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
         $this->addBreadcrumb('Related', '/shop/product-related/' . $product->getId());
 
-        $variants = [];
-        foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {
-            if (!isset($variants[$itemVariant->getVariantId()])) {
-                $variantArray = array_merge($itemVariant->getVariant()->getDataArray(), ['options' => []]);
-                $variants[$itemVariant->getVariantId()] = $variantArray;
-            }
+        $this->view->product = $product;
+        $this->view->items = $this->itemRelatedStore->getByItemID($productId);
 
-            $ivArray = $itemVariant->getDataArray();
-            $optionsArray = $itemVariant->getVariantOption()->getDataArray();
-
-            $computed = [
-                'item_variant_id' => $ivArray['id'],
-                'title' => $optionsArray['option_title'],
-                'position' => $optionsArray['position'],
-                'price_adjustment' => $ivArray['price_adjustment']
-            ];
-
-            $variants[$itemVariant->getVariantId()]['options'][] = $computed;
-        }
-
-        $this->view->variants = $variants;
+        $this->view->availableProducts = $this->productStore->getProductsNotRelatedToProductId($productId);
 
         if ($this->request->getMethod() == 'POST') {
-            if ($this->getParam('price')) {
-                foreach ($this->getParam('price') as $itemVariantId => $priceAdjustment) {
-                    $itemVariant = $this->itemVariantStore->getById($itemVariantId);
-                    $itemVariant->setPriceAdjustment($priceAdjustment);
-                    $this->itemVariantStore->save($itemVariant);
+
+            $action = $this->getParam('action', '');
+            $relatedItemId = (int)$this->getParam('relatedItem', 0);
+
+            if ($action == 'add') {
+                if ($relatedItemId < 1) {
+                    $this->errorMessage('There was a problem with related product. No action was performed.', true);
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-related/' . $productId);
+                    exit;
+                }
+                    $itemRelated = new ItemRelated();
+                    $itemRelated->setItemId($productId);
+                    $itemRelated->setRelatedItemId($relatedItemId);
+                    $ret = $this->itemRelatedStore->save($itemRelated);
+                if ($ret) {
+                    $this->successMessage('The related product was added successfully.', true);
+                } else {
+                    $this->errorMessage('The related product was NOT added.', true);
                 }
             }
 
-            if ($this->getParam('new_variant')) {
-                $variant = $this->variantStore->getById($this->getParam('new_variant'));
-                $options = $this->variantOptionStore->getByVariantId($variant->getId());
 
-                foreach ($options as $option) {
-                    $iv = new ItemVariant();
-                    $iv->setVariantId($variant->getId());
-                    $iv->setVariantOptionId($option->getId());
-                    $iv->setItemId($productId);
-                    $this->itemVariantStore->save($iv);
+            if ($action == 'remove') {
+                $itemRelatedId = (int)$this->getParam('itemRelatedId', 0);
+                $itemRelated = $this->itemRelatedStore->getById($itemRelatedId);
+                $ret = $this->itemRelatedStore->delete($itemRelated);
+                if ($ret) {
+                    $this->successMessage('The related product was removed successfully.', true);
+                } else {
+                    $this->errorMessage('The related product was NOT removed.', true);
                 }
             }
 
-            $this->successMessage('The variants were updated succcessfully.', true);
-            header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-variants/' . $productId);
+
+            header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-related/' . $productId);
             exit();
         }
     }

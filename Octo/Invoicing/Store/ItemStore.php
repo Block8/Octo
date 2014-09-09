@@ -91,4 +91,33 @@ class ItemStore extends Octo\Store
             throw new StoreException('Could not get Item by Slug', 0, $ex);
         }
     }
+
+    public function getProductsNotRelatedToProductId($productId, $activeOnly = true, $useConnection = 'read')
+    {
+        if (is_null($productId)) {
+            throw new StoreException('ProductId passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Item').'\Model\Item', $useConnection);
+
+        $query->select('*')->from('item');
+        $query->where(' ' . ($activeOnly ? ' item.active = 1 ' : ' ') .
+                        ' AND item.id NOT IN ( SELECT DISTINCT item_related.related_item_id
+                        FROM item_related
+                        WHERE item_related.item_id = :product_id )
+                        AND item.id <> :product_id
+                        ORDER BY item.title'
+        );
+
+        $query->bind(':product_id', $productId);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Items available to be related by productId.', 0, $ex);
+        }
+
+    }
+
 }

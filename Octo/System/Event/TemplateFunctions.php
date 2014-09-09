@@ -23,6 +23,12 @@ class TemplateFunctions extends Listener
             return $_SESSION['user']->canAccess($uri);
         });
 
+        $template->addFunction('count', function ($args, &$view) {
+                $variable = $view->getVariable($args['variable']);
+
+                return count($variable) > 0 ? count($variable) : '';
+            });
+
     }
 
     public function globalTemplateFunctions(Template &$template)
