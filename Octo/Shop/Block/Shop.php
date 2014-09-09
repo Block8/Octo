@@ -196,14 +196,19 @@ class Shop extends Block
             foreach ($itemRelated as $item) {
                 $products[] = $item->getRelatedItem();
             }
-        } else {
+        }
+
+        /*
+         * LPP
+         * Disable, may be enabled as an option from BO or removed later
+        else {
         //if there is no related products //as 01/09/2014 pick random
             $related = $this->productStore->getAll(true);
 
             shuffle($related);
             $products = array_slice($related, 0, 4);
         }
-
+        */
         return $products;
     }
 
