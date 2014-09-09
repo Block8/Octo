@@ -54,6 +54,7 @@ class DispatchEventListener extends Listener
         }
         $itemList.="</table>";
         $shipping = json_decode($invoice->getShippingAddress(), true);
+
         $shippingAddress = "";
         $shippingAddress.=$shipping['address1']."<br />";
         $shippingAddress.=$shipping['address2']."<br />";
@@ -61,13 +62,17 @@ class DispatchEventListener extends Listener
         $shippingAddress.=$shipping['postcode']."<br />";
         $shippingAddress.=$shipping['country_name'];
 
-        $customerName = $invoice->Contact->first_name." ".$invoice->Contact->first_name;
+        $customerName = $invoice->Contact->first_name." ".$invoice->Contact->last_name;
+        $customerEmail = $invoice->Contact->email;
+        $customerPhone = $invoice->Contact->phone;
 
         $message = $supplier->getEmailCopy();
         $message = str_replace("{items}", $itemList, $message);
         $message = str_replace("{shipping_address}", $shippingAddress, $message);
         $message = str_replace("{invoice_number}", $invoice->getId(), $message);
         $message = str_replace("{customer_name}", $customerName, $message);
+        $message = str_replace("{customer_phone}", $customerPhone, $message);
+        $message = str_replace("{customer_email}", $customerEmail, $message);
 
         $config = Config::getInstance();
         $mail = new \PHPMailer();
