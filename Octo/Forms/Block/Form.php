@@ -20,17 +20,17 @@ use Octo\Event;
 class Form extends Block
 {
     /**
-     * @var Store\FormStore
-     */
-    protected $formStore;
-
-    /**
-     * @var Store\ContactStore
+     * @var \Octo\System\Store\ContactStore
      */
     protected $contactStore;
 
     /**
-     * @var Store\SubmissionStore
+     * @var \Octo\Forms\Store\FormStore
+     */
+    protected $formStore;
+
+    /**
+     * @var \Octo\Forms\Store\SubmissionStore
      */
     protected $submissionStore;
 
@@ -236,11 +236,11 @@ class Form extends Block
             $mail->SetFrom($config->site['email_from']);
         }
         else {
-            $mail->SetFrom('octo@block8.net');
+            $mail->SetFrom('remedia@re-systems.co.uk');
         }
 
-        $message         = Template::getPublicTemplate('Emails/FormSubmission');
-        $message->form   = $form;
+        $message = Template::getPublicTemplate('Emails/FormSubmission');
+        $message->form = $form;
         $message->submission = $submission;
         $mail->Body = $message->render();
         $mail->send();
