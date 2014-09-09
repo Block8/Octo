@@ -1,7 +1,7 @@
 <?php
 $queries = [];
 
-$queries[] = "CREATE TABLE `related_item` (
+$queries[] = "CREATE TABLE `item_related` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(11) unsigned NOT NULL,
   `related_item_id` int(11) unsigned NOT NULL,

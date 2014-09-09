@@ -39,6 +39,12 @@
                     </li>
                     {/if}
 
+                    {if (can_access uri: "/shop/product-relates")}
+                    <li>
+                        <a href="/{@adminUri}/shop/product-related/{@value.id}">Manage Related products</a>
+                    </li>
+                    {/if}
+
                     {if (can_access uri: "/shop/product-variants")}
                     <li>
                         <a href="/{@adminUri}/shop/product-variants/{@value.id}">Manage Variants</a>

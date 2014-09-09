@@ -315,9 +315,75 @@ class ShopController extends Controller
         $this->view->items = $this->itemVariantStore->getAllForItem($productId);
 
         $this->setTitle($product->getTitle() . ' Variants');
-        $this->addBreadcrumb('Products', '/shop');
         $this->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
         $this->addBreadcrumb('Variants', '/shop/product-variants/' . $product->getId());
+
+        $variants = [];
+        foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {
+            if (!isset($variants[$itemVariant->getVariantId()])) {
+                $variantArray = array_merge($itemVariant->getVariant()->getDataArray(), ['options' => []]);
+                $variants[$itemVariant->getVariantId()] = $variantArray;
+            }
+
+            $ivArray = $itemVariant->getDataArray();
+            $optionsArray = $itemVariant->getVariantOption()->getDataArray();
+
+            $computed = [
+                'item_variant_id' => $ivArray['id'],
+                'title' => $optionsArray['option_title'],
+                'position' => $optionsArray['position'],
+                'price_adjustment' => $ivArray['price_adjustment']
+            ];
+
+            $variants[$itemVariant->getVariantId()]['options'][] = $computed;
+        }
+
+        $this->view->variants = $variants;
+
+        if ($this->request->getMethod() == 'POST') {
+            if ($this->getParam('price')) {
+                foreach ($this->getParam('price') as $itemVariantId => $priceAdjustment) {
+                    $itemVariant = $this->itemVariantStore->getById($itemVariantId);
+                    $itemVariant->setPriceAdjustment($priceAdjustment);
+                    $this->itemVariantStore->save($itemVariant);
+                }
+            }
+
+            if ($this->getParam('new_variant')) {
+                $variant = $this->variantStore->getById($this->getParam('new_variant'));
+                $options = $this->variantOptionStore->getByVariantId($variant->getId());
+
+                foreach ($options as $option) {
+                    $iv = new ItemVariant();
+                    $iv->setVariantId($variant->getId());
+                    $iv->setVariantOptionId($option->getId());
+                    $iv->setItemId($productId);
+                    $this->itemVariantStore->save($iv);
+                }
+            }
+
+            $this->successMessage('The variants were updated succcessfully.', true);
+            header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-variants/' . $productId);
+            exit();
+        }
+    }
+
+    /**
+     * Manage related products - You may also like...
+     * @param $productId
+     */
+    public function productRelated($productId)
+    {
+        $product = $this->productStore->getById($productId);
+
+        $this->view->product = $product;
+        $this->view->availableVariants = $this->variantStore->getVariantsNotUsedByProduct($productId);
+
+        $this->view->items = $this->itemVariantStore->getAllForItem($productId);
+
+        $this->setTitle('Manage related products for: ' . $product->getCategory()->getName() .' / '. $product->getTitle());
+        $this->addBreadcrumb($product->getTitle(), '/shop/edit-product/' . $product->getId());
+        $this->addBreadcrumb('Related', '/shop/product-related/' . $product->getId());
 
         $variants = [];
         foreach ($this->itemVariantStore->getAllForItem($product->getId()) as $itemVariant) {

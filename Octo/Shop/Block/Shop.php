@@ -26,9 +26,9 @@ class Shop extends Block
      */
     protected $itemVariantStore;
     /**
-     * @var \Octo\Shop\Store\RelatedItemStore
+     * @var \Octo\Shop\Store\ItemRelatedStore
      */
-    protected $relatedItemStore;
+    protected $itemRelatedStore;
     /**
      * @var bool Set URI extensions
      */
@@ -54,7 +54,7 @@ class Shop extends Block
         $this->categoryStore = Store::get('Category');
         $this->productStore = Store::get('Item');
         $this->itemVariantStore = Store::get('ItemVariant');
-        $this->relatedItemStore = Store::get('RelatedItem');
+        $this->itemRelatedStore = Store::get('ItemRelated');
     }
 
     public function renderNow()
@@ -181,14 +181,19 @@ class Shop extends Block
         return $variants;
     }
 
+    /**
+     * Get related products to display on webpage
+     * @param $product
+     * @return array
+     */
     protected function setupRelatedProducts($product)
     {
-        $relatedItems = $this->relatedItemStore->getByItemID($product->getId());
+        $itemRelated = $this->itemRelatedStore->getByItemID($product->getId());
         $products = [];
 
-        if (count($relatedItems) > 0)
+        if (count($itemRelated) > 0)
         {
-            foreach ($relatedItems as $item) {
+            foreach ($itemRelated as $item) {
                 $products[] = $item->getRelatedItem();
             }
         } else {
