@@ -48,7 +48,7 @@ class DispatchEventListener extends Listener
         if(!isset($supplier)) {
             return;
         }
-        $itemList = "<table width='100%'><thead><tr><th>Item</th><th>Quantity</th></tr></thead>";
+        $itemList = "<table width='100%'><thead><tr><th align='left'>Item</th><th align='left'>Quantity</th></tr></thead>";
         foreach($items as $item) {
             $itemList.="<tr><td>".$item->getDescription()."</td><td>".$item->getQuantity()."</td>";
         }
