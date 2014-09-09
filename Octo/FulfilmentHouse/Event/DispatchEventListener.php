@@ -82,7 +82,7 @@ class DispatchEventListener extends Listener
             $mail->SetFrom($config->site['email_from']);
         }
         else {
-            $mail->SetFrom('octoshop@block8.net');
+            $mail->SetFrom('remedia@re-systems.co.uk');
         }
         if($supplier->getEmail1()) {
             $mail->addAddress($supplier->getEmail1());
