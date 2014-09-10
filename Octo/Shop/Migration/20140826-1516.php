@@ -10,3 +10,4 @@ $queries[] = "ALTER TABLE `item` ADD `activeCopy` TINYINT(1)  NULL  DEFAULT '1' 
 $queries[] = "ALTER TABLE `item_file` ADD UNIQUE INDEX (`item_id`, `file_id`);"; //one image/file per product
 $queries[] = "ALTER TABLE `item_file` ADD `date_added` TIMESTAMP  NULL  DEFAULT CURRENT_TIMESTAMP  AFTER `position`;";
 $queries[] = "ALTER TABLE `category` ADD `active` TINYINT(1)  NULL  DEFAULT '1';";
+$queries[] = "ALTER TABLE `item` ADD `destination_code` VARCHAR(20)  NULL  DEFAULT NULL  AFTER `fulfilment_house_id`;";
