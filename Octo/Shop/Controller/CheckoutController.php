@@ -163,17 +163,23 @@ class CheckoutController extends Controller
 
     public function invoice($invoiceUuid)
     {
-        $this->invoiceStore = Store::get('Invoice');
-        /** @var \Octo\Invoicing\Model\Invoice $invoice */
-        $invoice = $this->invoiceStore->getByUuid($invoiceUuid);
-
-        if ($invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
+        if (strlen($invoiceUuid) != Invoice::UUID_LENGTH) {
             header('Location: /');
             die;
         }
 
+        $this->invoiceStore = Store::get('Invoice');
+        /** @var \Octo\Invoicing\Model\Invoice $invoice */
+        $invoice = $this->invoiceStore->getByUuid($invoiceUuid);
+
         if (is_null($invoice)) {
             throw new NotFoundException('There is no invoice with ID: ' . $invoiceUuid);
+        }
+
+        if (!empty($invoice) && $invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
+            //TODO: Add check date
+            header('Location: /');
+            die;
         }
 
         $view = Template::getPublicTemplate('Checkout/invoice');
@@ -220,18 +226,25 @@ class CheckoutController extends Controller
 
     public function thanks($invoiceUuid)
     {
+        if (strlen($invoiceUuid) != Invoice::UUID_LENGTH) {
+            header('Location: /');
+            die;
+        }
+
         $this->invoiceStore = Store::get('Invoice');
         /** @var \Octo\Invoicing\Model\Invoice $invoice */
         $invoice = $this->invoiceStore->getByUuid($invoiceUuid);
 
-        if ($invoice->getInvoiceStatusId() == Invoice::STATUS_NEW) {
-            header('Location: /checkout/');
-            die;
-        }
-
         if (is_null($invoice)) {
             throw new NotFoundException('There is no invoice with Uuid: ' . $invoiceUuid);
         }
+
+        if ($invoice->getInvoiceStatusId() == Invoice::STATUS_NEW) {
+            //TODO: Add check date
+            header('Location: /');
+            die;
+        }
+
 
         $view = Template::getPublicTemplate('Checkout/thanks');
         $view->invoice = $invoice;

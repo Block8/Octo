@@ -22,4 +22,6 @@ class Invoice extends Octo\Model
     const STATUS_OVERDUE = 6;
     const STATUS_PART_PAID = 7;
     const STATUS_OVERPAID = 8;
+
+    const UUID_LENGTH = 36;
 }
