@@ -67,7 +67,7 @@ class RsmGatewayController extends Controller
         if (!empty($errors) && count($errors)>0) {
             $errorCode = $errors[0]['code'];
             $errorMessage = $errors[0]['message'];
-            $message = $errorCode;
+            $message = $errorMessage;
             $this->logRSM2000Errors($invoice_id, $errorCode .': '.$errorMessage);
         }
 
