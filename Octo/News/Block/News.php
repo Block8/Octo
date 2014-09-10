@@ -93,6 +93,8 @@ class News extends Block
 
     public function renderNow()
     {
+        $this->setupTemplateFunctions();
+
         $this->newsStore = Store::get('Article');
         $this->categoryStore = Store::get('Category');
 
@@ -120,10 +122,6 @@ class News extends Block
         $endDate = new \DateTime();
         $startDate = new \DateTime();
         $startDate = $startDate->sub(new \DateInterval('P14D'));
-/*
-        $startDate = date("Y-m-01", strtotime("last month"));
-        $endDate = date("Y-m-t", strtotime("last month"));
- */
 
         $news = $this->newsStore->getNewsforMailshot($startDate->format('Y-m-d'), $endDate->format('Y-m-d'));
 
@@ -268,4 +266,19 @@ class News extends Block
 
         return $isCategory->getId();
     }
+
+
+    public function setupTemplateFunctions()
+    {
+        $this->view->addFunction(
+            'date_format',
+            function ($args, &$view) {
+                $date = $view->getVariable($args['date']);
+                return $date->format('d/m/Y');
+            }
+        );
+    }
+
+
+
 }
