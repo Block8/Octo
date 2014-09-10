@@ -309,4 +309,21 @@ class MediaController extends Controller
         print json_encode($files);
         exit;
     }
+
+    // Get meta information about a set of files described by Id.
+    public function metadata()
+    {
+        $imageIds = json_decode($this->getParam('q', '[]'));
+        $rtn = ['results' => [], 'more' => false];
+
+        foreach($imageIds as $imageId) {
+            $image = $this->fileStore->getById($imageId);
+
+            if($image) {
+                $rtn['results'][] = ['id' => $image->getId(), 'text' => $image->getTitle()];
+            }
+        }
+
+        die(json_encode($rtn));
+    }
 }

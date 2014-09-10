@@ -1,0 +1,36 @@
+<div id="{@id}" class="carousel slide" data-ride="carousel">
+    {if hasControls}
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        {for 0:imageCount; i++}
+
+        <li data-target="#{@id}" data-slide-to="{@i}"{if i == 0} class="active"{/if}></li>
+        {/for}
+    </ol>
+    {/if}
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        {for images}
+        <div class="item {if item.id == firstImageId}active{/if}">
+            <img src="/media/render/{@item.id}/{@imageWidth}/auto/{@imageFormat}" alt="{@item.title}">
+
+            {if hasCaptions}
+            <div class="carousel-caption">
+                {@item.title}
+            </div>
+            {/if}
+        </div>
+        {/for}
+    </div>
+
+    {if hasControls}
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+    {/if}
+</div>
