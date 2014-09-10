@@ -259,4 +259,33 @@ abstract class Block
     {
         $this->dataStore =& $dataStore;
     }
+
+    public function getContent($tagId, $default = null)
+    {
+        $rtn = $default;
+
+        if (array_key_exists($tagId, $this->content)) {
+            $rtn = $this->content[$tagId];
+        }
+
+        if ($rtn === $default && array_key_exists('inherit', $this->templateParams) && $this->templateParams['inherit']) {
+            $page = $this->page;
+
+            while ($rtn === $default) {
+                if (!$page->getParentId()) {
+                    break;
+                }
+
+                $page = $page->getParent();
+                $content = $page->getCurrentVersion()->getContentItem()->getContent();
+                $content = json_decode($content, true);
+
+                if (isset($content[$this->templateParams['id']][$tagId])) {
+                    $rtn = $content[$this->templateParams['id']][$tagId];
+                }
+            }
+        }
+
+        return $rtn;
+    }
 }

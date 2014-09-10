@@ -93,11 +93,13 @@ class Form extends Block
 
     public function renderNow()
     {
-        if (empty($this->content['id'])) {
+        $id = $this->getContent('id', null);
+
+        if (empty($id)) {
             return;
         }
 
-        $this->formModel = $this->formStore->getById($this->content['id']);
+        $this->formModel = $this->formStore->getById($id);
         $this->form = $this->createForm($this->formModel->getDefinition());
 
         if ($this->request->getMethod() == 'POST') {

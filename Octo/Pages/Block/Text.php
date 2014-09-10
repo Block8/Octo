@@ -48,13 +48,14 @@ class Text extends Block
 
     public function renderNow()
     {
-        if (array_key_exists('content', $this->content)) {
-            $content = $this->content['content'];
+        $content = $this->getContent('content', '');
 
+        if (!empty($content)) {
             // Replace file blocks
             $content = preg_replace_callback('/\<img id\=\"([a-zA-Z0-9]{32})".*>/', [$this, 'replaceFile'], $content);
-            $this->view->content = $content;
         }
+
+        $this->view->content = $content;
     }
 
     public function replaceFile($matches)
