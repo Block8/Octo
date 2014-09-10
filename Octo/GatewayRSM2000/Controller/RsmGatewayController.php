@@ -29,7 +29,7 @@ class RsmGatewayController extends Controller
     {
         $this->invoiceStore = Store::get('Invoice');
 
-        /** @type \Octo\Invoicing\Model\Invoice */
+        /** @type \Octo\Invoicing\Model\Invoice $invoice */
         $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
 
         if ($invoice) {
@@ -48,7 +48,7 @@ class RsmGatewayController extends Controller
                 }
             }
 
-            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
+            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getUuid().'";</script>');
         }
 
         header('Location: /checkout/failed');
@@ -84,7 +84,7 @@ class RsmGatewayController extends Controller
                     //$message = 'That invoice is marked as paid.';
 
                     //Redirect to thanks page, as it looks like the invoice is paid.
-                    die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getId().'";</script>');
+                    die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getUuid().'";</script>');
                 } else {
                     //UniqueId cannot be use, Invoice not paid
                     $class = 'warning';

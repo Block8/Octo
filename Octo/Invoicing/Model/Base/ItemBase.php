@@ -55,6 +55,9 @@ trait ItemBase
         $this->data['fulfilment_house_id'] = null;
         $this->getters['fulfilment_house_id'] = 'getFulfilmentHouseId';
         $this->setters['fulfilment_house_id'] = 'setFulfilmentHouseId';
+        $this->data['destination_code'] = null;
+        $this->getters['destination_code'] = 'getDestinationCode';
+        $this->setters['destination_code'] = 'setDestinationCode';
 
         // Foreign keys:
         $this->getters['Category'] = 'getCategory';
@@ -214,6 +217,18 @@ trait ItemBase
     public function getFulfilmentHouseId()
     {
         $rtn = $this->data['fulfilment_house_id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of DestinationCode / destination_code.
+    *
+    * @return string
+    */
+    public function getDestinationCode()
+    {
+        $rtn = $this->data['destination_code'];
 
         return $rtn;
     }
@@ -427,6 +442,23 @@ trait ItemBase
 
         $this->data['fulfilment_house_id'] = $value;
         $this->setModified('fulfilment_house_id');
+    }
+
+    /**
+    * Set the value of DestinationCode / destination_code.
+    *
+    * @param $value string
+    */
+    public function setDestinationCode($value)
+    {
+        $this->validateString('DestinationCode', $value);
+
+        if ($this->data['destination_code'] === $value) {
+            return;
+        }
+
+        $this->data['destination_code'] = $value;
+        $this->setModified('destination_code');
     }
     /**
     * Get the Category model for this Item by Id.

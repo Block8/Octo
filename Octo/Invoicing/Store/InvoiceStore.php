@@ -42,4 +42,26 @@ class InvoiceStore extends Octo\Store
 
         return $query->execute()->fetchAll();
     }
+
+    public function getByUuid($invoiceUuid, $useConnection = 'read')
+    {
+        if (is_null($invoiceUuid)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Invoice').'\Model\Invoice', $useConnection);
+        $query->select('*')->from('invoice')->limit(1);
+        $query->where('`uuid` = :uuid');
+        $query->bind(':uuid', $invoiceUuid);
+
+        try {
+            $query->execute();
+            return $query->fetch();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Invoice by Uuid', 0, $ex);
+        }
+    }
+
+
+
 }

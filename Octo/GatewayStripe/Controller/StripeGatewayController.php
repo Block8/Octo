@@ -27,7 +27,7 @@ class StripeGatewayController extends Controller
         $invoiceStore = Store::get('Invoice');
 
         /**
-         * @var \Octo\Invoicing\Model\Invoice
+         * @var \Octo\Invoicing\Model\Invoice $invoice
          */
         $invoice = $invoiceStore->getById($invoiceId);
 
@@ -41,7 +41,7 @@ class StripeGatewayController extends Controller
                     "description" => $invoice->getContact()->getEmail())
             );
         } catch(Stripe_CardError $e) {
-            header('Location: /checkout/invoice/' . $invoice->getId() . '?declined=1');
+            header('Location: /checkout/invoice/' . $invoice->getUuid() . '?declined=1');
             die;
         }
 
@@ -52,7 +52,7 @@ class StripeGatewayController extends Controller
 
         $invoiceStore->save($invoice);
 
-        header('Location: /checkout/thanks/' . $invoice->getId());
+        header('Location: /checkout/thanks/' . $invoice->getUuid());
         die;
     }
 

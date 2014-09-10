@@ -5,6 +5,7 @@ namespace Octo\Invoicing\Service;
 use DateTime;
 use Exception;
 use HMUK\Utilities\PostageCalculator;
+use HMUK\Utilities\UUID;
 use Octo\Event;
 use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Model\InvoiceStatus;
@@ -72,6 +73,7 @@ class InvoiceService
         $invoice->setUpdatedDate(new DateTime());
         $invoice->setContact($contact);
         $invoice->setInvoiceStatusId(Invoice::STATUS_NEW);
+        $invoice->setUuid(UUID::v4()); //generate uuid v4 RFC 2122
 
         // Save the invoice and return the updated model (incl. ID)
         if (Event::trigger('BeforeInvoiceCreate', $invoice)) {
@@ -280,6 +282,7 @@ class InvoiceService
         $status = Store::get('InvoiceStatus')->getById($status);
 
         $invoice->setTotalPaid($totalPaid);
+        $invoice->setUpdatedDate(new \DateTime());
         return $this->updateInvoiceStatus($invoice, $status);
     }
 

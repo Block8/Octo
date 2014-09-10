@@ -22,6 +22,9 @@ trait InvoiceBase
         $this->data['id'] = null;
         $this->getters['id'] = 'getId';
         $this->setters['id'] = 'setId';
+        $this->data['uuid'] = null;
+        $this->getters['uuid'] = 'getUuid';
+        $this->setters['uuid'] = 'setUuid';
         $this->data['reference'] = null;
         $this->getters['reference'] = 'getReference';
         $this->setters['reference'] = 'setReference';
@@ -79,6 +82,18 @@ trait InvoiceBase
     public function getId()
     {
         $rtn = $this->data['id'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Uuid / uuid.
+    *
+    * @return string
+    */
+    public function getUuid()
+    {
+        $rtn = $this->data['uuid'];
 
         return $rtn;
     }
@@ -281,6 +296,25 @@ trait InvoiceBase
 
         $this->data['id'] = $value;
         $this->setModified('id');
+    }
+
+    /**
+    * Set the value of Uuid / uuid.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setUuid($value)
+    {
+        $this->validateNotNull('Uuid', $value);
+        $this->validateString('Uuid', $value);
+
+        if ($this->data['uuid'] === $value) {
+            return;
+        }
+
+        $this->data['uuid'] = $value;
+        $this->setModified('uuid');
     }
 
     /**

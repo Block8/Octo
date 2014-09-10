@@ -9,6 +9,7 @@ use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
+use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
 use Octo\Shop\Store\ShopBasketStore;
 use Octo\Shop\Service\ShopService;
@@ -22,7 +23,10 @@ class CheckoutController extends Controller
      * @var \Octo\System\Store\ContactStore
      */
     protected $contactStore;
-
+    /**
+     * @var \Octo\Invoicing\Store\InvoiceStore
+     */
+    protected $invoiceStore;
 
     public function index()
     {
@@ -136,7 +140,7 @@ class CheckoutController extends Controller
 
                 Event::trigger('CheckoutDetailsSubmit', $data);
 
-                header('Location: /checkout/invoice/' . $invoice->getId());
+                header('Location: /checkout/invoice/' . $invoice->getUuid());
                 die;
             }
         }
@@ -157,13 +161,19 @@ class CheckoutController extends Controller
         return $output;
     }
 
-    public function invoice($invoiceId)
+    public function invoice($invoiceUuid)
     {
+        $this->invoiceStore = Store::get('Invoice');
         /** @var \Octo\Invoicing\Model\Invoice $invoice */
-        $invoice = Store::get('Invoice')->getById($invoiceId);
+        $invoice = $this->invoiceStore->getByUuid($invoiceUuid);
+
+        if ($invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
+            header('Location: /');
+            die;
+        }
 
         if (is_null($invoice)) {
-            throw new NotFoundException('There is no invoice with ID: ' . $invoiceId);
+            throw new NotFoundException('There is no invoice with ID: ' . $invoiceUuid);
         }
 
         $view = Template::getPublicTemplate('Checkout/invoice');
@@ -208,20 +218,28 @@ class CheckoutController extends Controller
         return $output;
     }
 
-    public function thanks($invoiceId)
+    public function thanks($invoiceUuid)
     {
-        $invoice = Store::get('Invoice')->getById($invoiceId);
+        $this->invoiceStore = Store::get('Invoice');
+        /** @var \Octo\Invoicing\Model\Invoice $invoice */
+        $invoice = $this->invoiceStore->getByUuid($invoiceUuid);
+
+        if ($invoice->getInvoiceStatusId() == Invoice::STATUS_NEW) {
+            header('Location: /checkout/');
+            die;
+        }
 
         if (is_null($invoice)) {
-            throw new NotFoundException('There is no invoice with ID: ' . $invoiceId);
+            throw new NotFoundException('There is no invoice with Uuid: ' . $invoiceUuid);
         }
 
         $view = Template::getPublicTemplate('Checkout/thanks');
         $view->invoice = $invoice;
+        /*
         $view->items = $this->getInvoiceService()->getItems($invoice);
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
-
+        */
         $blockManager = $this->getBlockManager($view);
 
         $output = $view->render();
