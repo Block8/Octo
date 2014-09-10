@@ -92,6 +92,14 @@ class ItemStore extends Octo\Store
         }
     }
 
+    /**
+     * Get products list to make them an option to pick as a related to some other product
+     * @param $productId
+     * @param bool $activeOnly
+     * @param string $useConnection
+     * @return array
+     * @throws StoreException
+     */
     public function getProductsNotRelatedToProductId($productId, $activeOnly = true, $useConnection = 'read')
     {
         if (is_null($productId)) {
