@@ -185,6 +185,7 @@ class InvoiceController extends Admin\Controller
 
         $this->successMessage('Invoice deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/invoice');
+        die();
     }
 
     public function view($key, $format = null)
