@@ -186,8 +186,11 @@ class CheckoutController extends Controller
         /** @var \Octo\Invoicing\Model\InvoiceAdjustment $adjustments */
         $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
 
+        /** @var \Octo\Invoicing\Model\Item[] $invoiceItems */
+        $invoiceItems = $this->getInvoiceService()->getItems($invoice);
+
         $view->invoice = $invoice;
-        $view->items = $this->getInvoiceService()->getItems($invoice);
+        $view->items = $invoiceItems;
         $view->adjustments = $adjustments;
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
@@ -199,16 +202,24 @@ class CheckoutController extends Controller
             $donations += floatval($donation->getDisplayValue());
         }
         $view->total = $invoice->getSubtotal() + $invoice->getShippingCost() + $donations;
+        $view->justevents = 0;
 
-        $invoiceData = [
-            'payment_options' => [],
-            'invoice' => $invoice,
-            'items' => $view->items,
-        ];
+        //Payment
+        if ($invoice->getTotal() > 0) {
 
-        Event::trigger('PaymentOptions', $invoiceData);
+            $invoiceData = [
+                'payment_options' => [],
+                'invoice' => $invoice,
+                'items' => $view->items,
+            ];
 
-        $view->paymentOptions = $invoiceData['payment_options'];
+            Event::trigger('PaymentOptions', $invoiceData);
+            $view->paymentOptions = $invoiceData['payment_options'];
+        } elseif($this->isEligibleForFreePass($invoiceItems, $invoice->getTotal())){
+            //Free items like tickets
+            $view->justevents = 1;
+        }
+
 
         $blockManager = $this->getBlockManager($view);
 
@@ -223,6 +234,57 @@ class CheckoutController extends Controller
 
         return $output;
     }
+
+
+    //Check if basket is not empty means there are items for free
+    private function isEligibleForFreePass($invoiceItems, $invoiceTotal)
+    {
+        if ($invoiceTotal != 0 ) {
+            return false;
+        }
+
+        return (count($invoiceItems) > 0);
+    }
+
+
+    /**
+     * Accept paid=0.00 for free items like Tickets
+     */
+    public function proceedFreeTickets()
+    {
+        $this->invoiceStore = Store::get('Invoice');
+        $purchase = (int)$this->getParam('purchase', 0);
+
+        /** @type \Octo\Invoicing\Model\Invoice $invoice */
+        $invoice = $this->invoiceStore->getByUuid($this->getParam('uniqueid'));
+
+        /** @var \Octo\Invoicing\Model\Item[] $invoiceItems */
+        $invoiceItems = $this->getInvoiceService()->getItems($invoice);
+
+
+        if ($invoice && $this->isEligibleForFreePass($invoiceItems, $invoice->getTotal()) && $purchase == 0) {
+            $invoiceService = $this->getInvoiceService();
+            $invoiceService->registerPayment($invoice, $purchase);
+
+            //Clear Basket
+            $this->lineItemStore = Store::get('LineItem');
+            /** @type \Octo\Invoicing\Model\LineItem[]  $items */
+            $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
+
+            foreach($items as $item) {
+                $basket = $item->getBasket();
+                if(!empty($basket) && is_numeric($basket->getId())) {
+                    $this->lineItemStore->emptyShopBasket($item->Basket);
+                }
+            }
+
+            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getUuid().'";</script>');
+        }
+
+        header('Location: /checkout/failed');
+        die;
+    }
+
 
     public function thanks($invoiceUuid)
     {
@@ -249,6 +311,7 @@ class CheckoutController extends Controller
         $view = Template::getPublicTemplate('Checkout/thanks');
         $view->invoice = $invoice;
         /*
+         * Not used
         $view->items = $this->getInvoiceService()->getItems($invoice);
         $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
