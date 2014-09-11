@@ -16,7 +16,6 @@ use Octo\Utilities\StringUtilities;
 
 class ShopController extends Controller
 {
-
     /**
      * @var \Octo\Invoicing\Store\ItemStore
      */
@@ -120,26 +119,6 @@ class ShopController extends Controller
         $this->view->categories = $this->categoryStore->getAllForParent($categoryId);
     }
 
-
-    /**
-     * Check if title is unique for product in category
-     * @param $title
-     * @param $category
-     * @param null $itemId
-     * @return bool
-     */
-    protected function isUniqueSlugInCategory($title, $category, $itemId = null)
-    {
-        $slug = StringUtilities::generateSlug($title);
-
-        $isUnique = $this->productStore->getBySlugAndCategory($slug, $category, false);
-
-        if(!empty($isUnique) && !empty($itemId)) {
-            return $isUnique->getId() == $itemId;
-        }
-
-        return empty($isUnique);
-    }
 
     public function addProduct()
     {
@@ -458,6 +437,13 @@ class ShopController extends Controller
         $field->setClass('select2');
         $fieldset->addField($field);
 
+        $field = new Form\Element\Text('destination_code');
+        $field->setRequired(true);
+        $field->setLabel('ThankQ Destination code');
+        $field->setPattern('.{1,20}');
+        $fieldset->addField($field);
+
+
         $field = new Form\Element\TextArea('short_description');
         $field->setRequired(false);
         $field->setLabel('Short Description (optional)');
@@ -521,4 +507,27 @@ class ShopController extends Controller
             }
         }
     }
+
+
+    /**
+     * Check if title is unique for product in category
+     * @param $title
+     * @param $category
+     * @param null $itemId
+     * @return bool
+     */
+    protected function isUniqueSlugInCategory($title, $category, $itemId = null)
+    {
+        $slug = StringUtilities::generateSlug($title);
+
+        $isUnique = $this->productStore->getBySlugAndCategory($slug, $category, false);
+
+        if(!empty($isUnique) && !empty($itemId)) {
+            return $isUnique->getId() == $itemId;
+        }
+
+        return empty($isUnique);
+    }
+
+
 }
