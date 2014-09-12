@@ -23,11 +23,9 @@
 
                                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-
-
                                     {if (can_access uri: "/item/delete")}
                                     <li>
-                                        <a href="/{@adminUri}/item/delete/{@value.id}">Delete</a>
+                                        <a href="/{@adminUri}/item/delete/{@value.id}" class="btn-delete">Delete</a>
                                     </li>
                                     {/if}
                                 </ul>
