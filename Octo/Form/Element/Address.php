@@ -29,7 +29,7 @@ class Address extends FieldSet
         $address1 = new Element\Text($address1);
         $address1->setRequired(true);
         $address1->setLabel('Address 1');
-        $address1->setPattern('.{2,100}');
+        $address1->setPattern("(^[a-zA-Z0-9 \.\_\-\@\$\'\:\,]{2,100}$)");
 
         $town = new Element\Text($town);
         $town->setRequired(true);
