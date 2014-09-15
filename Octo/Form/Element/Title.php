@@ -8,7 +8,7 @@ class Title extends Select
     public function __construct($name = null)
     {
         parent::__construct($name);
-        $this->setPattern('(mr|mrs|miss|ms|dr|prof)');
+        $this->setPattern('(mr|mrs|miss|ms|dr|prof|reverend|sir|lady)');
         $this->setOptions([
             'mr' => 'Mr',
             'mrs' => 'Mrs',
@@ -16,6 +16,9 @@ class Title extends Select
             'ms' => 'Ms',
             'dr' => 'Doctor',
             'prof' => 'Professor',
+            'reverend' => 'Reverend',
+            'sir' => 'Sir',
+            'lady' => 'Lady'
         ]);
     }
 }
