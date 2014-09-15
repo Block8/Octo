@@ -90,6 +90,7 @@ class CheckoutController extends Controller
             if(isset($myParams['same_as_billing']) && $myParams['same_as_billing'] == "1") {
                 $myParams['shipping_address'] = $myParams['billing_address'];
             }
+
             $form->setValues($myParams);
 
             if($form->validate()) {
@@ -400,20 +401,17 @@ class CheckoutController extends Controller
         $name = new Form\Element\Text('company');
         $name->setRequired(false);
         $name->setLabel('Company');
-
         $fieldset->addField($name);
 
         $name = new Form\Element\Email('email');
         $name->setRequired(true);
         $name->setLabel('Email Address');
-        $name->setPattern('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$');
-
+        $name->setPattern('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$');
         $fieldset->addField($name);
 
         $name = new FormElement\Element\Phone('phone');
         $name->setRequired(true);
         $name->setLabel('Phone Number');
-
         $fieldset->addField($name);
 
         $fieldset = new Form\FieldSet('billing_address');
