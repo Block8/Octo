@@ -34,7 +34,7 @@ class Address extends FieldSet
         $town = new Element\Text($town);
         $town->setRequired(true);
         $town->setLabel('Town');
-        $town->setPattern('^[A-Za-z0-9- ]{2,40}$');
+        $town->setPattern('^[A-Za-z0-9\- \.\,\']{2,40}$');
 
         $postcode = new Element\Text($postcode);
         $postcode->setRequired(true);
