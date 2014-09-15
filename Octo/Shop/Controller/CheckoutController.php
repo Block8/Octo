@@ -5,6 +5,7 @@ namespace Octo\Shop\Controller;
 use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
 use HMUK\Utilities\PostageCalculator;
+use Katzgrau\KLogger\Logger;
 use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
@@ -16,6 +17,7 @@ use Octo\Shop\Service\ShopService;
 use Octo\Store;
 use Octo\Template;
 use Octo\System\Model\Contact;
+use Psr\Log\LogLevel;
 
 class CheckoutController extends Controller
 {
@@ -143,6 +145,9 @@ class CheckoutController extends Controller
 
                 header('Location: /checkout/invoice/' . $invoice->getUuid());
                 die;
+            } else {
+                $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
+                $log->debug('Contact validation failed: ', $form->getValues());
             }
         }
         $view = Template::getPublicTemplate('Checkout/details');
@@ -237,7 +242,7 @@ class CheckoutController extends Controller
     }
 
 
-    //Check if basket is not empty means there are items for free
+    //Check Basket - if is not empty means there are items for free
     private function isEligibleForFreePass($invoiceItems, $invoiceTotal)
     {
         if ($invoiceTotal != 0 ) {

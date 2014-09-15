@@ -71,12 +71,18 @@ class RsmGatewayController extends Controller
             $this->logRSM2000Errors($invoice_id, $errorCode .': '.$errorMessage);
         }
 
+
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
         if (!empty($errorCode) && !empty($invoice_id)) {
             $this->invoiceStore = Store::get('Invoice');
 
-            /** @type \Octo\Invoicing\Model\Invoice */
+            /** @type \Octo\Invoicing\Model\Invoice $invoice */
             $invoice = $this->invoiceStore->getById($invoice_id);
+
+            if ($errorCode >= 2000 && $errorCode < 3000) {
+                $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
+                $log->debug('Contact validation failed for RSM2000: ', $this->getParams());
+            }
 
             if ((int)$errorCode == 1014) {
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
