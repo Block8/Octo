@@ -78,6 +78,12 @@ class TemplateFunctions extends Listener
 
                 return false;
             });
+        $template->addFunction('remove_quotes', function ($args, &$view) {
+            $value = $view->getVariable($args['value']);
+
+            return str_replace('"', "", $value);
+        });
+
     }
 
     /**
