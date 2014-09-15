@@ -4,6 +4,7 @@ namespace Octo\GatewayRSM2000\Controller;
 
 use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
+use Katzgrau\KLogger\Logger;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
@@ -14,6 +15,7 @@ use Octo\Shop\Service\ShopService;
 use Octo\Store;
 use Octo\System\Model\Log;
 use Octo\Template;
+use Psr\Log\LogLevel;
 
 class RsmGatewayController extends Controller
 {
