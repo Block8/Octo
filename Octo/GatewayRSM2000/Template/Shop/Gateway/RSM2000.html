@@ -1,5 +1,6 @@
 <form id="widget_data_form" action="{@rsm.widget_url}" target="cp_widget" method="post" class="auto-form">
     <input type="hidden" name="vendorid" value="{@rsm.vendor_id}">
+    <input type="hidden" name="title" value="{@invoice.Contact.title}">
     <input type="hidden" name="firstname" value="{remove_quotes value: invoice.Contact.first_name}">
     <input type="hidden" name="surname" value="{remove_quotes value: invoice.Contact.last_name}">
     <input type="hidden" name="address1" value="{remove_quotes value: billingAddress.address1}">
