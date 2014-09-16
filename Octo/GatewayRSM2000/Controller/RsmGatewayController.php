@@ -29,6 +29,11 @@ class RsmGatewayController extends Controller
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function success()
     {
+        if ($this->config->get('debug.rsm')) {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('Contact validation failed: ', $this->getParams());
+        }
+
         $this->invoiceStore = Store::get('Invoice');
 
         /** @type \Octo\Invoicing\Model\Invoice $invoice */
