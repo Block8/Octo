@@ -14,5 +14,41 @@ class InvoiceAdjustmentStore extends Octo\Store
 {
     use Base\InvoiceAdjustmentStoreBase;
 
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    /**
+     * Process donation amount
+     * @param $invoice
+     * @return float DonationAmount
+     */
+    public function getDonationAmount($invoiceId)
+    {
+        /** @var \Octo\Invoicing\Model\InvoiceAdjustment[] $adjustments */
+        $adjustments = $this->getByInvoiceId($invoiceId);
+
+        $donationAmount = 0.00;
+        foreach ($adjustments as $adjustment) {
+            if ($adjustment->getScope() == 'donation') {
+                $donationAmount = $adjustment->getDisplayValue();
+            }
+        }
+        return $donationAmount;
+    }
+
+
+    /**
+     * Check if GiftAid declaration Yes
+     * @param Invoice $invoice
+     * @return bool
+     */
+    public function isGiftAid($invoiceId)
+    {
+        $adjustments = $this->getByInvoiceId($invoiceId);
+
+        foreach ($adjustments as $adjustment) {
+            if ($adjustment->getScope() == 'donation' && $adjustment->getGiftAid() == 1) {
+                    return true;
+            }
+        }
+        return false;
+    }
+
 }
