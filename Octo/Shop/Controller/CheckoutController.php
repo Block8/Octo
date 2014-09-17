@@ -307,8 +307,8 @@ class CheckoutController extends Controller
         $view = Template::getPublicTemplate('Checkout/thanks');
 
 
-        $view->title    = $_SESSION['title'];
-        $view->forename = $_SESSION['forename'];
+        $view->title    = ucfirst($_SESSION['title']);
+        $view->forename = $_SESSION['firstname'];
         $view->surname  = $_SESSION['surname'];
 
         $blockManager = $this->getBlockManager($view);

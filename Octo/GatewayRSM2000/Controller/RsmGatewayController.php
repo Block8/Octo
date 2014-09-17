@@ -30,6 +30,12 @@ class RsmGatewayController extends Controller
     /* $_POST 'IdentityCheck', 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function successCallback()
     {
+        if ($this->config->get('debug.rsm')) {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('SuccessCallback, POST=: ', $this->getParams());
+        }
+
+
         $identityCheck = $this->getParam('IdentityCheck', null);
         $postData = $this->getParams();
         unset($postData['IdentityCheck']);
@@ -104,7 +110,7 @@ class RsmGatewayController extends Controller
 
             session_start();
             $_SESSION['title'] = $this->getParam('title');
-            $_SESSION['forename'] = $this->getParam('forename', '');
+            $_SESSION['forename'] = $this->getParam('firstname', '');
             $_SESSION['surname'] = $this->getParam('surname', '');
 
             die('<script>top.window.location.href="/checkout/thanks/";</script>');
