@@ -291,37 +291,26 @@ class CheckoutController extends Controller
         die;
     }
 
-
-    public function thanks($invoiceUuid)
+    /**
+     * Redirection from RSM2000 with title, forename, surname after success payment
+     * @return string
+     */
+    public function thanks()
     {
-        if (strlen($invoiceUuid) != Invoice::UUID_LENGTH) {
-            header('Location: /');
-            die;
+        session_start();
+
+        if ($this->config->get('debug.rsm')) {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('Thanks page after success Redirect SESSION=: ', $_SESSION);
         }
-
-        $this->invoiceStore = Store::get('Invoice');
-        /** @var \Octo\Invoicing\Model\Invoice $invoice */
-        $invoice = $this->invoiceStore->getByUuid($invoiceUuid);
-
-        if (is_null($invoice)) {
-            throw new NotFoundException('There is no invoice with Uuid: ' . $invoiceUuid);
-        }
-
-        if ($invoice->getInvoiceStatusId() == Invoice::STATUS_NEW) {
-            //TODO: Add check date
-            header('Location: /');
-            die;
-        }
-
 
         $view = Template::getPublicTemplate('Checkout/thanks');
-        $view->invoice = $invoice;
-        /*
-         * Not used
-        $view->items = $this->getInvoiceService()->getItems($invoice);
-        $view->billingAddress = json_decode($invoice->getBillingAddress(), true);
-        $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
-        */
+
+
+        $view->title    = $_SESSION['title'];
+        $view->forename = $_SESSION['forename'];
+        $view->surname  = $_SESSION['surname'];
+
         $blockManager = $this->getBlockManager($view);
 
         $output = $view->render();
@@ -338,6 +327,11 @@ class CheckoutController extends Controller
 
     public function failed()
     {
+        if ($this->config->get('debug.rsm')) {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('Failed page after failed redirect POST=: ', $this->getParams());
+        }
+
         $view = Template::getPublicTemplate('Checkout/failed');
         $blockManager = $this->getBlockManager($view);
         $output = $view->render();

@@ -26,12 +26,73 @@ class RsmGatewayController extends Controller
      */
     protected $invoiceStore;
 
+
+    /* $_POST 'IdentityCheck', 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
+    public function successCallback()
+    {
+        $identityCheck = $this->getParam('IdentityCheck', null);
+        $postData = $this->getParams();
+        unset($postData['IdentityCheck']);
+        $rawPost = http_build_query($postData);
+
+        $sha1 = sha1(urldecode($rawPost) . $this->config->get('rsm.key'));
+
+        if ($sha1 == $identityCheck) {
+
+            $this->invoiceStore = Store::get('Invoice');
+
+            /** @type \Octo\Invoicing\Model\Invoice $invoice */
+            $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
+
+            if ($invoice) {
+                $invoiceService = $this->getInvoiceService();
+                $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
+
+                //Clear Basket
+                $this->lineItemStore = Store::get('LineItem');
+                /** @type \Octo\Invoicing\Model\LineItem[]  $items */
+                $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
+
+                foreach($items as $item) {
+                    $basket = $item->getBasket();
+                    if(!empty($basket) && is_numeric($basket->getId())) {
+                        $this->lineItemStore->emptyShopBasket($item->Basket);
+                    }
+                }
+
+                //TODO: Clear unpaid Invoices with the same basketId
+
+            }
+
+        } else {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('Sha1:: ' . $sha1 . ' should be equal to IdentityCheck:: ' . $identityCheck);
+        }
+
+
+        die;
+    }
+
+
+    public function failedCallback()
+    {
+        //TODO: write to DB log with failed payment
+        if ($this->config->get('debug.rsm')) {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('Failed Callback, POST=: ', $this->getParams());
+        }
+        die;
+    }
+
+
+
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
+
     public function success()
     {
         if ($this->config->get('debug.rsm')) {
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
-            $log->debug('Contact validation failed: ', $this->getParams());
+            $log->debug('Success Redirect POST=: ', $this->getParams());
         }
 
         $this->invoiceStore = Store::get('Invoice');
@@ -39,23 +100,14 @@ class RsmGatewayController extends Controller
         /** @type \Octo\Invoicing\Model\Invoice $invoice */
         $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
 
-        if ($invoice) {
-            $invoiceService = $this->getInvoiceService();
-            $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
+        if ($invoice && ($invoice->getTotalPaid() == $invoice->getTotal())) {
 
-            //Clear Basket
-            $this->lineItemStore = Store::get('LineItem');
-            /** @type \Octo\Invoicing\Model\LineItem[]  $items */
-            $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
+            session_start();
+            $_SESSION['title'] = $this->getParam('title');
+            $_SESSION['forename'] = $this->getParam('forename', '');
+            $_SESSION['surname'] = $this->getParam('surname', '');
 
-            foreach($items as $item) {
-                $basket = $item->getBasket();
-                if(!empty($basket) && is_numeric($basket->getId())) {
-                    $this->lineItemStore->emptyShopBasket($item->Basket);
-                }
-            }
-
-            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getUuid().'";</script>');
+            die('<script>top.window.location.href="/checkout/thanks/";</script>');
         }
 
         header('Location: /checkout/failed');
@@ -65,6 +117,11 @@ class RsmGatewayController extends Controller
     /* $_POST 'acccountno', Array of errors and error codes errors[0][code] errors[0][message]*/
     public function failed()
     {
+        if ($this->config->get('debug.rsm')) {
+            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
+            $log->debug('Failed redirection POST=: ', $this->getParams());
+        }
+
         $message = 'There was a problem.';
         $class = 'warning';
         $errors = $this->getParam('errors', null);
