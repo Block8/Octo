@@ -93,7 +93,7 @@ class RsmGatewayController extends Controller
 
 
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
-
+    /*WatchOut: Here they post firstname not forename*/
     public function success()
     {
         if ($this->config->get('debug.rsm')) {
@@ -110,7 +110,7 @@ class RsmGatewayController extends Controller
 
             session_start();
             $_SESSION['title'] = $this->getParam('title');
-            $_SESSION['forename'] = $this->getParam('firstname', '');
+            $_SESSION['firstname'] = $this->getParam('firstname', '');
             $_SESSION['surname'] = $this->getParam('surname', '');
 
             die('<script>top.window.location.href="/checkout/thanks/";</script>');
