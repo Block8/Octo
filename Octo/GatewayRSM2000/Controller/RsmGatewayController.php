@@ -156,7 +156,7 @@ class RsmGatewayController extends Controller
 
             if ($errorCode >= 2000 && $errorCode < 3000) {
                 $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
-                $log->debug('Contact validation failed for RSM2000: ', $this->getParams());
+                $log->debug('Contact validation failed for RSM2000: ', $this->request->getParams());
             }
 
             if ($errorCode == 1014) {
@@ -192,29 +192,29 @@ class RsmGatewayController extends Controller
     protected function logRSM2000Operation($post, $type="callback")
     {
         $rsm2000log = new Rsm2000Log();
-        $rsm2000log->setInvoiceId($post['uniqueid]']);
-        $rsm2000log->setDonation($post['donation']);
-        $rsm2000log->setPurchase($post['purchase']);
-        $rsm2000log->setTransId($post['transId']);
-        $rsm2000log->setCardType($post['cardType']);
+        $rsm2000log->setInvoiceId($this->getParam('uniqueid', null));
+        $rsm2000log->setDonation($this->getParam('donation', null));
+        $rsm2000log->setPurchase($this->getParam('purchase', null));
+        $rsm2000log->setTransId($this->getParam('transId', null));
+        $rsm2000log->setCardType($this->getParam('cardType', null));
 
         if ($type == "callback") {
-            $rsm2000log->setRawAuthMessage($post['rawAuthMessage']);
-            $rsm2000log->setTransTime($post['transTime']);
-            $rsm2000log->setTransStatus($post['transStatus']);
-            $rsm2000log->setBaseStatus($post['baseStatus']);
+            $rsm2000log->setRawAuthMessage($this->getParam('rawAuthMessage', null));
+            $rsm2000log->setTransTime($this->getParam('transTime', null));
+            $rsm2000log->setTransStatus($this->getParam('transStatus', null));
+            $rsm2000log->setBaseStatus($this->getParam('baseStatus', null));
         } elseif ($type == "redirect-fail") {
         //Redirect
-            $rsm2000log->setRawAuthMessage(var_export($post['errors'], true));
+            $rsm2000log->setRawAuthMessage(var_export($this->getParam('errors'), true));
             $rsm2000log->setTransTime(time());
             $rsm2000log->setTransStatus('');
-            $rsm2000log->setBaseStatus($post['status']);
+            $rsm2000log->setBaseStatus($this->getParam('status', null));
         } else {
             //Redirect success
             $rsm2000log->setRawAuthMessage('');
-            $rsm2000log->setTransTime($post['transTime']);
+            $rsm2000log->setTransTime($this->getParam('transTime', null));
             $rsm2000log->setTransStatus('');
-            $rsm2000log->setBaseStatus($post['status']);
+            $rsm2000log->setBaseStatus($this->getParam('status', null));
         }
 
         Store::get('Rsm2000Log')->save($rsm2000log);
