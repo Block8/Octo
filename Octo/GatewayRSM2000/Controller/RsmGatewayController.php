@@ -8,6 +8,7 @@ use Katzgrau\KLogger\Logger;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
+use Octo\GatewayRSM2000\Model\Rsm2000Log;
 use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
 use Octo\Shop\Store\ShopBasketStore;
@@ -35,6 +36,7 @@ class RsmGatewayController extends Controller
             $log->debug('SuccessCallback, POST=: ', $this->getParams());
         }
 
+        $this->logRSM2000Operation($this->getParams(), "callback");
 
         $identityCheck = $this->getParam('IdentityCheck', null);
         $postData = $this->getParams();
@@ -75,7 +77,6 @@ class RsmGatewayController extends Controller
             $log->debug('Sha1:: ' . $sha1 . ' should be equal to IdentityCheck:: ' . $identityCheck);
         }
 
-
         die;
     }
 
@@ -87,9 +88,11 @@ class RsmGatewayController extends Controller
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('Failed Callback, POST=: ', $this->getParams());
         }
+
+        $this->logRSM2000Operation($this->getParams(), "callback");
+
         die;
     }
-
 
 
     /* $_POST 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
@@ -100,6 +103,8 @@ class RsmGatewayController extends Controller
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('Success Redirect POST=: ', $this->getParams());
         }
+
+        $this->logRSM2000Operation($this->getParams(), "redirect-success");
 
         $this->invoiceStore = Store::get('Invoice');
 
@@ -120,7 +125,7 @@ class RsmGatewayController extends Controller
         die;
     }
 
-    /* $_POST 'acccountno', Array of errors and error codes errors[0][code] errors[0][message]*/
+    /* $_POST 'uniqueid', Array of errors and error codes errors[0][code] errors[0][message]*/
     public function failed()
     {
         if ($this->config->get('debug.rsm')) {
@@ -128,19 +133,19 @@ class RsmGatewayController extends Controller
             $log->debug('Failed redirection POST=: ', $this->getParams());
         }
 
+        $this->logRSM2000Operation($this->getParams(), "redirect-fail");
+
         $message = 'There was a problem.';
         $class = 'warning';
         $errors = $this->getParam('errors', null);
 
-        $invoice_id = $this->getParam('acccountno', null);
+        $invoice_id = $this->getParam('uniqueid', null);
 
         if (!empty($errors) && count($errors)>0) {
             $errorCode = $errors[0]['code'];
             $errorMessage = $errors[0]['message'];
             $message = $errorMessage;
-            $this->logRSM2000Errors($invoice_id, $errorCode .': '.$errorMessage);
         }
-
 
         //Error: 1014 - Unique ID has been used before. /Invoice is paid?
         if (!empty($errorCode) && !empty($invoice_id)) {
@@ -154,7 +159,7 @@ class RsmGatewayController extends Controller
                 $log->debug('Contact validation failed for RSM2000: ', $this->getParams());
             }
 
-            if ((int)$errorCode == 1014) {
+            if ($errorCode == 1014) {
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
                     //$class = 'success';
                     //$message = 'That invoice is marked as paid.';
@@ -167,29 +172,52 @@ class RsmGatewayController extends Controller
                     $message = '<p>Payment gateway will not process this transaction anymore.</p>';
                     $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
                 }
-            } elseif ((int)$errorCode == 3001) {
-            //3001: User cancelled transaction.
-                $class = 'warning';
-                $message = '<p>You cancelled transaction.</p>';
-                $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
             }
 
+        } elseif (!empty($errorCode) && $errorCode == 3001) {
+            //3001: User cancelled transaction.
+            $class = 'warning';
+            $message = '<p>You cancelled transaction.</p>';
+            $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
         }
+
         echo '<div class="alert alert-'.$class.'" role="alert">'.$message.'</div>';
     }
 
     /**
-     * Log errors from RSM2000 to DB
-     * @param int $invoice_id
-     * @param string $errorMessage
+     * Log error from RSM2000 failed payment to DB
+     * @param array $post
+     * @param string $type
      */
-    protected function logRSM2000Errors($invoice_id=0, $errorMessage='')
+    protected function logRSM2000Operation($post, $type="callback")
     {
-        $log = Log::create(Log::TYPE_ERROR, 'rsm2000', $errorMessage);
-        $log->setUser(1);
-        $log->setScopeId($invoice_id);
-        $log->setLink('rsm-gateway/failed');
-        $log->save();
+        $rsm2000log = new Rsm2000Log();
+        $rsm2000log->setInvoiceId($post['uniqueid]']);
+        $rsm2000log->setDonation($post['donation']);
+        $rsm2000log->setPurchase($post['purchase']);
+        $rsm2000log->setTransId($post['transId']);
+        $rsm2000log->setCardType($post['cardType']);
+
+        if ($type == "callback") {
+            $rsm2000log->setRawAuthMessage($post['rawAuthMessage']);
+            $rsm2000log->setTransTime($post['transTime']);
+            $rsm2000log->setTransStatus($post['transStatus']);
+            $rsm2000log->setBaseStatus($post['baseStatus']);
+        } elseif ($type == "redirect-fail") {
+        //Redirect
+            $rsm2000log->setRawAuthMessage(var_export($post['errors'], true));
+            $rsm2000log->setTransTime(time());
+            $rsm2000log->setTransStatus('');
+            $rsm2000log->setBaseStatus($post['status']);
+        } else {
+            //Redirect success
+            $rsm2000log->setRawAuthMessage('');
+            $rsm2000log->setTransTime($post['transTime']);
+            $rsm2000log->setTransStatus('');
+            $rsm2000log->setBaseStatus($post['status']);
+        }
+
+        Store::get('Rsm2000Log')->save($rsm2000log);
     }
 
 
@@ -202,4 +230,5 @@ class RsmGatewayController extends Controller
 
         return new InvoiceService($invoiceStore, $adjustmentStore, $itemStore, $lineStore);
     }
+
 }
