@@ -2,6 +2,9 @@
 
 namespace Octo\Shop\Service;
 
+use b8\Config;
+use Katzgrau\KLogger\Logger;
+use Octo\Store;
 use Octo\System\Model\Contact;
 use Octo\Invoicing\Model\LineItem;
 use Octo\Invoicing\Service\InvoiceService;
@@ -11,6 +14,7 @@ use Octo\Invoicing\Store\LineItemStore;
 use Octo\Shop\Model\ShopBasket;
 use Octo\Shop\Store\ItemVariantStore;
 use Octo\Shop\Store\ShopBasketStore;
+use Psr\Log\LogLevel;
 
 class ShopService
 {
@@ -123,13 +127,33 @@ class ShopService
         return $lineItem;
     }
 
+    /**
+     * Create a new invoice or use generated for the same BasketId, ContactId and unpaid invoice
+     * @param InvoiceService $service
+     * @param ShopBasket $basket
+     * @param Contact $contact
+     * @return \Octo\Invoicing\Model\Invoice
+     */
     public function createInvoiceForBasket(InvoiceService $service, ShopBasket $basket, Contact $contact)
     {
         $orderTitle = 'Order (Basket #' . $basket->getId() . ')';
-        $invoice = $service->createInvoice($orderTitle, $contact, new \DateTime(), null);
+
+        //Try to avoid creating new invoice for the same basket, same contact, and unpaid invice
+        $isInvoice = Store::get('Invoice')->getInvoiceAlreadyCreated($orderTitle, $contact);
+
+        $this->config = Config::getInstance();
+        $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
+        $log->debug('Found invoice? Id=' . ($isInvoice ? $isInvoice->getId() : 'not found'));
+
+        if ($isInvoice) {
+            $invoice = $isInvoice;
+        } else {
+            $invoice = $service->createInvoice($orderTitle, $contact, new \DateTime(), null);
+        }
         $this->lineStore->copyBasketToInvoice($basket, $invoice);
         $service->updateSubtotal($invoice);
 
         return $invoice;
     }
+
 }
