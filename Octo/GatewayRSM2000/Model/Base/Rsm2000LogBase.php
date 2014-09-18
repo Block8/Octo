@@ -52,6 +52,9 @@ trait Rsm2000LogBase
         $this->data['created_at'] = null;
         $this->getters['created_at'] = 'getCreatedAt';
         $this->setters['created_at'] = 'setCreatedAt';
+        $this->data['security_pass'] = null;
+        $this->getters['security_pass'] = 'getSecurityPass';
+        $this->setters['security_pass'] = 'setSecurityPass';
 
         // Foreign keys:
     }
@@ -183,6 +186,18 @@ trait Rsm2000LogBase
     public function getCreatedAt()
     {
         $rtn = $this->data['created_at'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of SecurityPass / security_pass.
+    *
+    * @return int
+    */
+    public function getSecurityPass()
+    {
+        $rtn = $this->data['security_pass'];
 
         return $rtn;
     }
@@ -377,5 +392,24 @@ trait Rsm2000LogBase
 
         $this->data['created_at'] = $value;
         $this->setModified('created_at');
+    }
+
+    /**
+    * Set the value of SecurityPass / security_pass.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setSecurityPass($value)
+    {
+        $this->validateNotNull('SecurityPass', $value);
+        $this->validateInt('SecurityPass', $value);
+
+        if ($this->data['security_pass'] === $value) {
+            return;
+        }
+
+        $this->data['security_pass'] = $value;
+        $this->setModified('security_pass');
     }
 }

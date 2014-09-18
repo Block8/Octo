@@ -31,27 +31,11 @@ class RsmGatewayController extends Controller
     /* $_POST 'IdentityCheck', 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function successCallback()
     {
-        //disable additional buffering which occurs in Apache:
-        apache_setenv('no-gzip', 1);
-        ini_set('zlib.output_compression', 0);
-        ini_set('implicit_flush', 1);
-
-        ignore_user_abort(true);
-        $response = "OK";
-        header("Connection: close");
-        header("Content-Length: " . mb_strlen($response));
-        echo $response;
-        flush(); // releasing the browser from waiting
-        session_write_close(); // Added a line suggested in the comment
-        set_time_limit(0);
-
         if ($this->config->get('debug.rsm')) {
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('SuccessCallback, POST=: ', $this->getParams());
         }
 
-        $this->logRSM2000Operation($this->getParams(), "callback");
-        set_time_limit(0);
 
         $identityCheck = $this->getParam('IdentityCheck', null);
         $postData = $this->getParams();
@@ -59,6 +43,9 @@ class RsmGatewayController extends Controller
         $rawPost = http_build_query($postData);
 
         $sha1 = sha1(urldecode($rawPost) . $this->config->get('rsm.key'));
+
+        $this->logRSM2000Operation($this->getParams(), "callback", ($sha1 == $identityCheck));
+
 
         if ($sha1 == $identityCheck) {
 
@@ -91,6 +78,9 @@ class RsmGatewayController extends Controller
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('Sha1:: ' . $sha1 . ' should be equal to IdentityCheck:: ' . $identityCheck);
         }
+
+
+        set_time_limit(0);
 
         die;
     }
@@ -203,12 +193,14 @@ class RsmGatewayController extends Controller
      * @param array $post
      * @param string $type
      */
-    protected function logRSM2000Operation($post, $type="callback")
+    protected function logRSM2000Operation($post, $type="callback", $securityPass=null)
     {
         $rsm2000log = new Rsm2000Log();
         $rsm2000log->setInvoiceId($this->getParam('uniqueid', null));
         $rsm2000log->setDonation($this->getParam('donation', null));
         $rsm2000log->setPurchase($this->getParam('purchase', null));
+        $rsm2000log->setSecurityPass($securityPass);
+
 
         if ($type == "callback") {
             $rsm2000log->setCardType($this->getParam('cardType', null));
