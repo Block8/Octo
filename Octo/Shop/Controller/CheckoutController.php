@@ -264,6 +264,17 @@ class CheckoutController extends Controller
         /** @type \Octo\Invoicing\Model\Invoice $invoice */
         $invoice = $this->invoiceStore->getByUuid($this->getParam('uniqueid'));
 
+        session_start();
+        $_SESSION['title'] = $invoice->getContact()->getTitle();
+        $_SESSION['firstname'] = $invoice->getContact()->getFirstName();
+        $_SESSION['surname'] = $invoice->getContact()->getLastName();
+
+        if ($invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
+            //Do not need to proccess invoice anymore
+            die('<script>top.window.location.href="/checkout/thanks/";</script>');
+        }
+
+
         /** @var \Octo\Invoicing\Model\Item[] $invoiceItems */
         $invoiceItems = $this->getInvoiceService()->getItems($invoice);
 
@@ -283,10 +294,7 @@ class CheckoutController extends Controller
                     $this->lineItemStore->emptyShopBasket($item->Basket);
                 }
             }
-            session_start();
-            $_SESSION['title'] = $invoice->getContact()->getTitle();
-            $_SESSION['firstname'] = $invoice->getContact()->getFirstName();
-            $_SESSION['surname'] = $invoice->getContact()->getLastName();
+
 
             die('<script>top.window.location.href="/checkout/thanks/";</script>');
         }
