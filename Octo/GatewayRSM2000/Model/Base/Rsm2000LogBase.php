@@ -49,6 +49,9 @@ trait Rsm2000LogBase
         $this->data['base_status'] = null;
         $this->getters['base_status'] = 'getBaseStatus';
         $this->setters['base_status'] = 'setBaseStatus';
+        $this->data['created_at'] = null;
+        $this->getters['created_at'] = 'getCreatedAt';
+        $this->setters['created_at'] = 'setCreatedAt';
 
         // Foreign keys:
     }
@@ -168,6 +171,18 @@ trait Rsm2000LogBase
     public function getBaseStatus()
     {
         $rtn = $this->data['base_status'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of CreatedAt / created_at.
+    *
+    * @return string
+    */
+    public function getCreatedAt()
+    {
+        $rtn = $this->data['created_at'];
 
         return $rtn;
     }
@@ -343,5 +358,24 @@ trait Rsm2000LogBase
 
         $this->data['base_status'] = $value;
         $this->setModified('base_status');
+    }
+
+    /**
+    * Set the value of CreatedAt / created_at.
+    *
+    * Must not be null.
+    * @param $value string
+    */
+    public function setCreatedAt($value)
+    {
+        $this->validateNotNull('CreatedAt', $value);
+        $this->validateString('CreatedAt', $value);
+
+        if ($this->data['created_at'] === $value) {
+            return;
+        }
+
+        $this->data['created_at'] = $value;
+        $this->setModified('created_at');
     }
 }

@@ -1,0 +1,72 @@
+<!-- Working one -->
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Log browser</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="rsm2000" class="table table-bordered table-condensed table-responsive" aria-describedby="rsm2000_info">
+                <thead>
+                <tr role="row">
+                    <th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Invoice id: activate to sort column descending">InvoiceId</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Status of transaction: activate to sort column ascending">Status</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Transaction Id: activate to sort column ascending">Trans Id</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Donation amount: activate to sort column ascending">Donation</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Purchase amount: activate to sort column ascending">Purchase</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Card type : activate to sort column ascending">CardType</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Created at : activate to sort column ascending">Created at</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="rsm2000" rowspan="1" colspan="1" aria-label="Auth message : activate to sort column ascending">Auth message</th>
+                </tr>
+                </thead>
+                <tbody role="alert" aria-live="polite" aria-relevant="all">
+                {for rsm2000logs}
+                <tr {if value.base_status = "SUCCESS"} class="success"{/if}{if value.base_status = "FAIL"} class="danger"{/if}{if value.base_status = "INVALID"} class="warning"{/if}>
+                    <td><a href="/{@adminUri}/invoice/view/{@value.invoice_id}" title="Go to invoice">{@value.invoice_id}</a></td>
+                    <td>{@value.base_status}</td>
+                    <td>{@value.trans_id}</td>
+                    <td>{@value.donation}</td>
+                    <td>{@value.purchase}</td>
+                    <td>{@value.card_type}</td>
+                    <td>{@value.created_at}</td>
+                    <td>{@value.raw_auth_message}</td>
+                </tr>
+                {/for}
+                </tbody>
+            </table>
+
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <h4>Key:</h4>
+        <dl class="dl-horizontal">
+            <dt><span class="label label-success">SUCCESS</span></dt>
+            <dd>RSM2000 accepted payment from Customer.</dd>
+            <dt><span class="label label-danger">INVALID</span></dt>
+            <dd>RSM2000 has problem with Customer card/payment.</dd>
+            <dt><span class="label label-warning">FAIL</span></dt>
+            <dd>Transaction was not succeeded due to user.</dd>
+            <dt><span class="label" style="background-color: #ffffff;color: #000000;">OK</span></dt>
+            <dd>Transaction success, customer clicked Continue.</dd>
+        </dl>
+    </div>
+</div>
+        <script>
+            $(document).ready(function() {
+                $('#rsm2000').dataTable({
+                    "bPaginate": true,
+                    "bLengthChange": true,
+                    "bFilter": true,
+                    "bSort": true,
+                    "bInfo": true,
+                    "bAutoWidth": false,
+                    "iDisplayLength": 50
+
+                });
+            } );
+        </script>

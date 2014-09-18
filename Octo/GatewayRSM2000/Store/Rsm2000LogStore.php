@@ -5,6 +5,8 @@
 
 namespace Octo\GatewayRSM2000\Store;
 
+use b8\Database;
+use b8\Database\Query;
 use Octo;
 
 /**
@@ -14,5 +16,13 @@ class Rsm2000LogStore extends Octo\Store
 {
     use Base\Rsm2000LogStoreBase;
 
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    public function getAll()
+    {
+        //TODO: Why getNamespace does not work?
+        $query = new Query('Octo\GatewayRSM2000\Model\Rsm2000Log');
+        $query->select('*')->from('rsm2000_log');
+        $query->order('id', 'DESC');
+
+        return $query->execute()->fetchAll();
+    }
 }
