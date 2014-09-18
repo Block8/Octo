@@ -21,7 +21,7 @@ class Rsm2000LogStore extends Octo\Store
         //TODO: Why getNamespace does not work?
         $query = new Query('Octo\GatewayRSM2000\Model\Rsm2000Log');
         $query->select('*')->from('rsm2000_log');
-        $query->order('id', 'DESC');
+        $query->order('created_at', 'DESC');
 
         return $query->execute()->fetchAll();
     }
