@@ -7,6 +7,7 @@ use Katzgrau\KLogger\Logger;
 use Octo\Controller;
 use Octo\Event;
 use Octo\GatewayRSM2000\Model\Rsm2000Log;
+use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
 use Octo\Store;
 use Psr\Log\LogLevel;
@@ -98,16 +99,18 @@ class RsmGatewayController extends Controller
             $log->debug('Success Redirect POST=: ', $this->getParams());
         }
 
-        $this->logRSM2000Operation("redirect-success");
-
         $this->invoiceStore = Store::get('Invoice');
 
         /** @type \Octo\Invoicing\Model\Invoice $invoice */
         $invoiceId = $this->getParam('uniqueid');
         if (!empty($invoiceId)) {
-            $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
+            $invoice = $this->invoiceStore->getById($invoiceId);
 
-            if ($invoice && ($invoice->getTotalPaid() == $invoice->getTotal())) {
+            if ($invoice) {
+                $this->logRSM2000Operation("redirect-success");
+            }
+
+            if ($invoice && $this->isSuccess($invoice)) {
 
                 session_start();
                 $_SESSION['title'] = $this->getParam('title');
@@ -120,6 +123,38 @@ class RsmGatewayController extends Controller
 
         die('<script>top.window.location.href="/checkout/failed/";</script>');
     }
+
+    /**
+     * Check if data passed to success is the same, before redirect to thanks page with personal data
+     * @param Invoice $invoice
+     * @return bool
+     */
+    protected function isSuccess(Invoice $invoice)
+    {
+
+        if ($invoice->getTotalPaid() != $invoice->getTotal()) {
+            return false;
+        }
+
+        if ($invoice->getTotal() != $this->getParam('purchase')) {
+            return false;
+        }
+
+        if (ucfirst($invoice->getContact()->getTitle()) != ucfirst($this->getParam('title'))) {
+            return false;
+        }
+
+        if ($invoice->getContact()->getFirstName() != $this->getParam('firstname')) {
+            return false;
+        }
+
+        if ($invoice->getContact()->getLastName() != $this->getParam('surname')) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     /* $_POST 'uniqueid', Array of errors and error codes errors[0][code] errors[0][message]*/
     public function failed()
