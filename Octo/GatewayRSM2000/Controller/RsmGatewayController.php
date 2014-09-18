@@ -163,11 +163,14 @@ class RsmGatewayController extends Controller
 
             if ($errorCode == 1014) {
                 if ($invoice && ($invoice->getTotal() <= $invoice->getTotalPaid())) {
-                    //$class = 'success';
-                    //$message = 'That invoice is marked as paid.';
+                    session_start();
+                    $_SESSION['title'] = $this->getParam('title');
+                    $_SESSION['firstname'] = $this->getParam('firstname', '');
+                    $_SESSION['surname'] = $this->getParam('surname', '');
 
                     //Redirect to thanks page, as it looks like the invoice is paid.
-                    die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getUuid().'";</script>');
+
+                    die('<script>top.window.location.href="/checkout/thanks/";</script>');
                 } else {
                     //UniqueId cannot be use, Invoice not paid
                     $class = 'warning';

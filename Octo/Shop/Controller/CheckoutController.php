@@ -283,8 +283,12 @@ class CheckoutController extends Controller
                     $this->lineItemStore->emptyShopBasket($item->Basket);
                 }
             }
+            session_start();
+            $_SESSION['title'] = $invoice->getContact()->getTitle();
+            $_SESSION['firstname'] = $invoice->getContact()->getFirstName();
+            $_SESSION['surname'] = $invoice->getContact()->getLastName();
 
-            die('<script>top.window.location.href="/checkout/thanks/'.$invoice->getUuid().'";</script>');
+            die('<script>top.window.location.href="/checkout/thanks/";</script>');
         }
 
         header('Location: /checkout/failed');
