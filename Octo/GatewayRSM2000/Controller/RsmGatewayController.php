@@ -2,20 +2,13 @@
 
 namespace Octo\GatewayRSM2000\Controller;
 
-use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
 use Katzgrau\KLogger\Logger;
 use Octo\Controller;
 use Octo\Event;
-use Octo\Form as FormElement;
 use Octo\GatewayRSM2000\Model\Rsm2000Log;
-use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
-use Octo\Shop\Store\ShopBasketStore;
-use Octo\Shop\Service\ShopService;
 use Octo\Store;
-use Octo\System\Model\Log;
-use Octo\Template;
 use Psr\Log\LogLevel;
 
 class RsmGatewayController extends Controller
@@ -44,7 +37,7 @@ class RsmGatewayController extends Controller
 
         $sha1 = sha1(urldecode($rawPost) . $this->config->get('rsm.key'));
 
-        $this->logRSM2000Operation($this->getParams(), "callback", ($sha1 == $identityCheck));
+        $this->logRSM2000Operation("callback", ($sha1 == $identityCheck));
 
 
         if ($sha1 == $identityCheck) {
@@ -85,13 +78,12 @@ class RsmGatewayController extends Controller
 
     public function failedCallback()
     {
-        //TODO: write to DB log with failed payment
         if ($this->config->get('debug.rsm')) {
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('Failed Callback, POST=: ', $this->getParams());
         }
 
-        $this->logRSM2000Operation($this->getParams(), "callback");
+        $this->logRSM2000Operation("callback");
 
         die;
     }
@@ -106,21 +98,24 @@ class RsmGatewayController extends Controller
             $log->debug('Success Redirect POST=: ', $this->getParams());
         }
 
-        $this->logRSM2000Operation($this->getParams(), "redirect-success");
+        $this->logRSM2000Operation("redirect-success");
 
         $this->invoiceStore = Store::get('Invoice');
 
         /** @type \Octo\Invoicing\Model\Invoice $invoice */
-        $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
+        $invoiceId = $this->getParam('uniqueid');
+        if (!empty($invoiceId)) {
+            $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
 
-        if ($invoice && ($invoice->getTotalPaid() == $invoice->getTotal())) {
+            if ($invoice && ($invoice->getTotalPaid() == $invoice->getTotal())) {
 
-            session_start();
-            $_SESSION['title'] = $this->getParam('title');
-            $_SESSION['firstname'] = $this->getParam('firstname', '');
-            $_SESSION['surname'] = $this->getParam('surname', '');
+                session_start();
+                $_SESSION['title'] = $this->getParam('title');
+                $_SESSION['firstname'] = $this->getParam('firstname', '');
+                $_SESSION['surname'] = $this->getParam('surname', '');
 
-            die('<script>top.window.location.href="/checkout/thanks/";</script>');
+                die('<script>top.window.location.href="/checkout/thanks/";</script>');
+            }
         }
 
         die('<script>top.window.location.href="/checkout/failed/";</script>');
@@ -134,7 +129,7 @@ class RsmGatewayController extends Controller
             $log->debug('Failed redirection POST=: ', $this->getParams());
         }
 
-        $this->logRSM2000Operation($this->getParams(), "redirect-fail");
+        $this->logRSM2000Operation("redirect-fail");
 
         $message = 'There was a problem.';
         $class = 'warning';
@@ -185,11 +180,11 @@ class RsmGatewayController extends Controller
     }
 
     /**
-     * Log error from RSM2000 failed payment to DB
-     * @param array $post
+     * Log operations from RSM2000 payment gateway to DB
      * @param string $type
+     * @param null $securityPass
      */
-    protected function logRSM2000Operation($post, $type="callback", $securityPass=null)
+    protected function logRSM2000Operation($type="callback", $securityPass=null)
     {
         $rsm2000log = new Rsm2000Log();
         $rsm2000log->setInvoiceId($this->getParam('uniqueid', null));
