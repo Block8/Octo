@@ -79,9 +79,6 @@ class RsmGatewayController extends Controller
             $log->debug('Sha1:: ' . $sha1 . ' should be equal to IdentityCheck:: ' . $identityCheck);
         }
 
-
-        set_time_limit(0);
-
         die;
     }
 
@@ -199,8 +196,9 @@ class RsmGatewayController extends Controller
         $rsm2000log->setInvoiceId($this->getParam('uniqueid', null));
         $rsm2000log->setDonation($this->getParam('donation', null));
         $rsm2000log->setPurchase($this->getParam('purchase', null));
-        $rsm2000log->setSecurityPass($securityPass);
-
+        if (!is_null($securityPass)) {
+            $rsm2000log->setSecurityPass($securityPass);
+        }
 
         if ($type == "callback") {
             $rsm2000log->setCardType($this->getParam('cardType', null));

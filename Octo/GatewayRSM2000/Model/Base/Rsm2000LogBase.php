@@ -397,12 +397,10 @@ trait Rsm2000LogBase
     /**
     * Set the value of SecurityPass / security_pass.
     *
-    * Must not be null.
     * @param $value int
     */
     public function setSecurityPass($value)
     {
-        $this->validateNotNull('SecurityPass', $value);
         $this->validateInt('SecurityPass', $value);
 
         if ($this->data['security_pass'] === $value) {
