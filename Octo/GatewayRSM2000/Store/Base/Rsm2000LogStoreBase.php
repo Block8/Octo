@@ -62,4 +62,58 @@ trait Rsm2000LogStoreBase
             throw new StoreException('Could not get Rsm2000Log by Id', 0, $ex);
         }
     }
+
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForInvoiceId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Rsm2000Log').'\Model\Rsm2000Log', $useConnection);
+        $query->from('rsm2000_log')->where('`invoice_id` = :invoice_id');
+        $query->bind(':invoice_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Rsm2000Log by InvoiceId', 0, $ex);
+        }
+    }
+
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Rsm2000Log[]
+     */
+    public function getByInvoiceId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Rsm2000Log').'\Model\Rsm2000Log', $useConnection);
+        $query->from('rsm2000_log')->where('`invoice_id` = :invoice_id');
+        $query->bind(':invoice_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Rsm2000Log by InvoiceId', 0, $ex);
+        }
+
+    }
 }

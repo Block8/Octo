@@ -57,6 +57,8 @@ trait Rsm2000LogBase
         $this->setters['security_pass'] = 'setSecurityPass';
 
         // Foreign keys:
+        $this->getters['Invoice'] = 'getInvoice';
+        $this->setters['Invoice'] = 'setInvoice';
     }
     /**
     * Get the value of Id / id.
@@ -409,5 +411,53 @@ trait Rsm2000LogBase
 
         $this->data['security_pass'] = $value;
         $this->setModified('security_pass');
+    }
+    /**
+    * Get the Invoice model for this Rsm2000Log by Id.
+    *
+    * @uses \Octo\Invoicing\Store\InvoiceStore::getById()
+    * @uses \Octo\Invoicing\Model\Invoice
+    * @return \Octo\Invoicing\Model\Invoice
+    */
+    public function getInvoice()
+    {
+        $key = $this->getInvoiceId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('Invoice', 'Octo\Invoicing')->getById($key);
+    }
+
+    /**
+    * Set Invoice - Accepts an ID, an array representing a Invoice or a Invoice model.
+    *
+    * @param $value mixed
+    */
+    public function setInvoice($value)
+    {
+        // Is this an instance of Invoice?
+        if ($value instanceof \Octo\Invoicing\Model\Invoice) {
+            return $this->setInvoiceObject($value);
+        }
+
+        // Is this an array representing a Invoice item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setInvoiceId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setInvoiceId($value);
+    }
+
+    /**
+    * Set Invoice - Accepts a Invoice model.
+    *
+    * @param $value \Octo\Invoicing\Model\Invoice
+    */
+    public function setInvoiceObject(\Octo\Invoicing\Model\Invoice $value)
+    {
+        return $this->setInvoiceId($value->getId());
     }
 }
