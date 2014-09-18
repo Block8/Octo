@@ -3,6 +3,7 @@
 namespace Octo\GatewayRSM2000\Controller;
 
 use b8\Form;
+use HMUK\Utilities\CookieHelper;
 use Katzgrau\KLogger\Logger;
 use Octo\Controller;
 use Octo\Event;
@@ -64,8 +65,8 @@ class RsmGatewayController extends Controller
                     }
                 }
 
-                //TODO: Clear unpaid Invoices with the same basketId
-
+                $cookieHelper = new CookieHelper();
+                $cookieHelper->clearCookie();
             }
 
         } else {
