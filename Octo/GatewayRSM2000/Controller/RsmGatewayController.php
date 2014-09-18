@@ -65,8 +65,6 @@ class RsmGatewayController extends Controller
                     }
                 }
 
-                $cookieHelper = new CookieHelper();
-                $cookieHelper->clearCookie();
             }
 
         } else {
@@ -99,6 +97,9 @@ class RsmGatewayController extends Controller
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('Success Redirect POST=: ', $this->getParams());
         }
+
+        $cookieHelper = new CookieHelper();
+        $cookieHelper->clearCookie();
 
         $this->invoiceStore = Store::get('Invoice');
 
