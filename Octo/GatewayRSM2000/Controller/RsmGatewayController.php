@@ -31,12 +31,27 @@ class RsmGatewayController extends Controller
     /* $_POST 'IdentityCheck', 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function successCallback()
     {
+        //disable additional buffering which occurs in Apache:
+        apache_setenv('no-gzip', 1);
+        ini_set('zlib.output_compression', 0);
+        ini_set('implicit_flush', 1);
+
+        ignore_user_abort(true);
+        $response = "OK";
+        header("Connection: close");
+        header("Content-Length: " . mb_strlen($response));
+        echo $response;
+        flush(); // releasing the browser from waiting
+        session_write_close(); // Added a line suggested in the comment
+        set_time_limit(0);
+
         if ($this->config->get('debug.rsm')) {
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
             $log->debug('SuccessCallback, POST=: ', $this->getParams());
         }
 
         $this->logRSM2000Operation($this->getParams(), "callback");
+        set_time_limit(0);
 
         $identityCheck = $this->getParam('IdentityCheck', null);
         $postData = $this->getParams();
@@ -121,8 +136,7 @@ class RsmGatewayController extends Controller
             die('<script>top.window.location.href="/checkout/thanks/";</script>');
         }
 
-        header('Location: /checkout/failed');
-        die;
+        die('<script>top.window.location.href="/checkout/failed/";</script>');
     }
 
     /* $_POST 'uniqueid', Array of errors and error codes errors[0][code] errors[0][message]*/
