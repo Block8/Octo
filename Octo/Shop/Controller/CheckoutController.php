@@ -109,6 +109,7 @@ class CheckoutController extends Controller
                 }
 
                 $contact->setValues($contactDetails);
+                /** @var \Octo\System\Model\Contact $contact */
                 $contact = $this->contactStore->save($contact);
 
                 $shopService = $this->getShopService();
