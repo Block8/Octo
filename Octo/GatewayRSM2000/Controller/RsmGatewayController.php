@@ -170,17 +170,17 @@ class RsmGatewayController extends Controller
                     //UniqueId cannot be use, Invoice not paid
                     $class = 'warning';
                     $message = '<p>Payment gateway will not process this transaction anymore.</p>';
-                    $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
                 }
             }
 
-        } elseif (!empty($errorCode) && $errorCode == 3001) {
+        }
+        if (!empty($errorCode) && $errorCode == 3001) {
             //3001: User cancelled transaction.
             $class = 'warning';
             $message = '<p>You cancelled transaction.</p>';
-            $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
         }
 
+        $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
         echo '<div class="alert alert-'.$class.'" role="alert">'.$message.'</div>';
     }
 
@@ -195,24 +195,28 @@ class RsmGatewayController extends Controller
         $rsm2000log->setInvoiceId($this->getParam('uniqueid', null));
         $rsm2000log->setDonation($this->getParam('donation', null));
         $rsm2000log->setPurchase($this->getParam('purchase', null));
-        $rsm2000log->setTransId($this->getParam('transId', null));
-        $rsm2000log->setCardType($this->getParam('cardType', null));
 
         if ($type == "callback") {
+            $rsm2000log->setCardType($this->getParam('cardType', null));
+            $rsm2000log->setTransId($this->getParam('transId', null));
             $rsm2000log->setRawAuthMessage($this->getParam('rawAuthMessage', null));
             $rsm2000log->setTransTime($this->getParam('transTime', null));
             $rsm2000log->setTransStatus($this->getParam('transStatus', null));
             $rsm2000log->setBaseStatus($this->getParam('baseStatus', null));
         } elseif ($type == "redirect-fail") {
         //Redirect
+            $rsm2000log->setCardType($this->getParam('cardtype', null));
+            $rsm2000log->setTransId($this->getParam('transid', null));
             $rsm2000log->setRawAuthMessage(var_export($this->getParam('errors'), true));
             $rsm2000log->setTransTime(time());
             $rsm2000log->setTransStatus('');
             $rsm2000log->setBaseStatus($this->getParam('status', null));
         } else {
             //Redirect success
+            $rsm2000log->setCardType($this->getParam('cardtype', null));
+            $rsm2000log->setTransId($this->getParam('transid', null));
             $rsm2000log->setRawAuthMessage('');
-            $rsm2000log->setTransTime($this->getParam('transTime', null));
+            $rsm2000log->setTransTime($this->getParam('transtime', null));
             $rsm2000log->setTransStatus('');
             $rsm2000log->setBaseStatus($this->getParam('status', null));
         }
