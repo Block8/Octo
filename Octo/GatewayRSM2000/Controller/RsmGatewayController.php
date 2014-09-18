@@ -155,6 +155,7 @@ class RsmGatewayController extends Controller
             /** @type \Octo\Invoicing\Model\Invoice $invoice */
             $invoice = $this->invoiceStore->getById($invoice_id);
 
+            //3001: User cancelled transaction.
             if ($errorCode >= 2000 && $errorCode < 3000) {
                 $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
                 $log->debug('Contact validation failed for RSM2000: ', $this->request->getParams());
@@ -174,11 +175,6 @@ class RsmGatewayController extends Controller
                 }
             }
 
-        }
-        if (!empty($errorCode) && $errorCode == 3001) {
-            //3001: User cancelled transaction.
-            $class = 'warning';
-            $message = '<p>You cancelled transaction.</p>';
         }
 
         $message .= '<p><a href="javascript:void(0)" onclick="top.window.location.href=\'/checkout/\';">Go to Checkout</a></p>';
@@ -211,10 +207,11 @@ class RsmGatewayController extends Controller
         //Redirect
             $rsm2000log->setCardType($this->getParam('cardtype', null));
             $rsm2000log->setTransId($this->getParam('transid', null));
-            $rsm2000log->setRawAuthMessage(var_export($this->getParam('errors'), true));
             $rsm2000log->setTransTime(time());
             $rsm2000log->setTransStatus('');
             $rsm2000log->setBaseStatus($this->getParam('status', null));
+            $errorMessage = $this->getParam('errors')[0]['code'] . " : " . $this->getParam('errors')[0]['message'];
+            $rsm2000log->setRawAuthMessage($errorMessage);
         } else {
             //Redirect success
             $rsm2000log->setCardType($this->getParam('cardtype', null));
