@@ -1,7 +1,7 @@
 {include template: "include/header"}
 {include template: "include/subheader_breadcrumb"}
 <div class="alert alert-success">
-    <h3>Thank you for your order, {@title} {@forename} {@surname}!</h3>
+    <h3>Thank you for your order, {@title} {@firstname} {@surname}!</h3>
     {if invoice.total > 0}<p>Your payment was successful.</p>{/if}
     {if invoice.total = 0}<p>Your order was successful.</p>{/if}
 </div>

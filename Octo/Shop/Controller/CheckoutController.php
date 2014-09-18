@@ -308,7 +308,7 @@ class CheckoutController extends Controller
 
 
         $view->title    = isset($_SESSION['title']) ? ucfirst($_SESSION['title']) : '';
-        $view->forename = isset($_SESSION['firstname']) ? $_SESSION['firstname'] : '';
+        $view->firstname = isset($_SESSION['firstname']) ? $_SESSION['firstname'] : '';
         $view->surname  = isset($_SESSION['surname']) ? $_SESSION['surname'] : '';
 
         $blockManager = $this->getBlockManager($view);
