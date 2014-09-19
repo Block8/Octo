@@ -55,6 +55,11 @@ class DispatchEventListener extends Listener
         $itemList.="</table>";
         $shipping = json_decode($invoice->getShippingAddress(), true);
 
+        //For old invoices without county
+        if(!isset($shipping['county'])) {
+            $billing['county'] = '';
+        }
+
         $shippingAddress = "";
         $shippingAddress.=$shipping['address1']."<br />";
         $shippingAddress.=$shipping['address2']."<br />";
