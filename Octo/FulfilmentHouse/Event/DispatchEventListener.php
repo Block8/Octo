@@ -59,6 +59,7 @@ class DispatchEventListener extends Listener
         $shippingAddress.=$shipping['address1']."<br />";
         $shippingAddress.=$shipping['address2']."<br />";
         $shippingAddress.=$shipping['town']."<br />";
+        $shippingAddress.=$shipping['county']."<br />";
         $shippingAddress.=$shipping['postcode']."<br />";
         $shippingAddress.=$shipping['country_name'];
 

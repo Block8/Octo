@@ -16,6 +16,7 @@ class Address extends FieldSet
         $address1 = $name . '[address1]';
         $address2 = $name . '[address2]';
         $town = $name . '[town]';
+        $county = $name . '[county]';
         $postcode = 'postcode';
 
         if ($name != 'address') {
@@ -36,6 +37,9 @@ class Address extends FieldSet
         $town->setLabel('Town');
         $town->setPattern('^[A-Za-z0-9\- \.\,\']{2,40}$');
 
+        $county = Text::create($county, 'County', false);
+        //$county->setPattern("(^[a-zA-Z0-9 \.\_\-\@\$\'\:\,]{2,40})$");
+
         $postcode = new Element\Text($postcode);
         $postcode->setRequired(true);
         $postcode->setLabel('Postcode');
@@ -49,6 +53,7 @@ class Address extends FieldSet
         $this->addField($address1);
         $this->addField($address2);
         $this->addField($town);
+        $this->addField($county);
         $this->addField($postcode);
         $this->addField($countryCode);
     }
@@ -61,6 +66,7 @@ class Address extends FieldSet
             }
 
             $this->children[$this->getName() . '[address2]']->setRequired(false);
+            $this->children[$this->getName() . '[county]']->setRequired(false);
         } else {
             foreach ($this->children as &$child) {
                 $child->setRequired(false);
