@@ -41,7 +41,7 @@ class InvoiceController extends Admin\Controller
         $manage->addChild(new Menu\Item('Edit Invoice', '/invoice/edit', true));
         $manage->addChild(new Menu\Item('Delete Invoice', '/invoice/delete', true));
         $thisMenu->addChild($manage);
-
+        $thisMenu->addChild(new Menu\Item('Unpaid Invoices', '/invoice/unpaid'));
     }
 
     /**
@@ -67,7 +67,15 @@ class InvoiceController extends Admin\Controller
     public function index()
     {
         $this->setTitle('Manage Invoices');
-        $this->view->invoices = $this->invoiceStore->getAll();
+        $this->view->invoices = $this->invoiceStore->getAll(Invoice::STATUS_NEW);
+        $this->view->invoiceStatuses = $this->statusStore->getAll();
+        $this->view->canPdf = SYSTEM_PDF_AVAILABLE;
+    }
+
+    public function unpaid()
+    {
+        $this->setTitle('Unpaid Invoices');
+        $this->view->invoices = $this->invoiceStore->getAll(null, Invoice::STATUS_NEW);
         $this->view->invoiceStatuses = $this->statusStore->getAll();
         $this->view->canPdf = SYSTEM_PDF_AVAILABLE;
     }

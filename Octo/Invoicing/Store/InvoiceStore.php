@@ -16,13 +16,17 @@ class InvoiceStore extends Octo\Store
 {
     use Base\InvoiceStoreBase;
 
-    public function getAll($exclude = null)
+    public function getAll($exclude = null, $only = null)
     {
         $query = new Query($this->getNamespace('Invoice') . '\Model\Invoice');
         $query->select('*')->from('invoice');
 
         if(!empty($exclude)) {
             $query->where('invoice_status_id <> ' . (int)$exclude);
+        }
+
+        if(!empty($only)) {
+            $query->where('invoice_status_id = ' . (int)$only);
         }
 
         $query->order('id', 'DESC');
