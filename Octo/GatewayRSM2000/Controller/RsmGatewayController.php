@@ -223,6 +223,10 @@ class RsmGatewayController extends Controller
      */
     protected function logRSM2000Operation($type="callback", $securityPass=null)
     {
+        if (is_null($this->getParam('purchase', null))) {
+            return;
+        }
+
         $rsm2000log = new Rsm2000Log();
         $rsm2000log->setInvoiceId($this->getParam('uniqueid', null));
         $rsm2000log->setDonation($this->getParam('donation', null));
