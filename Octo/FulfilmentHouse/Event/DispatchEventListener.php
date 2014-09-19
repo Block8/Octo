@@ -57,7 +57,7 @@ class DispatchEventListener extends Listener
 
         //For old invoices without county
         if(!isset($shipping['county'])) {
-            $billing['county'] = '';
+            $shipping['county'] = '';
         }
 
         $shippingAddress = "";
