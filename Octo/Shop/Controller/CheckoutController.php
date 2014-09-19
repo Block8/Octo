@@ -424,7 +424,8 @@ class CheckoutController extends Controller
         $name = new Form\Element\Email('email');
         $name->setRequired(true);
         $name->setLabel('Email Address');
-        $name->setPattern('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$');
+        $name->setPattern('^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,6})$');
+        //$name->setPattern('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$');
         $fieldset->addField($name);
 
         $name = new FormElement\Element\Phone('phone');
