@@ -183,8 +183,16 @@ class CheckoutController extends Controller
             throw new NotFoundException('There is no invoice with ID: ' . $invoiceUuid);
         }
 
-        if (!empty($invoice) && $invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
+        if ($invoice && $invoice->getInvoiceStatusId() != Invoice::STATUS_NEW) {
             //TODO: Add check date
+            header('Location: /');
+            die;
+        }
+
+        /** @var \Octo\Invoicing\Model\Item[] $invoiceItems */
+        $invoiceItems = $this->getInvoiceService()->getItems($invoice);
+
+        if (empty($invoiceItems)) {
             header('Location: /');
             die;
         }
@@ -193,8 +201,6 @@ class CheckoutController extends Controller
         /** @var \Octo\Invoicing\Model\InvoiceAdjustment $adjustments */
         $adjustments = Store::get('InvoiceAdjustment')->getByInvoiceId($invoice->getId());
 
-        /** @var \Octo\Invoicing\Model\Item[] $invoiceItems */
-        $invoiceItems = $this->getInvoiceService()->getItems($invoice);
 
         $view->invoice = $invoice;
         $view->items = $invoiceItems;
