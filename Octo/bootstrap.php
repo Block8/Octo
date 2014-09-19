@@ -82,7 +82,7 @@ if (is_dir($adminTemplatePath)) {
 }
 
 $rtn = 0;
-exec('wkhtmltopdf --version 2>&1', $out, $rtn);
+//exec('wkhtmltopdf --version 2>&1', $out, $rtn);
 
 if ($rtn == 0) {
     define('SYSTEM_PDF_AVAILABLE', true);
