@@ -81,7 +81,7 @@ if (is_dir($adminTemplatePath)) {
     $config->set('Octo', $settings);
 }
 
-$rtn = 0;
+$rtn = 1;
 //exec('wkhtmltopdf --version 2>&1', $out, $rtn);
 
 if ($rtn == 0) {
