@@ -142,6 +142,11 @@ class InvoiceService
 
     public function updateInvoiceStatus(Invoice $invoice, InvoiceStatus $status)
     {
+
+        if ($status->getId() == Invoice::STATUS_PAID) {
+            $invoice->setTotalPaid($invoice->getTotal());
+        }
+
         $invoice->setInvoiceStatus($status);
         $invoice = $this->invoiceStore->saveByUpdate($invoice);
         Event::trigger('OnInvoiceStatusChanged', $invoice);
