@@ -16,7 +16,7 @@ class InvoiceAdjustmentStore extends Octo\Store
 
     /**
      * Process donation amount
-     * @param $invoice
+     * @param $invoiceId
      * @return float DonationAmount
      */
     public function getDonationAmount($invoiceId)
@@ -36,7 +36,7 @@ class InvoiceAdjustmentStore extends Octo\Store
 
     /**
      * Check if GiftAid declaration Yes
-     * @param Invoice $invoice
+     * @param int $invoiceId
      * @return bool
      */
     public function isGiftAid($invoiceId)
