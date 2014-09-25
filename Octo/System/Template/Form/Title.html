@@ -3,13 +3,9 @@
     <label for="{@id}">{@label}</label>
     {/if}
 
-    {var_dump variable : current_value}
     <div class="controls">
         <select id="{@id}" class="form-control {@css}" name="{@name}">
-
             {for options}
-
-
             <option value="{@key}"{if key == current_value} selected="selected"{/if}>{@value}</option>
             {/for}
         </select>
