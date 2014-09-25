@@ -23,7 +23,7 @@ class RsmGatewayController extends Controller
     protected $invoiceStore;
 
 
-    /* $_POST 'IdentityCheck', 'uniqueid', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
+    /* $_POST 'IdentityCheck', 'uniqueid', 'authAmount', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function successCallback()
     {
         if ($this->config->get('debug.rsm')) {
@@ -51,7 +51,7 @@ class RsmGatewayController extends Controller
 
             if ($invoice) {
                 $invoiceService = $this->getInvoiceService();
-                $invoiceService->registerPayment($invoice, $this->getParam('purchase'));
+                $invoiceService->registerPayment($invoice, $this->getParam('purchase')); //authAmount?
 
                 //Clear Basket
                 $this->lineItemStore = Store::get('LineItem');
