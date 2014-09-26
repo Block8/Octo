@@ -5,7 +5,7 @@
 <table class="table table-striped table-responsive" id="invoices">
     <thead>
     <tr>
-        <th width="2">ID</th>
+        <th width="1">ID</th>
         <th>Title</th>
         <th>Customer</th>
         <th width="15%">Invoice Date</th>
@@ -92,29 +92,28 @@
 
         function changeInvoiceStatus()
         {
-            var invoiceRow = $(this).parents('tr');
-            var invoiceId = invoiceRow.data('invoice');
             var newStatus = $(this).data('status');
-            var newCode = $(this).data('code');
-            var newName = $(this).data('name');
-            var statusButton = invoiceRow.find('.status-dropdown');
 
-            $('.pace').removeClass('hide');
+            if (newStatus != 1) {
+                $('.pace').removeClass('hide');
 
-            $.post('/' + window.adminUri + '/invoice/editStatus/' + invoiceId, {invoice_status_id: newStatus}, function () {
-                $('.pace').addClass('hide');
-                var oldCode = statusButton.data('code');
-                statusButton.data('code', newCode);
-                statusButton.removeClass('btn-' + oldCode);
-                statusButton.addClass('btn-' + newCode);
-                statusButton.find('.name').text(newName);
-                invoiceRow.removeClass(oldCode);
-                invoiceRow.addClass(newCode);
-            });
+                var invoiceRow = $(this).parents('tr');
+                var invoiceId = invoiceRow.data('invoice');
+
+                $.post('/' + window.adminUri + '/invoice/editStatus/' + invoiceId, {invoice_status_id: newStatus}, function () {
+
+                        invoiceRow.fadeOut(400, function(){
+                            invoiceRow.remove();
+                        });
+
+                    $('.pace').addClass('hide');
+                });
+
+            }
         }
 
-        $('.status-change').on('click', changeInvoiceStatus);
 
+        $('.status-change').on('click', changeInvoiceStatus);
 
         $('#invoices').dataTable({
             "aaSorting": [],

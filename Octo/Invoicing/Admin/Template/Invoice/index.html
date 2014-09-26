@@ -103,18 +103,24 @@
 
             $.post('/' + window.adminUri + '/invoice/editStatus/' + invoiceId, {invoice_status_id: newStatus}, function () {
                 $('.pace').addClass('hide');
-                var oldCode = statusButton.data('code');
-                statusButton.data('code', newCode);
-                statusButton.removeClass('btn-' + oldCode);
-                statusButton.addClass('btn-' + newCode);
-                statusButton.find('.name').text(newName);
-                invoiceRow.removeClass(oldCode);
-                invoiceRow.addClass(newCode);
+
+                if (newStatus == 1) {
+                    invoiceRow.fadeOut(500, function(){
+                        invoiceRow.remove();
+                    });
+                } else {
+                    var oldCode = statusButton.data('code');
+                    statusButton.data('code', newCode);
+                    statusButton.removeClass('btn-' + oldCode);
+                    statusButton.addClass('btn-' + newCode);
+                    statusButton.find('.name').text(newName);
+                    invoiceRow.removeClass(oldCode);
+                    invoiceRow.addClass(newCode);
+                }
             });
         }
 
         $('.status-change').on('click', changeInvoiceStatus);
-
 
         $('#invoices').dataTable({
             "aaSorting": [],
