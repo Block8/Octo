@@ -3,9 +3,7 @@ namespace Octo\Form\Element;
 
 use b8\Form\Element;
 use b8\Form\FieldSet;
-use b8\Form\Element\Text;
 use HMUK\Utilities\PostageCalculator;
-
 
 class Address extends FieldSet
 {
@@ -25,25 +23,39 @@ class Address extends FieldSet
 
         $countryCode = $name . '[country_code]';
 
-        $address2 = Text::create($address2, 'Address 2', false);
-
-        $address1 = new Element\Text($address1);
+        $address1 = new Input5($address1);
         $address1->setRequired(true);
         $address1->setLabel('Address 1');
         $address1->setPattern("(^[a-zA-Z0-9 \.\_\-\@\$\'\:\,]{2,100}$)");
+        $address1->setAttributes(array('maxlength'=>100));
+        $address1->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Maximum 100 characters.');
 
-        $town = new Element\Text($town);
+        $address2 = new Input5($address2);
+        $address2->setRequired(false);
+        $address2->setLabel('Address 2');
+        $address2->setAttributes(array('maxlength'=>100));
+        $address2->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Maximum 100 characters.');
+
+        $town = new Input5($town);
         $town->setRequired(true);
         $town->setLabel('Town');
         $town->setPattern('^[A-Za-z0-9\- \.\,\']{2,40}$');
+        $town->setAttributes(array('maxlength'=>40));
+        $town->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Maximum 40 characters.');
 
-        $county = Text::create($county, 'County', false);
+        $county = new Input5($county);
+        $county->setLabel('County');
+        $county->setRequired(false);
+        $county->setAttributes(array('maxlength'=>40));
+        $county->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Maximum 40 characters.');
         //$county->setPattern("(^[a-zA-Z0-9 \.\_\-\@\$\'\:\,]{2,40})$");
 
-        $postcode = new Element\Text($postcode);
+        $postcode = new Input5($postcode);
         $postcode->setRequired(true);
         $postcode->setLabel('Postcode');
         $postcode->setPattern('^[A-Za-z0-9- ]{5,10}$');
+        $postcode->setAttributes(array('maxlength'=>10));
+        $postcode->setTitle('Please enter only: letters and numbers (hyphens and spaces may be included). Maximum 10 characters.');
 
         $countryCode = Element\Select::create($countryCode, 'Country', true);
         $countryCode->setOptions(PostageCalculator::$countries);

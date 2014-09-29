@@ -1,14 +1,1 @@
-<div class="form-group {@ccss} {if error}has-error{/if}">
-    {if label}
-    <label for="{@id}">{@label}</label>
-    {/if}
-
-    <div class="controls">
-        <input id="{@id}" type="{@type}" class="form-control {@css}"
-               name="{@name}"{if value} value="{@value}"{/if}{if pattern} pattern="{@pattern}"{/if}{if required} required{/if}>
-
-        {if error}
-        <span class="help-block">{@error}</span>
-        {/if}
-    </div>
-</div>
+{include template: "form/Input5"; variables: item => item, css, label, name ,title,type,id,attributes,required,pattern,error,ccss}

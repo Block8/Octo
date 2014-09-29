@@ -10,6 +10,7 @@ use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
+use Octo\Form\Element\Input5;
 use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
 use Octo\Shop\Store\ShopBasketStore;
@@ -421,15 +422,20 @@ class CheckoutController extends Controller
         $name->setLabel('Company');
         $fieldset->addField($name);
 
-        $name = new Form\Element\Email('email');
+        //Email validation for RSM2000
+        $name = new Input5('email');
         $name->setRequired(true);
         $name->setLabel('Email Address');
         $name->setPattern('^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,6})$');
+        $name->setTitle('Please enter valid e-mail address. Maximum 50 characters.');
+        $name->setAttributes(array('maxlength'=>50));
         $fieldset->addField($name);
 
         $name = new FormElement\Element\Phone('phone');
         $name->setRequired(true);
         $name->setLabel('Phone Number');
+        $name->setTitle('Please enter only: digits (hyphens, spaces, plus may be included). Maximum 15 characters.');
+        $name->setAttributes(array('maxlength'=>15));
         $fieldset->addField($name);
 
         $fieldset = new Form\FieldSet('billing_address');

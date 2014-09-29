@@ -1,0 +1,9 @@
+<section class="form-group {@ccss} {if error}has-error{/if}">
+    {if label}<label class="">{@label}</label>{/if}
+    <input id="{@id}" type="{@type}" class="form-control {@css} {if error}invalid{/if}" name="{@name}"
+           value="{@value}"{if pattern} pattern="{@pattern}"{/if}{if required} required{/if}{if maxlength} maxlength="{@maxlength}"{/if}>
+
+    {if error}
+    <em for="{@name}" class="invalid">{@error}</em>
+    {/if}
+</section>
