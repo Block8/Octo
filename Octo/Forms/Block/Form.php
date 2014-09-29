@@ -135,6 +135,10 @@ class Form extends Block
                     $thisField->setOptions($field['options']);
                 }
 
+                if (method_exists($thisField, 'setCheckedValue')) {
+                    $thisField->setCheckedValue('Checked');
+                }
+
                 $form->addField($thisField);
             } else {
                 print 'Type not found:  ' . $type . '<br>';
