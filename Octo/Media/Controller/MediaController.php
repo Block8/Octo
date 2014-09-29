@@ -33,7 +33,13 @@ class MediaController extends Controller
      */
     public function render($fileId, $width = null, $height = null)
     {
+        if (is_null($fileId)) return;
         $file = $this->fileStore->getById($fileId);
+
+        if (is_null($file)) {
+            header("HTTP/1.0 404 Not Found");
+            die();
+        }
 
         Image::$sourcePath = APP_PATH . '/public/uploads/';
         $image = new Image($file->getId() . '.' . $file->getExtension());
