@@ -28,13 +28,13 @@ class Address extends FieldSet
         $address1->setLabel('Address 1');
         $address1->setPattern("(^[a-zA-Z0-9 \.\_\-\@\$\'\:\,]{2,100}$)");
         $address1->setAttributes(array('maxlength'=>100));
-        $address1->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Maximum 100 characters.');
+        $address1->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Minimum 2 characters.');
 
         $address2 = new Input5($address2);
         $address2->setRequired(false);
         $address2->setLabel('Address 2');
         $address2->setAttributes(array('maxlength'=>100));
-        $address2->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Maximum 100 characters.');
+        $address2->setTitle('Please enter only: letters and numbers (hyphens, spaces, comma, dot may be included). Minimum 2 characters.');
 
         $town = new Input5($town);
         $town->setRequired(true);
