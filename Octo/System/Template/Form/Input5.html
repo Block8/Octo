@@ -1,8 +1,11 @@
 <section class="form-group {@ccss} {if error}has-error{/if}">
 
     {if label}<label class="">{@label}</label>{/if}
+    {if addon}<div class="input-group">
+    <span class="input-group-addon">{@addon}</span>{/if}
     <input id="{@id}" type="{@type}" class="form-control {@css} {if error}invalid{/if}" name="{@name}" title="{@title}"
            value="{@value}"{if pattern} pattern="{@pattern}"{/if}{if required} required{/if} {for attributes} {@key}="{@value}"{/for}>
+    {if addon}</div>{/if}
 	{if error}
     <em for="{@name}" class="invalid">{@error}</em>
 	{/if}

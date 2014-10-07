@@ -9,6 +9,7 @@ class Input5 extends Input
 {
     protected $type = 'text';
     protected $title;
+    protected $addon;
     protected $attributes = array(); //input attributes like maxlength
 
 
@@ -18,6 +19,7 @@ class Input5 extends Input
         $view->type = $this->type;
         $view->attributes = $this->attributes;
         $view->title = $this->title;
+        $view->addon = $this->addon;
     }
 
     public function getType()
@@ -39,6 +41,17 @@ class Input5 extends Input
     public function setTitle($value)
     {
         $this->title = $value;
+        return $this;
+    }
+
+    public function getAddon()
+    {
+        return $this->addon;
+    }
+
+    public function setAddon($value)
+    {
+        $this->addon = $value;
         return $this;
     }
 
