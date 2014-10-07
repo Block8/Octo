@@ -1,7 +1,9 @@
 <?php
 namespace Octo\Form\Element;
 
-class Phone extends Input5
+use b8\Form\Element\Text;
+
+class Phone extends Text
 {
     public function __construct($name = null)
     {

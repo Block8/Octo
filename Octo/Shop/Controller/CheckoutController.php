@@ -11,6 +11,7 @@ use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
 use Octo\Form\Element\Input5;
+use Octo\Form\Element\Phone;
 use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
 use Octo\Shop\Store\ShopBasketStore;
@@ -405,6 +406,7 @@ class CheckoutController extends Controller
         $fieldset->setLabel('Your details');
         $form->addField($fieldset);
 
+
         //RSM2000 2-10
         $name = new FormElement\Element\Title('title');
         $name->setLabel('Title');
@@ -431,8 +433,9 @@ class CheckoutController extends Controller
         $name->setAttributes(array('maxlength'=>50));
         $fieldset->addField($name);
 
-        $name = new FormElement\Element\Phone('phone');
+        $name = new  Input5('phone');
         $name->setRequired(true);
+        $name->setPattern('(^[0-9 \-\+\(\)]{9,15}$)');
         $name->setLabel('Phone Number');
         $name->setTitle('Please enter only: digits (hyphens, spaces, plus may be included). Maximum 15 characters.');
         $name->setAttributes(array('maxlength'=>15));
