@@ -153,6 +153,7 @@ class CheckoutController extends Controller
                 $log->debug('Contact validation failed: ', $form->getValues());
             }
         }
+
         $view = Template::getPublicTemplate('Checkout/details');
         $view->form = $form;
 
@@ -211,16 +212,19 @@ class CheckoutController extends Controller
         $view->shippingAddress = json_decode($invoice->getShippingAddress(), true);
 
         $donations = 0;
+        $totalToBePaid = 0;
 
         foreach($adjustments as $donation)
         {
             $donations += floatval($donation->getDisplayValue());
         }
-        $view->total = $invoice->getSubtotal() + $invoice->getShippingCost() + $donations;
+        $totalToBePaid = $invoice->getSubtotal() + $invoice->getShippingCost() + $donations;
+
+        $view->total = $totalToBePaid;
         $view->justevents = 0;
 
         //Payment
-        if ($invoice->getTotal() > 0) {
+        if ($totalToBePaid > 0) {
 
             $invoiceData = [
                 'payment_options' => [],
@@ -230,7 +234,7 @@ class CheckoutController extends Controller
 
             Event::trigger('PaymentOptions', $invoiceData);
             $view->paymentOptions = $invoiceData['payment_options'];
-        } elseif($this->isEligibleForFreePass($invoiceItems, $invoice->getTotal())){
+        } elseif($this->isEligibleForFreePass($invoiceItems, $totalToBePaid)){
             //Free items like tickets
             $view->justevents = 1;
         }
