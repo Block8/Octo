@@ -99,14 +99,17 @@ class CheckoutController extends Controller
 
             if($form->validate()) {
                 $contactDetails = $this->getContactDetails();
-                $contact = $this->contactStore->findContact($contactDetails);
+                $contact = $this->contactStore->findExistingContact($contactDetails);
 
-                if (!is_null($contact) && $contact->getIsBlocked()) {
+                if (is_null($contact)) {
+                    $contact = new Contact();
+                }
+
+                if ($contact->getIsBlocked()) {
                     header('Location: /');
                     die;
                 }
 
-                $contact = new Contact();
                 $contact->setValues($contactDetails);
                 /** @var \Octo\System\Model\Contact $contact */
                 $contact = $this->contactStore->save($contact);

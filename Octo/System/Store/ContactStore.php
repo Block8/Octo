@@ -58,6 +58,38 @@ class ContactStore extends Octo\Store
         }
     }
 
+    public function findExistingContact(array $details)
+    {
+        $database = Database::getConnection('read');
+
+        $query = 'SELECT * FROM contact
+                WHERE first_name = :first AND last_name = :last AND phone = :phone AND postcode = :postcode AND email = :email ';
+
+        if (isset($details['company'])) {
+            $query .= ' AND company = :company';
+        } else {
+            $query .= ' AND company IS NULL';
+        }
+        $query .= ' LIMIT 1';
+        $stmt = $database->prepare($query);
+        $stmt->bindValue(':first', $details['first_name']);
+        $stmt->bindValue(':last', $details['last_name']);
+        $stmt->bindValue(':phone', $details['phone']);
+        $stmt->bindValue(':postcode', $details['postcode']);
+        $stmt->bindValue(':email', $details['email']);
+        if (isset($details['company'])) {
+            $stmt->bindValue(':company', $details['company']);
+        }
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetch(Database::FETCH_ASSOC);
+
+            return new Contact($res);
+        }
+
+        return null;
+    }
+
 
     public function findContact(array $details)
     {
@@ -88,6 +120,39 @@ class ContactStore extends Octo\Store
             if ($stmt->execute()) {
                 $res = $stmt->fetch(Database::FETCH_ASSOC);
                 return new Contact($res);
+            }
+        }
+
+        return null;
+    }
+
+    public function isCustomerBlocked(array $details)
+    {
+        $database = Database::getConnection('read');
+
+        if (isset($details['email'])) {
+            $query = 'SELECT is_blocked FROM contact WHERE email = :email LIMIT 1';
+            $stmt = $database->prepare($query);
+            $stmt->bindValue(':email', $details['email']);
+
+            if ($stmt->execute()) {
+                return $stmt->fetchColumn(0);
+            }
+        }
+
+        if (in_array(['first_name', 'last_name', 'phone', 'postcode'], $details)) {
+            $query = 'SELECT is_blocked FROM contact
+                    WHERE first_name = :first AND last_name = :last AND (phone = :phone OR postcode = :postcode)
+                    LIMIT 1';
+
+            $stmt = $database->prepare($query);
+            $stmt->bindValue(':first', $details['first_name']);
+            $stmt->bindValue(':last', $details['last_name']);
+            $stmt->bindValue(':phone', $details['phone']);
+            $stmt->bindValue(':postcode', $details['postcode']);
+
+            if ($stmt->execute()) {
+                return $stmt->fetchColumn(0);
             }
         }
 
