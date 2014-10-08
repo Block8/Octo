@@ -138,8 +138,9 @@ class ShopService
     {
         $orderTitle = 'Order (Basket #' . $basket->getId() . ')';
 
-        //Try to avoid creating new invoice for the same basket, same contact, and unpaid invice
-        $isInvoice = Store::get('Invoice')->getInvoiceAlreadyCreated($orderTitle, $contact);
+        //Try to avoid creating new invoice for the same basket, same contact, and unpaid invoice
+        $this->invoiceStore = Store::get('Invoice');
+        $isInvoice = $this->invoiceStore->getInvoiceAlreadyCreated($orderTitle, $contact);
 
         $this->config = Config::getInstance();
         $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
