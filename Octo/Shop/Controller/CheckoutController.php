@@ -101,15 +101,12 @@ class CheckoutController extends Controller
                 $contactDetails = $this->getContactDetails();
                 $contact = $this->contactStore->findContact($contactDetails);
 
-                if (is_null($contact)) {
-                    $contact = new Contact();
-                }
-
-                if ($contact->getIsBlocked()) {
+                if (!is_null($contact) && $contact->getIsBlocked()) {
                     header('Location: /');
                     die;
                 }
 
+                $contact = new Contact();
                 $contact->setValues($contactDetails);
                 /** @var \Octo\System\Model\Contact $contact */
                 $contact = $this->contactStore->save($contact);
@@ -441,7 +438,7 @@ class CheckoutController extends Controller
         $name->setRequired(true);
         $name->setPattern('(^[0-9 \-\+\(\)]{9,15}$)');
         $name->setLabel('Phone Number');
-        $name->setTitle('Please enter only: digits (hyphens, spaces, plus may be included). Maximum 15 characters.');
+        $name->setTitle('Please enter only: digits (hyphens, spaces, plus may be included). Minimum 9, maximum 15 characters.');
         $name->setAttributes(array('maxlength'=>15));
         $fieldset->addField($name);
 
