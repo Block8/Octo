@@ -88,7 +88,7 @@ class InvoiceStore extends Octo\Store
             $query->execute();
             return $query->fetch();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get Invoice by Uuid', 0, $ex);
+            throw new StoreException('Could not get Invoice.', 0, $ex);
         }
     }
 
