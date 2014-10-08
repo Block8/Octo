@@ -55,7 +55,7 @@ class Address extends FieldSet
         $postcode->setLabel('Postcode');
         $postcode->setPattern('^[A-Za-z0-9- ]{5,10}$');
         $postcode->setAttributes(array('maxlength'=>10));
-        $postcode->setTitle('Please enter only: letters and numbers (hyphens and spaces may be included). Minimum 5 characters.');
+        $postcode->setTitle('Please enter only: letters and numbers (hyphens and spaces may be included). Minimum 5, maximum 10 characters.');
 
         $countryCode = Element\Select::create($countryCode, 'Country', true);
         $countryCode->setOptions(PostageCalculator::$countries);
