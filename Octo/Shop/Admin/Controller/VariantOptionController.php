@@ -163,7 +163,7 @@ class VariantOptionController extends Controller
         $fieldset->addField($field);
 
         $field = new Form\Element\Submit();
-        $field->setValue('Save Variant');
+        $field->setValue('Save Variant Option');
         $field->setClass('btn-success');
         $form->addField($field);
 
