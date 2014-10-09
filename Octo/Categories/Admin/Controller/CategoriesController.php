@@ -135,8 +135,10 @@ class CategoriesController extends Controller
                     $adminUri = $this->config->get('site.admin_uri');
                     if ($useBase) {
                         header('Location: /' . $adminUri . '/categories/manage/' . $scope . '/base');
+                        die();
                     } else {
                         header('Location: /' . $adminUri . '/categories/manage/' . $scope);
+                        die();
                     }
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error adding the category. Please try again.');
@@ -228,8 +230,10 @@ class CategoriesController extends Controller
                     $adminUri = $this->config->get('site.admin_uri');
                     if ($useBase) {
                         header('Location: /' . $adminUri . '/categories/manage/' . $scope . '/base');
+                        die();
                     } else {
                         header('Location: /' . $adminUri . '/categories/manage/' . $scope);
+                        die();
                     }
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the category. Please try again.');
@@ -253,8 +257,10 @@ class CategoriesController extends Controller
 
         if ($useBase) {
             header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope . '/base');
+            die();
         } else {
             header('Location: /' . $this->config->get('site.admin_uri') . '/categories/manage/' . $scope);
+            die();
         }
         exit();
     }
