@@ -18,3 +18,11 @@
     .tree ul li div {
         margin-right: 15px;
     }
+
+/*Select2*/
+img.flag {padding-right: 10px; }
+.bigdrop.select2-container .select2-results {max-height: 300px;}
+.bigdrop .select2-results {max-height: 300px;}
+.imagePicker .select2-choice {
+    height:80px;
+}

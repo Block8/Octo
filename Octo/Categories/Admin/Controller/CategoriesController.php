@@ -8,6 +8,7 @@ use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
 use Octo\Categories\Model\Category;
 use Octo\Categories\Store\CategoryStore;
+use Octo\Form\Element\ImagePicker;
 use Octo\Form\Element\ImageUpload;
 use Octo\System\Model\File;
 use Octo\Store;
@@ -20,6 +21,10 @@ class CategoriesController extends Controller
      * @var CategoryStore
      */
     protected $categoryStore;
+    /**
+     * @var \Octo\System\Store\FileStore
+     */
+    protected $fileStore;
 
     /**
      * Setup initial menu
@@ -198,7 +203,7 @@ class CategoriesController extends Controller
      * @param $categoryId
      * @param $useBase
      */
-    protected function processEdit($category, $scope, $categoryId, $useBase)
+    protected function processEdit(Category $category, $scope, $categoryId, $useBase)
     {
         if ($this->request->getMethod() == 'POST') {
             $values = array_merge($this->getParams(), array('id' => $categoryId));
@@ -211,15 +216,17 @@ class CategoriesController extends Controller
                     if ($category->getParentId() == 0) {
                         $category->setParentId(null);
                     }
+                    if (($category->getImageId() == 0)) {
+                        $category->setImageId(null);
+                    }
 
+                    /*
                     if ($files = File::upload('image', 'category')) {
                         if (isset($files[0])) {
                             $category->setImageId($files[0]->getId());
                         }
                     }
-                    if ($this->getParam('remove_image')) {
-                        $category->setImageId(null);
-                    }
+                    */
 
                     // Later, we might want to change the slug if there's nothing in the category already
                     // or fix URLs, or something. [JI - 21/02/14]
@@ -313,12 +320,33 @@ class CategoriesController extends Controller
         $field->setLabel('Description (optional)');
         $fieldset->addField($field);
 
+        /*
+         * Old upload multiply files for category
         $field = new ImageUpload('image');
         $field->setRequired(false);
         $field->setLabel('Image (optional)');
         if (isset($values['image_id'])) {
             $field->setImageId($values['image_id']);
         }
+        $fieldset->addField($field);
+*/
+
+        $field = new ImagePicker('image_id');
+        $field->setClass('imagePicker');
+        $field->setLabel('Chose image');
+
+        $options = [];
+        $options[] = '---';
+        $this->fileStore = Store::get('File');
+        $options = $options + $this->fileStore->getForOptions('category');
+        $field->setOptions($options);
+        $field->setRequired(false);
+
+
+        if ($type =='edit') {
+            $field->setValue($values['image_id']);
+        }
+
         $fieldset->addField($field);
 
         $field = new Form\Element\Select('parent_id');

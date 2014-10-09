@@ -116,4 +116,35 @@ class FileStore extends Octo\Store
             return [];
         }
     }
+
+    public function getForOptions($scope)
+    {
+        $query = 'SELECT id, title FROM file WHERE scope ';
+
+        if ($scope != 'files') {
+            $query .= ' <> "files" '; //scopes: images, shop, category
+        } else {
+            $query .= ' = :scope ';
+        }
+
+        $query .= " ORDER BY title";
+        $stmt = Database::getConnection('read')->prepare($query);
+        if ($scope != 'files') {
+            $stmt->bindParam(':scope', $scope);
+        }
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $data = [];
+            foreach ($res as $item) {
+                $data[$item['id']] = $item['title'];
+            }
+            return $data;
+        } else {
+            return array();
+        }
+    }
+
+
+
 }

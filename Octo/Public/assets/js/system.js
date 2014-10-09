@@ -169,7 +169,7 @@ function imagePicker(id, label, value)
                 img_loader.fadeOut('fast');
             });
         })
-        .on("change", function(e) { img.attr('src', '/media/render/' + e.val + '/160/90');img_loader.fadeOut('fast');img.fadeIn("Fast");});
+        .on("change", function(e) { img.attr('src', '/media/render/' + e.val + '/160/90'); img_loader.fadeOut('fast'); img.fadeIn("Fast");});
 
     input.val(value);
 
@@ -220,6 +220,21 @@ $(document).ready(function () {
 
     $('.select2').select2();
 
+    function formatSelectWithImage(image) {
+        if (image.id == 0) return "<img class='flag' src='/assets/images/no_image.png' width='80' height='80'/>" + " Remove image";
+        return "<img class='flag' src='/media/render/" + image.id.toLowerCase() + "/80/80'/> " + image.text;
+    }
+
+    $('.imagePicker').select2({
+        formatResult: formatSelectWithImage,
+        formatSelection: formatSelectWithImage,
+        dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+        escapeMarkup: function(m) { return m; }
+    }).on("change", function(e) {
+        if (e.val != '0' ) $('#image_preview').attr('src', '/media/render/' + e.val + '/200/auto');
+        else {$('#image_preview').attr('src', '/assets/images/no_image.png');}
+    });
+
     $('.sa-datepicker').daterangepicker({
         format: 'YYYY-MM-DD',
         singleDatePicker: true,
@@ -240,7 +255,7 @@ $(document).ready(function () {
             initSelection : function(element, callback) {
 
                 if (input.val()) {
-                    img.attr('src', '/media/render/' + input.val() + '/160/90');
+                    img.attr('src', '/media/render/' + input.val() + '/160/160');
                     img.show();
 
                     $.getJSON('/'+window.adminUri+'/media/autocomplete/images?q=' + input.val(), function (data) {

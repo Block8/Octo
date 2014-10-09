@@ -1,0 +1,20 @@
+<section class="form-group {@ccss}{if error} error{/if}">
+    {if label}<label class="label">{@label}</label>{/if}
+
+        <div class="image_form_container">
+            <p>{if value}<img id="image_preview" src="/media/render/{@value}/200/auto" />{/if}
+               {ifnot value}<img id="image_preview" src="/assets/images/no_image.png" title="There is no assigned image." />{/ifnot}
+            </p>
+        </div>
+
+    <select id="{@id}" class="form-control {@css}" name="{@name}">
+        {for options}
+        <option value="{@key}"{if parent.value == key} selected="selected"{/if}>{@value}</option>
+        {/for}
+    </select>
+
+    {if error}
+        <em for="{@name}" class="invalid">{@error}</em>
+    {/if}
+</section>
+
