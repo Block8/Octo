@@ -48,7 +48,7 @@ class VariantController extends Controller
 
                     $variant = $this->variantStore->save($variant);
 
-                    $this->successMessage($variant->getTitle() . ' was added successfully.', true);
+                    $this->successMessage('Variant ' . $variant->getTitle() . ' was added successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/variant');
                     exit();
                 } catch (Exception $e) {
@@ -83,7 +83,7 @@ class VariantController extends Controller
                     $variant->setValues($values);
                     $variant = $this->variantStore->save($variant);
 
-                    $this->successMessage($variant->getTitle() . ' was edited successfully.', true);
+                    $this->successMessage('Variant ' . $variant->getTitle() . ' was edited successfully.', true);
                     header('Location: /' . $this->config->get('site.admin_uri') . '/variant');
                     exit();
                 } catch (Exception $e) {
@@ -108,7 +108,7 @@ class VariantController extends Controller
         $variant = $this->variantStore->getById($variantId);
         $this->variantStore->delete($variant);
 
-        $this->successMessage($variant->getTitle() . ' was deleted successfully.', true);
+        $this->successMessage('Variant ' . $variant->getTitle() . ' was deleted successfully.', true);
         header('Location: /' . $this->config->get('site.admin_uri') . '/variant/');
         exit();
     }
