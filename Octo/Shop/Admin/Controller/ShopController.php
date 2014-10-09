@@ -338,6 +338,11 @@ class ShopController extends Controller
                 $variant = $this->variantStore->getById($this->getParam('new_variant'));
                 $options = $this->variantOptionStore->getByVariantId($variant->getId());
 
+                if (count($options) < 1) {
+                    $this->errorMessage('Define options for variant <a class="typical-link" href="/backoffice/variant-option/manage/'.$variant->getId().'">'.$variant->getTitle().' <i class="fa fa-external-link"></i></a> first, please.', true);
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-variants/' . $productId);
+                    exit();
+                }
                 foreach ($options as $option) {
                     $iv = new ItemVariant();
                     $iv->setVariantId($variant->getId());

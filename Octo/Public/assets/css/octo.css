@@ -26,3 +26,8 @@ img.flag {padding-right: 10px; }
 .imagePicker .select2-choice {
     height:80px;
 }
+
+.typical-link{
+    text-decoration:underline;
+    font-weight:bold;
+}
