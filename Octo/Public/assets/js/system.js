@@ -120,19 +120,25 @@ function selectElement(id, label, options, value)
 
 function imagePicker(id, label, value)
 {
-    var section = $('<div></div>').addClass('form-group');
+    var all = $('<div></div>').addClass('form-group');
+    var section = $('<div></div>').css('height', '100px');
+    all.append(section);
+
     var input = $('<input>').attr('id', id).attr('type', 'text').addClass('form-control');
     input.css('width', '100%');
 
     var img = $('<img>');
     section.append(img);
 
+    var img_loader = $('<img src="/assets/backoffice/img/ajax-loader1.gif" style="float: right; display: none;" />');
+    section.append(img_loader);
+
     if (value) {
         img.attr('src', '/media/render/' + value + '/160/90');
     }
 
-    section.append('<br /><br />');
-    section.append(input);
+    all.append('<br />');
+    all.append(input);
 
     input.select2({
         placeholder: "Search for an image",
@@ -152,13 +158,22 @@ function imagePicker(id, label, value)
         }
     });
 
-    input.on('change', function () {
-        img.attr('src', '/media/render/' + $(this).val() + '/160/90');
-    });
+    input
+        .on('select2-highlight', function (e) {
+            img_loader.css('display', 'block');
+            img.fadeOut("fast");
+
+            img.attr('src', '/media/render/' + e.val + '/160/90');
+            img.load(function () {
+                img.fadeIn("Fast");
+                img_loader.fadeOut('fast');
+            });
+        })
+        .on("change", function(e) { img.attr('src', '/media/render/' + e.val + '/160/90');img_loader.fadeOut('fast');img.fadeIn("Fast");});
 
     input.val(value);
 
-    return section;
+    return all;
 }
 
 function pagePicker(id, label, value)
