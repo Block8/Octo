@@ -358,6 +358,17 @@ class ShopController extends Controller
         }
     }
 
+    public function productVariantsRemove()
+    {
+        $itemId = $this->getParam('itemid', 0);
+        $variantId = $this->getParam('variantid', 0);
+
+        (string)$ret = ''. Store::get('ItemVariant')->deleteVariantForItem($itemId, $variantId);
+
+        die($ret);
+    }
+
+
     /**
      * Manage related products - You may also like...
      * @param $productId

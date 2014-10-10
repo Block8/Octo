@@ -213,17 +213,46 @@ function pagePicker(id, label, value)
     return section;
 }
 
+/*For imagePicker with Select2*/
+function formatSelectWithImage(image) {
+    if (image.id == 0) return "<img class='flag' src='/assets/images/no_image.png' width='80' height='80'/>" + " Remove image";
+    return "<img class='flag' src='/media/render/" + image.id.toLowerCase() + "/80/80'/> " + image.text;
+}
+
+
 $(document).ready(function () {
     $('.btn-delete').on('click', function () {
         return confirm('Are you sure?');
     });
 
+    $("[data-widget='remove-variant']").click(function() {
+        //Find the box parent
+        var box = $(this).parents(".box").first();
+        var button = $(this);
+        var formData = {variantid:button.data('variantid'),itemid:button.data('itemid')};
+
+        $.ajax({
+            url : "/backoffice/shop/product-variants-remove",
+            type: "POST",
+            data : formData,
+            success: function(affectedRows)
+            {
+                //data - response from server
+                if (affectedRows > 0) {
+                    box.slideUp();
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError)
+            {
+
+            }
+        });
+
+    });
+
+
     $('.select2').select2();
 
-    function formatSelectWithImage(image) {
-        if (image.id == 0) return "<img class='flag' src='/assets/images/no_image.png' width='80' height='80'/>" + " Remove image";
-        return "<img class='flag' src='/media/render/" + image.id.toLowerCase() + "/80/80'/> " + image.text;
-    }
 
     $('.imagePicker').select2({
         formatResult: formatSelectWithImage,

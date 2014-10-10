@@ -6,6 +6,7 @@
 namespace Octo\Shop\Store;
 
 use Octo;
+use b8\Database;
 use b8\Database\Query;
 
 /**
@@ -30,4 +31,20 @@ class ItemVariantStore extends Octo\Store
             throw new StoreException('Could not get ItemFile by ItemId and FileId', 0, $ex);
         }
     }
+
+    public function deleteVariantForItem($itemId, $variantId)
+    {
+        $stmt = Database::getConnection('write')->prepare(
+            'DELETE FROM item_variant WHERE item_id = :itemId AND variant_id = :variantId'
+        );
+        $stmt->bindValue(':variantId', $variantId);
+        $stmt->bindValue(':itemId', $itemId);
+        if ($stmt->execute()) {
+            return $stmt->rowCount();
+        } else {
+            return 0;
+        }
+    }
+
+
 }
