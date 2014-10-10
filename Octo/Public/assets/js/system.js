@@ -225,6 +225,7 @@ $(document).ready(function () {
         return confirm('Are you sure?');
     });
 
+    //Manage variants for product
     $("[data-widget='remove-variant']").click(function() {
         //Find the box parent
         var box = $(this).parents(".box").first();
@@ -239,7 +240,10 @@ $(document).ready(function () {
             {
                 //data - response from server
                 if (affectedRows > 0) {
-                    box.slideUp();
+                    box.slideUp("400", function() {
+                        // Animation complete.
+                        box.remove();
+                    });
                 }
             },
             error: function (xhr, ajaxOptions, thrownError)
