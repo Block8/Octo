@@ -66,8 +66,11 @@ class ItemStore extends Octo\Store
         return $this->getAll();
     }
 
+
     /**
      * @param $value
+     * @param $categoryId
+     * @param bool $activeOnly
      * @param string $useConnection Connection type to use.
      * @throws StoreException
      * @return Item
