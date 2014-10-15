@@ -27,14 +27,14 @@ class VariantOptionController extends Controller
         $this->variantOptionStore = Store::get('VariantOption');
 
         $this->setTitle('Variant Options');
-        $this->addBreadcrumb('Products', '/product');
+        $this->addBreadcrumb('Shop', '/shop');
         $this->addBreadcrumb('Variants', '/variant');
     }
 
     public function manage($variantId)
     {
         $variant = $this->variantStore->getById($variantId);
-        $this->addBreadcrumb($variant->getTitle(), '/variant/' . $variantId);
+        $this->addBreadcrumb($variant->getTitle(), '/variant/edit/' . $variantId);
         $this->addBreadcrumb('Options', '/variant-option/manage/' . $variantId);
 
         $this->view->variant = $variant;
@@ -47,7 +47,7 @@ class VariantOptionController extends Controller
     public function add($variantId)
     {
         $variant = $this->variantStore->getById($variantId);
-        $this->addBreadcrumb($variant->getTitle(), '/variant/' . $variantId);
+        $this->addBreadcrumb($variant->getTitle(), '/variant/edit/' . $variantId);
         $this->addBreadcrumb('Options', '/variant-option/manage/' . $variantId);
         $this->addBreadcrumb('Add Option', '/variant-option/add/' . $variantId);
 
@@ -93,7 +93,7 @@ class VariantOptionController extends Controller
         $this->view->variant = $variant;
         $this->view->variantOption = $variantOption;
 
-        $this->addBreadcrumb($variant->getTitle(), '/variant/' . $variant->getId());
+        $this->addBreadcrumb($variant->getTitle(), '/variant/edit/' . $variant->getId());
         $this->addBreadcrumb('Options', '/variant-option/manage/' . $variant->getId());
         $this->addBreadcrumb($variantOption->getOptionTitle(), '/variant-option/edit/' . $variantOption->getId());
 

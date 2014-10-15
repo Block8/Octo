@@ -21,7 +21,7 @@ class VariantController extends Controller
         $this->variantStore = Store::get('Variant');
 
         $this->setTitle('Variants');
-        $this->addBreadcrumb('Products', '/product');
+        $this->addBreadcrumb('Shop', '/shop');
         $this->addBreadcrumb('Variants', '/variant');
     }
 
