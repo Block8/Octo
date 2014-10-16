@@ -33,6 +33,32 @@ class ItemDiscountStore extends Octo\Store
         }
     }
 
+    public function getDiscountTableForCategory($categoryId)
+    {
+        $query = new Query();
+        $query->select('discount_option.amount_initial, item_discount.price_adjustment');
+        $query->from('item_discount');
+        $query->join('discount_option', '', 'discount_option.id = item_discount.discount_option_id');
+        $query->where('item_discount.category_id = :categoryId');
+        $query->bind(':categoryId', $categoryId);
+
+        try {
+            if ($query->execute()) {
+                $res = $query->fetchAll(\PDO::FETCH_ASSOC);
+                $data = [];
+                foreach ($res as $item) {
+                    $data[$item['amount_initial']] = $item['price_adjustment'];
+                }
+                return $data;
+            } else {
+                return array();
+            }
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get DiscountTable by CategoryId', 0, $ex);
+        }
+    }
+
+
     public function deleteDiscountForCategory($categoryId, $discountId)
     {
         $stmt = Database::getConnection('write')->prepare(

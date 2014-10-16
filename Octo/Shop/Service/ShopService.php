@@ -4,6 +4,7 @@ namespace Octo\Shop\Service;
 
 use b8\Config;
 use Katzgrau\KLogger\Logger;
+use Octo\Invoicing\Model\Item;
 use Octo\Store;
 use Octo\System\Model\Contact;
 use Octo\Invoicing\Model\LineItem;
@@ -31,8 +32,11 @@ class ShopService
     /**
      * @var \Octo\Shop\Store\ItemVariantStore
      */
-    protected $variantStore;
-
+    protected $itemVariantStore;
+    /**
+     * @var \Octo\Shop\Store\ItemDiscountStore
+     */
+    protected $itemDiscountStore;
     /**
      * @var \Octo\Shop\Store\ShopBasketStore
      */
@@ -46,13 +50,17 @@ class ShopService
     public function __construct(
         ItemStore $itemStore,
         LineItemStore $lineStore,
-        ItemVariantStore $variantStore,
-        ShopBasketStore $basketStore
+        ItemVariantStore $itemVariantStore,
+        ShopBasketStore $basketStore,
+                        $itemDiscountStore
     ) {
         $this->itemStore = $itemStore;
         $this->lineStore = $lineStore;
-        $this->variantStore = $variantStore;
+        $this->itemVariantStore = $itemVariantStore;
         $this->basketStore = $basketStore;
+        if (!is_null($itemDiscountStore)) {
+            $this->itemDiscountStore = $itemDiscountStore;
+        }
     }
 
     public function setInvoiceStore(InvoiceStore $store)
@@ -90,12 +98,15 @@ class ShopService
 
         if (isset($itemData['variants'])) {
             foreach ($itemData['variants'] as $variantData) {
-                $variant = $this->variantStore->getById($variantData['variant']);
+                $variant = $this->itemVariantStore->getById($variantData['variant']);
                 $title = $variant->getVariant()->getTitle();
                 $description .= ' [' . $title . ': ' . $variant->getVariantOption()->getOptionTitle() . '] ';
                 $itemPrice += $variantData['adjustment'];
             }
         }
+
+        $discountTable = $this->itemDiscountStore->getDiscountTableForCategory($item->getCategoryId());
+        $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
 
         //Check if line item already exist
         //if exist receive, sum, update
@@ -104,12 +115,15 @@ class ShopService
         {
             $lineItemInBasket = $lineItemInBasket[0];
             $lineItemInBasket->setQuantity($lineItemInBasket->getQuantity() + $quantity);
+            $itemPrice = $this->calculateDiscountedPrice($item, $lineItemInBasket->getQuantity(), $discountTable);
             $linePrice = $itemPrice * $lineItemInBasket->getQuantity();
+            $lineItemInBasket->setItemPrice($itemPrice);
             $lineItemInBasket->setLinePrice(round($linePrice, 2));
             $lineItem = $this->lineStore->saveByUpdate($lineItemInBasket);
         } else {
             //else Save By Insert (new item)
 
+            $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
             $linePrice = $itemPrice * $quantity;
 
             $lineItem = new LineItem();
@@ -126,6 +140,21 @@ class ShopService
 
         return $lineItem;
     }
+
+    protected function calculateDiscountedPrice(Item $item, $quantity, $discountTable)
+    {
+        $discountedPrice = $item->getPrice();
+
+        foreach ($discountTable as $minAmount => $productPrice) {
+            if ($quantity >= $minAmount) {
+                $discountedPrice = $item->getPrice() + $productPrice;
+            }
+        }
+
+        return $discountedPrice;
+    }
+
+
 
     /**
      * Create a new invoice or use generated for the same BasketId, ContactId and unpaid invoice

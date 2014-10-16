@@ -4,6 +4,9 @@ namespace Octo\Shop\Block;
 
 use b8\Exception\HttpException\NotFoundException;
 use Octo\Block;
+use Octo\Invoicing\Model\Item;
+use Octo\Shop\Model\Discount;
+use Octo\Shop\Model\ItemDiscount;
 use Octo\Store;
 use Octo\Template;
 use Octo\Shop\Service\ShopService;
@@ -14,13 +17,6 @@ class Shop extends Block
      * @var \Octo\Invoicing\Store\ItemStore
      */
     protected $itemStore;
-
-    //TODO: Will fix it later
-    /**
-     * @var \Octo\Invoicing\Store\ItemStore
-     */
-    protected $productStore;
-
     /**
      * @var \Octo\Shop\Store\ItemVariantStore
      */
@@ -29,6 +25,10 @@ class Shop extends Block
      * @var \Octo\Shop\Store\ItemRelatedStore
      */
     protected $itemRelatedStore;
+    /**
+     * @var \Octo\Shop\Store\ItemDiscountStore
+     */
+    protected $itemDiscountStore;
     /**
      * @var bool Set URI extensions
      */
@@ -51,10 +51,11 @@ class Shop extends Block
 
     public function init()
     {
-        $this->categoryStore = Store::get('Category');
-        $this->productStore = Store::get('Item');
-        $this->itemVariantStore = Store::get('ItemVariant');
-        $this->itemRelatedStore = Store::get('ItemRelated');
+        $this->categoryStore     = Store::get('Category');
+        $this->itemStore         = Store::get('Item');
+        $this->itemVariantStore  = Store::get('ItemVariant');
+        $this->itemRelatedStore  = Store::get('ItemRelated');
+        $this->itemDiscountStore = Store::get('ItemDiscount');
     }
 
     public function renderNow()
@@ -115,7 +116,7 @@ class Shop extends Block
 
         $products = [];
         if ($category->getActive()) {
-            $products = $this->productStore->getByCategoryId($category->getId());
+            $products = $this->itemStore->getByCategoryId($category->getId());
         }
 
         $this->view->products = $products;
@@ -127,7 +128,8 @@ class Shop extends Block
         $category = $this->categoryStore->getByScopeAndSlug('shop', $categorySlug);
 
         $productSlug = $this->uriParts[1];
-        $product = $this->productStore->getBySlugAndCategory($productSlug, $category->getId(), !(int)$this->request->getParam('preview', 0));
+        /** @type \Octo\Invoicing\Model\Item $product */
+        $product = $this->itemStore->getBySlugAndCategory($productSlug, $category->getId(), !(int)$this->request->getParam('preview', 0));
 
         if (!$product) {
             throw new NotFoundException;
@@ -153,6 +155,35 @@ class Shop extends Block
         $this->view->category = $category;
         $this->view->variants = $this->setupVariants($product);
         $this->view->related = $this->setupRelatedProducts($product);
+        $this->view->discounts = $this->setupDiscounts($product);
+    }
+
+    protected function setupDiscounts(Item $product)
+    {
+        $discount = [];
+
+        /** @var @type \Octo\Shop\Model\ItemDiscount[] $discounts */
+        $discounts = $this->itemDiscountStore->getAllForCategory($product->getCategoryId());
+
+        if ($discounts) {
+
+            $discount['title'] = $discounts[0]->getDiscount()->getTitle();
+            $discount['description'] = $discounts[0]->getDiscount()->getDescription();
+            $discount['single'] = $discounts[0]->getDiscount()->getItemSingleTitle();
+            $discount['plural'] = $discounts[0]->getDiscount()->getItemPluralTitle();
+
+            foreach ($discounts as $itemDiscount) {
+
+                $option['amount_initial'] = $itemDiscount->getDiscountOption()->getAmountInitial();
+                $option['amount_final'] = $itemDiscount->getDiscountOption()->getAmountFinal();
+                $option['price_new'] = $product->getPrice() + $itemDiscount->getPriceAdjustment();
+                $option['price_amount_initial'] = number_format(($option['amount_initial'] * $option['price_new']), 2, '.', '');
+
+                $discount['options'][] = $option;
+            }
+        }
+
+        return $discount;
     }
 
     protected function setupVariants($product)
@@ -203,7 +234,7 @@ class Shop extends Block
          * Disable, may be enabled as an option from BO or removed later
         else {
         //if there is no related products //as 01/09/2014 pick random
-            $related = $this->productStore->getAll(true);
+            $related = $this->itemStore->getAll(true);
 
             shuffle($related);
             $products = array_slice($related, 0, 4);
@@ -218,10 +249,11 @@ class Shop extends Block
 
         $itemStore = Store::get('Item');
         $lineStore = Store::get('LineItem');
-        $variantStore = Store::get('ItemVariant');
+        $itemVariantStore = Store::get('ItemVariant');
+        $itemDiscountStore = Store::get('ItemDiscount');
         $basketStore = Store::get('ShopBasket');
 
-        $service = new ShopService($itemStore, $lineStore, $variantStore, $basketStore);
+        $service = new ShopService($itemStore, $lineStore, $itemVariantStore, $basketStore, $itemDiscountStore);
         $basket = $service->getBasket($itemData['basket_id']);
 
         $service->addItemToBasket($basket, $itemData);

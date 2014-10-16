@@ -31,6 +31,12 @@ trait DiscountBase
         $this->data['active'] = null;
         $this->getters['active'] = 'getActive';
         $this->setters['active'] = 'setActive';
+        $this->data['item_single_title'] = null;
+        $this->getters['item_single_title'] = 'getItemSingleTitle';
+        $this->setters['item_single_title'] = 'setItemSingleTitle';
+        $this->data['item_plural_title'] = null;
+        $this->getters['item_plural_title'] = 'getItemPluralTitle';
+        $this->setters['item_plural_title'] = 'setItemPluralTitle';
 
         // Foreign keys:
     }
@@ -78,6 +84,30 @@ trait DiscountBase
     public function getActive()
     {
         $rtn = $this->data['active'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ItemSingleTitle / item_single_title.
+    *
+    * @return string
+    */
+    public function getItemSingleTitle()
+    {
+        $rtn = $this->data['item_single_title'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ItemPluralTitle / item_plural_title.
+    *
+    * @return string
+    */
+    public function getItemPluralTitle()
+    {
+        $rtn = $this->data['item_plural_title'];
 
         return $rtn;
     }
@@ -155,5 +185,39 @@ trait DiscountBase
 
         $this->data['active'] = $value;
         $this->setModified('active');
+    }
+
+    /**
+    * Set the value of ItemSingleTitle / item_single_title.
+    *
+    * @param $value string
+    */
+    public function setItemSingleTitle($value)
+    {
+        $this->validateString('ItemSingleTitle', $value);
+
+        if ($this->data['item_single_title'] === $value) {
+            return;
+        }
+
+        $this->data['item_single_title'] = $value;
+        $this->setModified('item_single_title');
+    }
+
+    /**
+    * Set the value of ItemPluralTitle / item_plural_title.
+    *
+    * @param $value string
+    */
+    public function setItemPluralTitle($value)
+    {
+        $this->validateString('ItemPluralTitle', $value);
+
+        if ($this->data['item_plural_title'] === $value) {
+            return;
+        }
+
+        $this->data['item_plural_title'] = $value;
+        $this->setModified('item_plural_title');
     }
 }

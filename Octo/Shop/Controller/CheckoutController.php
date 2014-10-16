@@ -480,10 +480,11 @@ class CheckoutController extends Controller
     {
         $itemStore = Store::get('Item');
         $lineStore = Store::get('LineItem');
-        $variantStore = Store::get('ItemVariant');
+        $itemVariantStore = Store::get('ItemVariant');
+        $itemDiscountStore = Store::get('ItemDiscount');
         $basketStore = Store::get('ShopBasket');
 
-        return new ShopService($itemStore, $lineStore, $variantStore, $basketStore);
+        return new ShopService($itemStore, $lineStore, $itemVariantStore, $basketStore, $itemDiscountStore);
     }
 
     protected function getInvoiceService()

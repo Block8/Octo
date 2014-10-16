@@ -106,11 +106,11 @@ class CategoryStore extends Octo\Store
     public function getNamesForScope($scope, $order = 'c.name ASC')
     {
         $query = "SELECT c.id, c.name, c2.id AS child_id, CONCAT('- ', c2.name) AS child_name
-FROM category c
-LEFT JOIN category c2 ON c2.parent_id = c.id
-LEFT JOIN category c3 ON c3.id = c.id
-WHERE c.scope = :scope AND (CONCAT('- ', c2.name) IS NOT NULL OR c.parent_id IS NULL)
-ORDER BY c.parent_id ASC, " . $order;
+                    FROM category c
+                    LEFT JOIN category c2 ON c2.parent_id = c.id
+                    LEFT JOIN category c3 ON c3.id = c.id
+                    WHERE c.scope = :scope AND (CONCAT('- ', c2.name) IS NOT NULL OR c.parent_id IS NULL)
+                    ORDER BY c.parent_id ASC, " . $order;
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);
 
