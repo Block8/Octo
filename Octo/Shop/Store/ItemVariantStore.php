@@ -28,7 +28,7 @@ class ItemVariantStore extends Octo\Store
             $query->execute();
             return $query->fetchAll(\PDO::FETCH_ASSOC);
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get ItemFile by ItemId and FileId', 0, $ex);
+            throw new StoreException('Could not get ItemVariant by ItemId', 0, $ex);
         }
     }
 
