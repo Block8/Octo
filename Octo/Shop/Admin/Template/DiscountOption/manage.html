@@ -1,0 +1,57 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <h1 class="page-title txt-color-blueDark pull-left"><i class="fa fa-fw fa-shopping-cart"></i> Manage Discount Options for {@discount.title}</h1>
+    <div class="pull-right header-buttons">
+        <a class="btn-default btn" href="/{@adminUri}/discount-option/add/{@discount.id}"><i class="fa fa-plus"></i> Add Option</a>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="table-items">
+    <thead>
+    <tr>
+        <th>Initial Amount</th>
+        <th>Final Amount</th>
+        <td width="2%"></td>
+        <th width="20%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {for discountOptions}
+    <tr class="table-item" data-id="{@value.id}">
+        <td>{@value.amount_initial}</td>
+        <td>{@value.amount_final}</td>
+        <td><i class="fa fa-fw fa-arrows handler"></i></td>
+        <td>
+            <div class="btn-group">
+                {if (can_access uri: "/discount-option/edit")}
+                <a class="btn btn-default btn-sm" href="/{@adminUri}/discount-option/edit/{@value.id}">Edit</a>
+                {/if}
+
+                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {if (can_access uri: "/discount-option/edit")}
+                    <li>
+                        <a href="/{@adminUri}/discount-option/edit/{@value.id}">Edit</a>
+                    </li>
+                    {/if}
+
+                    {if (can_access uri: "/discount-option/delete")}
+                    <li>
+                        <a href="/{@adminUri}/discount-option/delete/{@value.id}" class="btn-delete">Delete</a>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+        </td>
+    </tr>
+    {/for}
+    </tbody>
+</table>
+
+<script>
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+</script>

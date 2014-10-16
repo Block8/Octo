@@ -1,0 +1,98 @@
+<div class="row">
+<div class="col-lg-12">
+    <h1 class="page-title txt-color-blueDark"><i class="fa fa-fw fa-shopping-cart"></i> Manage Discounts</h1>
+</div>
+</div>
+
+{if items}
+<div class="row">
+<div class="col-lg-12">
+
+{for discounts}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title"></h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary btn-xs" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-primary btn-xs btn-delete" data-widget="remove-discount" data-discountid="{@item.id}" data-categoryid="{@category.id}"  data-toggle="tooltip" title="" data-original-title="Remove discounts from category"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="box-body" style="display: block;">
+            <table class="table table-bordered table-striped" id="menu-items">
+            <thead>
+            <tr>
+                <th>Initial Amount</th>
+                <th>Final Amount</th>
+                <th width="20%">Price Adjustment</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop item.options}
+            <tr class="menu-item" data-id="{@item.id}">
+                <td>{@value.amount_initial}</td>
+                <td>{@value.amount_final}</td>
+                <td style="padding-right: 5px"><input class="menu-item-title form-control discount_price" style="padding-left: 5px;" name="price[{@item.item_discount_id}]" type="text" value="{@item.price_adjustment}"></td>
+            </tr>
+            {/loop}
+            </tbody>
+        </table>
+        </div><!-- /.box-body -->
+    </div>
+{/for}
+</div>
+</div>
+
+<form class="smart-form" id="discounts-form" action="/{@adminUri}/shop/category-discounts/{@category.id}" method="post" style="border: none; padding: none; margin: none;">
+    <div style="margin: 40px auto; width: 150px;">
+        <input class="btn btn-lg btn-success" type="submit" value="Save discounts price adjustments">
+    </div>
+</form>
+{/if}
+
+{ifnot items}
+{if availableDiscounts}
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Not assigned discounts:</h3>
+            </div>
+            <form class="smart-form" action="/{@adminUri}/shop/category-discounts/{@category.id}" method="post">
+                <div class="box-body">
+                    <section class="form-group">
+                        <label for="new_discount">Discount</label>
+                            <select class="form-control select2" name="new_discount" id="new_discount">
+                                {for availableDiscounts}
+                                <option value="{@item.id}">{@item.title}</option>
+                                {/for}
+                            </select>
+                    </section>
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                        <button id="add-item" type="submit" class="btn btn-primary">
+                            Add Discount
+                        </button>
+                </div><!-- /.box-footer-->
+            </form>
+        </div>
+    </div>
+</div>
+{/if}
+{/ifnot}
+<script>
+$(document).ready( function(e) {
+    $('#discounts-form').submit( function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $('#discounts_form input.price_adjustment').remove();
+
+        $('input.discount_price').each( function(vp) {
+            form.append( '<input class="price_adjustment" type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '">');
+        });
+
+        form.off("submit");
+        form.submit();
+    });
+});
+</script>
