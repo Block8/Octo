@@ -7,6 +7,7 @@ use Octo\Admin\Controller;
 use Octo\Admin\Menu;
 use Octo\Form\Element\ImageUpload;
 use Octo\Invoicing\Model\Item;
+use Octo\Shop\Model\ItemDiscount;
 use Octo\Shop\Model\ItemFile;
 use Octo\Shop\Model\ItemRelated;
 use Octo\Shop\Model\ItemVariant;
@@ -49,6 +50,19 @@ class ShopController extends Controller
      */
     protected $itemRelatedStore;
 
+    /**
+     * @var \Octo\Shop\Store\DiscountStore
+     */
+    protected $discountStore;
+    /**
+     * @var \Octo\Shop\Store\DiscountOptionStore
+     */
+    protected $discountOptionStore;
+
+    /**
+     * @var \Octo\Shop\Store\ItemDiscountStore
+     */
+    protected $itemDiscountStore;
 
     /**
      * Return the menu nodes required for this controller
@@ -81,6 +95,14 @@ class ShopController extends Controller
         $variants->addChild(new Menu\Item('Edit Variant Option', '/variant-option/edit', true));
         $variants->addChild(new Menu\Item('Delete Variant Option', '/variant-option/delete', true));
         $products->addChild($variants);
+
+        $discounts = new Menu\Item('Manage Discounts', '/discount');
+        $discounts->addChild(new Menu\Item('Edit Discount', '/discount/edit', true));
+        $discounts->addChild(new Menu\Item('Manage Discount Options', '/discount-option/manage', true));
+        $discounts->addChild(new Menu\Item('Add Discount Option', '/discount-option/add', true));
+        $discounts->addChild(new Menu\Item('Edit Discount Option', '/discount-option/edit', true));
+        $discounts->addChild(new Menu\Item('Delete Discount Option', '/discount-option/delete', true));
+        $products->addChild($discounts);
     }
 
     public function init()
@@ -95,6 +117,10 @@ class ShopController extends Controller
         $this->variantOptionStore = Store::get('VariantOption');
         $this->itemVariantStore = Store::get('ItemVariant');
         $this->itemRelatedStore = Store::get('ItemRelated');
+
+        $this->discountStore = Store::get('Discount');
+        $this->discountOptionStore = Store::get('DiscountOption');
+        $this->itemDiscountStore = Store::get('ItemDiscount');
 
         $mm = $this->config->get('ModuleManager');
         if($mm->isEnabled('FulfilmentHouse')) {
@@ -424,6 +450,85 @@ class ShopController extends Controller
             header('Location: /' . $this->config->get('site.admin_uri') . '/shop/product-related/' . $productId);
             exit();
         }
+    }
+
+    /*Discounts*/
+    public function categoryDiscounts($categoryId)
+    {
+        $category = $this->categoryStore->getById($categoryId);
+
+        $this->view->category = $category;
+        $this->view->availableDiscounts = $this->discountStore->getDiscountsNotUsedByCategory($categoryId);
+
+        $this->view->items = $this->itemDiscountStore->getAllForCategory($categoryId);
+
+        $this->setTitle($category->getName() . ' Discounts');
+        $this->addBreadcrumb($category->getName(), '/shop/edit-product/' . $category->getId());
+        $this->addBreadcrumb('Discounts', '/shop/category-discounts/' . $category->getId());
+
+        $discounts = [];
+        foreach ($this->itemDiscountStore->getAllForCategory($category->getId()) as $itemDiscount) {
+            if (!isset($discounts[$itemDiscount->getDiscountId()])) {
+                $discountArray = array_merge($itemDiscount->getDiscount()->getDataArray(), ['options' => []]);
+                $discounts[$itemDiscount->getDiscountId()] = $discountArray;
+            }
+
+            $ivArray = $itemDiscount->getDataArray();
+            $optionsArray = $itemDiscount->getDiscountOption()->getDataArray();
+
+            $computed = [
+                'item_discount_id' => $ivArray['id'],
+                'amount_initial' => $optionsArray['amount_initial'],
+                'amount_final' => $optionsArray['amount_final'],
+                'price_adjustment' => $ivArray['price_adjustment']
+            ];
+
+            $discounts[$itemDiscount->getDiscountId()]['options'][] = $computed;
+        }
+
+        $this->view->discounts = $discounts;
+
+        if ($this->request->getMethod() == 'POST') {
+            if ($this->getParam('price')) {
+                foreach ($this->getParam('price') as $itemDiscountId => $priceAdjustment) {
+                    $itemDiscount = $this->itemDiscountStore->getById($itemDiscountId);
+                    $itemDiscount->setPriceAdjustment($priceAdjustment);
+                    $this->itemDiscountStore->save($itemDiscount);
+                }
+            }
+
+            if ($this->getParam('new_discount')) {
+                $discount = $this->discountStore->getById($this->getParam('new_discount'));
+                $options = $this->discountOptionStore->getByDiscountId($discount->getId());
+
+                if (count($options) < 1) {
+                    $this->errorMessage('Define options for discount <a class="typical-link" href="/backoffice/discount-option/manage/'.$discount->getId().'">'.$discount->getTitle().' <i class="fa fa-external-link"></i></a> first, please.', true);
+                    header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category-discounts/' . $categoryId);
+                    exit();
+                }
+                foreach ($options as $option) {
+                    $iv = new ItemDiscount();
+                    $iv->setDiscountId($discount->getId());
+                    $iv->setDiscountOptionId($option->getId());
+                    $iv->setCategoryId($categoryId);
+                    $this->itemDiscountStore->save($iv);
+                }
+            }
+
+            $this->successMessage('The discounts were updated successfully.', true);
+            header('Location: /' . $this->config->get('site.admin_uri') . '/shop/category-discounts/' . $categoryId);
+            exit();
+        }
+    }
+
+    public function categoryDiscountsRemove()
+    {
+        $categoryId = $this->getParam('categoryid', 0);
+        $discountId = $this->getParam('discountid', 0);
+
+        (string)$ret = ''. Store::get('ItemDiscount')->deleteDiscountForCategory($categoryId, $discountId);
+
+        die($ret);
     }
 
     public function productForm($values = [], $type = 'add')

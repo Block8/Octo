@@ -254,6 +254,34 @@ $(document).ready(function () {
 
     });
 
+    //Manage discounts for category
+    $("[data-widget='remove-discount']").click(function() {
+        //Find the box parent
+        var box = $(this).parents(".box").first();
+        var button = $(this);
+        var formData = {discountid:button.data('discountid'),categoryid:button.data('categoryid')};
+
+        $.ajax({
+            url : "/backoffice/shop/category-discounts-remove",
+            type: "POST",
+            data : formData,
+            success: function(affectedRows)
+            {
+                //data - response from server
+                if (affectedRows > 0) {
+                    box.slideUp("400", function() {
+                        // Animation complete.
+                        box.remove();
+                    });
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError)
+            {
+
+            }
+        });
+
+    });
 
     $('.select2').select2();
 

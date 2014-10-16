@@ -47,6 +47,12 @@
                                         <a href="/{@adminUri}/categories/deactivate/{@item.id}" class="btn-deactivate">Deactivate Category</a>
                                     </li>
                                     {/ifnot}
+
+                                    {if (can_access uri: "/shop/category-discounts")}
+                                    <li>
+                                        <a href="/{@adminUri}/shop/category-discounts/{@item.id}">Manage Discounts</a>
+                                    </li>
+                                    {/if}
                                 </ul>
                             </div>
                         </td>
