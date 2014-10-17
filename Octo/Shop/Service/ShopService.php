@@ -19,6 +19,8 @@ use Psr\Log\LogLevel;
 
 class ShopService
 {
+    const CATEGORY_ECARDS = 6;      // TODO: Remove magic category number
+
     /**
      * @var \Octo\Invoicing\Store\ItemStore
      */
@@ -106,7 +108,6 @@ class ShopService
         }
 
         $discountTable = $this->itemDiscountStore->getDiscountTableForCategory($item->getCategoryId());
-        $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
 
         //Check if line item already exist
         //if exist receive, sum, update
@@ -114,15 +115,32 @@ class ShopService
         if(!is_null($lineItemInBasket) && count($lineItemInBasket)>0)
         {
             $lineItemInBasket = $lineItemInBasket[0];
-            $lineItemInBasket->setQuantity($lineItemInBasket->getQuantity() + $quantity);
-            $itemPrice = $this->calculateDiscountedPrice($item, $lineItemInBasket->getQuantity(), $discountTable);
-            $linePrice = $itemPrice * $lineItemInBasket->getQuantity();
+
+            if ($lineItemInBasket->Item->getCategoryId() == self::CATEGORY_ECARDS) {
+                $params = $this->decodeMetaData($lineItemInBasket->getMetaData());
+                $emailAddresses = explode(";", $params['to_email']);
+
+                $newParams = $this->decodeMetaData($metadata);
+                $newEmailAddresses = explode(";", $newParams['to_email']);
+                $newEmailAddresses = $this->combineAndFilterEmails($emailAddresses, $newEmailAddresses);
+
+                $newParams['to_email'] = implode(';', $newEmailAddresses);
+                $toMetaData[] = array('name'=> 'message', 'value'=>$newParams['message']);
+                $toMetaData[] = array('name'=> 'to_email', 'value'=>$newParams['to_email']);
+                $lineItemInBasket->setMetaData(json_encode($toMetaData));
+                $quantity  = count($newEmailAddresses);
+            } else {
+                $quantity += $lineItemInBasket->getQuantity();
+            }
+
+            $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
+            $linePrice = $itemPrice * $quantity;
+            $lineItemInBasket->setQuantity($quantity);
             $lineItemInBasket->setItemPrice($itemPrice);
             $lineItemInBasket->setLinePrice(round($linePrice, 2));
             $lineItem = $this->lineStore->saveByUpdate($lineItemInBasket);
         } else {
             //else Save By Insert (new item)
-
             $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
             $linePrice = $itemPrice * $quantity;
 
@@ -140,21 +158,6 @@ class ShopService
 
         return $lineItem;
     }
-
-    protected function calculateDiscountedPrice(Item $item, $quantity, $discountTable)
-    {
-        $discountedPrice = $item->getPrice();
-
-        foreach ($discountTable as $minAmount => $productPrice) {
-            if ($quantity >= $minAmount) {
-                $discountedPrice = $item->getPrice() + $productPrice;
-            }
-        }
-
-        return $discountedPrice;
-    }
-
-
 
     /**
      * Create a new invoice or use generated for the same BasketId, ContactId and unpaid invoice
@@ -184,6 +187,50 @@ class ShopService
         $service->updateSubtotal($invoice);
 
         return $invoice;
+    }
+
+    /**
+     * @param $metaData string
+     * @return array
+     */
+    protected function decodeMetaData($metaData)
+    {
+        $json_array = json_decode($metaData, true);
+
+        $params = array();
+        for ($i = 0; $i < sizeof($json_array); $i++) {
+            $key = $json_array[$i]['name'];
+            $params[$key] = $json_array[$i]['value'];
+        }
+
+        return $params;
+    }
+
+    /**
+     * @param $emailAddresses
+     * @param $newEmailAddresses
+     * @return array
+     */
+    protected function combineAndFilterEmails($emailAddresses, $newEmailAddresses)
+    {
+        $retEmailAddresses = array_merge($emailAddresses, $newEmailAddresses);
+        $retEmailAddresses = array_filter($retEmailAddresses);
+        $retEmailAddresses = array_unique($retEmailAddresses);
+
+        return $retEmailAddresses;
+    }
+
+    protected function calculateDiscountedPrice(Item $item, $quantity, $discountTable)
+    {
+        $discountedPrice = $item->getPrice();
+
+        foreach ($discountTable as $minAmount => $productPrice) {
+            if ($quantity >= $minAmount) {
+                $discountedPrice = $item->getPrice() + $productPrice;
+            }
+        }
+
+        return $discountedPrice;
     }
 
 }
