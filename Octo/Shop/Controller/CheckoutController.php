@@ -4,17 +4,14 @@ namespace Octo\Shop\Controller;
 
 use b8\Exception\HttpException\NotFoundException;
 use b8\Form;
-use HMUK\Utilities\PostageCalculator;
 use Katzgrau\KLogger\Logger;
 use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form as FormElement;
 use Octo\Form\Element\Input5;
-use Octo\Form\Element\Phone;
 use Octo\Invoicing\Model\Invoice;
 use Octo\Invoicing\Service\InvoiceService;
-use Octo\Shop\Store\ShopBasketStore;
 use Octo\Shop\Service\ShopService;
 use Octo\Store;
 use Octo\Template;
@@ -62,7 +59,7 @@ class CheckoutController extends Controller
         if ($this->request->isAjax() || $this->request->getParam('ajax')) {
             $return = [
                 'basket' => $basket->toArray(),
-                'items' => array_map(function ($item) { return $item->toArray(); }, $items),
+                'items' => array_map(function ($item) { $item->setBasket(null); $item->setItem(null); return $item->toArray(); }, $items),
                 'total' => $basketTotal,
             ];
 
