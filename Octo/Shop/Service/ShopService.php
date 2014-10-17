@@ -106,12 +106,15 @@ class ShopService
                 $itemPrice += $variantData['adjustment'];
             }
         }
+        if ($item->getCategoryId() == self::CATEGORY_ECARDS) {
+            $params = $this->decodeMetaData($metadata);
+            $description .= ' [' . crc32($params['message']) .']';
+        }
 
-        $discountTable = $this->itemDiscountStore->getDiscountTableForCategory($item->getCategoryId());
 
         //Check if line item already exist
         //if exist receive, sum, update
-        $lineItemInBasket = $this->lineStore->getLineItemFromBasket($basket->getId(), $itemId ,$description);
+        $lineItemInBasket = $this->lineStore->getLineItemFromBasket($basket->getId(), $itemId, $description);
         if(!is_null($lineItemInBasket) && count($lineItemInBasket)>0)
         {
             $lineItemInBasket = $lineItemInBasket[0];
@@ -133,7 +136,6 @@ class ShopService
                 $quantity += $lineItemInBasket->getQuantity();
             }
 
-            $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
             $linePrice = $itemPrice * $quantity;
             $lineItemInBasket->setQuantity($quantity);
             $lineItemInBasket->setItemPrice($itemPrice);
@@ -141,7 +143,6 @@ class ShopService
             $lineItem = $this->lineStore->saveByUpdate($lineItemInBasket);
         } else {
             //else Save By Insert (new item)
-            $itemPrice = $this->calculateDiscountedPrice($item, $quantity, $discountTable);
             $linePrice = $itemPrice * $quantity;
 
             $lineItem = new LineItem();
@@ -156,7 +157,37 @@ class ShopService
             $lineItem = $this->lineStore->saveByInsert($lineItem);
         }
 
+        if($lineItem) {
+            $this->applyDiscountForItemInCategory($item, $basket);
+        }
+
         return $lineItem;
+    }
+
+    private function applyDiscountForItemInCategory(Item $item, ShopBasket $basket)
+    {
+        $discountTable = $this->itemDiscountStore->getDiscountTableForCategory($item->getCategoryId());
+
+        if($discountTable) {
+            //there is a discount for Category, count all items for Category in Basket
+            $existingCategoryQuantity = $this->lineStore->getCountItemsInCategory($basket->getId(), $item->getCategoryId());
+            $newItemPrice = $this->calculateDiscountedPrice($item, $existingCategoryQuantity, $discountTable);
+
+            if ($newItemPrice != $item->getPrice()) {
+
+                /** @var \Octo\Invoicing\Model\LineItem[] $itemsInBasket */
+                $itemsInBasket = $this->lineStore->getLineItemInCategoryFromBasket($basket->getId(), $item->getCategoryId());
+
+                foreach ($itemsInBasket as $itemInBasket) {
+                    $itemInBasket->setId($itemInBasket->getId()); //need it
+                    $itemInBasket->setItemPrice($newItemPrice);
+                    $newLinePrice = round($newItemPrice * $itemInBasket->getQuantity() ,2);
+                    $itemInBasket->setLinePrice($newLinePrice);
+                    $ret = $this->lineStore->saveByUpdate($itemInBasket);
+                }
+
+            }
+        }
     }
 
     /**
@@ -232,5 +263,7 @@ class ShopService
 
         return $discountedPrice;
     }
+
+
 
 }
