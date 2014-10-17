@@ -70,19 +70,36 @@ class TemplateFunctions extends Listener
 
             return $rtn;
         });
+
         $template->addFunction('is_mobile', function ($args, &$view) {
                 if (class_exists('\Mobile_Detect')) {
                     $mobileDetect = new \Mobile_Detect();
                     return $mobileDetect->isMobile();
                 }
-
                 return false;
             });
+
         $template->addFunction('remove_quotes', function ($args, &$view) {
             $value = $view->getVariable($args['value']);
 
             return str_replace('"', "", $value);
         });
+
+        $template->addFunction('extract_value', function ($args, &$view) {
+                $keyName = $view->getVariable($args['name']);
+                $jsonString = $view->getVariable($args['json']);
+
+                $json_array = json_decode($jsonString, true);
+
+                for ($i = 0; $i < sizeof($json_array); $i++) {
+                    $key = $json_array[$i]['name'];
+                    if ($key == $keyName) {
+                        $ret = $json_array[$i]['value'];
+                        return str_replace(";", "; ", $ret);
+                    }
+                }
+
+            });
 
     }
 
