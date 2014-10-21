@@ -64,9 +64,9 @@
 
                 container.append(item);
 
-                $('#item_' + data.items[i].id).find('.line-price').html('&pound;' + data.items[i].line_price);
-
-
+                if ($('#item_' + data.items[i].id).length >0) {
+                    $('#item_' + data.items[i].id).find('.line-price').html('&pound;' + data.items[i].line_price);
+                }
             }
 
             var totalRow = $('<div></div>').addClass('item-row');
