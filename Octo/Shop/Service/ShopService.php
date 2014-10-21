@@ -172,6 +172,7 @@ class ShopService
         return $lineItem;
     }
 
+    //Currently do not work with price_adjustment
     public function applyDiscountForItemInCategory(Item $item, ShopBasket $basket)
     {
         $discountTable = $this->itemDiscountStore->getDiscountTableForCategory($item->getCategoryId());
@@ -181,24 +182,18 @@ class ShopService
             $existingCategoryQuantity = $this->lineStore->getCountItemsInCategory($basket->getId(), $item->getCategoryId());
             $newItemPrice = $this->calculateDiscountedPrice($item, $existingCategoryQuantity, $discountTable);
 
-          //  if ($newItemPrice != $item->getPrice()) {
-
                 /** @var \Octo\Invoicing\Model\LineItem[] $itemsInBasket */
                 $itemsInBasket = $this->lineStore->getLineItemInCategoryFromBasket($basket->getId(), $item->getCategoryId());
 
                 foreach ($itemsInBasket as $itemInBasket) {
                     $itemInBasket->setId($itemInBasket->getId()); //need it
                     $itemInBasket->setItemPrice($newItemPrice);
-                    $newLinePrice = round($newItemPrice * $itemInBasket->getQuantity() ,2);
+                    $newLinePrice = round($newItemPrice * $itemInBasket->getQuantity(), 2);
                     $itemInBasket->setLinePrice($newLinePrice);
                     $this->lineStore->saveByUpdate($itemInBasket);
                 }
-
-                return $newItemPrice;
-           // }
         }
 
-        return $item->getPrice();
     }
 
     /**

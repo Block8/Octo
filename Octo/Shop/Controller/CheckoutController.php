@@ -515,8 +515,8 @@ class CheckoutController extends Controller
     public function updateLineItem($itemId)
     {
         $quantity = $this->getParam('quantity', null);
-        $remove = $this->getParam('remove', null);
-
+        $remove   = $this->getParam('remove', null);
+        /** @var $lineStore \Octo\Invoicing\Store\LineItemStore */
         $lineStore = Store::get('LineItem');
 
         /** @type \Octo\Invoicing\Model\LineItem $lineItem */
@@ -532,8 +532,9 @@ class CheckoutController extends Controller
             $lineStore->delete($lineItem);
         }
 
+        //Discount system     //Currently do not work with price_adjustment//
         $shopService = $this->getShopService();
-        $newItemPrice = $shopService->applyDiscountForItemInCategory($lineItem->getItem(), $lineItem->getBasket());
+        $shopService->applyDiscountForItemInCategory($lineItem->getItem(), $lineItem->getBasket());
 
 
         $items = $lineStore->getByBasketId($lineItem->getBasketId());
@@ -544,7 +545,7 @@ class CheckoutController extends Controller
         }
 
         die(json_encode([
-            'line_price' => number_format($newItemPrice, 2),
+            'line_price' => number_format($lineItem->getLinePrice(), 2),
             'basket_total' => number_format($basketTotal, 2, '.', ''),
         ]));
     }
