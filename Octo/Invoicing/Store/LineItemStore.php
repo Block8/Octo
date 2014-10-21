@@ -120,28 +120,43 @@ class LineItemStore extends Octo\Store
      * @param $basketId
      * @param $itemId
      * @param $itemDescription
+     * @param string $eCardHash
      * @param array $options
      * @param string $useConnection
      * @return Octo\Invoicing\Model\LineItem
      * @throws StoreException
      */
-    public function getLineItemFromBasket($basketId, $itemId, $itemDescription, $options = [], $useConnection = 'read')
+    public function getLineItemFromBasket($basketId, $itemId, $itemDescription, $eCardHash = '', $options = [], $useConnection = 'read')
     {
         if (is_null($basketId) || is_null($itemId) || is_null($itemDescription)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
 
+        $where = '`basket_id` = :basket_id AND `item_id` = :item_id';
+        if (!empty($eCardHash)) {
+            $where .= ' AND ecard_hash = :ecard_hash';
+        } else {
+            $where .= ' AND `description` = :description';
+        }
+
         $query = new Query($this->getNamespace('LineItem').'\Model\LineItem', $useConnection);
-        $query->from('line_item')->where('`basket_id` = :basket_id AND `description` = :description AND `item_id` = :item_id');
+        $query->from('line_item');
+        $query->where($where);
         $query->limit(1);
         $query->bind(':basket_id', $basketId);
         $query->bind(':item_id', $itemId);
-        $query->bind(':description', $itemDescription);
+
+        if (!empty($eCardHash)) {
+            $query->bind(':ecard_hash', $eCardHash);
+        } else {
+            $query->bind(':description', $itemDescription);
+        }
 
         $this->handleQueryOptions($query, $options);
 
         try {
             $query->execute();
+
             return $query->fetchAll();
         } catch (PDOException $ex) {
             throw new StoreException('Could not get LineItem from Basket', 0, $ex);
@@ -191,22 +206,29 @@ class LineItemStore extends Octo\Store
         } else {
             return array();
         }
-        /*
-        $query = new Query($this->getNamespace('LineItem').'\Model\LineItem');
+
+    }
+
+    public function getCountItemsByItemIdFromBasket($basketId, $itemId)
+    {
+        if (is_null($basketId) || is_null($itemId)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+        $query = new Query();
+        $query->select('id');
         $query->from('line_item');
-        $query->join('item', '', 'item.id = line_item.item_id');
-        $query->where('`basket_id` = :basket_id AND item.category_id = :categoryId');
+        $query->where('`basket_id` = :basket_id AND item_id = :itemId');
         $query->bind(':basket_id', $basketId);
-        $query->bind(':categoryId', $categoryId);
+        $query->bind(':itemId', $itemId);
 
         try {
-            $query->execute();
-            return $query->fetchAll();
+            return $query->getCount();
         } catch (PDOException $ex) {
-            throw new StoreException('Could not get LineItems for Category from Basket', 0, $ex);
+            throw new StoreException('Could not get Count for items from Basket', 0, $ex);
         }
-        */
     }
+
+
 
 
 }

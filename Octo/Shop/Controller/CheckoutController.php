@@ -532,6 +532,10 @@ class CheckoutController extends Controller
             $lineStore->delete($lineItem);
         }
 
+        $shopService = $this->getShopService();
+        $newItemPrice = $shopService->applyDiscountForItemInCategory($lineItem->getItem(), $lineItem->getBasket());
+
+
         $items = $lineStore->getByBasketId($lineItem->getBasketId());
         $basketTotal = 0;
 
@@ -540,7 +544,7 @@ class CheckoutController extends Controller
         }
 
         die(json_encode([
-            'line_price' => number_format($lineItem->getLinePrice(), 2),
+            'line_price' => number_format($newItemPrice, 2),
             'basket_total' => number_format($basketTotal, 2, '.', ''),
         ]));
     }

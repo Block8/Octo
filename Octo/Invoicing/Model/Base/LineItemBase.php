@@ -46,6 +46,9 @@ trait LineItemBase
         $this->data['meta_data'] = null;
         $this->getters['meta_data'] = 'getMetaData';
         $this->setters['meta_data'] = 'setMetaData';
+        $this->data['ecard_hash'] = null;
+        $this->getters['ecard_hash'] = 'getEcardHash';
+        $this->setters['ecard_hash'] = 'setEcardHash';
 
         // Foreign keys:
         $this->getters['Invoice'] = 'getInvoice';
@@ -159,6 +162,18 @@ trait LineItemBase
     public function getMetaData()
     {
         $rtn = $this->data['meta_data'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of EcardHash / ecard_hash.
+    *
+    * @return string
+    */
+    public function getEcardHash()
+    {
+        $rtn = $this->data['ecard_hash'];
 
         return $rtn;
     }
@@ -317,6 +332,23 @@ trait LineItemBase
 
         $this->data['meta_data'] = $value;
         $this->setModified('meta_data');
+    }
+
+    /**
+    * Set the value of EcardHash / ecard_hash.
+    *
+    * @param $value string
+    */
+    public function setEcardHash($value)
+    {
+        $this->validateString('EcardHash', $value);
+
+        if ($this->data['ecard_hash'] === $value) {
+            return;
+        }
+
+        $this->data['ecard_hash'] = $value;
+        $this->setModified('ecard_hash');
     }
     /**
     * Get the Invoice model for this LineItem by Id.

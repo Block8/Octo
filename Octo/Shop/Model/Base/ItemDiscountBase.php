@@ -39,6 +39,8 @@ trait ItemDiscountBase
         $this->setters['price_adjustment'] = 'setPriceAdjustment';
 
         // Foreign keys:
+        $this->getters['Category'] = 'getCategory';
+        $this->setters['Category'] = 'setCategory';
         $this->getters['Item'] = 'getItem';
         $this->setters['Item'] = 'setItem';
         $this->getters['Discount'] = 'getDiscount';
@@ -227,6 +229,54 @@ trait ItemDiscountBase
 
         $this->data['price_adjustment'] = $value;
         $this->setModified('price_adjustment');
+    }
+    /**
+    * Get the Category model for this ItemDiscount by Id.
+    *
+    * @uses \Octo\Categories\Store\CategoryStore::getById()
+    * @uses \Octo\Categories\Model\Category
+    * @return \Octo\Categories\Model\Category
+    */
+    public function getCategory()
+    {
+        $key = $this->getCategoryId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('Category', 'Octo\Categories')->getById($key);
+    }
+
+    /**
+    * Set Category - Accepts an ID, an array representing a Category or a Category model.
+    *
+    * @param $value mixed
+    */
+    public function setCategory($value)
+    {
+        // Is this an instance of Category?
+        if ($value instanceof \Octo\Categories\Model\Category) {
+            return $this->setCategoryObject($value);
+        }
+
+        // Is this an array representing a Category item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setCategoryId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setCategoryId($value);
+    }
+
+    /**
+    * Set Category - Accepts a Category model.
+    *
+    * @param $value \Octo\Categories\Model\Category
+    */
+    public function setCategoryObject(\Octo\Categories\Model\Category $value)
+    {
+        return $this->setCategoryId($value->getId());
     }
     /**
     * Get the Item model for this ItemDiscount by Id.

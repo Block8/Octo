@@ -124,6 +124,60 @@ trait ItemDiscountStoreBase
      * @throws StoreException
      * @return int
      */
+    public function getTotalForCategoryId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('ItemDiscount').'\Model\ItemDiscount', $useConnection);
+        $query->from('item_discount')->where('`category_id` = :category_id');
+        $query->bind(':category_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of ItemDiscount by CategoryId', 0, $ex);
+        }
+    }
+
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return ItemDiscount[]
+     */
+    public function getByCategoryId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('ItemDiscount').'\Model\ItemDiscount', $useConnection);
+        $query->from('item_discount')->where('`category_id` = :category_id');
+        $query->bind(':category_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get ItemDiscount by CategoryId', 0, $ex);
+        }
+
+    }
+
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
     public function getTotalForDiscountId($value, $options = [], $useConnection = 'read')
     {
         if (is_null($value)) {

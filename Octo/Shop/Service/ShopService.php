@@ -97,6 +97,7 @@ class ShopService
         $item = $this->itemStore->getById($itemId);
         $description = $item->getTitle();
         $itemPrice = $item->getPrice();
+        $eCardHash = '';
 
         if (isset($itemData['variants'])) {
             foreach ($itemData['variants'] as $variantData) {
@@ -108,13 +109,17 @@ class ShopService
         }
         if ($item->getCategoryId() == self::CATEGORY_ECARDS) {
             $params = $this->decodeMetaData($metadata);
-            $description .= ' [' . crc32($params['message']) .']';
+            $eCardHash = md5($params['message']);
+            $countEcardItemId = $this->lineStore->getCountItemsByItemIdFromBasket($basket->getId(), $itemId);
+            if ($countEcardItemId > 0) {
+                $description .= ' [Message #'.($countEcardItemId+1).']';
+            }
         }
-
 
         //Check if line item already exist
         //if exist receive, sum, update
-        $lineItemInBasket = $this->lineStore->getLineItemFromBasket($basket->getId(), $itemId, $description);
+        $lineItemInBasket = $this->lineStore->getLineItemFromBasket($basket->getId(), $itemId, $description, $eCardHash);
+
         if(!is_null($lineItemInBasket) && count($lineItemInBasket)>0)
         {
             $lineItemInBasket = $lineItemInBasket[0];
@@ -153,6 +158,9 @@ class ShopService
             $lineItem->setBasket($basket);
             $lineItem->setDescription($description);
             $lineItem->setMetaData($metadata);
+            if ($item->getCategoryId() == self::CATEGORY_ECARDS) {
+                $lineItem->setEcardHash($eCardHash);
+            }
 
             $lineItem = $this->lineStore->saveByInsert($lineItem);
         }
@@ -164,7 +172,7 @@ class ShopService
         return $lineItem;
     }
 
-    private function applyDiscountForItemInCategory(Item $item, ShopBasket $basket)
+    public function applyDiscountForItemInCategory(Item $item, ShopBasket $basket)
     {
         $discountTable = $this->itemDiscountStore->getDiscountTableForCategory($item->getCategoryId());
 
@@ -173,7 +181,7 @@ class ShopService
             $existingCategoryQuantity = $this->lineStore->getCountItemsInCategory($basket->getId(), $item->getCategoryId());
             $newItemPrice = $this->calculateDiscountedPrice($item, $existingCategoryQuantity, $discountTable);
 
-            if ($newItemPrice != $item->getPrice()) {
+          //  if ($newItemPrice != $item->getPrice()) {
 
                 /** @var \Octo\Invoicing\Model\LineItem[] $itemsInBasket */
                 $itemsInBasket = $this->lineStore->getLineItemInCategoryFromBasket($basket->getId(), $item->getCategoryId());
@@ -183,41 +191,14 @@ class ShopService
                     $itemInBasket->setItemPrice($newItemPrice);
                     $newLinePrice = round($newItemPrice * $itemInBasket->getQuantity() ,2);
                     $itemInBasket->setLinePrice($newLinePrice);
-                    $ret = $this->lineStore->saveByUpdate($itemInBasket);
+                    $this->lineStore->saveByUpdate($itemInBasket);
                 }
 
-            }
+                return $newItemPrice;
+           // }
         }
-    }
 
-    /**
-     * Create a new invoice or use generated for the same BasketId, ContactId and unpaid invoice
-     * @param InvoiceService $service
-     * @param ShopBasket $basket
-     * @param Contact $contact
-     * @return \Octo\Invoicing\Model\Invoice
-     */
-    public function createInvoiceForBasket(InvoiceService $service, ShopBasket $basket, Contact $contact)
-    {
-        $orderTitle = 'Order (Basket #' . $basket->getId() . ')';
-
-        //Try to avoid creating new invoice for the same basket, same contact, and unpaid invoice
-        $this->invoiceStore = Store::get('Invoice');
-        $isInvoice = $this->invoiceStore->getInvoiceAlreadyCreated($orderTitle, $contact);
-
-        $this->config = Config::getInstance();
-        $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
-        $log->debug('Found invoice? Id=' . ($isInvoice ? $isInvoice->getId() : 'not found'));
-
-        if ($isInvoice) {
-            $invoice = $isInvoice;
-        } else {
-            $invoice = $service->createInvoice($orderTitle, $contact, new \DateTime(), null);
-        }
-        $this->lineStore->copyBasketToInvoice($basket, $invoice);
-        $service->updateSubtotal($invoice);
-
-        return $invoice;
+        return $item->getPrice();
     }
 
     /**
@@ -249,6 +230,36 @@ class ShopService
         $retEmailAddresses = array_unique($retEmailAddresses);
 
         return $retEmailAddresses;
+    }
+
+    /**
+     * Create a new invoice or use generated for the same BasketId, ContactId and unpaid invoice
+     * @param InvoiceService $service
+     * @param ShopBasket $basket
+     * @param Contact $contact
+     * @return \Octo\Invoicing\Model\Invoice
+     */
+    public function createInvoiceForBasket(InvoiceService $service, ShopBasket $basket, Contact $contact)
+    {
+        $orderTitle = 'Order (Basket #' . $basket->getId() . ')';
+
+        //Try to avoid creating new invoice for the same basket, same contact, and unpaid invoice
+        $this->invoiceStore = Store::get('Invoice');
+        $isInvoice = $this->invoiceStore->getInvoiceAlreadyCreated($orderTitle, $contact);
+
+        $this->config = Config::getInstance();
+        $log = new Logger($this->config->get('logging.directory'), LogLevel::DEBUG);
+        $log->debug('Found invoice? Id=' . ($isInvoice ? $isInvoice->getId() : 'not found'));
+
+        if ($isInvoice) {
+            $invoice = $isInvoice;
+        } else {
+            $invoice = $service->createInvoice($orderTitle, $contact, new \DateTime(), null);
+        }
+        $this->lineStore->copyBasketToInvoice($basket, $invoice);
+        $service->updateSubtotal($invoice);
+
+        return $invoice;
     }
 
     protected function calculateDiscountedPrice(Item $item, $quantity, $discountTable)
