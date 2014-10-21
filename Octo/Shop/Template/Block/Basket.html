@@ -57,11 +57,16 @@
             }
 
             for (var i in data.items) {
+
                 var item = $('<div></div>').addClass('item-row');
                 item.append($('<div></div>').addClass('ir-title').append('<span>'+data.items[i].quantity+'</span> ').append(data.items[i].description));
                 item.append($('<div></div>').addClass('ir-price').append('&pound;' + data.items[i].line_price));
 
                 container.append(item);
+
+                $('#item_' + data.items[i].id).find('.line-price').html('&pound;' + data.items[i].line_price);
+
+
             }
 
             var totalRow = $('<div></div>').addClass('item-row');
