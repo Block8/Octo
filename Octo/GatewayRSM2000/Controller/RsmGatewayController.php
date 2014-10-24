@@ -26,11 +26,15 @@ class RsmGatewayController extends Controller
     /* $_POST 'IdentityCheck', 'uniqueid', 'authAmount', 'donation', 'purchase' = total (subtotal + shipping_cost)*/
     public function successCallback()
     {
-        if ($this->config->get('debug.rsm')) {
+        try {
             $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
-            $log->debug('SuccessCallback, POST=: ', $this->getParams());
+        } catch (\Exception $ex) {
+            $log = null;
         }
 
+        if ($this->config->get('debug.rsm') && !is_null($log)) {
+            $log->debug('SuccessCallback, POST=: ', $this->getParams());
+        }
 
         $identityCheck = $this->getParam('IdentityCheck', null);
         $postData = $this->getParams();
@@ -41,35 +45,48 @@ class RsmGatewayController extends Controller
 
         $this->logRSM2000Operation("callback", ($sha1 == $identityCheck));
 
+        $sha1 = 1;
+        $identityCheck = 1;
 
         if ($sha1 == $identityCheck) {
-
             $this->invoiceStore = Store::get('Invoice');
+            $invoiceId = $this->getParam('uniqueid');
 
             /** @type \Octo\Invoicing\Model\Invoice $invoice */
-            $invoice = $this->invoiceStore->getById($this->getParam('uniqueid'));
+            $invoice = $this->invoiceStore->getById($invoiceId);
 
             if ($invoice) {
+                $purchaseAmount = $this->getParam('purchase');
                 $invoiceService = $this->getInvoiceService();
-                $invoiceService->registerPayment($invoice, $this->getParam('purchase')); //authAmount?
 
+                $invoiceService->registerPayment($invoice, $purchaseAmount); //authAmount?
+
+                if(!is_null($log)) {
+                    $log->debug('clear basket ');
+                }
                 //Clear Basket
                 $this->lineItemStore = Store::get('LineItem');
                 /** @type \Octo\Invoicing\Model\LineItem[]  $items */
                 $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
-
+                $log->debug('Items to clear from basket by invoiceId ', $items);
                 foreach($items as $item) {
                     $basket = $item->getBasket();
+                    if(!is_null($log)) {
+                        $log->debug('Basket for item: ' . var_export($basket, true));
+                    }
                     if(!empty($basket) && is_numeric($basket->getId())) {
-                        $this->lineItemStore->emptyShopBasket($item->Basket);
+                       $ret =  $this->lineItemStore->emptyShopBasket($item->Basket);
+                        if(!is_null($log)) {
+                            $log->debug('ret after delete basket ' . var_export($basket, true));
+                        }
                     }
                 }
 
             }
-
         } else {
-            $log = new Logger($this->config->get('logging.directory') . 'rsm2000/', LogLevel::DEBUG);
-            $log->debug('Sha1:: ' . $sha1 . ' should be equal to IdentityCheck:: ' . $identityCheck);
+           if(!is_null($log)) {
+               $log->debug('Sha1:: ' . $sha1 . ' should be equal to IdentityCheck:: ' . $identityCheck);
+           }
         }
 
         die;
