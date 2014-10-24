@@ -21,7 +21,7 @@ class RsmController extends  Admin\Controller
 
     public static function registerMenus(Menu $menu)
     {
-        $invoices = $menu->addRoot('Reports', '#')->setIcon('list-alt');
+        $invoices = $menu->addRoot('Logs', '#')->setIcon('eye');
         $invoices->addChild(new Menu\Item('RSM2000 logs', '/rsm'));
     }
 
@@ -42,7 +42,4 @@ class RsmController extends  Admin\Controller
         $this->setTitle('Rsm2000 logs');
         $this->view->rsm2000logs = $this->rsm2000LogStore->getAll();
     }
-
-
-
 }
