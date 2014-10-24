@@ -59,8 +59,6 @@ class RsmGatewayController extends Controller
                 $purchaseAmount = $this->getParam('purchase');
                 $invoiceService = $this->getInvoiceService();
 
-                $invoiceService->registerPayment($invoice, $purchaseAmount); //authAmount?
-
                 if(!is_null($log)) {
                     $log->debug('clear basket ');
                 }
@@ -68,20 +66,21 @@ class RsmGatewayController extends Controller
                 $this->lineItemStore = Store::get('LineItem');
                 /** @type \Octo\Invoicing\Model\LineItem[]  $items */
                 $items = $this->lineItemStore->getByInvoiceId($invoice->getId());
-                $log->debug('Items to clear from basket by invoiceId ', $items);
+
                 foreach($items as $item) {
                     $basket = $item->getBasket();
                     if(!is_null($log)) {
                         $log->debug('Basket for item: ' . var_export($basket, true));
                     }
                     if(!empty($basket) && is_numeric($basket->getId())) {
-                       $ret =  $this->lineItemStore->emptyShopBasket($item->Basket);
-                        if(!is_null($log)) {
-                            $log->debug('ret after delete basket ' . var_export($basket, true));
-                        }
+                        $this->lineItemStore->emptyShopBasket($item->Basket);
                     }
                 }
 
+                if(!is_null($log)) {
+                    $log->debug('Register payment.');
+                }
+                $invoiceService->registerPayment($invoice, $purchaseAmount); //authAmount?
             }
         } else {
            if(!is_null($log)) {
