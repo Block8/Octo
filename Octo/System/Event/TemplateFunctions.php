@@ -27,6 +27,12 @@ class TemplateFunctions extends Listener
                 $variable = $view->getVariable($args['variable']);
 
                 return count($variable) > 0 ? count($variable) : '';
+        });
+
+        $template->addFunction('check_status', function ($args, &$view) {
+                $statuses = $view->getVariable($args['statuses']);
+
+                return (strpos($statuses, '0') !== false);
             });
 
     }
@@ -51,7 +57,10 @@ class TemplateFunctions extends Listener
                 $format = 'd/m/Y';
             } elseif ($args['format'] == 'time') {
                 $format = 'g:ia';
-            } else {
+            } elseif ($args['format'] == 'timestamp') {
+                $format = 'Y-m-d H:i:s';
+            }
+            else {
                 $format = 'jS F Y, g:ia';
             }
 
