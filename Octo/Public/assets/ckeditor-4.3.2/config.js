@@ -7,7 +7,9 @@ CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
+    config.height = '320px';
 };
+
 
 CKEDITOR.on('dialogDefinition', function( ev ) {
     var dialogName = ev.data.name;

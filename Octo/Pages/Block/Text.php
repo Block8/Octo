@@ -52,7 +52,7 @@ class Text extends Block
 
         if (!empty($content)) {
             // Replace file blocks
-            $content = preg_replace_callback('/\<img id\=\"([a-zA-Z0-9]{32})".*>/', [$this, 'replaceFile'], $content);
+            $content = preg_replace_callback('/<img id="([a-zA-Z0-9]{32})"(?:.*?)>/i', [$this, 'replaceFile'], $content);
         }
 
         $this->view->content = $content;
@@ -65,6 +65,7 @@ class Text extends Block
             if ($file) {
                 $template = Template::getPublicTemplate('Block/Text/File');
                 $template->file = $file;
+
                 return $template->render();
             }
         }
