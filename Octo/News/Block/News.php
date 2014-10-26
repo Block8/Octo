@@ -167,6 +167,7 @@ class News extends Block
         $params = [];
 
         $criteria[] = 'c.scope = :scope';
+        $criteria[] = 'publish_date <= NOW()';
         $params[':scope'] = static::$scope;
 
         if (!is_null($category)) {
