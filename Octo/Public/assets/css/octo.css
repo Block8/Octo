@@ -31,3 +31,7 @@ img.flag {padding-right: 10px; }
     text-decoration:underline;
     font-weight:bold;
 }
+
+fieldset {
+    min-width: 1px !important; /*fix bootstrap 3.2 min-width:0;*/
+}
