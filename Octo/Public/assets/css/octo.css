@@ -33,5 +33,5 @@ img.flag {padding-right: 10px; }
 }
 
 fieldset {
-    min-width: 1px !important; /*fix bootstrap 3.2 min-width:0;*/
+    min-width: 1px; /*fix bootstrap 3.2 min-width:0;*/
 }
