@@ -63,7 +63,7 @@ class DiscountOptionController extends Controller
 
                     $discountOption = $this->discountOptionStore->save($discountOption);
 
-                    $this->successMessage($discountOption->getOptionTitle() . ' was added successfully.', true);
+                    $this->successMessage($discount->getOptionTitle() . ' was added successfully.', true);
 
                     $redirect = $this->config->get('site.admin_uri') . '/discount-option/manage/' . $discountId;
                     header('Location: /' . $redirect);
