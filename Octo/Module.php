@@ -65,7 +65,13 @@ abstract class Module
         $this->config->set('Octo', $octoConfig);
     }
 
+    /**
+     * @return string Module name
+     */
     abstract protected function getName();
+    /**
+     * @return string Path to file
+     */
     abstract protected function getPath();
 
     protected function getModels($namespace)
