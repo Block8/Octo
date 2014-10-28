@@ -27,8 +27,19 @@
             </tr>
             </thead>
             <tbody>
+            {loop newDiscounts}
+            {var_dump variable : value}
+            <tr class="menu-item" data-id="0">
+                <td>{@value.amount_initial}</td>
+                <td>{@value.amount_final}</td>
+                <td style="padding-right: 5px">
+                    <input name="newprice[{@value.discount_option_id}][price]" value="{@value.price_adjustment}" class="menu-item-title form-control discount_price" style="padding-left: 5px;" type="text">
+                    <input name="newprice[{@value.discount_option_id}][discountid]" value="{@value.discount_id}" class="discount_price" type="hidden">
+                </td>
+            </tr>
+            {/loop}
             {loop item.options}
-            <tr class="menu-item" data-id="{@item.id}">
+            <tr class="menu-item" data-id="{@item.item_discount_id}">
                 <td>{@value.amount_initial}</td>
                 <td>{@value.amount_final}</td>
                 <td style="padding-right: 5px"><input class="menu-item-title form-control discount_price" style="padding-left: 5px;" name="price[{@item.item_discount_id}]" type="text" value="{@item.price_adjustment}"></td>
@@ -40,7 +51,7 @@
     </div>
 {/for}
 </div>
-</div>
+</div><!-- row -->
 
 <form class="smart-form" id="discounts-form" action="/{@adminUri}/shop/category-discounts/{@category.id}" method="post" style="border: none; padding: none; margin: none;">
     <div style="margin: 40px auto; width: 150px;">
@@ -77,7 +88,7 @@
             </form>
         </div>
     </div>
-</div>
+</div><!-- row -->
 {/if}
 {/ifnot}
 <script>
@@ -88,7 +99,12 @@ $(document).ready( function(e) {
         $('#discounts_form input.price_adjustment').remove();
 
         $('input.discount_price').each( function(vp) {
-            form.append( '<input class="price_adjustment" type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '">');
+            if ($(this).hasClass('discount_new')) {
+                form.append('<input type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '">');
+                form.append('<input type="hidden" name="new_discountid" value="' + $(this).data('discount_id') + '">');
+            } else {
+                form.append('<input class="price_adjustment" type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '">');
+            }
         });
 
         form.off("submit");

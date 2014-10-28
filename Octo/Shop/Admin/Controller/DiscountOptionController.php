@@ -38,7 +38,7 @@ class DiscountOptionController extends Controller
         $this->addBreadcrumb('Options', '/discount-option/manage/' . $discountId);
 
         $this->view->discount = $discount;
-        $this->view->discountOptions = $this->discountOptionStore->getByDiscountId($discountId);
+        $this->view->discountOptions = $this->discountOptionStore->getByDiscountId($discountId, array('order'=>array(0=>array('amount_initial', 'ASC'))));
     }
 
     public function add($discountId)

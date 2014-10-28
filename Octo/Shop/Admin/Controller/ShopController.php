@@ -452,19 +452,24 @@ class ShopController extends Controller
         }
     }
 
+    protected function cmp($a, $b){
+        if ($a == $b)
+            return 0;
+        return ($a['amount_initial'] < $b['amount_initial']) ? -1 : 1;
+    }
+
     /*Discounts*/
     public function categoryDiscounts($categoryId)
     {
         $category = $this->categoryStore->getById($categoryId);
 
-        $this->view->category = $category;
-        $this->view->availableDiscounts = $this->discountStore->getDiscountsNotUsedByCategory($categoryId);
-
-        $this->view->items = $this->itemDiscountStore->getAllForCategory($categoryId);
-
         $this->setTitle($category->getName() . ' Discounts');
         $this->addBreadcrumb($category->getName(), '/shop/edit-product/' . $category->getId());
         $this->addBreadcrumb('Discounts', '/shop/category-discounts/' . $category->getId());
+
+        $this->view->category = $category;
+        $this->view->availableDiscounts = $this->discountStore->getDiscountsNotUsedByCategory($categoryId);
+        $this->view->items = $this->itemDiscountStore->getAllForCategory($categoryId);
 
         $discounts = [];
         foreach ($this->itemDiscountStore->getAllForCategory($category->getId()) as $itemDiscount) {
@@ -473,6 +478,8 @@ class ShopController extends Controller
                 $discounts[$itemDiscount->getDiscountId()] = $discountArray;
             }
 
+            $n = new ItemDiscount();
+            $n->getDiscountOption();
             $ivArray = $itemDiscount->getDataArray();
             $optionsArray = $itemDiscount->getDiscountOption()->getDataArray();
 
@@ -483,16 +490,38 @@ class ShopController extends Controller
                 'price_adjustment' => $ivArray['price_adjustment']
             ];
 
+
             $discounts[$itemDiscount->getDiscountId()]['options'][] = $computed;
         }
 
+        /*Sort options by amount_initial*/
+        foreach ($discounts as $discountId => $options) {
+            usort($options['options'], array($this, 'cmp'));
+            $discounts[$discountId]['options'] = $options['options'];
+        }
+
         $this->view->discounts = $discounts;
+
+        $newDiscountOptions = $this->itemDiscountStore->getOptionNotDefinedForCategory($categoryId);
+        $this->view->newDiscounts = $newDiscountOptions;
+
 
         if ($this->request->getMethod() == 'POST') {
             if ($this->getParam('price')) {
                 foreach ($this->getParam('price') as $itemDiscountId => $priceAdjustment) {
                     $itemDiscount = $this->itemDiscountStore->getById($itemDiscountId);
                     $itemDiscount->setPriceAdjustment($priceAdjustment);
+                    $this->itemDiscountStore->save($itemDiscount);
+                }
+            }
+
+            if ($this->getParam('newprice')) {
+                foreach ($this->getParam('newprice') as $discountOptionId => $discountParams) {
+                    $itemDiscount = new ItemDiscount();
+                    $itemDiscount->setCategoryId($categoryId);
+                    $itemDiscount->setDiscountOptionId($discountOptionId);
+                    $itemDiscount->setDiscountId($discountParams['discountid']);
+                    $itemDiscount->setPriceAdjustment($discountParams['price']);
                     $this->itemDiscountStore->save($itemDiscount);
                 }
             }
