@@ -5,7 +5,7 @@ You can find a working example site in the [Octo Skeleton](https://github.com/Bl
 
 To get started:
 
-* Clone: `git clone git clone git@bitbucket.org:block8/octo-skeleton.git <your site name>`
+* Clone: `git clone git@bitbucket.org:block8/octo-skeleton.git <your site name>`
 * Move into your new project directory: `cd <your site name>`
 * Remove the .git folder and create as a new repo: `rm -Rf .git && git init`
 * Modify the `siteconfig.php` file as necessary for your project
