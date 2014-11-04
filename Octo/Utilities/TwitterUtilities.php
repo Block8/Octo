@@ -63,7 +63,6 @@ class TwitterUtilities
             self::updateLastAPICall();
 
             $statuses = $twitter->load(Twitter::ME);
-			var_dump($statuses);
             foreach ($statuses as $s) {
                 if (!$tweetStore->getByTwitterIdForScope($s->id, 'user')) {
                     $t = new Tweet;
