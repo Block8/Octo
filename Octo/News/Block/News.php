@@ -226,6 +226,9 @@ class News extends Block
             'active' => true,
         ];
 
+        $this->dataStore['meta_title'] = $item->getTitle();
+        $this->dataStore['meta_description'] = $item->getSummary();
+
         $content = $item->getContentItem()->getContent();
         $content = json_decode($content, true);
         $content = $content['content'];

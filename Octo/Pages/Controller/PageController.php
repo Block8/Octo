@@ -102,6 +102,15 @@ class PageController extends Controller
 
         Event::trigger('PageLoaded', $data);
 
+        if (Template::exists('include/meta')) {
+            $template = Template::getPublicTemplate('include/meta');
+            $template->page = $this->page;
+            $template->version = $this->version;
+            $template->datastore = $blockManager->getDataStore();
+
+            $output = str_replace('{!@octo.meta}', $template->render(), $output);
+        }
+
         return $output;
     }
 
