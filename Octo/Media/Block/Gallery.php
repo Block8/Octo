@@ -87,10 +87,13 @@ class Gallery extends Block
             $this->view->imageWidth = $this->templateParams['imageWidth'];
         }
 
-        if (array_key_exists('images', $this->content)) {
+        $galleryImages = $this->getContent('images', []);
+
+        if (is_array($galleryImages)) {
             $images = [];
             $rendered = 0;
-            foreach ($this->content['images'] as $imageId) {
+
+            foreach ($galleryImages as $imageId) {
                 if (++$rendered >= $this->limit) {
                     break;
                 }
