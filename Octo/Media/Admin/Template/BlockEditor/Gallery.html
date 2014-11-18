@@ -7,7 +7,7 @@
         blockContent = {};
     }
 
-    var imagePicker = $('#block_gallery_parent_{@blockId}');
+    var galleryImagePicker = $('#block_gallery_parent_{@blockId}');
     var current = '';
     var imageList = $('<ul style="margin-top: 25px; list-style: none;padding-left:0px;"></ul>');
 
@@ -39,8 +39,8 @@
                 appendImage(imagesMeta.results[i].id, imagesMeta.results[i].text);
             });
 
-            imageList.insertAfter(imagePicker);
-            imagePicker.on('change', function () {
+            imageList.insertAfter(galleryImagePicker);
+            galleryImagePicker.on('change', function () {
                 appendImage($(this).val(), $(this).select2('data').text);
             });
         }
