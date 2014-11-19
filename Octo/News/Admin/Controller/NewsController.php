@@ -334,6 +334,12 @@ class NewsController extends Controller
             $fieldset->addField($field);
         }
 
+        $field = new Form\Element\Text('image_id');
+        $field->setClass('octo-image-picker');
+        $field->setRequired(false);
+        $field->setLabel('Image');
+        $fieldset->addField($field);
+
         $data = [&$form, &$values];
         Event::trigger($this->scope . 'Form', $data);
         list($form, $values) = $data;

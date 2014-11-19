@@ -67,8 +67,13 @@ trait ArticleBase
         $this->data['guest_company_url'] = null;
         $this->getters['guest_company_url'] = 'getGuestCompanyUrl';
         $this->setters['guest_company_url'] = 'setGuestCompanyUrl';
+        $this->data['image_id'] = null;
+        $this->getters['image_id'] = 'getImageId';
+        $this->setters['image_id'] = 'setImageId';
 
         // Foreign keys:
+        $this->getters['Image'] = 'getImage';
+        $this->setters['Image'] = 'setImage';
         $this->getters['User'] = 'getUser';
         $this->setters['User'] = 'setUser';
         $this->getters['Category'] = 'getCategory';
@@ -282,6 +287,18 @@ trait ArticleBase
     public function getGuestCompanyUrl()
     {
         $rtn = $this->data['guest_company_url'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of ImageId / image_id.
+    *
+    * @return string
+    */
+    public function getImageId()
+    {
+        $rtn = $this->data['image_id'];
 
         return $rtn;
     }
@@ -561,6 +578,71 @@ trait ArticleBase
 
         $this->data['guest_company_url'] = $value;
         $this->setModified('guest_company_url');
+    }
+
+    /**
+    * Set the value of ImageId / image_id.
+    *
+    * @param $value string
+    */
+    public function setImageId($value)
+    {
+        $this->validateString('ImageId', $value);
+
+        if ($this->data['image_id'] === $value) {
+            return;
+        }
+
+        $this->data['image_id'] = $value;
+        $this->setModified('image_id');
+    }
+    /**
+    * Get the File model for this Article by Id.
+    *
+    * @uses \Octo\System\Store\FileStore::getById()
+    * @uses \Octo\System\Model\File
+    * @return \Octo\System\Model\File
+    */
+    public function getImage()
+    {
+        $key = $this->getImageId();
+
+        if (empty($key)) {
+            return null;
+        }
+
+        return Factory::getStore('File', 'Octo\System')->getById($key);
+    }
+
+    /**
+    * Set Image - Accepts an ID, an array representing a File or a File model.
+    *
+    * @param $value mixed
+    */
+    public function setImage($value)
+    {
+        // Is this an instance of File?
+        if ($value instanceof \Octo\System\Model\File) {
+            return $this->setImageObject($value);
+        }
+
+        // Is this an array representing a File item?
+        if (is_array($value) && !empty($value['id'])) {
+            return $this->setImageId($value['id']);
+        }
+
+        // Is this a scalar value representing the ID of this foreign key?
+        return $this->setImageId($value);
+    }
+
+    /**
+    * Set Image - Accepts a File model.
+    *
+    * @param $value \Octo\System\Model\File
+    */
+    public function setImageObject(\Octo\System\Model\File $value)
+    {
+        return $this->setImageId($value->getId());
     }
     /**
     * Get the User model for this Article by Id.
