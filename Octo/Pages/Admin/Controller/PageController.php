@@ -229,7 +229,7 @@ class PageController extends Controller
                 continue;
             }
 
-            $groupName = $block['type'];
+            $groupName = $blockTypes[$block['type']]['title'];
 
             if (!empty($block['group'])) {
                 $groupName = $block['group'];
