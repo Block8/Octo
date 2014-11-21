@@ -1,7 +1,8 @@
 <div class="row clearfix">
     <div class="col-lg-3 pull-right">
-        <div class="box box-primary" style="text-align: center">
+        <div class="box box-primary" style="text-align: right">
             <div class="box-body">
+                <div class="page-save-notice pull-left alert alert-success" style="display: none; margin-left: 0; padding: 6px;"></div>
                 <button id="edit-page-details" class="btn">Edit Page Details</button>
                 <a class="btn btn-success" href="/{@adminUri}/page/publish/{@page.id}">Publish Page</a>
             </div>
@@ -16,14 +17,18 @@
                 <li class="active"><a href="#preview" data-toggle="tab"><i class="fa fa-search"></i> Page Preview</a></li>
 
                 {if hasEditableBlocks}
-                    {for blocks}
+                    {for blockGroups}
                         {if value.haseditable}
+                            <li>
+                                <a href="#tab_{@key}" data-toggle="tab">{@value.name}</a>
+                            </li>
+                <!--
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                     {if item.icon}
                                     <i class="fa fa-{@item.icon}"></i>
                                     {/if}
-                                    Edit {@item.title} <span class="caret"></span>
+                                    {@key} <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     {for value.blocks}
@@ -33,6 +38,7 @@
                                     {/for}
                                 </ul>
                             </li>
+                -->
                         {/if}
                     {/for}
                 {/if}
@@ -44,15 +50,20 @@
                 </div>
 
                 {if hasEditableBlocks}
-                    {for blocks}
-                        {if value.haseditable}
-                            {for value.blocks}
-                                <div class="tab-pane" id="tab_{@value.id}">
-                                    <h3>Edit {@value.name}</h3>
-                                    {@value.editor}
-                                </div>
-                            {/for}
-                        {/if}
+                    {for blockGroups}
+                        <div class="tab-pane" id="tab_{@key}">
+
+                            {if value.haseditable}
+                                {for value.blocks}
+                                    <div class="row block-editor">
+                                        <div class="col-lg-2"><h4>{@value.name}</h4></div>
+                                        <div class="col-lg-10">{@value.editor}</div>
+                                    </div>
+                                {/for}
+                            {/if}
+
+                        </div>
+
                     {/for}
                 {/if}
 
@@ -68,6 +79,7 @@
 
         var editor = new window.pageEditor();
         editor.id = '{@page.id}';
+        editor.content_id = '{@latest.content_item_id}';
         editor.content = {@pageContent};
         editor.page = {
             title: '{@latest.title}',
@@ -81,37 +93,29 @@
         editor.templates = {@templates};
         editor.pages = {@pages};
 
-        $('.block-save').on('click', function () {
-            var form = $(this).parents('form');
-            var formId = form.attr('id').replace('block_', '');
-            var serialized = form.serializeArray();
-            var content = {};
+        $('.block-editor footer').hide();
 
-            for (var i in serialized) {
-                var name = serialized[i].name;
+        CKEDITOR.on('instanceReady', function (instance) {
+            instance.editor.on('blur', function () {
+                var element = $(instance.editor.element.$);
+                editor.triggerSaveContent(element.parents('form'));
+            });
+        });
 
-                if (name.substring(name.length - 2) == '[]') {
-                    name = name.substring(0, name.length - 2);
-
-                    if (!content[name]) {
-                        content[name] = [];
-                    }
-
-                    content[name].push(serialized[i].value);
-                } else {
-                    content[name] = serialized[i].value;
-                }
-            }
-
-            editor.content[formId] = content;
-            editor.saveContent();
+        $('.block-editor input:not(.skip-autosave, .select2-input)').on('change', function () {
+            editor.triggerSaveContent($(this).parents('form'));
+        });
+        $('.block-editor input').on('autosave', function () {
+            editor.triggerSaveContent($(this).parents('form'));
+        });
+        $('.block-editor select:not(.skip-autosave)').on('change', function () {
+            editor.triggerSaveContent($(this).parents('form'));
         });
 
         $('#edit-page-details').click(function ()
         {
             var saveButton = $('<button>Save</button>').addClass('btn btn-success');
             var dialog = createDialog('page-details-editor', {allowClose: true, title: 'Edit Page Details', button: saveButton});
-
             var form = $('<form></form>').addClass('smart-form');
             var fieldset = $('<fieldset></fieldset>');
             form.append(fieldset);

@@ -34,7 +34,7 @@ class Gallery extends Block
 
         $formSelect = \b8\Form\Element\Text::create('image', 'Add an Image');
         $formSelect->setId('block_gallery_parent_' . $item['id']);
-        $formSelect->setClass('octo-image-picker');
+        $formSelect->setClass('octo-image-picker skip-autosave');
         $form->addField($formSelect);
 
         $saveButton = new Button();

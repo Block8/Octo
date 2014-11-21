@@ -59,16 +59,49 @@ function createDialog(id, options)
 
 
 window.pageEditor = Class.extend({
-
     id: null,
     content: {},
     page: {},
 
+    triggerSaveContent: function (form) {
+        $('.page-save-notice').addClass('alert-warning').removeClass('alert-success').text('Saving...').fadeIn('fast');
+
+        var self = this;
+        var formId = form.attr('id').replace('block_', '');
+        var serialized = form.serializeArray();
+        var content = {};
+
+        for (var i in serialized) {
+            var name = serialized[i].name;
+
+            if (name.substring(name.length - 2) == '[]') {
+                name = name.substring(0, name.length - 2);
+
+                if (!content[name]) {
+                    content[name] = [];
+                }
+
+                content[name].push(serialized[i].value);
+            } else {
+                content[name] = serialized[i].value;
+            }
+        }
+
+        self.content[formId] = content;
+        self.saveContent();
+    },
+
     saveContent: function () {
-        $.post('/'+window.adminUri+'/page/save/' + this.id, {content: JSON.stringify(this.content)}, function () {
-            document.getElementById('page-preview').contentWindow.location.reload();
-            $('a[href=#preview]').tab('show');
-            $('.pace').addClass('hide');
+        var self = this;
+
+        $.post('/'+window.adminUri+'/page/save/' + this.id, {content: JSON.stringify(this.content)}, function (response) {
+            response = JSON.parse(response);
+
+            if (self.content_id != response.content_id) {
+                document.getElementById('page-preview').contentWindow.location.reload();
+            }
+
+            $('.page-save-notice').addClass('alert-success').removeClass('alert-warning').text('Saved.').fadeOut('slow');
         });
     },
 
@@ -77,7 +110,6 @@ window.pageEditor = Class.extend({
 
         $.post('/'+window.adminUri+'/page/save/' + this.id, {page: this.page}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
-            $('a[href=#preview]').tab('show');
             $('.pace').addClass('hide');
         });
     }
@@ -210,7 +242,6 @@ $(document).ready(function () {
         singleDatePicker: true,
         timePicker: false
     });
-
 
     $('.octo-image-picker').each(function () {
         var input = $(this);

@@ -210,7 +210,7 @@ class PageController extends Controller
 
 
         $pageBlocks = $this->parseTemplate($latest->getTemplate());
-        $blocks = Block::getBlocks();
+        $blockTypes = Block::getBlocks();
 
         $hasEditableBlocks = false;
 
@@ -221,20 +221,35 @@ class PageController extends Controller
             $pageContent = json_decode($latest->getContentItem()->getContent(), true);
         }
 
+        $blockGroups = [];
+
         foreach ($pageBlocks as &$block) {
-            if (!isset($blocks[$block['type']])) {
+            if (!isset($blockTypes[$block['type']])) {
                 $block['editable'] = false;
                 continue;
             }
 
-            $blocks[$block['type']]['blocks'][] =& $block;
+            $groupName = $block['type'];
+
+            if (!empty($block['group'])) {
+                $groupName = $block['group'];
+            }
+
+            $safeGroupName = preg_replace('/([^a-zA-Z0-9])/', '', $groupName);
+
+            if (!array_key_exists($safeGroupName, $blockGroups)) {
+                $blockGroups[$safeGroupName] = ['name' => $groupName, 'haseditable' => false, 'blocks' => []];
+            }
+
+            $blockGroups[$safeGroupName]['blocks'][$block['id']] =& $block;
+            $blockTypes[$block['type']]['blocks'][] =& $block;
 
             if (array_key_exists('editable', $block) && !$block['editable']) {
                 $block['editable'] = false;
                 continue;
             }
 
-            if (isset($blocks[$block['type']]['editor']) && is_callable($blocks[$block['type']]['editor'])) {
+            if (isset($blockTypes[$block['type']]['editor']) && is_callable($blockTypes[$block['type']]['editor'])) {
                 $block['editable'] = true;
             } else {
                 $block['editable'] = false;
@@ -246,15 +261,16 @@ class PageController extends Controller
 
             if ($block['editable']) {
                 $hasEditableBlocks = true;
-                $blocks[$block['type']]['haseditable'] = true;
-                $block['editor'] = $blocks[$block['type']]['editor']($block);
+                $blockTypes[$block['type']]['haseditable'] = true;
+                $blockGroups[$safeGroupName]['haseditable'] = true;
+                $block['editor'] = $blockTypes[$block['type']]['editor']($block);
             }
         }
 
-
         $this->view->page = $page;
         $this->view->latest = $latest;
-        $this->view->blocks = $blocks;
+        $this->view->blocks = $blockTypes;
+        $this->view->blockGroups = $blockGroups;
         $this->view->hasEditableBlocks = $hasEditableBlocks;
         $this->view->templates = json_encode($this->getTemplates());
         $this->view->pages = json_encode($this->pageStore->getParentPageOptions());
@@ -346,6 +362,8 @@ class PageController extends Controller
 
                 $this->versionStore->save($latest);
             }
+
+            die(json_encode(['content_id' => $hash]));
         }
 
         $pageData = $this->getParam('page', null);

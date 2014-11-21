@@ -34,7 +34,7 @@ class PageCollection extends Block
 
         $formSelect = \b8\Form\Element\Text::create('page', 'Add a Page');
         $formSelect->setId('block_pagecollection_parent_' . $item['id']);
-        $formSelect->setClass('octo-page-picker');
+        $formSelect->setClass('octo-page-picker skip-autosave');
         $form->addField($formSelect);
 
         $saveButton = new Button();
