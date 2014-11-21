@@ -14,5 +14,19 @@ class PageVersion extends Octo\Model
 {
     use Base\PageVersionBase;
 
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+    public function __get($key)
+    {
+        if (array_key_exists($key, $this->getters)) {
+            $getter = $this->getters[$key];
+            return $this->{$getter}();
+        }
+
+        $content = json_decode($this->getContentItem()->getContent(), true);
+
+        if (!empty($content[$key])) {
+            return $content[$key];
+        }
+
+        return null;
+    }
 }

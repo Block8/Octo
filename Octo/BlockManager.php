@@ -108,6 +108,13 @@ class BlockManager
     public function attachToTemplate(Template $template)
     {
         $template->addFunction('block', [$this, 'renderBlock']);
+        $template->addFunction('has_content', function ($args, &$view) {
+            if (!empty($this->content[$view->getVariable($args['id'])])) {
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 
     /**

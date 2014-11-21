@@ -9,6 +9,7 @@ use Octo\Admin\Form as FormElement;
 use Octo\Admin\Menu;
 use Octo\Block;
 use Octo\Event;
+use Octo\Form\Element\DateOfBirth;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
 use Octo\Store;
@@ -410,7 +411,48 @@ class PageController extends Controller
 
         $this->successMessage($latest->getTitle() . ' has been published!', true);
         $this->response = new \b8\Http\Response\RedirectResponse($this->response);
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
+
+        $uri = '/page';
+
+        if (!empty($page->getParentId()) && !empty($page->getParent()->getParentId())) {
+            $uri .= '?parent=' . $page->getParentId();
+        }
+
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').$uri);
+    }
+
+    public function duplicate($pageId)
+    {
+        $page = $this->pageStore->getById($pageId);
+        $latest = $this->pageStore->getLatestVersion($page);
+
+        // Create a copy of the page:
+        $newPage = new Page();
+        $newPage->setParentId($page->getParentId());
+        $newPage->setPosition($page->getPosition() + 1);
+        $newPage->generateId();
+
+        $newPage = $this->pageStore->saveByInsert($newPage);
+
+        $copyContent = $latest->getDataArray();
+        $copyContent['version'] = 1;
+        $copyContent['page_id'] = $newPage->getId();
+        $copyContent['title'] = 'Copy of ' . $latest->getTitle();
+        $copyContent['short_title'] = 'Copy of ' . $latest->getShortTitle();
+        $copyContent['user_id'] = $this->currentUser->getId();
+        $copyContent['updated_date'] = new \DateTime();
+        unset($copyContent['id']);
+
+        $newVersion = new PageVersion();
+        $newVersion->setValues($copyContent);
+        $newVersion = $this->versionStore->save($newVersion);
+
+        $newPage->setCurrentVersion($newVersion);
+        $newPage->generateUri();
+        $newPage = $this->pageStore->saveByUpdate($newPage);
+
+        header('Location: /'.$this->config->get('site.admin_uri').'/page/edit/' . $newPage->getId());
+        die;
     }
 
     public function delete($pageId)
