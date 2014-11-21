@@ -63,6 +63,34 @@ window.pageEditor = Class.extend({
     content: {},
     page: {},
 
+    triggerSaveDetails: function () {
+        $('.page-save-notice').addClass('alert-warning').removeClass('alert-success').text('Saving...').fadeIn('fast');
+
+        var self = this;
+        var form = $('#details form');
+        var serialized = form.serializeArray();
+        var details = {};
+
+        for (var i in serialized) {
+            var name = serialized[i].name;
+
+            if (name.substring(name.length - 2) == '[]') {
+                name = name.substring(0, name.length - 2);
+
+                if (!details[name]) {
+                    details[name] = [];
+                }
+
+                details[name].push(serialized[i].value);
+            } else {
+                details[name] = serialized[i].value;
+            }
+        }
+
+        self.page = details;
+        self.saveMetaData();
+    },
+
     triggerSaveContent: function (form) {
         $('.page-save-notice').addClass('alert-warning').removeClass('alert-success').text('Saving...').fadeIn('fast');
 
@@ -110,7 +138,7 @@ window.pageEditor = Class.extend({
 
         $.post('/'+window.adminUri+'/page/save/' + this.id, {page: this.page}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
-            $('.pace').addClass('hide');
+            $('.page-save-notice').addClass('alert-success').removeClass('alert-warning').text('Saved.').fadeOut('slow');
         });
     }
 

@@ -138,6 +138,11 @@ class NewsController extends Controller
                     $modelName = $this->modelType;
                     $article = new $modelName();
                     $article->setValues($this->getParams());
+
+                    if (empty($this->getParam('image_id'))) {
+                        $article->setImageId(null);
+                    }
+
                     $article->setUserId($this->currentUser->getId());
                     $article->setContentItemId($hash);
                     $article->setCreatedDate(new \DateTime());

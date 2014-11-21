@@ -6,7 +6,7 @@
 	<div class="controls">
     {for options}
 	<label class="radio" for="radio-{@id}-{@key}">
-		<input type="radio" id="radio-{@id}-{@key}" class="form-control {@css}" name="{@name}" value="{@key}"{if parent.value == value} checked="checked"{/if}{if required} required{/if}>
+		<input type="radio" id="radio-{@id}-{@key}" class="{@css}" name="{@name}" value="{@key}"{if parent.value == value} checked="checked"{/if}{if required} required{/if}>
 		{@value}
 	</label>
 	{/for}
