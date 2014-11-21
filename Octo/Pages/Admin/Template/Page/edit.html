@@ -1,20 +1,14 @@
-<div class="row clearfix">
-    <div class="col-lg-3 pull-right">
-        <div class="box box-primary" style="text-align: right">
-            <div class="box-body">
-                <div class="page-save-notice pull-left alert alert-success" style="display: none; margin-left: 0; padding: 6px;"></div>
-                <button id="edit-page-details" class="btn">Edit Page Details</button>
-                <a class="btn btn-success" href="/{@adminUri}/page/publish/{@page.id}">Publish Page</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-lg-12">
         <div class="nav-tabs-custom">
+            <div class="pull-right" style="margin-top: 5px; margin-right: 5px;">
+                <div class="page-save-notice alert alert-success" style="float:left; margin: 0 5px 0 0; padding: 6px; display: none"></div>
+                <a class="btn btn-success" href="/{@adminUri}/page/publish/{@page.id}">Publish Page</a>
+            </div>
+
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#preview" data-toggle="tab"><i class="fa fa-search"></i> Page Preview</a></li>
+                <li><a href="#details" data-toggle="tab"><i class="fa fa-info-circle"></i> Page Details</a></li>
 
                 {if hasEditableBlocks}
                     {for blockGroups}
@@ -22,23 +16,6 @@
                             <li>
                                 <a href="#tab_{@key}" data-toggle="tab">{@value.name}</a>
                             </li>
-                <!--
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    {if item.icon}
-                                    <i class="fa fa-{@item.icon}"></i>
-                                    {/if}
-                                    {@key} <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    {for value.blocks}
-                                        <li role="presentation">
-                                            <a href="#tab_{@value.id}" data-toggle="tab" role="menuitem" tabindex="-1">{@value.name}</a>
-                                        </li>
-                                    {/for}
-                                </ul>
-                            </li>
-                -->
                         {/if}
                     {/for}
                 {/if}
@@ -47,6 +24,10 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="preview">
                     <iframe id="page-preview" src="/page/preview/{@page.id}?version={@latest.id}" style="width: 100%; height: 450px; border: 0"></iframe>
+                </div>
+
+                <div class="tab-pane" id="details">
+                    {@pageDetailsForm}
                 </div>
 
                 {if hasEditableBlocks}
@@ -105,58 +86,25 @@
         $('.block-editor input:not(.skip-autosave, .select2-input)').on('change', function () {
             editor.triggerSaveContent($(this).parents('form'));
         });
+
         $('.block-editor input').on('autosave', function () {
             editor.triggerSaveContent($(this).parents('form'));
         });
+
         $('.block-editor select:not(.skip-autosave)').on('change', function () {
             editor.triggerSaveContent($(this).parents('form'));
         });
 
-        $('#edit-page-details').click(function ()
-        {
-            var saveButton = $('<button>Save</button>').addClass('btn btn-success');
-            var dialog = createDialog('page-details-editor', {allowClose: true, title: 'Edit Page Details', button: saveButton});
-            var form = $('<form></form>').addClass('smart-form');
-            var fieldset = $('<fieldset></fieldset>');
-            form.append(fieldset);
+        $('#details input:not(.skip-autosave, .select2-input)').on('change', function () {
+            editor.triggerSaveDetails();
+        });
 
-            fieldset.append(textElement('page-title', 'Page Title', editor.page.title));
-            fieldset.append(textElement('page-short_title', 'Short Title', editor.page.short_title));
-            fieldset.append(textElement('page-description', 'Description', editor.page.description));
-            fieldset.append(textElement('page-meta_description', 'Meta Description', editor.page.meta_description));
+        $('#details input').on('autosave', function () {
+            editor.triggerSaveDetails();
+        });
 
-            if (editor.page.parent_id.length != undefined && editor.page.parent_id.length != 0) {
-                fieldset.append(selectElement('page-parent', 'Parent', editor.pages, editor.page.parent_id));
-            }
-
-            fieldset.append(selectElement('page-template', 'Template', editor.templates, editor.page.template));
-            fieldset.append(imagePicker('page-image', 'Image', editor.page.image_id));
-
-            dialog.find('.modal-body').append(form);
-
-            // Set up the save functionality:
-            saveButton.on('click', function () {
-
-                editor.page = {
-                    title: $('#page-title').val(),
-                    short_title: $('#page-short_title').val(),
-                    description: $('#page-description').val(),
-                    meta_description: $('#page-meta_description').val(),
-                    template: $('#page-template').val(),
-                    image_id: $('#page-image').val(),
-                    parent_id: $('#page-parent').val()
-                };
-
-                editor.saveMetaData();
-
-                dialog.on('hidden.bs.modal', function () {
-                    dialog.remove();
-                });
-
-                dialog.modal('hide');
-            });
-
-            dialog.modal('show');
+        $('#details select:not(.skip-autosave)').on('change', function () {
+            editor.triggerSaveDetails();
         });
     });
 

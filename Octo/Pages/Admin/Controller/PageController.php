@@ -93,9 +93,19 @@ class PageController extends Controller
         $this->setTitle('Add Page');
         $this->addBreadcrumb('Add Page', '/page/add');
 
+        $form = $this->getPageDetailsForm('add');
+        $this->view->form = $form;
+    }
+
+    protected function getPageDetailsForm($type = 'add')
+    {
         $form = new FormElement();
-        $form->setMethod('POST');
-        $form->setAction('/' . $this->config->get('site.admin_uri') . '/page/add');
+
+        if ($type == 'add') {
+            $form->setMethod('POST');
+            $form->setAction('/' . $this->config->get('site.admin_uri') . '/page/add');
+        }
+
         $form->setClass('smart-form');
 
         $fieldset = new Form\FieldSet('fieldset');
@@ -129,12 +139,19 @@ class PageController extends Controller
         $field->setClass('select2');
         $fieldset->addField($field);
 
-        $field = new Form\Element\Submit();
-        $field->setValue('Create Page');
-        $field->setClass('btn-success');
+        $field = Form\Element\Text::create('image_id', 'Page Image', false);
+        $field->setClass('octo-image-picker');
         $fieldset->addField($field);
 
-        $this->view->form = $form;
+
+        if ($type == 'add') {
+            $field = new Form\Element\Submit();
+            $field->setValue('Create Page');
+            $field->setClass('btn-success');
+            $fieldset->addField($field);
+        }
+
+        return $form;
     }
 
     protected function createPage()
@@ -275,6 +292,11 @@ class PageController extends Controller
         $this->view->templates = json_encode($this->getTemplates());
         $this->view->pages = json_encode($this->pageStore->getParentPageOptions());
 
+        $form = $this->getPageDetailsForm('edit');
+        $form->setValues($page->getDataArray());
+        $form->setValues($latest->getDataArray());
+        $this->view->pageDetailsForm = $form;
+
         if ($latest->getContentItemId()) {
             $this->view->pageContent = $latest->getContentItem()->getContent();
         } else {
@@ -378,11 +400,13 @@ class PageController extends Controller
 
             if ($pageData['parent_id'] != $page->getParentId()) {
                 $page->setParentId($pageData['parent_id']);
+                $page->generateUri();
                 $this->pageStore->saveByUpdate($page);
             }
 
             $latest = $this->pageStore->getLatestVersion($page);
             $latest->setValues($pageData);
+
             $latest->setUpdatedDate(new \DateTime());
             $latest->setUser($this->currentUser);
 

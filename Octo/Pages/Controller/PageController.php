@@ -133,8 +133,20 @@ class PageController extends Controller
         }
 
         $template = $this->getTemplate();
-        $this->getBlockManager($template);
-        return $template->render();
+        $blockManager = $this->getBlockManager($template);
+
+        $output = $template->render();
+
+        if (Template::exists('include/meta')) {
+            $template = Template::getPublicTemplate('include/meta');
+            $template->page = $this->page;
+            $template->version = $this->version;
+            $template->datastore = $blockManager->getDataStore();
+
+            $output = str_replace('{!@octo.meta}', $template->render(), $output);
+        }
+
+        return $output;
     }
 
     public function getTemplate()
