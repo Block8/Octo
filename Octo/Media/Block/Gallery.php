@@ -34,7 +34,7 @@ class Gallery extends Block
 
         $formSelect = \b8\Form\Element\Text::create('image', 'Add an Image');
         $formSelect->setId('block_gallery_parent_' . $item['id']);
-        $formSelect->setClass('octo-image-picker');
+        $formSelect->setClass('octo-image-picker skip-autosave');
         $form->addField($formSelect);
 
         $saveButton = new Button();
@@ -87,10 +87,13 @@ class Gallery extends Block
             $this->view->imageWidth = $this->templateParams['imageWidth'];
         }
 
-        if (array_key_exists('images', $this->content)) {
+        $galleryImages = $this->getContent('images', []);
+
+        if (is_array($galleryImages)) {
             $images = [];
             $rendered = 0;
-            foreach ($this->content['images'] as $imageId) {
+
+            foreach ($galleryImages as $imageId) {
                 if (++$rendered >= $this->limit) {
                     break;
                 }

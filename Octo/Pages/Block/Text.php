@@ -24,6 +24,12 @@ class Text extends Block
 
     public static function getEditorForm($item)
     {
+        $type = 'advanced';
+
+        if (!empty($item['editor'])) {
+            $type = $item['editor'];
+        }
+
         $form = new Form('block_text_' . $item['id']);
         $form->setId('block_' . $item['id']);
         $fieldset = new FieldSet();
@@ -31,7 +37,7 @@ class Text extends Block
 
         $content = TextArea::create('content', 'Content', false);
         $content->setId('block_text_content_' . $item['id']);
-        $content->setClass('ckeditor advanced');
+        $content->setClass('ckeditor '.$type);
 
         if (isset($item['content']['content'])) {
             $content->setValue($item['content']['content']);

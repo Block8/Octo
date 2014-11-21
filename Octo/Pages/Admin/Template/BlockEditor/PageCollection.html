@@ -18,6 +18,7 @@
 
         var btn = $('<button class="close" style="position:absolute;right:8px;">').text('×').on('click', function () {
             $(this).parent('li').remove();
+            pagePicker.trigger('autosave');
         });
 
         item.append(btn);
@@ -42,6 +43,7 @@
             pageList.insertAfter(pagePicker);
             pagePicker.on('change', function () {
                 appendPage($(this).val(), $(this).select2('data').text);
+                pagePicker.trigger('autosave');
             });
         }
     });

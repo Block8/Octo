@@ -17,6 +17,7 @@
         item.append('<input type="hidden" name="images[]" value="'+id+'">');
 
         var btn = $('<button class="close" style="position:absolute;right:8px;">').text('×').on('click', function () {
+            galleryImagePicker.trigger('autosave');
             $(this).parent('li').remove();
         });
 
@@ -42,6 +43,7 @@
             imageList.insertAfter(galleryImagePicker);
             galleryImagePicker.on('change', function () {
                 appendImage($(this).val(), $(this).select2('data').text);
+                galleryImagePicker.trigger('autosave');
             });
         }
     });

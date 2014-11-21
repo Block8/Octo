@@ -302,4 +302,58 @@ trait ArticleStoreBase
             throw new StoreException('Could not get Article by Slug', 0, $ex);
         }
     }
+
+    /**
+     * @param $value
+     * @param array $options Offsets, limits, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return int
+     */
+    public function getTotalForImageId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
+        $query->from('article')->where('`image_id` = :image_id');
+        $query->bind(':image_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            return $query->getCount();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get count of Article by ImageId', 0, $ex);
+        }
+    }
+
+    /**
+     * @param $value
+     * @param array $options Limits, offsets, etc.
+     * @param string $useConnection Connection type to use.
+     * @throws StoreException
+     * @return Article[]
+     */
+    public function getByImageId($value, $options = [], $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Article').'\Model\Article', $useConnection);
+        $query->from('article')->where('`image_id` = :image_id');
+        $query->bind(':image_id', $value);
+
+        $this->handleQueryOptions($query, $options);
+
+        try {
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Article by ImageId', 0, $ex);
+        }
+
+    }
 }

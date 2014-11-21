@@ -177,10 +177,12 @@ trait PageBase
     /**
     * Set the value of Position / position.
     *
+    * Must not be null.
     * @param $value int
     */
     public function setPosition($value)
     {
+        $this->validateNotNull('Position', $value);
         $this->validateInt('Position', $value);
 
         if ($this->data['position'] === $value) {

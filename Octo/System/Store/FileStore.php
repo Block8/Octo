@@ -50,7 +50,10 @@ class FileStore extends Octo\Store
      */
     public function search($scope, $query)
     {
-        $query = 'SELECT * FROM file WHERE scope = :scope AND (title LIKE \'%'.$query.'%\' OR id = \''.$query.'\')';
+        $query = 'SELECT * FROM file
+                    WHERE scope = :scope
+                        AND (title LIKE \'%'.$query.'%\' OR id = \''.$query.'\')
+                    ORDER BY title ASC';
 
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);

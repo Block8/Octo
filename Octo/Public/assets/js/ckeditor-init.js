@@ -2,14 +2,16 @@ window.basicCkEditor = {
     toolbar: [
         [ 'Source' ],
         [ 'Styles' ],
-        [ 'Bold', 'Italic', 'Underline' ],
+        [ 'Bold', 'Italic' ],
         [ 'octolink' ],
-        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
+        [ 'Undo', 'Redo', '-', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
     extraPlugins: 'scayt,undo',
     resizeEnabled: false,
+    stylesSet: 'styles:/assets/js/ckeditor_styles.js',
+    contentsCss: '/assets/style.css',
     height: '200px'
 };
 
@@ -17,14 +19,16 @@ window.smallCkEditor = {
     toolbar: [
         [ 'Source' ],
         [ 'Styles' ],
-        [ 'Bold', 'Italic', 'Underline' ],
+        [ 'Bold', 'Italic' ],
         [ 'octolink' ],
-        [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
+        [ 'Undo', 'Redo', '-', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
     extraPlugins: 'scayt,undo',
     resizeEnabled: false,
+    stylesSet: 'styles:/assets/js/ckeditor_styles.js',
+    contentsCss: '/assets/style.css',
     height: '100px'
 };
 
@@ -43,7 +47,7 @@ window.fullCkEditor = {
     resizeEnabled: false,
     extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     alllowedContent: true,
-    height: '200px',
+    height: '300px',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
     contentsCss: '/assets/style.css',
     bodyClass: 'main'
@@ -87,7 +91,7 @@ CKEDITOR.on('dialogDefinition', function( ev ) {
 });
 
 $(document).ready(function() {
-	$('textarea.ckeditor.basic.small').ckeditor(window.smallCkEditor);
+	$('textarea.ckeditor.small').ckeditor(window.smallCkEditor);
 	$('textarea.ckeditor.basic').ckeditor(window.basicCkEditor);
     $('textarea.ckeditor.advanced').ckeditor(window.fullCkEditor);
 
