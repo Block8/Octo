@@ -34,6 +34,7 @@ class UserController extends Controller
         $manage->addChild(new Menu\Item('Edit User', '/user/edit', true));
         $manage->addChild(new Menu\Item('Delete User', '/user/delete', true));
         $manage->addChild(new Menu\Item('Edit Permissions', '/user/permissions', true));
+        $manage->addChild(new Menu\Item('Edit Profile', '/user/profile', true));
         $users->addChild($manage);
     }
 
@@ -281,5 +282,41 @@ class UserController extends Controller
         }
 
         return $item;
+    }
+
+    public function profile()
+    {
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $this->currentUser->setEmail($this->getParam('email'));
+            $this->currentUser->setName($this->getParam('name'));
+
+            $password = $this->getParam('password', '');
+
+            if (!empty($password)) {
+                $this->currentUser->setHash(password_hash($password, PASSWORD_DEFAULT));
+            }
+
+            $this->currentUser = $this->userStore->save($this->currentUser);
+            $this->successMessage('Profile updated successfully!');
+        }
+
+        $this->setTitle($this->currentUser->getName(), 'Edit Profile');
+
+        $form = new \Octo\Admin\Form();
+        $form->setMethod('POST');
+        $name = Form\Element\Text::create('name', 'Name', true);
+        $name->setValue($this->currentUser->getName());
+        $email = Form\Element\Email::create('email', 'Email Address', true);
+        $email->setValue($this->currentUser->getEmail());
+        $password = Form\Element\Password::create('password', 'Password (enter a new password to change)', false);
+        $submit = new Form\Element\Submit();
+        $submit->setValue('Update Profile');
+        $submit->setClass('btn btn-success');
+        $form->addField($name);
+        $form->addField($email);
+        $form->addField($password);
+        $form->addField($submit);
+
+        $this->view->form = $form;
     }
 }

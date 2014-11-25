@@ -60,7 +60,13 @@
 
 <header class="header">
 <a href="/{@adminUri}" class="logo">
+    {if siteLogo}
     <img src="/assets/images/cms-logo.png" alt="" style="max-width: 150px">
+    {/if}
+
+    {ifnot siteLogo}
+    <img src="/assets/backoffice/img/logo.png" alt="" style="max-width: 150px">
+    {/ifnot}
 </a>
 
 <!-- Header Navbar: style can be found in header.less -->
@@ -90,23 +96,12 @@
                 <small>Member since {@user.date_added.formatted}</small>
             </p>
         </li>
-        <!-- Menu Body --
-        <li class="user-body">
-            <div class="col-xs-4 text-center">
-                <a href="#">Followers</a>
-            </div>
-            <div class="col-xs-4 text-center">
-                <a href="#">Sales</a>
-            </div>
-            <div class="col-xs-4 text-center">
-                <a href="#">Friends</a>
-            </div>
-        </li -->
+
         <!-- Menu Footer-->
         <li class="user-footer">
-            <!-- div class="pull-left">
-                <a href="#" class="btn btn-default btn-flat">Profile</a>
-            </div -->
+            <div class="pull-left">
+                <a href="/{@adminUri}/user/profile" class="btn btn-default btn-flat">Edit Profile</a>
+            </div>
             <div class="pull-right">
                 <a href="/{@adminUri}/session/logout" class="btn btn-default btn-flat">Sign out</a>
             </div>
