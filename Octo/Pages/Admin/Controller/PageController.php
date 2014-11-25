@@ -6,6 +6,7 @@ use b8\Form;
 use b8\Http\Response\RedirectResponse;
 use Octo\Admin\Controller;
 use Octo\Admin\Form as FormElement;
+use Octo\Admin\Template as AdminTemplate;
 use Octo\Admin\Menu;
 use Octo\Block;
 use Octo\Event;
@@ -72,20 +73,20 @@ class PageController extends Controller
                 return;
             }
 
-            $parentId = $parent->getId();
+            $pages = [$parent];
+            $this->view->pages = $pages;
         }
+        else {
+            $pages = $this->pageStore->getByParentId($parentId, ['order' => [['position', 'ASC']]]);
 
-        $pages = $this->pageStore->getByParentId($parentId, ['order' => [['position', 'ASC']]]);
+            $list = AdminTemplate::getAdminTemplate('Page/list');
+            $list->pages = $pages;
 
-        if (isset($parent)) {
-            array_unshift($pages, $parent);
+            die($list->render());
         }
-
-        $this->view->pages = $pages;
-        $this->view->parentId = $parentId;
     }
 
-    public function add()
+    public function add($parentId = null)
     {
         if ($this->request->getMethod() == 'POST') {
             return $this->createPage();
@@ -95,6 +96,8 @@ class PageController extends Controller
         $this->addBreadcrumb('Add Page', '/page/add');
 
         $form = $this->getPageDetailsForm('add');
+        $form->setValues(['parent_id' => $parentId]);
+
         $this->view->form = $form;
     }
 

@@ -1,0 +1,24 @@
+{for pages}
+<li class="clearfix"    data-id="{@value.id}"
+                        data-updated="{date_format date: item.latestVersion.updated_date}"
+                        data-author="{@item.latestVersion.User.name}"
+                        data-locked="{if item.isLocked}1{/if}">
+    {if value.hasChildren}
+    <i class="open-arrow fa fa-caret-right"></i>
+    {/if}
+
+    {ifnot value.hasChildren}
+    <i class="fa"></i>
+    {/ifnot}
+
+    {if value.parent_id}
+    <i class="fa fa-file-text-o"></i>
+    {/if}
+
+    {ifnot value.parent_id}
+    <i class="fa fa-home"></i>
+    {/ifnot}
+
+    <span>{@value.CurrentVersion.short_title}</span>
+</li>
+{/for}
