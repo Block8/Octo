@@ -9,7 +9,6 @@
                 <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Last Editor</th>
                     <th>Last Update</th>
                 </tr>
                 </thead>
@@ -22,8 +21,7 @@
                         {/if}
                         {ifnot (can_access uri: "/page/edit")}{@item.CurrentVersion.title}{/ifnot}
                     </td>
-                    <td>{if item.CurrentVersion.User}{@item.CurrentVersion.User.name}{/if}</td>
-                    <td>{date_format date: item.CurrentVersion.updated_date}</td>
+                    <td>{date_format date: item.CurrentVersion.updated_date; format: "short"}</td>
                 </tr>
                 {/for}
                 </tbody>
