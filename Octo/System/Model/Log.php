@@ -23,14 +23,28 @@ class Log extends Octo\Model
     const TYPE_PERMISSION = 16;
     const TYPE_ERROR = 32;
     const TYPE_WARNING = 64;
+    const TYPE_PUBLISH = 128;
 
-    public static function create($type, $scope, $message)
+    public static function create($type, $scope, $message, $scopeId = null, $link = null)
     {
         $rtn = new static();
         $rtn->setType($type);
         $rtn->setScope($scope);
+
+        if (!empty($scopeId)) {
+            $rtn->setScopeId($scopeId);
+        }
+
         $rtn->setMessage($message);
+
+        if (!empty($link)) {
+            $rtn->setLink($link);
+        }
+
         $rtn->setLogDate(new \DateTime());
+        $rtn->setUser($_SESSION['user']);
+
+        $rtn = Store::get('Log')->save($rtn);
 
         return $rtn;
     }

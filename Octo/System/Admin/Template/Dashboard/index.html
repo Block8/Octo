@@ -26,7 +26,23 @@
 </div><!-- /.row -->
 
 <div class="row">
-{for widgets}
-    {@value.html}
-{/for}
+    <div class="col-lg-4">
+        <ul class="timeline">
+            {for timeline}
+                {@value}
+            {/for}
+
+            <li>
+                <i class="fa fa-clock-o"></i>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="row">
+            {for widgets}
+            {@value.html}
+            {/for}
+        </div>
+    </div>
 </div>

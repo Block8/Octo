@@ -15,6 +15,7 @@ use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
 use Octo\Store;
 use Octo\System\Model\ContentItem;
+use Octo\System\Model\Log;
 use Octo\Template;
 
 class PageController extends Controller
@@ -180,6 +181,11 @@ class PageController extends Controller
 
         // Set up the current version of the page:
         $version->setValues($this->getParams());
+
+        if (empty($this->getParam('image_id', null))) {
+            $version->setImageId(null);
+        }
+
         $version->setPage($page);
         $version->setVersion(1);
         $version->setUserId($this->currentUser->getId());
@@ -204,8 +210,12 @@ class PageController extends Controller
         $page->generateUri();
         $this->pageStore->save($page);
 
+        $uri = '/'.$this->config->get('site.admin_uri').'/page/edit/' . $page->getId();
+
+        Log::create(Log::TYPE_CREATE, 'page', $version->getTitle(), $page->getId(), $uri);
+
         $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page/edit/' . $page->getId());
+        $this->response->setHeader('Location', $uri);
     }
 
     public function edit($pageId)
@@ -369,6 +379,11 @@ class PageController extends Controller
         if (!is_null($content)) {
             $page = $this->pageStore->getById($pageId);
             $latest = $this->pageStore->getLatestVersion($page);
+
+            $uri = '/'.$this->config->get('site.admin_uri').'/page/edit/' . $page->getId();
+
+            Log::create(Log::TYPE_EDIT, 'page', $latest->getTitle(), $page->getId(), $uri);
+
             $hash = md5($content);
 
             if ($latest->getContentItemId() !== $hash) {
@@ -425,6 +440,11 @@ class PageController extends Controller
         $page = $this->pageStore->getById($pageId);
         $latest = $this->pageStore->getLatestVersion($page);
         $latest->setUpdatedDate(new \DateTime());
+
+        $uri = '/'.$this->config->get('site.admin_uri').'/page/edit/' . $page->getId();
+
+        Log::create(Log::TYPE_PUBLISH, 'page', $latest->getTitle(), $page->getId(), $uri);
+
         $this->versionStore->save($latest);
 
         $page->setCurrentVersion($latest);
@@ -486,6 +506,8 @@ class PageController extends Controller
     {
         $page = $this->pageStore->getById($pageId);
         $this->successMessage($page->getCurrentVersion()->getShortTitle() . ' has been deleted.', true);
+
+        Log::create(Log::TYPE_DELETE, 'page', $page->getCurrentVersion()->getTitle(), $page->getId());
 
         $this->pageStore->delete($page);
 

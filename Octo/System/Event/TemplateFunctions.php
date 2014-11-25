@@ -31,19 +31,27 @@ class TemplateFunctions extends Listener
         $template->addFunction('date_format', function ($args, &$view) {
             $date = $view->getVariable($args['date']);
 
+            $format = null;
+
+            if (isset($args['format'])) {
+                $format = $view->getVariable($args['format']);
+            }
+
             if (!($date instanceof \DateTime)) {
                 return '';
             }
 
-            if (!isset($args['format'])) {
+            if (empty($format)) {
                 $format = 'jS F Y, g:ia';
-            } elseif ($args['format'] == 'short') {
+            } elseif ($format == 'friendly') {
+                return $this->friendlyDate($date);
+            } elseif ($format == 'short') {
                 $format = 'd/m/Y g:ia';
-            } elseif ($args['format'] == 'long_date') {
+            } elseif ($format == 'long_date') {
                 $format = 'jS F Y';
-            } elseif ($args['format'] == 'date') {
+            } elseif ($format == 'date') {
                 $format = 'd/m/Y';
-            } elseif ($args['format'] == 'time') {
+            } elseif ($format == 'time') {
                 $format = 'g:ia';
             } else {
                 $format = 'jS F Y, g:ia';
@@ -72,6 +80,20 @@ class TemplateFunctions extends Listener
 
                 return false;
             });
+    }
+
+    protected function friendlyDate(\DateTime $date)
+    {
+        $now = new \DateTime();
+        $yesterday = new \DateTime('-1 day');
+
+        if ($date->format('Y-m-d') == $now->format('Y-m-d')) {
+            return $date->format('g:ia');
+        } elseif ($date->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+            return 'Yesterday, ' . $date->format('g:ia');
+        } else {
+            return $date->format('M j Y, g:ia');
+        }
     }
 
     /**

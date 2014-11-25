@@ -1,0 +1,25 @@
+<!-- timeline item -->
+<li>
+    <!-- timeline icon -->
+    <i class="fa fa-{@icon} bg-{@color}"></i>
+
+    <div class="timeline-item">
+        <span class="time"><i class="fa fa-clock-o"></i> {date_format date: item.log_date; format: "friendly"}</span>
+
+        <h3 class="timeline-header no-border">
+            <a>{@item.User.name}</a> {@verb}
+
+
+            {if item.link}
+            <a href="{@item.link}">
+            {/if}
+
+            {@item.message}
+
+            {if item.link}
+            </a>
+            {/if}
+        </h3>
+    </div>
+</li>
+<!-- END timeline item -->

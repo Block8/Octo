@@ -1,0 +1,18 @@
+<!-- timeline item -->
+<li>
+    <!-- timeline icon -->
+    <i class="fa fa-image bg-{@color}"></i>
+
+    <div class="timeline-item">
+        <span class="time"><i class="fa fa-clock-o"></i> {date_format date: item.log_date; format: "friendly"}</span>
+
+        <h3 class="timeline-header"><a>{@item.User.name}</a> uploaded new images</h3>
+
+        <div class="timeline-body">
+            {for decoded}
+            <img src="/media/render/{@value.id}/130/100/png" alt="" style="margin-right: 5px;">
+            {/for}
+        </div>
+    </div>
+</li>
+<!-- END timeline item -->

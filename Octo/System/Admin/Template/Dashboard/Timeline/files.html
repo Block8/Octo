@@ -1,0 +1,19 @@
+<!-- timeline item -->
+<li>
+    <!-- timeline icon -->
+    <i class="fa fa-image bg-{@color}"></i>
+
+    <div class="timeline-item">
+        <span class="time"><i class="fa fa-clock-o"></i> {date_format date: item.log_date; format: "friendly"}</span>
+
+        <h3 class="timeline-header"><a>{@item.User.name}</a> uploaded new files</h3>
+
+        <div class="timeline-body">
+
+            {for decoded}
+            <a class="btn btn-default" href="/{@adminUri}/media/edit/files/{@value.id}"><i class="fa fa-file-text-o"></i> {@value.title}</a>
+            {/for}
+        </div>
+    </div>
+</li>
+<!-- END timeline item -->

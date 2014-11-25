@@ -43,6 +43,27 @@ class FileStore extends Octo\Store
         }
     }
 
+    public function getAllForScopeSince($scope, $date, $order = 'title ASC')
+    {
+        $query = 'SELECT * FROM file WHERE scope = :scope AND created_date > :date ORDER BY ' . $order;
+        $stmt = Database::getConnection('read')->prepare($query);
+        $stmt->bindParam(':scope', $scope);
+        $stmt->bindParam(':date', $date->format('Y-m-d H:i:s'));
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new File($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
+
     /**
      * @param $scope
      * @param string $order
