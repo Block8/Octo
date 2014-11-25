@@ -71,13 +71,13 @@ class DashboardController extends Controller
                     break;
 
                 case 4:
-                    $template->color = 'blue';
-                    $template->verb = 'edited';
+                    $template->color = 'red';
+                    $template->verb = 'deleted';
                     break;
 
                 case 8:
-                    $template->color = 'red';
-                    $template->verb = 'deleted';
+                    $template->color = 'blue';
+                    $template->verb = 'edited';
                     break;
 
                 case 128:
