@@ -134,8 +134,10 @@ class PageStore extends Octo\Store
 
         $children = $this->getByParentId($parent->getId());
         foreach ($children as $page) {
-            $options[$page->getId()] = $prefix  . $page->getCurrentVersion()->getTitle();
-            $options = $this->getParentPageOptions($options, $page, '--' . $prefix);
+            if ($page->getCurrentVersionId()) {
+                $options[$page->getId()] = $prefix  . $page->getCurrentVersion()->getTitle();
+                $options = $this->getParentPageOptions($options, $page, '--' . $prefix);
+            }
         }
 
         return $options;

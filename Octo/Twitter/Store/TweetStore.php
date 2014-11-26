@@ -72,4 +72,18 @@ class TweetStore extends Octo\Store
             return null;
         }
     }
+
+    public function getLatestTweet()
+    {
+        $query = 'SELECT tweet.* FROM tweet ORDER BY posted DESC LIMIT 1';
+
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return new Tweet($res);
+        } else {
+            return null;
+        }
+    }
 }

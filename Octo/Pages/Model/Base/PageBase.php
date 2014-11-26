@@ -34,6 +34,9 @@ trait PageBase
         $this->data['position'] = null;
         $this->getters['position'] = 'getPosition';
         $this->setters['position'] = 'setPosition';
+        $this->data['active'] = null;
+        $this->getters['active'] = 'getActive';
+        $this->setters['active'] = 'setActive';
 
         // Foreign keys:
         $this->getters['CurrentVersion'] = 'getCurrentVersion';
@@ -97,6 +100,18 @@ trait PageBase
     public function getPosition()
     {
         $rtn = $this->data['position'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Active / active.
+    *
+    * @return int
+    */
+    public function getActive()
+    {
+        $rtn = $this->data['active'];
 
         return $rtn;
     }
@@ -191,6 +206,25 @@ trait PageBase
 
         $this->data['position'] = $value;
         $this->setModified('position');
+    }
+
+    /**
+    * Set the value of Active / active.
+    *
+    * Must not be null.
+    * @param $value int
+    */
+    public function setActive($value)
+    {
+        $this->validateNotNull('Active', $value);
+        $this->validateInt('Active', $value);
+
+        if ($this->data['active'] === $value) {
+            return;
+        }
+
+        $this->data['active'] = $value;
+        $this->setModified('active');
     }
     /**
     * Get the PageVersion model for this Page by Id.

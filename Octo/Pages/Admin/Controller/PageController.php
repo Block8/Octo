@@ -144,6 +144,12 @@ class PageController extends Controller
         $field->setClass('select2');
         $fieldset->addField($field);
 
+        $field = Form\Element\Checkbox::create('active', 'Page Active?', false);
+        $field->setCheckedValue(1);
+        $field->setValue(1);
+        $fieldset->addField($field);
+
+
         $field = Form\Element\Text::create('image_id', 'Page Image', false);
         $field->setClass('octo-image-picker');
         $fieldset->addField($field);
@@ -413,11 +419,19 @@ class PageController extends Controller
 
             $page = $this->pageStore->getById($pageId);
 
+            if (!array_key_exists('active', $pageData) || $pageData['active'] == 0) {
+                $page->setActive(0);
+            } else {
+                $page->setActive(1);
+            }
+
+
             if ($pageData['parent_id'] != $page->getParentId()) {
                 $page->setParentId($pageData['parent_id']);
                 $page->generateUri();
-                $this->pageStore->saveByUpdate($page);
             }
+
+            $this->pageStore->saveByUpdate($page);
 
             $latest = $this->pageStore->getLatestVersion($page);
             $latest->setValues($pageData);

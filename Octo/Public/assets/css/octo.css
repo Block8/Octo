@@ -73,3 +73,8 @@
         vertical-align: middle;
         width: 18px;
     }
+
+
+input[type=checkbox] {
+    margin-right: 10px;
+}
