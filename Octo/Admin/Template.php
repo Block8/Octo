@@ -25,7 +25,7 @@ class Template extends \Octo\Template
 
         if (!is_null($rtn)) {
             $rtn->addFunction('hash', function ($args, $view) {
-                    return md5($view->getVariable($args['value']));
+                    return md5($args['value']);
             });
         }
 

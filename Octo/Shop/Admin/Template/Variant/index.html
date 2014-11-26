@@ -18,25 +18,25 @@
         <td>{@value.title}</td>
         <td>
             <div class="btn-group">
-                {if (can_access uri: "/variant-option")}
+                {if canAccess(uri: "/variant-option")}
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/variant-option/manage/{@value.id}">Edit Options</a>
                 {/if}
 
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    {if (can_access uri: "/variant-option")}
+                    {if canAccess(uri: "/variant-option")}
                     <li>
                         <a href="/{@adminUri}/variant-option/manage/{@value.id}">Edit Options</a>
                     </li>
                     {/if}
 
-                    {if (can_access uri: "/variant/edit")}
+                    {if canAccess(uri: "/variant/edit")}
                     <li>
                         <a href="/{@adminUri}/variant/edit/{@value.id}">Edit Variant</a>
                     </li>
                     {/if}
 
-                    {if (can_access uri: "/variant/delete")}
+                    {if canAccess(uri: "/variant/delete")}
                     <li>
                         <a href="/{@adminUri}/variant/delete/{@value.id}" class="btn-delete">Delete</a>
                     </li>

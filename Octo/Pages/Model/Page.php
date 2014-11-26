@@ -29,6 +29,33 @@ class Page extends Octo\Model
         $this->getters['latestVersion'] = 'getLatestVersion';
     }
 
+    public function __get($key)
+    {
+        return $this->getVariable($key);
+    }
+
+    public function getVariable($key)
+    {
+        // Try local variables:
+        if (array_key_exists($key, $this->getters)) {
+            $getter = $this->getters[$key];
+            return $this->{$getter}();
+        }
+
+        // Try content variables:
+        $fromContent = $this->getCurrentVersion()->getVariable($key);
+        if ($fromContent) {
+            return $fromContent;
+        }
+
+        // Try and get from parent page:
+        if ($this->getParentId()) {
+            return $this->getParent()->getVariable($key);
+        }
+
+        return null;
+    }
+
     public function hasChildren()
     {
         $store = Store::get('Page');
@@ -85,5 +112,4 @@ class Page extends Octo\Model
         $content = $this->getLatestVersion()->getContentItem()->getContent();
         return $content;
     }
-
 }

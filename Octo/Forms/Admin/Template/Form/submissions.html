@@ -16,7 +16,7 @@
                 <td>{@value.Contact.email}</td>
                 <td>{@value.created_date.formatted}</td>
                 <td>
-                    {if (can_access uri: "/form/submission")}
+                    {if canAccess(uri: "/form/submission")}
                     <a class="btn btn-default btn-sm" href="/{@adminUri}/form/submission/{@value.id}">View</a>
                     {/if}
                 </td>

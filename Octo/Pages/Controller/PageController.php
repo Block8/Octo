@@ -77,6 +77,23 @@ class PageController extends Controller
             throw new NotFoundException('Page does not exist: ' . $path);
         }
 
+        if (is_null(Event::getEventManager())) {
+            Event::init();
+        }
+
+        Event::getEventManager()->registerListener('PublicTemplateLoaded', function (Template $template) {
+            $template->addFunction('getPages', function ($args, &$view) {
+                $parent = $args['parent'];
+                $limit = 10;
+
+                if (isset($args['limit'])) {
+                    $limit = $args['limit'];
+                }
+
+                return $this->pageStore->getByParentId($parent, ['order' => [['position', 'ASC']], 'limit' => $limit]);
+            });
+        });
+
         $this->version = $this->page->getCurrentVersion();
         $template = $this->getTemplate();
         $blockManager = $this->getBlockManager($template);

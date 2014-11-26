@@ -17,10 +17,8 @@ class TemplateFunctions extends Listener
 
     public function adminTemplateFunctions(Template &$template)
     {
-        $template->addFunction('can_access', function ($args, &$view) {
-            $uri = $view->getVariable($args['uri']);
-
-            return $_SESSION['user']->canAccess($uri);
+        $template->addFunction('canAccess', function ($args, &$view) {
+            return $_SESSION['user']->canAccess($args['uri']);
         });
 
     }
@@ -29,12 +27,12 @@ class TemplateFunctions extends Listener
     {
         $config = Config::getInstance();
         $template->addFunction('date_format', function ($args, &$view) {
-            $date = $view->getVariable($args['date']);
+            $date = $args['date'];
 
             $format = null;
 
             if (isset($args['format'])) {
-                $format = $view->getVariable($args['format']);
+                $format = $args['format'];
             }
 
             if (!($date instanceof \DateTime)) {
@@ -66,7 +64,7 @@ class TemplateFunctions extends Listener
         $template->addFunction('pagination', array($this, 'handlePagination'));
         $template->addFunction('var_dump', function ($args, Template $view) {
             ob_start();
-            var_dump($view->getVariable($args['variable']));
+            var_dump($args['variable']);
             $rtn = ob_get_contents();
             ob_end_clean();
 
@@ -105,10 +103,10 @@ class TemplateFunctions extends Listener
      */
     public function handlePagination($args, Template $view)
     {
-        $uri = $view->getVariable($args['uri']);
-        $current = $view->getVariable($args['current']);
-        $total = $view->getVariable($args['total']);
-        $limit = $view->getVariable($args['limit']);
+        $uri = $args['uri'];
+        $current = $args['current'];
+        $total = $args['total'];
+        $limit = $args['limit'];
 
         $uri   = preg_replace('/offset=([0-9]+)/', '', $uri);
         $pages = ceil($total / $limit);

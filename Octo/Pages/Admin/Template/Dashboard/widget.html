@@ -16,12 +16,12 @@
                 {for latestPages}
                 <tr>
                     <td>
-                        {if (can_access uri: "/page/edit")}
-                        <a href="/{@adminUri}/page/edit/{@item.id}">{@item.CurrentVersion.title}</a>
+                        {if canAccess(uri: "/page/edit")}
+                        <a href="/{@adminUri}/page/edit/{@item.id}">{@item.title}</a>
                         {/if}
-                        {ifnot (can_access uri: "/page/edit")}{@item.CurrentVersion.title}{/ifnot}
+                        {ifnot canAccess(uri: "/page/edit")}{@item.title}{/ifnot}
                     </td>
-                    <td>{date_format date: item.CurrentVersion.updated_date; format: "short"}</td>
+                    <td>{date_format date: item.updated_date; format: "short"}</td>
                 </tr>
                 {/for}
                 </tbody>

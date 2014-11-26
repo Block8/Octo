@@ -31,14 +31,9 @@ class DashboardController extends Controller
         $items = $logStore->getTimeline();
         $timeline = [];
 
-        $lastDate = new \DateTime();
+        $lastDate = new \DateTime('1970-01-01');
 
         $date = $lastDate->format('M j Y');
-        $timeline[] = "<li class=\"time-label\">
-                                    <span class=\"bg-blue\">
-                                        {$date}
-                                    </span>
-                                </li>";
 
         foreach ($items as $item) {
 

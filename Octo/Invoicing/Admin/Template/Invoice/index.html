@@ -64,25 +64,25 @@
         </td>
         <td>
             <div class="btn-group">
-                {if (can_access uri: "/invoice/view")}
+                {if canAccess(uri: "/invoice/view")}
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/invoice/view/{@value.id}">View</a>
                 {/if}
 
-                {if (can_access uri: "/invoice/edit")}
+                {if canAccess(uri: "/invoice/edit")}
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/invoice/edit/{@value.id}">Edit</a>
                 {/if}
 
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     {if canPdf}
-                    {if (can_access uri: "/invoice/view")}
+                    {if canAccess(uri: "/invoice/view")}
                     <li>
                         <a target="_blank" href="/{@adminUri}/invoice/view/{@value.id}/pdf">Download PDF</a>
                     </li>
                     {/if}
                     {/if}
 
-                    {if (can_access uri: "/invoice/delete")}
+                    {if canAccess(uri: "/invoice/delete")}
                     <li>
                         <a href="/{@adminUri}/invoice/delete/{@value.id}">Delete</a>
                     </li>

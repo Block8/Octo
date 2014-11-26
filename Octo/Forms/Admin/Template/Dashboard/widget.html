@@ -1,4 +1,4 @@
-{if (can_access uri: "/form")}
+{if canAccess(uri: "/form")}
 <div class="col-lg-6">
     <div class="box box-success">
         <div class="box-header">
@@ -18,7 +18,7 @@
                 <tr>
                     <td>{@value.Contact.email}</td>
                     <td>
-                        {if (can_access uri: "/form/submission")}
+                        {if canAccess(uri: "/form/submission")}
                         <a class="btn btn-default btn-sm" href="/{@adminUri}/form/submission/{@value.id}">View</a>
                         {/if}
                     </td>

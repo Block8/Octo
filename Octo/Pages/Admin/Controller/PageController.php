@@ -346,12 +346,8 @@ class PageController extends Controller
     {
         $blocks = array();
         $template = Template::getPublicTemplate($template);
-        $template->addFunction('block', function ($block, $view) use (&$blocks) {
-            foreach ($block as &$value) {
-                $value = $view->getVariable($value);
-            }
-
-            $blocks[] = $block;
+        $template->addFunction('block', function ($args, $view) use (&$blocks) {
+            $blocks[] = $args;
         });
 
         $template->render();

@@ -17,9 +17,9 @@
         </div>
 
         <div id="analytics_container">
-            {include template: "Dashboard/analytics"; variables: "pageviews" => metric }
-            {include template: "Dashboard/analytics"; variables: "uniquePageviews" => metric }
-            {include template: "Dashboard/analytics"; variables: "visitors" => metric, 1 => responsive }
+            {include template: "Dashboard/analytics"; metric: pageviews}
+            {include template: "Dashboard/analytics"; metric: uniquePageviews }
+            {include template: "Dashboard/analytics"; metric: visitors; responsive: true }
         </div>
     </div>
 </div>

@@ -183,7 +183,7 @@ class ControllerGenerator
         $tpl->counts = $this->counts;
 
         $callback = function ($args, $view) {
-            return $this->getNamespace($view->getVariable($args['model']));
+            return $this->getNamespace($args['model']);
         };
 
         $tpl->addFunction('get_namespace', $callback);

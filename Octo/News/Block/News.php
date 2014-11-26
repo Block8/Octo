@@ -277,8 +277,7 @@ class News extends Block
         $this->view->addFunction(
             'date_format',
             function ($args, &$view) {
-                $date = $view->getVariable($args['date']);
-                return $date->format('d/m/Y');
+                return $args['date']->format('d/m/Y');
             }
         );
     }

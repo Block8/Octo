@@ -195,10 +195,6 @@ abstract class Block
             $this->view = Template::getPublicTemplate('Block/' . $class);
         }
 
-        foreach ($this->templateParams['variables'] as $key => $value) {
-            $this->view->{$key} = $value;
-        }
-
         $rtn = $this->renderNow();
 
         if (method_exists($this, 'renderDeferred')) {

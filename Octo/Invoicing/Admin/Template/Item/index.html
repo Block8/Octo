@@ -17,7 +17,7 @@
         <td>&pound;{@value.price}</td>
         <td>
             <div class="btn-group">
-                {if (can_access uri: "/item/edit")}
+                {if canAccess(uri: "/item/edit")}
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/item/edit/{@value.id}">Edit</a>
                 {/if}
 
@@ -25,7 +25,7 @@
                 <ul class="dropdown-menu">
 
 
-                    {if (can_access uri: "/item/delete")}
+                    {if canAccess(uri: "/item/delete")}
                     <li>
                         <a href="/{@adminUri}/item/delete/{@value.id}">Delete</a>
                     </li>

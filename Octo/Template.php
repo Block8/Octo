@@ -80,27 +80,15 @@ class Template extends View\Template
     public function includeTemplate($args, &$view)
     {
         if ($view instanceof AdminTemplate) {
-            $template = static::getAdminTemplate($view->getVariable($args['template']));
+            $template = static::getAdminTemplate($args['template']);
         } else {
-            $template = static::getPublicTemplate($view->getVariable($args['template']));
+            $template = static::getPublicTemplate($args['template']);
         }
 
-        if (isset($args['variables'])) {
-            if (!is_array($args['variables'])) {
-                $args['variables'] = array($args['variables']);
-            }
+        unset($args['template']);
 
-            foreach ($args['variables'] as $variable) {
-
-                $variable = explode('=>', $variable);
-                $variable = array_map('trim', $variable);
-
-                if (count($variable) == 1) {
-                    $template->{$variable[0]} = $view->getVariable($variable[0]);
-                } else {
-                    $template->{$variable[1]} = $view->getVariable($variable[0]);
-                }
-            }
+        foreach ($args as $key => $val) {
+            $template->{$key} = $val;
         }
 
         return $template->render();

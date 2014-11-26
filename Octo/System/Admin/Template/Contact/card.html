@@ -3,7 +3,7 @@
     <div class="box-header" role="heading">
         <h3 class="box-title">Contact</h3>
 
-        {if (can_access uri: "/contact/block")}
+        {if canAccess(uri: "/contact/block")}
         <div class="box-tools pull-right" role="menu">
             {if contact.is_blocked}
             <a href="/{@adminUri}/contact/unblock/{@contact.id}" class="btn btn-success">Unblock</a>

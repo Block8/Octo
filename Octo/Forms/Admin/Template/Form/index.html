@@ -13,19 +13,19 @@
                 <td>{@value.title}</td>
                 <td>
                     <div class="btn-group">
-                        {if (can_access uri: "/form/edit")}
+                        {if canAccess(uri: "/form/edit")}
                         <a class="btn btn-default btn-sm" href="/{@adminUri}/form/edit/{@value.id}">Edit</a>
                         {/if}
 
                         <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            {if (can_access uri: "/form/submissions")}
+                            {if canAccess(uri: "/form/submissions")}
                             <li>
                                 <a href="/{@adminUri}/form/submissions/{@value.id}">View Submissions</a>
                             </li>
                             {/if}
 
-                            {if (can_access uri: "/form/delete")}
+                            {if canAccess(uri: "/form/delete")}
                             <li>
                                 <a href="/{@adminUri}/form/delete/{@value.id}" class="btn-delete">Delete</a>
                             </li>

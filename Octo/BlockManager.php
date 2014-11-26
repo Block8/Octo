@@ -109,7 +109,7 @@ class BlockManager
     {
         $template->addFunction('block', [$this, 'renderBlock']);
         $template->addFunction('has_content', function ($args, &$view) {
-            if (!empty($this->content[$view->getVariable($args['id'])])) {
+            if (!empty($this->content[$args['id']])) {
                 return true;
             } else {
                 return false;
@@ -124,31 +124,6 @@ class BlockManager
      */
     public function renderBlock($args, &$view)
     {
-        // Allow passing variables to blocks
-        $templateVariables = [];
-        if (isset($args['variables'])) {
-            if (!is_array($args['variables'])) {
-                $args['variables'] = array($args['variables']);
-            }
-
-            foreach ($args['variables'] as $variable) {
-                $variable = explode('=>', $variable);
-                $variable = array_map('trim', $variable);
-
-                if (count($variable) == 1) {
-                    $templateVariables[$variable[0]] = $variable[0];
-                } else {
-                    $templateVariables[$variable[0]] = $variable[1];
-                }
-            }
-
-            unset($args['variables']);
-        }
-
-        foreach ($args as &$value) {
-            $value = $view->getVariable($value);
-        }
-
         $type = $args['type'];
         $blockId = isset($args['id']) ? $args['id'] : null;
         $content = [];
@@ -160,8 +135,6 @@ class BlockManager
         $block = Block::create($type, $content);
         $block->setRequest($this->request);
         $block->setResponse($this->response);
-
-        $args = array_merge(['variables' => $templateVariables], $args);
 
         $block = $this->setBlockProperties($block, $args);
 

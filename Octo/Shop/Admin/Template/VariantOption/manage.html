@@ -20,19 +20,19 @@
         <td><i class="fa fa-fw fa-arrows handler"></i></td>
         <td>
             <div class="btn-group">
-                {if (can_access uri: "/variant-option/edit")}
+                {if canAccess(uri: "/variant-option/edit")}
                 <a class="btn btn-default btn-sm" href="/{@adminUri}/variant-option/edit/{@value.id}">Edit</a>
                 {/if}
 
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    {if (can_access uri: "/variant-option/edit")}
+                    {if canAccess(uri: "/variant-option/edit")}
                     <li>
                         <a href="/{@adminUri}/variant-option/edit/{@value.id}">Edit</a>
                     </li>
                     {/if}
 
-                    {if (can_access uri: "/variant-option/delete")}
+                    {if canAccess(uri: "/variant-option/delete")}
                     <li>
                         <a href="/{@adminUri}/variant-option/delete/{@value.id}" class="btn-delete">Delete</a>
                     </li>
