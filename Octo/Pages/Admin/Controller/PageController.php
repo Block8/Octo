@@ -422,7 +422,6 @@ class PageController extends Controller
 
             /** @var \Octo\Pages\Model\Page $page */
             $page = $this->pageStore->getById($pageId);
-            $page->set
 
             if (!array_key_exists('active', $pageData) || $pageData['active'] == 0) {
                 $page->setActive(0);
