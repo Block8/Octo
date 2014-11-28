@@ -443,8 +443,6 @@ class PageController extends Controller
             $latest->setUpdatedDate(new \DateTime());
             $latest->setUser($this->currentUser);
 
-            var_dump($latest->getModified()); die;
-
             $this->versionStore->save($latest);
         }
 
