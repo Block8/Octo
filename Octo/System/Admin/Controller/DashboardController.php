@@ -45,7 +45,14 @@ class DashboardController extends Controller
                                         {$date}
                                     </span>
                                 </li>";
+
                 $lastDate = $item->getLogDate();
+            }
+
+            $key = md5($item->getLogDate()->format('Y-m-d').$item->getScope() . '.' . $item->getType() . '.' . $item->getScopeId());
+
+            if (array_key_exists($key, $timeline)) {
+                continue;
             }
 
             $template = 'Dashboard/Timeline/'.$item->getScope();
@@ -100,7 +107,11 @@ class DashboardController extends Controller
                     break;
             }
 
-            $timeline[] = $template->render();
+            $timeline[$key] = $template->render();
+
+            if (count($timeline) >= 20) {
+                break;
+            }
         }
 
         return $timeline;

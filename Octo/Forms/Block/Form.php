@@ -61,7 +61,7 @@ class Form extends Block
         $store = Store::get('Form');
         $rtn = $store->getAll(0, 1000);
 
-        $forms = [];
+        $forms = [0 => 'Please select...'];
         foreach ($rtn as $frm) {
             $forms[$frm->getId()] = $frm->getTitle();
         }

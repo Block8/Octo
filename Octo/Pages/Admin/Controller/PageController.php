@@ -97,7 +97,10 @@ class PageController extends Controller
         $this->addBreadcrumb('Add Page', '/page/add');
 
         $form = $this->getPageDetailsForm('add');
-        $form->setValues(['parent_id' => $parentId]);
+
+        if ($form) {
+            $form->setValues(['parent_id' => $parentId]);
+        }
 
         $this->view->form = $form;
     }
@@ -417,14 +420,15 @@ class PageController extends Controller
                 unset($pageData['image_id']);
             }
 
+            /** @var \Octo\Pages\Model\Page $page */
             $page = $this->pageStore->getById($pageId);
+            $page->set
 
             if (!array_key_exists('active', $pageData) || $pageData['active'] == 0) {
                 $page->setActive(0);
             } else {
                 $page->setActive(1);
             }
-
 
             if ($pageData['parent_id'] != $page->getParentId()) {
                 $page->setParentId($pageData['parent_id']);
@@ -469,13 +473,7 @@ class PageController extends Controller
         $this->successMessage($latest->getTitle() . ' has been published!', true);
         $this->response = new \b8\Http\Response\RedirectResponse($this->response);
 
-        $uri = '/page';
-
-        if (!empty($page->getParentId()) && !empty($page->getParent()->getParentId())) {
-            $uri .= '?parent=' . $page->getParentId();
-        }
-
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').$uri);
+        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/page');
     }
 
     public function duplicate($pageId)

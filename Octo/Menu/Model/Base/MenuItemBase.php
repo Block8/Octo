@@ -125,8 +125,8 @@ trait MenuItemBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -144,6 +144,12 @@ trait MenuItemBase
     public function setMenuId($value)
     {
         $this->validateInt('MenuId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['menu_id'] === $value) {
             return;
@@ -178,6 +184,12 @@ trait MenuItemBase
     public function setPageId($value)
     {
         $this->validateString('PageId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['page_id'] === $value) {
             return;

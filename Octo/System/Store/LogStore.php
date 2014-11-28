@@ -20,7 +20,7 @@ class LogStore extends Octo\Store
     public function getTimeline()
     {
         $query = new Query($this->getNamespace('Log').'\Model\Log', 'read');
-        $query->select('*')->from('log')->limit(25);
+        $query->select('*')->from('log')->limit(100);
         $query->where('type IN (2, 4, 8, 128)');
         $query->order('id', 'DESC');
 

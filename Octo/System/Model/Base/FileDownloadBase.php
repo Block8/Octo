@@ -82,8 +82,8 @@ trait FileDownloadBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -101,6 +101,12 @@ trait FileDownloadBase
     public function setFileId($value)
     {
         $this->validateString('FileId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['file_id'] === $value) {
             return;

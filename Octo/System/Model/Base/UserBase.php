@@ -155,8 +155,8 @@ trait UserBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -174,8 +174,8 @@ trait UserBase
     */
     public function setEmail($value)
     {
-        $this->validateNotNull('Email', $value);
         $this->validateString('Email', $value);
+        $this->validateNotNull('Email', $value);
 
         if ($this->data['email'] === $value) {
             return;
@@ -193,8 +193,8 @@ trait UserBase
     */
     public function setHash($value)
     {
-        $this->validateNotNull('Hash', $value);
         $this->validateString('Hash', $value);
+        $this->validateNotNull('Hash', $value);
 
         if ($this->data['hash'] === $value) {
             return;
@@ -229,8 +229,8 @@ trait UserBase
     */
     public function setIsAdmin($value)
     {
-        $this->validateNotNull('IsAdmin', $value);
         $this->validateInt('IsAdmin', $value);
+        $this->validateNotNull('IsAdmin', $value);
 
         if ($this->data['is_admin'] === $value) {
             return;
@@ -248,8 +248,8 @@ trait UserBase
     */
     public function setIsHidden($value)
     {
-        $this->validateNotNull('IsHidden', $value);
         $this->validateInt('IsHidden', $value);
+        $this->validateNotNull('IsHidden', $value);
 
         if ($this->data['is_hidden'] === $value) {
             return;

@@ -129,8 +129,8 @@ trait SubmissionBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -148,8 +148,14 @@ trait SubmissionBase
     */
     public function setFormId($value)
     {
-        $this->validateNotNull('FormId', $value);
         $this->validateInt('FormId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+        $this->validateNotNull('FormId', $value);
 
         if ($this->data['form_id'] === $value) {
             return;
@@ -167,8 +173,8 @@ trait SubmissionBase
     */
     public function setCreatedDate($value)
     {
-        $this->validateNotNull('CreatedDate', $value);
         $this->validateDate('CreatedDate', $value);
+        $this->validateNotNull('CreatedDate', $value);
 
         if ($this->data['created_date'] === $value) {
             return;
@@ -186,8 +192,14 @@ trait SubmissionBase
     */
     public function setContactId($value)
     {
-        $this->validateNotNull('ContactId', $value);
         $this->validateInt('ContactId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+        $this->validateNotNull('ContactId', $value);
 
         if ($this->data['contact_id'] === $value) {
             return;

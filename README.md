@@ -7,9 +7,13 @@ To get started:
 
 * Clone: `git clone git@github.com:Block8/Octo-Skeleton.git <your site name>`
 * Move into your new project directory: `cd <your site name>`
-* Remove the .git folder and create as a new repo: `rm -Rf .git && git init`
-* Modify the `siteconfig.php` file as necessary for your project
-* Rename the `Example` namespace and modify the code within it for your project
+* If you want to try out the example site:
+  * Create a database and import into it the content from `octo-skeleton.sql`
+  * Modify `siteconfig.php` to point to that database
+* If you want to create a new site:
+  * Remove the .git folder and create as a new repo: `rm -Rf .git && git init`
+  * Modify the `siteconfig.php` file as necessary for your project
+  * Rename the `Example` namespace and modify the code within it for your project
 
 ## Dependencies
 

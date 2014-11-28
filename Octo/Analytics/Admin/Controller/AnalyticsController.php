@@ -72,7 +72,7 @@ class AnalyticsController extends Controller
         foreach ($pages as $item) {
             $page = $item->getPage();
             if (isset($page)) {
-                $pageName = $page->getCurrentVersion()->getTitle();
+                $pageName = $page->getCurrentVersion()->getShortTitle();
             } else {
                 $pageName = ltrim($item->getUri(), '/');
             }
@@ -99,7 +99,7 @@ class AnalyticsController extends Controller
         foreach ($pages as $item) {
             $page = $item->getPage();
             if (isset($page)) {
-                $pageName = $page->getCurrentVersion()->getTitle();
+                $pageName = $page->getCurrentVersion()->getShortTitle();
             } else {
                 $pageName = ltrim($item->getUri(), '/');
             }
