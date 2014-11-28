@@ -157,8 +157,8 @@ trait LogBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -205,12 +205,10 @@ trait LogBase
     /**
     * Set the value of ScopeId / scope_id.
     *
-    * Must not be null.
     * @param $value string
     */
     public function setScopeId($value)
     {
-        $this->validateNotNull('ScopeId', $value);
         $this->validateString('ScopeId', $value);
 
         if ($this->data['scope_id'] === $value) {
@@ -230,6 +228,12 @@ trait LogBase
     {
         $this->validateInt('UserId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['user_id'] === $value) {
             return;
         }
@@ -246,8 +250,8 @@ trait LogBase
     */
     public function setMessage($value)
     {
-        $this->validateNotNull('Message', $value);
         $this->validateString('Message', $value);
+        $this->validateNotNull('Message', $value);
 
         if ($this->data['message'] === $value) {
             return;
@@ -265,8 +269,8 @@ trait LogBase
     */
     public function setLogDate($value)
     {
-        $this->validateNotNull('LogDate', $value);
         $this->validateDate('LogDate', $value);
+        $this->validateNotNull('LogDate', $value);
 
         if ($this->data['log_date'] === $value) {
             return;

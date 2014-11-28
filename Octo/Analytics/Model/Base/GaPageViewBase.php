@@ -114,8 +114,8 @@ trait GaPageViewBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;

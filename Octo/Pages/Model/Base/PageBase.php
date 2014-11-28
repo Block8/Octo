@@ -34,9 +34,6 @@ trait PageBase
         $this->data['position'] = null;
         $this->getters['position'] = 'getPosition';
         $this->setters['position'] = 'setPosition';
-        $this->data['active'] = null;
-        $this->getters['active'] = 'getActive';
-        $this->setters['active'] = 'setActive';
 
         // Foreign keys:
         $this->getters['CurrentVersion'] = 'getCurrentVersion';
@@ -104,18 +101,6 @@ trait PageBase
         return $rtn;
     }
 
-    /**
-    * Get the value of Active / active.
-    *
-    * @return int
-    */
-    public function getActive()
-    {
-        $rtn = $this->data['active'];
-
-        return $rtn;
-    }
-
 
     /**
     * Set the value of Id / id.
@@ -125,8 +110,8 @@ trait PageBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateString('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -145,6 +130,12 @@ trait PageBase
     {
         $this->validateString('ParentId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['parent_id'] === $value) {
             return;
         }
@@ -162,6 +153,12 @@ trait PageBase
     {
         $this->validateInt('CurrentVersionId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['current_version_id'] === $value) {
             return;
         }
@@ -178,8 +175,8 @@ trait PageBase
     */
     public function setUri($value)
     {
-        $this->validateNotNull('Uri', $value);
         $this->validateString('Uri', $value);
+        $this->validateNotNull('Uri', $value);
 
         if ($this->data['uri'] === $value) {
             return;
@@ -197,8 +194,8 @@ trait PageBase
     */
     public function setPosition($value)
     {
-        $this->validateNotNull('Position', $value);
         $this->validateInt('Position', $value);
+        $this->validateNotNull('Position', $value);
 
         if ($this->data['position'] === $value) {
             return;
@@ -206,25 +203,6 @@ trait PageBase
 
         $this->data['position'] = $value;
         $this->setModified('position');
-    }
-
-    /**
-    * Set the value of Active / active.
-    *
-    * Must not be null.
-    * @param $value int
-    */
-    public function setActive($value)
-    {
-        $this->validateNotNull('Active', $value);
-        $this->validateInt('Active', $value);
-
-        if ($this->data['active'] === $value) {
-            return;
-        }
-
-        $this->data['active'] = $value;
-        $this->setModified('active');
     }
     /**
     * Get the PageVersion model for this Page by Id.

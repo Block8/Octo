@@ -106,8 +106,8 @@ trait FormBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -125,8 +125,8 @@ trait FormBase
     */
     public function setTitle($value)
     {
-        $this->validateNotNull('Title', $value);
         $this->validateString('Title', $value);
+        $this->validateNotNull('Title', $value);
 
         if ($this->data['title'] === $value) {
             return;
@@ -161,8 +161,8 @@ trait FormBase
     */
     public function setDefinition($value)
     {
-        $this->validateNotNull('Definition', $value);
         $this->validateString('Definition', $value);
+        $this->validateNotNull('Definition', $value);
 
         if ($this->data['definition'] === $value) {
             return;

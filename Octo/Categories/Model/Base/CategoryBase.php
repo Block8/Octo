@@ -155,8 +155,8 @@ trait CategoryBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -226,6 +226,12 @@ trait CategoryBase
     {
         $this->validateInt('ParentId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['parent_id'] === $value) {
             return;
         }
@@ -242,6 +248,12 @@ trait CategoryBase
     public function setImageId($value)
     {
         $this->validateString('ImageId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['image_id'] === $value) {
             return;

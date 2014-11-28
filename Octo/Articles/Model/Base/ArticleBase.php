@@ -312,8 +312,8 @@ trait ArticleBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -366,6 +366,12 @@ trait ArticleBase
     {
         $this->validateInt('UserId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['user_id'] === $value) {
             return;
         }
@@ -382,6 +388,12 @@ trait ArticleBase
     public function setCategoryId($value)
     {
         $this->validateInt('CategoryId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['category_id'] === $value) {
             return;
@@ -400,6 +412,12 @@ trait ArticleBase
     {
         $this->validateInt('AuthorId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['author_id'] === $value) {
             return;
         }
@@ -416,6 +434,12 @@ trait ArticleBase
     public function setContentItemId($value)
     {
         $this->validateString('ContentItemId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['content_item_id'] === $value) {
             return;
@@ -484,8 +508,8 @@ trait ArticleBase
     */
     public function setSlug($value)
     {
-        $this->validateNotNull('Slug', $value);
         $this->validateString('Slug', $value);
+        $this->validateNotNull('Slug', $value);
 
         if ($this->data['slug'] === $value) {
             return;
@@ -588,6 +612,12 @@ trait ArticleBase
     public function setImageId($value)
     {
         $this->validateString('ImageId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['image_id'] === $value) {
             return;

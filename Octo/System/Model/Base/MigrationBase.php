@@ -65,8 +65,8 @@ trait MigrationBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateString('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;

@@ -223,8 +223,8 @@ trait PageVersionBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -242,8 +242,14 @@ trait PageVersionBase
     */
     public function setPageId($value)
     {
-        $this->validateNotNull('PageId', $value);
         $this->validateString('PageId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+        $this->validateNotNull('PageId', $value);
 
         if ($this->data['page_id'] === $value) {
             return;
@@ -261,8 +267,8 @@ trait PageVersionBase
     */
     public function setVersion($value)
     {
-        $this->validateNotNull('Version', $value);
         $this->validateInt('Version', $value);
+        $this->validateNotNull('Version', $value);
 
         if ($this->data['version'] === $value) {
             return;
@@ -349,6 +355,12 @@ trait PageVersionBase
     {
         $this->validateString('ContentItemId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['content_item_id'] === $value) {
             return;
         }
@@ -366,6 +378,12 @@ trait PageVersionBase
     {
         $this->validateInt('UserId', $value);
 
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+
         if ($this->data['user_id'] === $value) {
             return;
         }
@@ -382,8 +400,8 @@ trait PageVersionBase
     */
     public function setUpdatedDate($value)
     {
-        $this->validateNotNull('UpdatedDate', $value);
         $this->validateDate('UpdatedDate', $value);
+        $this->validateNotNull('UpdatedDate', $value);
 
         if ($this->data['updated_date'] === $value) {
             return;
@@ -401,8 +419,8 @@ trait PageVersionBase
     */
     public function setTemplate($value)
     {
-        $this->validateNotNull('Template', $value);
         $this->validateString('Template', $value);
+        $this->validateNotNull('Template', $value);
 
         if ($this->data['template'] === $value) {
             return;
@@ -420,6 +438,12 @@ trait PageVersionBase
     public function setImageId($value)
     {
         $this->validateString('ImageId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['image_id'] === $value) {
             return;

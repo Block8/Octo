@@ -93,8 +93,8 @@ trait PermissionBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -112,8 +112,14 @@ trait PermissionBase
     */
     public function setUserId($value)
     {
-        $this->validateNotNull('UserId', $value);
         $this->validateInt('UserId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
+        $this->validateNotNull('UserId', $value);
 
         if ($this->data['user_id'] === $value) {
             return;
@@ -131,8 +137,8 @@ trait PermissionBase
     */
     public function setUri($value)
     {
-        $this->validateNotNull('Uri', $value);
         $this->validateString('Uri', $value);
+        $this->validateNotNull('Uri', $value);
 
         if ($this->data['uri'] === $value) {
             return;
@@ -150,8 +156,8 @@ trait PermissionBase
     */
     public function setCanAccess($value)
     {
-        $this->validateNotNull('CanAccess', $value);
         $this->validateInt('CanAccess', $value);
+        $this->validateNotNull('CanAccess', $value);
 
         if ($this->data['can_access'] === $value) {
             return;

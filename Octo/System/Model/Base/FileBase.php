@@ -208,8 +208,8 @@ trait FileBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateString('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -244,6 +244,12 @@ trait FileBase
     public function setCategoryId($value)
     {
         $this->validateInt('CategoryId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['category_id'] === $value) {
             return;
@@ -363,6 +369,12 @@ trait FileBase
     public function setUserId($value)
     {
         $this->validateInt('UserId', $value);
+
+        // As this is a foreign key, empty values should be treated as null:
+        if (empty($value)) {
+            $value = null;
+        }
+
 
         if ($this->data['user_id'] === $value) {
             return;
