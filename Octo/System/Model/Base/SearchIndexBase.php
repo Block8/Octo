@@ -106,8 +106,8 @@ trait SearchIndexBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -125,8 +125,8 @@ trait SearchIndexBase
     */
     public function setWord($value)
     {
-        $this->validateNotNull('Word', $value);
         $this->validateString('Word', $value);
+        $this->validateNotNull('Word', $value);
 
         if ($this->data['word'] === $value) {
             return;
@@ -144,8 +144,8 @@ trait SearchIndexBase
     */
     public function setModel($value)
     {
-        $this->validateNotNull('Model', $value);
         $this->validateString('Model', $value);
+        $this->validateNotNull('Model', $value);
 
         if ($this->data['model'] === $value) {
             return;
@@ -163,8 +163,8 @@ trait SearchIndexBase
     */
     public function setContentId($value)
     {
-        $this->validateNotNull('ContentId', $value);
         $this->validateString('ContentId', $value);
+        $this->validateNotNull('ContentId', $value);
 
         if ($this->data['content_id'] === $value) {
             return;
@@ -182,8 +182,8 @@ trait SearchIndexBase
     */
     public function setInstances($value)
     {
-        $this->validateNotNull('Instances', $value);
         $this->validateInt('Instances', $value);
+        $this->validateNotNull('Instances', $value);
 
         if ($this->data['instances'] === $value) {
             return;

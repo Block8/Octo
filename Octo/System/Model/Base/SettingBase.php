@@ -106,8 +106,8 @@ trait SettingBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -125,8 +125,8 @@ trait SettingBase
     */
     public function setKey($value)
     {
-        $this->validateNotNull('Key', $value);
         $this->validateString('Key', $value);
+        $this->validateNotNull('Key', $value);
 
         if ($this->data['key'] === $value) {
             return;
@@ -161,8 +161,8 @@ trait SettingBase
     */
     public function setScope($value)
     {
-        $this->validateNotNull('Scope', $value);
         $this->validateString('Scope', $value);
+        $this->validateNotNull('Scope', $value);
 
         if ($this->data['scope'] === $value) {
             return;

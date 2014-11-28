@@ -61,8 +61,8 @@ trait ContentItemBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateString('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -80,8 +80,8 @@ trait ContentItemBase
     */
     public function setContent($value)
     {
-        $this->validateNotNull('Content', $value);
         $this->validateString('Content', $value);
+        $this->validateNotNull('Content', $value);
 
         if ($this->data['content'] === $value) {
             return;

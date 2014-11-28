@@ -230,8 +230,8 @@ trait ContactBase
     */
     public function setId($value)
     {
-        $this->validateNotNull('Id', $value);
         $this->validateInt('Id', $value);
+        $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
             return;
@@ -249,8 +249,8 @@ trait ContactBase
     */
     public function setEmail($value)
     {
-        $this->validateNotNull('Email', $value);
         $this->validateString('Email', $value);
+        $this->validateNotNull('Email', $value);
 
         if ($this->data['email'] === $value) {
             return;
@@ -421,8 +421,8 @@ trait ContactBase
     */
     public function setMarketingOptin($value)
     {
-        $this->validateNotNull('MarketingOptin', $value);
         $this->validateInt('MarketingOptin', $value);
+        $this->validateNotNull('MarketingOptin', $value);
 
         if ($this->data['marketing_optin'] === $value) {
             return;
@@ -440,8 +440,8 @@ trait ContactBase
     */
     public function setIsBlocked($value)
     {
-        $this->validateNotNull('IsBlocked', $value);
         $this->validateInt('IsBlocked', $value);
+        $this->validateNotNull('IsBlocked', $value);
 
         if ($this->data['is_blocked'] === $value) {
             return;
