@@ -62,6 +62,7 @@ class DashboardController extends Controller
             }
 
             $template = Template::getAdminTemplate($template);
+            $template->icon = 'info';
             $template->item = $item;
             $template->decoded = @json_decode($item->getMessage(), true);
 
