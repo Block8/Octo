@@ -93,8 +93,6 @@ class News extends Block
 
     public function renderNow()
     {
-        $this->setupTemplateFunctions();
-
         $this->newsStore = Store::get('Article');
         $this->categoryStore = Store::get('Category');
 
@@ -186,6 +184,15 @@ class News extends Block
         $query->join('category', 'c', 'c.id = article.category_id');
 
         $pagination['total'] = $query->getCount();
+        $pagination['totalPages'] = $pagination['total'] / $limit;
+
+        if ($pagination['current'] < $pagination['totalPages']) {
+            $pagination['next'] = $pagination['current'] + 1;
+        }
+
+        if ($pagination['current'] > 0) {
+            $pagination['prev'] = $pagination['current'] - 1;
+        }
 
         $query->execute();
         $news = $query->fetchAll();
@@ -270,18 +277,4 @@ class News extends Block
 
         return $isCategory->getId();
     }
-
-
-    public function setupTemplateFunctions()
-    {
-        $this->view->addFunction(
-            'date_format',
-            function ($args, &$view) {
-                return $args['date']->format('d/m/Y');
-            }
-        );
-    }
-
-
-
 }
