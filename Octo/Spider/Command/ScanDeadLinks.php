@@ -38,6 +38,8 @@ class ScanDeadLinks extends Command
     /* command entrypoint */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input);
+
         $this->siteRoot = Config::getInstance()->get('site.url')."/";
         $this->blacklist = Config::getInstance()->get('site.spider.blacklist', []);
         $this->stdOut = $output;
@@ -215,8 +217,8 @@ class ScanDeadLinks extends Command
             $abs = $url['host'] . "$path/$rel";
         }
 
-        $re = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
-        for ($n=1; $n>0; $abs=preg_replace($re, '/', $abs, -1, $n)) {
+        $pattern = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
+        for ($n = 1; $n > 0; $abs = preg_replace($pattern, '/', $abs, -1, $n)) {
         }
 
         if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {

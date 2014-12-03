@@ -17,7 +17,7 @@ class TemplateFunctions extends Listener
 
     public function adminTemplateFunctions(Template &$template)
     {
-        $template->addFunction('canAccess', function ($args, &$view) {
+        $template->addFunction('canAccess', function ($args) {
             return $_SESSION['user']->canAccess($args['uri']);
         });
 
@@ -26,7 +26,7 @@ class TemplateFunctions extends Listener
     public function globalTemplateFunctions(Template &$template)
     {
         $config = Config::getInstance();
-        $template->addFunction('date_format', function ($args, &$view) {
+        $template->addFunction('date_format', function ($args) {
             $date = $args['date'];
 
             $format = null;
@@ -39,20 +39,29 @@ class TemplateFunctions extends Listener
                 return '';
             }
 
-            if (empty($format)) {
-                $format = 'jS F Y, g:ia';
-            } elseif ($format == 'friendly') {
-                return $this->friendlyDate($date);
-            } elseif ($format == 'short') {
-                $format = 'd/m/Y g:ia';
-            } elseif ($format == 'long_date') {
-                $format = 'jS F Y';
-            } elseif ($format == 'date') {
-                $format = 'd/m/Y';
-            } elseif ($format == 'time') {
-                $format = 'g:ia';
-            } else {
-                $format = 'jS F Y, g:ia';
+            switch ($format) {
+                case 'friendly':
+                    return $this->friendlyDate($date);
+
+                case 'short':
+                    $format = 'd/m/Y g:ia';
+                    break;
+
+                case 'long_date':
+                    $format = 'jS F Y';
+                    break;
+
+                case 'date':
+                    $format = 'd/m/Y';
+                    break;
+
+                case 'time':
+                    $format = 'g:ia';
+                    break;
+
+                default:
+                    $format = 'jS F Y, g:ia';
+                    break;
             }
 
             return $date->format($format);
@@ -102,7 +111,7 @@ class TemplateFunctions extends Listener
      * @param Template $view
      * @return string
      */
-    public function handlePagination($args, Template $view)
+    public function handlePagination($args)
     {
         $uri = $args['uri'];
         $current = $args['current'];

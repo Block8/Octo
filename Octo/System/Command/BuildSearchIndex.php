@@ -29,6 +29,8 @@ class BuildSearchIndex extends Command
     /* command entrypoint */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input);
+
         $items = glob(CMS_PATH.'*/Model/*.php');
 
         foreach ($items as $item) {

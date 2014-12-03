@@ -34,6 +34,9 @@ class UpdateTimeline extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input);
+        unset($output);
+
         $this->updateUploads('images');
         $this->updateUploads('files');
     }
@@ -53,12 +56,12 @@ class UpdateTimeline extends Command
 
         $items = $fileStore->getAllForScopeSince($scope, $date);
 
-        $i = 0;
+        $itemCount = 0;
         $message = [];
         $user = null;
 
         foreach ($items as $item) {
-            if (++$i > 3) {
+            if (++$itemCount > 3) {
                 break;
             }
 

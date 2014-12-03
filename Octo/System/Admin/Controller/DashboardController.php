@@ -33,8 +33,6 @@ class DashboardController extends Controller
 
         $lastDate = new \DateTime('1970-01-01');
 
-        $date = $lastDate->format('M j Y');
-
         foreach ($items as $item) {
 
             if ($item->getLogDate()->format('Y-m-d') != $lastDate->format('Y-m-d')) {

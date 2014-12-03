@@ -121,11 +121,11 @@ class NavigationArticle extends Block
 
     protected function getSlug()
     {
-        $s = explode("/", $this->request->getPath());
-        unset($s[0]); //empty
-        unset($s[1]);
-        unset($s[2]);
-        $slug = "/" . implode("/", $s);
+        $slug = explode("/", $this->request->getPath());
+        unset($slug[0]); //empty
+        unset($slug[1]);
+        unset($slug[2]);
+        $slug = "/" . implode("/", $slug);
 
         return $slug;
     }
@@ -148,7 +148,7 @@ class NavigationArticle extends Block
         }
 
         if (count($uriParts) == 2) {
-           return null;
+            return null;
         } elseif (count($uriParts) == 3) {
             //just category
             $probablyCategory = array_pop($uriParts);

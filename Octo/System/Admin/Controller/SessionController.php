@@ -101,8 +101,8 @@ Thank you,
 {$siteName}
 OUT;
 
-            $to = $name . ' <' . $user->getEmail() . '>';
-            @mail($to, $siteName . ' Password Reset', $message, 'From: ' . $this->config->get('site.email_from'));
+            $mailTo = $name . ' <' . $user->getEmail() . '>';
+            @mail($mailTo, $siteName . ' Password Reset', $message, 'From: ' . $this->config->get('site.email_from'));
             $this->view->emailed = true;
         }
     }

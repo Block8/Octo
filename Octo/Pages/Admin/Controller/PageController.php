@@ -354,7 +354,7 @@ class PageController extends Controller
     {
         $blocks = array();
         $template = Template::getPublicTemplate($template);
-        $template->addFunction('block', function ($args, $view) use (&$blocks) {
+        $template->addFunction('block', function ($args) use (&$blocks) {
             $blocks[] = $args;
         });
 
