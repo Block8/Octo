@@ -40,7 +40,7 @@ class SearchIndexStore extends Octo\Store
 
             foreach ($res as $item) {
                 $store = StoreFactory::get($item['model']);
-                if($store) {
+                if ($store) {
                     $rtn[] = $store->getByPrimaryKey($item['content_id']);
                 }
             }

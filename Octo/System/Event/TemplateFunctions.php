@@ -57,12 +57,12 @@ class TemplateFunctions extends Listener
 
             return $date->format($format);
         });
-		
-		$template->set('date_now', new \DateTime());
+
+        $template->set('date_now', new \DateTime());
         $template->set('adminUri', $config->get('site.admin_uri'));
         $template->set('config', $config);
         $template->addFunction('pagination', array($this, 'handlePagination'));
-        $template->addFunction('var_dump', function ($args, Template $view) {
+        $template->addFunction('var_dump', function ($args) {
             ob_start();
             var_dump($args['variable']);
             $rtn = ob_get_contents();
@@ -70,14 +70,15 @@ class TemplateFunctions extends Listener
 
             return $rtn;
         });
-        $template->addFunction('is_mobile', function ($args, &$view) {
-                if (class_exists('\Mobile_Detect')) {
-                    $mobileDetect = new \Mobile_Detect();
-                    return $mobileDetect->isMobile();
-                }
 
-                return false;
-            });
+        $template->addFunction('is_mobile', function () {
+            if (class_exists('\Mobile_Detect')) {
+                $mobileDetect = new \Mobile_Detect();
+                return $mobileDetect->isMobile();
+            }
+
+            return false;
+        });
     }
 
     protected function friendlyDate(\DateTime $date)

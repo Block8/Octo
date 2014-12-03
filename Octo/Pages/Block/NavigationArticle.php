@@ -59,12 +59,14 @@ class NavigationArticle extends Block
 
         //Top categories for scope
         $categoriesMenu = $this->getTopTreeMenuForScope();
-        if (!is_null($this->category))
-        {
+
+        if (!is_null($this->category)) {
             //Add Subcategory
             $subCategoriesMenu =  $this->getCategoryMenu();
-            $categoriesMenu = $this->putCategoriesToMenu($categoriesMenu, $subCategoriesMenu, $this->page->getUri() . "/" . $subCategoriesMenu['slug']);
+            $url = $this->page->getUri() . "/" . $subCategoriesMenu['slug'];
+            $categoriesMenu = $this->putCategoriesToMenu($categoriesMenu, $subCategoriesMenu, $url);
         }
+
         $topMenu = $this->putCategoriesToMenu($topMenu, $categoriesMenu, $this->page->getUri());
 
         $this->view->items = $topMenu;
@@ -73,19 +75,16 @@ class NavigationArticle extends Block
     protected function getTopTreeMenuForScope()
     {
         $parents = $this->categoryStore->getNamesAndScopeForParents($this->scope);
-        foreach ($parents as $key => $parent)
-        {
+        foreach ($parents as $key => $parent) {
             $category = $parent['id'];
 
             $subcategories = $this->categoryStore->getSubCategories($category);
-            if(!empty($subcategories))
-            {
+            if (!empty($subcategories)) {
                 $category .= "," . implode(',', $subcategories);
             }
             $articles = $this->articleStore->checkArticlesForSubCategories($category);
 
-            if (!count($articles))
-            {
+            if (!count($articles)) {
                 unset($parents[$key]);
             } else {
                 $parents[$key]['uri'] = $this->page->getUri() . "/" . $parents[$key]['slug'];
@@ -98,29 +97,23 @@ class NavigationArticle extends Block
     protected function putCategoriesToMenu($topMenu, $categoriesMenu, $keyToPut)
     {
         $position = -1;
-        foreach ($topMenu as $key => $menuLeaf)
-        {
-            if ($menuLeaf['uri'] == $keyToPut)
-            {
+        foreach ($topMenu as $key => $menuLeaf) {
+            if ($menuLeaf['uri'] == $keyToPut) {
                 $position = $key;
             }
         }
 
-        if($this->page->getUri() == $keyToPut)
-        {
+        if ($this->page->getUri() == $keyToPut) {
             $topMenu[$position]['children'] = $categoriesMenu;
             $topMenu[$position]['current'] = true;
         } else {
-
-            if(isset($categoriesMenu['children'])){
+            if (isset($categoriesMenu['children'])) {
                 $topMenu[$position]['children'] = $categoriesMenu['children'];
                 $topMenu[$position]['active'] = true;
                 $topMenu[$position]['current'] = true;
             } else {
                 $topMenu[$position]['current'] = true;
-
             }
-
         }
 
         return $topMenu;
@@ -144,20 +137,17 @@ class NavigationArticle extends Block
     protected function getScopeAndCategoryIdFromUri()
     {
         $uriParts = $this->request->getPathParts();
-        if ($uriParts[1] == 'blogs')
-        {
+        if ($uriParts[1] == 'blogs') {
             $this->scope = "blog"; //Hack for scope blog(s)
         } else {
             $this->scope = $uriParts[1];
         }
 
-        if ($uriParts[1] == 'case-studies')
-        {
+        if ($uriParts[1] == 'case-studies') {
             $this->scope = "case-study"; //Hack for scope case studies
         }
 
-        if (count($uriParts) == 2) //Root category - blog/news/case-studies
-        {
+        if (count($uriParts) == 2) {
            return null;
         } elseif (count($uriParts) == 3) {
             //just category
@@ -232,17 +222,18 @@ class NavigationArticle extends Block
 
         if (count($children)) {
             //23 June 2014 - Hide categories without any article
-            foreach($children as $key => $child)
-            {
+            foreach ($children as $key => $child) {
                 $hasArticles = $this->articleStore->getByCategoryId($child->getId());
 
-                if (!count($hasArticles))
-                {
+                if (!count($hasArticles)) {
                     unset($children[$key]);
                 }
             }
 
-            if (!count($children)) return null;
+            if (!count($children)) {
+                return null;
+            }
+
             return $children;
         }
 
@@ -273,7 +264,8 @@ class NavigationArticle extends Block
             $rtn['children'] = [];
 
             foreach ($children as $child) {
-                $rtn['children'][] = $this->buildCategoryTree($child, $depth + 1, $maxDepth, $uri . "/". $item->getSlug());
+                $url = $uri . "/" . $item->getSlug();
+                $rtn['children'][] = $this->buildCategoryTree($child, $depth + 1, $maxDepth, $url);
             }
         }
 
@@ -386,5 +378,4 @@ class NavigationArticle extends Block
 
         return false;
     }
-
 }

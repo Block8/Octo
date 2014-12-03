@@ -49,7 +49,8 @@ class DashboardController extends Controller
                 $lastDate = $item->getLogDate();
             }
 
-            $key = md5($item->getLogDate()->format('Y-m-d').$item->getScope() . '.' . $item->getType() . '.' . $item->getScopeId());
+            $keyDate = $item->getLogDate()->format('Y-m-d');
+            $key = md5($keyDate .$item->getScope() . '.' . $item->getType() . '.' . $item->getScopeId());
 
             if (array_key_exists($key, $timeline)) {
                 continue;

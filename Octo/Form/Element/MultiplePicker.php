@@ -18,6 +18,7 @@ class MultiplePicker extends Select
      */
     public function render($viewFile = null)
     {
+        unset($viewFile);
         return parent::render('MultiplePicker');
     }
 

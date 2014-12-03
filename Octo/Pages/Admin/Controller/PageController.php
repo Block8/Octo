@@ -76,8 +76,7 @@ class PageController extends Controller
 
             $pages = [$parent];
             $this->view->pages = $pages;
-        }
-        else {
+        } else {
             $pages = $this->pageStore->getByParentId($parentId, ['order' => [['position', 'ASC']]]);
 
             $list = AdminTemplate::getAdminTemplate('Page/list');
@@ -547,12 +546,15 @@ class PageController extends Controller
     {
         $pageIds = json_decode($this->getParam('q', '[]'));
         $rtn = ['results' => [], 'more' => false];
-        foreach($pageIds as $pageId) {
+
+        foreach ($pageIds as $pageId) {
             $page = $this->pageStore->getById($pageId);
-            if($page) {
+
+            if ($page) {
                 $rtn['results'][] = ['id' => $page->getId(), 'text' => $page->getCurrentVersion()->getTitle()];
             }
         }
+
         die(json_encode($rtn));
     }
 

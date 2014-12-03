@@ -58,8 +58,13 @@ class UpdateTimeline extends Command
         $user = null;
 
         foreach ($items as $item) {
-            if (++$i > 3) break;
-            if (empty($user)) $user = $item->getUser();
+            if (++$i > 3) {
+                break;
+            }
+
+            if (empty($user)) {
+                $user = $item->getUser();
+            }
 
             $message[] = ['title' => $item->getTitle(), 'id' => $item->getId()];
         }

@@ -198,7 +198,8 @@ class PageStore extends Octo\Store
         return null;
     }
 
-    public function getModelsToIndex() {
+    public function getModelsToIndex()
+    {
         return $this->getAll();
     }
 }

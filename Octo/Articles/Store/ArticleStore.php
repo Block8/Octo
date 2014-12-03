@@ -124,17 +124,18 @@ class ArticleStore extends Octo\Store
      * @param string $use_in_email
      * @return array
      */
-    public function getDateRange($startDate, $endDate, $scope ='news', $useInEmail = false)
+    public function getDateRange($startDate, $endDate, $scope = 'news', $useInEmail = false)
     {
-        if ($useInEmail)
-        {
+        if ($useInEmail) {
             $use_in_email = " AND a.use_in_email = 1 ";
         } else {
             $use_in_email = "";
         }
+
         $query = new Query('Octo\Articles\Model\Article');
         $query->select('a.*')->from('article', 'a')->join('category', 'c', 'c.id = a.category_id');
-        $query->where('c.scope = :scope '.$use_in_email.' AND a.publish_date BETWEEN "'.$startDate.'" AND "'.$endDate.'"');
+        $where = 'c.scope = :scope '.$use_in_email.' AND a.publish_date BETWEEN "'.$startDate.'" AND "'.$endDate.'"';
+        $query->where($where);
         $query->order('publish_date', 'DESC');
         $query->bind(':scope', $scope);
         $query->execute();
@@ -157,5 +158,4 @@ class ArticleStore extends Octo\Store
 
         return $query->execute()->fetchAll();
     }
-
 }
