@@ -171,7 +171,9 @@ class Application extends \b8\Application
             $blockManager->setResponse($this->response);
             $blockManager->attachToTemplate($template);
 
-            $this->response->setContent($template->render());
+            $content = $template->render();
+            $content = str_replace('{!@octo.meta}', '<title>Error</title>', $content);
+            $this->response->setContent($content);
         }
 
         return $this->response;
