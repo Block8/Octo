@@ -47,8 +47,7 @@ class Article extends Octo\Model
 
         //check if it is unique
         $uniqueId = '';
-        while(!$this->isUniqueSlug($slug . $uniqueId))
-        {
+        while (!$this->isUniqueSlug($slug . $uniqueId)) {
             $uniqueId = '-' . substr(sha1(uniqid('', true)), 0, 5);
         }
 
@@ -85,13 +84,12 @@ class Article extends Octo\Model
         $slug = '';
         $parent = $category->getParent();
 
-        if( ($parent != null) && !in_array($parent, $visited) )
-        {
+        if (($parent != null) && !in_array($parent, $visited)) {
             $visited[] = $parent;
             $slug .= $this->getParentSlugs($parent, $separator = '/', $visited = array());
         }
 
-        $slug .= $separator . StringUtilities::generateSlug($category->getName());;
+        $slug .= $separator . StringUtilities::generateSlug($category->getName());
 
         return $slug;
     }

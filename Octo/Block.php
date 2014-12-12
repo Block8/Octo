@@ -264,7 +264,8 @@ abstract class Block
             $rtn = $this->content[$tagId];
         }
 
-        if ($rtn === $default && array_key_exists('inherit', $this->templateParams) && $this->templateParams['inherit']) {
+        $hasInherit = array_key_exists('inherit', $this->templateParams);
+        if ($rtn === $default && $hasInherit && $this->templateParams['inherit']) {
             $page = $this->page;
 
             while ($rtn === $default) {

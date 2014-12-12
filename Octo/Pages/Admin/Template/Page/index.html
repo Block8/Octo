@@ -68,7 +68,7 @@
                 options.find('.alert').hide();
             }
 
-            var title = $(this).text();
+            var title = $(this).find('> span').text();
 
             options.find('.box-title').text(title);
             options.find('.btn-edit').attr('href', '/{@adminUri}/page/edit/' + page.data('id')).find('span').text('Edit ' + title);

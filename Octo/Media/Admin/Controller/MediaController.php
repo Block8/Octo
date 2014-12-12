@@ -316,10 +316,10 @@ class MediaController extends Controller
         $imageIds = json_decode($this->getParam('q', '[]'));
         $rtn = ['results' => [], 'more' => false];
 
-        foreach($imageIds as $imageId) {
+        foreach ($imageIds as $imageId) {
             $image = $this->fileStore->getById($imageId);
 
-            if($image) {
+            if ($image) {
                 $rtn['results'][] = ['id' => $image->getId(), 'text' => $image->getTitle()];
             }
         }

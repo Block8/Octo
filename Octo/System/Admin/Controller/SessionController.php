@@ -91,7 +91,7 @@ class SessionController extends Controller
             $message = <<<OUT
 Dear {$name},
 
-You have received this email because you, or someone else, has requested a password reset for the {$siteName} admin system.
+You have received this email because you, or someone else, has requested a password reset for {$siteName}.
 
 If this was you, please click the following link to reset your password: {$url}session/reset-password/{$userId}/{$key}
 
@@ -101,8 +101,8 @@ Thank you,
 {$siteName}
 OUT;
 
-            $to = $name . ' <' . $user->getEmail() . '>';
-            @mail($to, $siteName . ' Password Reset', $message, 'From: ' . $this->config->get('site.email_from'));
+            $mailTo = $name . ' <' . $user->getEmail() . '>';
+            @mail($mailTo, $siteName . ' Password Reset', $message, 'From: ' . $this->config->get('site.email_from'));
             $this->view->emailed = true;
         }
     }

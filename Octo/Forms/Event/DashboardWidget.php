@@ -18,7 +18,7 @@ class DashboardWidget extends Listener
 
     public function getStatistics(&$stats)
     {
-        $contactStore = Store::get('Contact');
+        //$contactStore = Store::get('Contact');
         $submissionStore = Store::get('Submission');
         /* TODO: Put back when contact management widget is added
         $stats[] = [

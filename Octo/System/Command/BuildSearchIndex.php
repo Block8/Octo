@@ -29,11 +29,15 @@ class BuildSearchIndex extends Command
     /* command entrypoint */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        unset($input);
+
         $items = glob(CMS_PATH.'*/Model/*.php');
+
         foreach ($items as $item) {
             $model = str_replace([CMS_BASE_PATH, '/', '.php'], ['', '\\', ''], $item);
             $systemModels[] = $model;
         }
+
         foreach (glob(APP_PATH."*", GLOB_ONLYDIR) as $path) {
             $items = glob($path.'/*/Model/*.php');
             foreach ($items as $item) {
@@ -42,20 +46,22 @@ class BuildSearchIndex extends Command
             }
         }
 
-        foreach($systemModels as $model) {
+        foreach ($systemModels as $model) {
             $myModel = new $model;
-            if(method_exists($myModel, 'getIndexableContent')) {
+            if (method_exists($myModel, 'getIndexableContent')) {
                 $reflect = new \ReflectionClass($myModel);
                 $myStore = Store::get($reflect->getShortName());
                 $modelsToIndex = $myStore->getModelsToIndex();
                 $output->write('Indexing: '.$reflect->getShortName());
                 $count=0;
-                foreach($modelsToIndex as $newModel) {
+
+                foreach ($modelsToIndex as $newModel) {
                     $count++;
                     $content = $newModel->getIndexableContent();
                     $data = ['model' => $newModel, 'content_id' => $newModel->getId(), 'content' => $content];
                     Event::trigger('ContentPublished', $data);
                 }
+
                 $output->writeln(' ('.$count.' items)');
             }
         }

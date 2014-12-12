@@ -29,25 +29,22 @@ class ContactController extends Controller
         $unsubscriberEmail = $this->validateUnsubscriberEmail($this->getParam('email'));
         $unsubscriberHash  = $this->getParam('hash', '');
 
-        if ($unsubscriberEmail && $unsubscriberHash && $this->getParam('confirmed'))
-        {
+        if ($unsubscriberEmail && $unsubscriberHash && $this->getParam('confirmed')) {
             $unsubscriber['email'] = $unsubscriberEmail;
 
             $contact = $this->contactStore->findContact($unsubscriber);
 
-            if ($unsubscriberHash === $this->contactStore->getUnsubscribeHash($contact->getId(), $unsubscriberEmail))
-            {
+            if ($unsubscriberHash === $this->contactStore->getUnsubscribeHash($contact->getId(), $unsubscriberEmail)) {
                 $contact->setMarketingOptin(0);
                 $this->contactStore->saveByUpdate($contact);
 
                 $message = 'Good-bye! You’ve successfully unsubscribed yourself from the email list.';
-                //$data = ['model' => $contact, 'hash' => $unsubscriberHash];
-                //Event::trigger('ContactUnsubscribed', $data);
             }
         } elseif ($unsubscriberEmail && $unsubscriberHash && !$this->getParam('confirmed')) {
             //Show confirmation
             $message = null;
-            $confirmLink = '/contact/unsubscribe?email=' . $unsubscriberEmail . '&hash=' . $unsubscriberHash . '&confirmed=1';
+            $confirmLink = '/contact/unsubscribe?email=' . $unsubscriberEmail;
+            $confirmLink .= '&hash=' . $unsubscriberHash . '&confirmed=1';
         } else {
             $this->response = new RedirectResponse();
             $redirect = $this->config->get('site.url');
@@ -64,21 +61,16 @@ class ContactController extends Controller
 
     private function validateUnsubscriberEmail($unsubscriberEmail)
     {
-        if (empty($unsubscriberEmail))
-        {
+        if (empty($unsubscriberEmail)) {
             return false;
         }
 
         $unsubscriberEmail = filter_var($unsubscriberEmail, FILTER_SANITIZE_EMAIL);
 
-        if (!filter_var($unsubscriberEmail, FILTER_VALIDATE_EMAIL))
-        {
+        if (!filter_var($unsubscriberEmail, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
         return $unsubscriberEmail;
     }
-
-
-
 }

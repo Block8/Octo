@@ -196,7 +196,8 @@ ORDER BY c.parent_id ASC, " . $order;
      */
     public function getNamesAndScopeForParents($scope, $order = 'name ASC')
     {
-        $query = 'SELECT id, name AS title, slug FROM category WHERE scope = :scope AND parent_id IS NULL ORDER BY ' . $order;
+        $query = 'SELECT id, name AS title, slug FROM category
+                    WHERE scope = :scope AND parent_id IS NULL ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
         $stmt->bindParam(':scope', $scope);
 
@@ -217,21 +218,18 @@ ORDER BY c.parent_id ASC, " . $order;
     public function getSubCategories($category_id)
     {
         $allChildren = array();
-
         $subChildren = $this->getAllForParent($category_id);
 
-        foreach ($subChildren as $child)
-        {
+        foreach ($subChildren as $child) {
             $childId = $child->getId();
             $allChildren[$childId] = $childId;
             $arr = $this->getSubCategories($childId);
-            if(count($arr)>0)
-            {
+
+            if (count($arr) > 0) {
                 $allChildren = array_merge($this->getSubCategories($childId), $allChildren);
             }
         }
 
         return $allChildren;
     }
-
 }

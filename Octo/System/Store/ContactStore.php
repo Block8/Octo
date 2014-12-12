@@ -58,29 +58,6 @@ class ContactStore extends Octo\Store
         }
     }
 
-
-    /**
-     * Return all RE:Systems emails for TEsting
-     */
-    public function getMarketingProspectsReSystems()
-    {
-        $query = "SELECT * FROM contact WHERE marketing_optin = 1 AND is_blocked = 0 AND email like '%@re-systems.co.uk'";
-        $stmt = Database::getConnection('read')->prepare($query);
-
-        if ($stmt->execute()) {
-            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            $map = function ($item) {
-                return new Contact($item);
-            };
-            $rtn = array_map($map, $res);
-            return $rtn;
-        } else {
-            return [];
-        }
-    }
-
-
     public function findContact(array $details)
     {
         $database = Database::getConnection('read');
@@ -139,10 +116,9 @@ class ContactStore extends Octo\Store
         }
     }
 
-
-    public function getUnsubscribeHash($id, $email) {
+    public function getUnsubscribeHash($unsubId, $email)
+    {
         $hashSecret = 'z!Fx~36N66>io3Bskhjsfsjd8JjCd4+Ld-s2^ca{19Q/5u';
-        return sha1($id . $email . $hashSecret);
+        return sha1($unsubId . $email . $hashSecret);
     }
-
 }

@@ -10,6 +10,7 @@ use Octo\BlockManager;
 use Octo\Event;
 use Octo\Menu\Store\MenuItemStore;
 use b8\Config;
+
 class SitemapController extends Controller
 {
     /**
@@ -40,7 +41,6 @@ class SitemapController extends Controller
     protected function getChildrenPages()
     {
         $this->ancestors = $this->getAncestors();
-
         $this->allChildren = true;
         $start = count($this->ancestors);
         $maxDepth = 3;
@@ -131,8 +131,7 @@ class SitemapController extends Controller
         $record['title'] = 'Home';
         $sitemap[] = $record;
 
-        foreach ($topMenu as $menuItem)
-        {
+        foreach ($topMenu as $menuItem) {
             $this->page = $this->pageStore->getById($menuItem->getPageId());
             $this->version = $this->page->getCurrentVersion();
 
@@ -142,12 +141,12 @@ class SitemapController extends Controller
 
             $rtn = $this->getChildrenPages();
 
-            if(count($rtn))
-            {
+            if (count($rtn)) {
                 $record['children'] = $rtn;
             }
             $sitemap[] = $record;
         }
+
         die(json_encode($sitemap));
     }
 
@@ -164,8 +163,7 @@ class SitemapController extends Controller
         $record['active'] = false;
 
         $sitemap[] = $record;
-        foreach ($topMenu as $menuItem)
-        {
+        foreach ($topMenu as $menuItem) {
             $this->page = $this->pageStore->getById($menuItem->getPageId());
             $this->version = $this->page->getCurrentVersion();
 
@@ -176,8 +174,7 @@ class SitemapController extends Controller
 
             $rtn = $this->getChildrenPages();
 
-            if(count($rtn))
-            {
+            if (count($rtn)) {
                 $record['active'] =  true;
                 $record['children'] = $rtn;
             } else {
@@ -215,5 +212,4 @@ class SitemapController extends Controller
 
         return $output;
     }
-
 }

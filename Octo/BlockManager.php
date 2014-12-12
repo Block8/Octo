@@ -108,7 +108,7 @@ class BlockManager
     public function attachToTemplate(Template $template)
     {
         $template->addFunction('block', [$this, 'renderBlock']);
-        $template->addFunction('has_content', function ($args, &$view) {
+        $template->addFunction('has_content', function ($args) {
             if (!empty($this->content[$args['id']])) {
                 return true;
             } else {
@@ -122,7 +122,7 @@ class BlockManager
      * @param $view
      * @return string|void
      */
-    public function renderBlock($args, &$view)
+    public function renderBlock($args)
     {
         $type = $args['type'];
         $blockId = isset($args['id']) ? $args['id'] : null;
