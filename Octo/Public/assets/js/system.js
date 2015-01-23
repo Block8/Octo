@@ -315,6 +315,40 @@ $(document).ready(function () {
         });
     });
 
+    $('.octo-file-picker').each(function () {
+        var input = $(this);
+
+        input.select2({
+            placeholder: "Search for a file",
+            allowClear: true,
+            minimumInputLength: 1,
+            width: '100%',
+            initSelection : function(element, callback) {
+
+                if (input.val()) {
+                    $.getJSON('/'+window.adminUri+'/media/autocomplete/files?q=' + input.val(), function (data) {
+                        if (data.results[0]) {
+                            callback(data.results[0]);
+                        }
+                    });
+                }
+
+            },
+            ajax: {
+                url: '/'+window.adminUri+'/media/autocomplete/files',
+                dataType: 'json',
+                data: function(term) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function(data) {
+                    return data;
+                }
+            }
+        });
+    });
+
     $('.octo-page-picker').each(function () {
         var input = $(this);
 
