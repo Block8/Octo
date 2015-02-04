@@ -242,9 +242,9 @@ class Form extends Block
         }
 
         if (isset($config->site['email_from'])) {
-            $mail->SetFrom($config->site['email_from']);
+            $mail->SetFrom($config->site['email_from'], $config->site['email_from_name']);
         } else {
-            $mail->SetFrom('octo@block8.net');
+            $mail->SetFrom('octo@block8.net', 'Octo');
         }
 
         $message         = Template::getPublicTemplate('Emails/FormSubmission');
