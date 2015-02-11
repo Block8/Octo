@@ -1,8 +1,13 @@
 #!/usr/bin/env php
 <?php
-define('APP_PATH', getcwd() . '/');
 define('CMS_BASE_PATH', dirname(__FILE__) . '/');
 define('CMS_PATH', CMS_BASE_PATH . 'Octo/');
+
+if (stripos(CMS_BASE_PATH, 'vendor/block8/octo') !== false) {
+    define('APP_PATH', realpath(CMS_BASE_PATH . '../../../') . '/');
+} else {
+    define('APP_PATH', getcwd() . '/');
+}
 
 define('IS_CONSOLE', true);
 
