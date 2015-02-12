@@ -44,6 +44,8 @@ class ModuleManager
 
     public function initialiseModules()
     {
+        $this->autoloadModulesFromComposer();
+
         foreach ($this->moduleObjects as $module) {
             $module->init();
         }
@@ -61,6 +63,33 @@ class ModuleManager
             // Create the object:
             $class = '\\' . $namespace . '\\' . $module . '\\Module';
             $this->moduleObjects[$module] = new $class($this, $this->config, $namespace);
+        }
+    }
+
+    protected function autoloadModulesFromComposer()
+    {
+        $config = json_decode(file_get_contents(APP_PATH . 'composer.lock'), true);
+
+        foreach ($config['packages'] as $package) {
+            if (isset($package['autoload']['psr-4'])) {
+                $this->autoloadComposerModule($package);
+            }
+        }
+    }
+
+    protected function autoloadComposerModule($package)
+    {
+        foreach ($package['autoload']['psr-4'] as $namespace => $path) {
+            if (file_exists(APP_PATH . 'vendor/'. $package['name'] . '/' . $path . 'Module.php')) {
+                if (class_exists($namespace . 'Module')) {
+                    $parts = explode('\\', $namespace);
+                    array_pop($parts);
+                    $moduleName = array_pop($parts);
+                    $namespace = implode('\\', $parts);
+
+                    $this->enable($namespace, $moduleName);
+                }
+            }
         }
     }
 }

@@ -7,11 +7,16 @@ use b8\Config;
 abstract class Controller extends \b8\Controller
 {
     /**
+     * @var Octo\AssetManager
+     */
+    public $assets;
+
+    /**
      * b8 framework requires that controllers have an init() method
      */
     public function init()
     {
-
+        $this->assets = Config::getInstance()->get('Octo.AssetManager');
     }
 
     public function handleAction($action, $params)

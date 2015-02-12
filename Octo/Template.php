@@ -93,4 +93,20 @@ class Template extends View\Template
 
         return $template->render();
     }
+
+    public function render()
+    {
+        Event::trigger('OnTemplateRender', $this);
+        return parent::render();
+    }
+
+    public function getTemplateCode()
+    {
+        return $this->viewCode;
+    }
+
+    public function setTemplateCode($code)
+    {
+        $this->viewCode = $code;
+    }
 }

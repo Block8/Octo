@@ -21,7 +21,6 @@ use Octo\Template;
  */
 class Application extends \b8\Application
 {
-
     /**
      * Setup the application and register basic routes
      */

@@ -31,6 +31,11 @@ abstract class Controller extends \b8\Controller
     public $view;
 
     /**
+     * @var Template
+     */
+    protected $layout;
+
+    /**
      * @param Config $config
      * @param Request $request
      * @param Response $response

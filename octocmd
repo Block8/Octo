@@ -9,19 +9,24 @@ define('IS_CONSOLE', true);
 require_once(CMS_PATH . 'bootstrap.php');
 
 $application = new Symfony\Component\Console\Application();
-$items = glob(CMS_PATH.'*/Command/*.php');
 
-foreach ($items as $item) {
-    $command = str_replace([CMS_BASE_PATH, '/', '.php'], ['', '\\', ''], $item);
-    $application->add(new $command());
-}
+$paths = b8\Config::getInstance()->get('Octo.paths.namespaces');
 
-// Add commands found in the application namespace
-foreach (glob(APP_PATH."*", GLOB_ONLYDIR) as $path) {
-    $items = glob($path.'/*/Command/*.php');
-    foreach ($items as $item) {
-        $command = str_replace([APP_PATH, '/', '.php'], ['', '\\', ''], $item);
-        $application->add(new $command());
+foreach ($paths as $ns => $path) {
+    $files = glob($path . 'Command/*.php');
+    $path = $path . 'Command/';
+
+    if (!is_dir($path)) {
+        continue;
+    }
+
+    $di = new DirectoryIterator($path);
+
+    foreach ($di as $file) {
+        if ($file->getExtension() == 'php') {
+            $command = $ns . '\\Command\\' . $file->getBasename('.php');
+            $application->add(new $command());
+        }
     }
 }
 
