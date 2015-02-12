@@ -93,13 +93,13 @@ class Form extends Block
 
     public function renderNow()
     {
-        $id = $this->getContent('id', null);
+        $formId = $this->getContent('id', null);
 
-        if (empty($id)) {
+        if (empty($formId)) {
             return;
         }
 
-        $this->formModel = $this->formStore->getById($id);
+        $this->formModel = $this->formStore->getById($formId);
         $this->form = $this->createForm($this->formModel->getDefinition());
 
         if ($this->request->getMethod() == 'POST') {
@@ -221,28 +221,30 @@ class Form extends Block
     {
         $config = Config::getInstance();
         $mail = new \PHPMailer();
-        if(isset($config->site['smtp_server'])) {
+
+        if (isset($config->site['smtp_server'])) {
             $mail->IsSMTP();
             $mail->Host = $config->site['smtp_server'];
         }
+
         $mail->IsHTML(true);
         $mail->Subject = 'Form Submission: ' . $form->getTitle();
         $mail->CharSet = "UTF-8";
 
         $recipients = array_filter(explode("\n", $form->getRecipients()));
-        foreach($recipients as $recipient) {
+        foreach ($recipients as $recipient) {
             $mail->AddAddress($recipient);
         }
 
         if ($submission->getContact() && $submission->getContact()->getEmail()) {
-            $mail->AddReplyTo($submission->getContact()->getEmail(), $submission->getContact()->getFirstName()." ".$submission->getContact()->getLastName());
+            $name = $submission->getContact()->getFirstName() . ' ' . $submission->getContact()->getLastName();
+            $mail->AddReplyTo($submission->getContact()->getEmail(), $name);
         }
 
         if (isset($config->site['email_from'])) {
-            $mail->SetFrom($config->site['email_from']);
-        }
-        else {
-            $mail->SetFrom('octo@block8.net');
+            $mail->SetFrom($config->site['email_from'], $config->site['email_from_name']);
+        } else {
+            $mail->SetFrom('octo@block8.net', 'Octo');
         }
 
         $message         = Template::getPublicTemplate('Emails/FormSubmission');

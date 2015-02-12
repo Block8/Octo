@@ -105,7 +105,9 @@ class NewsController extends Controller
             $params[':category_id'] = $category;
         }
 
-        $query = $this->articleStore->query($pagination['current'], $pagination['limit'], ['publish_date', 'DESC'], $criteria, $params);
+        $current = $pagination['current'];
+        $limit = $pagination['limit'];
+        $query = $this->articleStore->query($current, $limit, ['publish_date', 'DESC'], $criteria, $params);
         $query->join('category', 'c', 'c.id = article.category_id');
 
         $pagination['total'] = $query->getCount();
@@ -308,7 +310,7 @@ class NewsController extends Controller
         $field->setLabel('Author');
         $fieldset->addField($field);
 
-        if($this->scope == "blog") {
+        if ($this->scope == "blog") {
             $field = new Form\Element\Text('guest_author_name');
             $field->setRequired(false);
             $field->setLabel('Guest Author Name');
@@ -331,7 +333,7 @@ class NewsController extends Controller
         $field->setClass('select2');
         $fieldset->addField($field);
 
-        if($this->scope == "news") {
+        if ($this->scope == "news") {
             $field = new Form\Element\Select('use_in_email');
             $field->setOptions(['1'=>'Yes', '0'=>'No']);
             $field->setRequired(false);

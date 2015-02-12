@@ -33,8 +33,6 @@ class DashboardController extends Controller
 
         $lastDate = new \DateTime('1970-01-01');
 
-        $date = $lastDate->format('M j Y');
-
         foreach ($items as $item) {
 
             if ($item->getLogDate()->format('Y-m-d') != $lastDate->format('Y-m-d')) {
@@ -49,7 +47,8 @@ class DashboardController extends Controller
                 $lastDate = $item->getLogDate();
             }
 
-            $key = md5($item->getLogDate()->format('Y-m-d').$item->getScope() . '.' . $item->getType() . '.' . $item->getScopeId());
+            $keyDate = $item->getLogDate()->format('Y-m-d');
+            $key = md5($keyDate .$item->getScope() . '.' . $item->getType() . '.' . $item->getScopeId());
 
             if (array_key_exists($key, $timeline)) {
                 continue;

@@ -3,13 +3,13 @@ window.basicCkEditor = {
         [ 'Source' ],
         [ 'Styles' ],
         [ 'Bold', 'Italic' ],
-        [ 'octolink' ],
+        [ 'Link', 'Unlink', 'octolink' ],
         [ 'Undo', 'Redo', '-', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
-    extraPlugins: 'scayt,undo',
     resizeEnabled: false,
+    extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
     contentsCss: '/assets/style.css',
     height: '200px'
@@ -20,13 +20,13 @@ window.smallCkEditor = {
         [ 'Source' ],
         [ 'Styles' ],
         [ 'Bold', 'Italic' ],
-        [ 'octolink' ],
+        [ 'Link', 'Unlink', 'octolink' ],
         [ 'Undo', 'Redo', '-', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
     removePlugins: 'elementspath',
-    extraPlugins: 'scayt,undo',
     resizeEnabled: false,
+    extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
     contentsCss: '/assets/style.css',
     height: '100px'
@@ -38,9 +38,9 @@ window.fullCkEditor = {
         [ 'Styles' ],
         [ 'Bold', 'Italic', 'Underline' ],
         [ 'Link', 'Unlink' ],
-        [ 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote' ],
+        [ 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', 'Table' ],
         [ 'Undo', 'Redo', '-', 'Copy', 'Paste', 'PasteText', 'PasteFromWord' ],
-        [ 'octolink', 'cmsimage', 'cmsfile', 'Youtube', 'Table' ],
+        [ 'octolink', 'cmsimage', 'cmsfile', 'Youtube' ],
         [ 'Scayt' ]
     ],
     removePlugins: 'elementspath,image',

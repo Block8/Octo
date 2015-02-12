@@ -97,8 +97,7 @@ class News extends Block
         $this->categoryStore = Store::get('Category');
 
 
-        if (isset($this->templateParams['context']) && $this->templateParams['context'] == 'mailshot')
-        {
+        if (isset($this->templateParams['context']) && $this->templateParams['context'] == 'mailshot') {
             return $this->renderNewsMailshot();
         }
 
@@ -171,8 +170,7 @@ class News extends Block
         if (!is_null($category)) {
             $subcategories = $this->categoryStore->getSubCategories($category);
 
-            if(!empty($subcategories))
-            {
+            if (!empty($subcategories)) {
                 $category .= "," . implode(',', $subcategories);
             }
 
@@ -262,16 +260,15 @@ class News extends Block
      */
     protected function getCategoryFromSlug($slug)
     {
-        if (is_null($slug)) return $slug;
-
+        if (is_null($slug)) {
+            return $slug;
+        }
 
         $uriParts = explode('/', ltrim($this->uri, '/'));
         $probablyCategory = array_pop($uriParts);
-
         $isCategory = $this->categoryStore->getByScopeAndSlug(static::$scope, $probablyCategory);
 
-        if (is_null($isCategory->getId()))
-        {
+        if (is_null($isCategory->getId())) {
             throw new NotFoundException('News/Blog item not found: ' . $slug);
         }
 

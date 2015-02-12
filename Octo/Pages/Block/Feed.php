@@ -68,7 +68,7 @@ class Feed extends Block
         if (!empty($url)) {
             $cache = Cache::getCache(Cache::TYPE_APC);
             $hash = 'feed:' . md5($url);
-            $result = $cache->get($hash, null);
+            //$result = $cache->get($hash, null);
 
             if (is_null($result)) {
                 $xml = simplexml_load_file($url);
@@ -136,6 +136,15 @@ class Feed extends Block
             $item = [];
             $item['title'] = trim(strip_tags((string)$feedItem->title));
             $item['description'] = trim(strip_tags((string)$feedItem->summary));
+
+            if (!empty($feedItem->updated)) {
+                $item['updated'] = new \DateTime((string)$feedItem->updated);
+            }
+
+            if (!empty($feedItem->content)) {
+                $item['content'] = trim(strip_tags((string)$feedItem->content));
+            }
+
             $item['uri'] = trim(strip_tags((string)$feedItem->link['href']));
             $rtn['items'][] = $item;
         }

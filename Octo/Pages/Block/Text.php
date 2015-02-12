@@ -58,7 +58,8 @@ class Text extends Block
 
         if (!empty($content)) {
             // Replace file blocks
-            $content = preg_replace_callback('/<img id="([a-zA-Z0-9]{32})"(?:.*?)>/i', [$this, 'replaceFile'], $content);
+            $pattern = '/<img id="([a-zA-Z0-9]{32})"(?:.*?)>/i';
+            $content = preg_replace_callback($pattern, [$this, 'replaceFile'], $content);
         }
 
         $this->view->content = $content;

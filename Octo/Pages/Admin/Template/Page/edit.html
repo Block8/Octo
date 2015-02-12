@@ -63,10 +63,10 @@
         editor.content_id = '{@latest.content_item_id}';
         editor.content = {@pageContent};
         editor.page = {
-            title: '{@latest.title}',
-            short_title: '{@latest.short_title}',
-            description: '{@latest.description}',
-            meta_description: '{@latest.meta_description}',
+            title: {@latest.title.asJson},
+            short_title: {@latest.short_title.asJson},
+            description: {@latest.description.asJson},
+            meta_description: {@latest.meta_description.asJson},
             template: '{@latest.template}',
             image_id: '{@latest.image_id}',
             parent_id: '{@page.parent_id}'

@@ -182,7 +182,7 @@ class ControllerGenerator
         $tpl->table = $table;
         $tpl->counts = $this->counts;
 
-        $callback = function ($args, $view) {
+        $callback = function ($args) {
             return $this->getNamespace($args['model']);
         };
 

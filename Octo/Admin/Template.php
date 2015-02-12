@@ -24,7 +24,7 @@ class Template extends \Octo\Template
         $rtn = parent::getAdminTemplate($template, $module);
 
         if (!is_null($rtn)) {
-            $rtn->addFunction('hash', function ($args, $view) {
+            $rtn->addFunction('hash', function ($args) {
                     return md5($args['value']);
             });
         }

@@ -82,7 +82,7 @@ class PageController extends Controller
         }
 
         Event::getEventManager()->registerListener('PublicTemplateLoaded', function (Template $template) {
-            $template->addFunction('getPages', function ($args, &$view) {
+            $template->addFunction('getPages', function ($args) {
                 if (empty($args['parent'])) {
                     return null;
                 }
