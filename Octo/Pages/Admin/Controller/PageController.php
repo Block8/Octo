@@ -317,6 +317,12 @@ class PageController extends Controller
         $form = $this->getPageDetailsForm('edit');
         $form->setValues($page->getDataArray());
         $form->setValues($latest->getDataArray());
+
+        // Prevent users from changing the parent of the homepage:
+        if (is_null($page->getParentId())) {
+            $form->getChild('fieldset')->removeChild('parent_id');
+        }
+
         $this->view->pageDetailsForm = $form;
 
         if ($latest->getContentItemId()) {

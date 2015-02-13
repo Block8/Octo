@@ -19,7 +19,7 @@
             <div class="box-body page-options">
                 <div class="alert alert-warning fade in">
                     <i class="fa fa-info"></i>
-                    <span>This page is currently locked for editing by Dan Cryer</span>
+                    <span></span>
                 </div>
 
                 <a class="btn-edit btn btn-block btn-default"><i class="fa fa-pencil"></i> <span>Edit Page</span></a>
@@ -62,6 +62,7 @@
 
             if (page.data('locked')) {
                 options.find('.btn').hide();
+                options.find('.alert span').text('This page is currently locked for editing by ' + page.data('author'));
                 options.find('.alert').show();
             } else {
                 options.find('.btn').show();
@@ -73,8 +74,16 @@
             options.find('.box-title').text(title);
             options.find('.btn-edit').attr('href', '/{@adminUri}/page/edit/' + page.data('id')).find('span').text('Edit ' + title);
             options.find('.btn-create').attr('href', '/{@adminUri}/page/add/' + page.data('id')).find('span').text('Create Child Page');
-            options.find('.btn-delete').attr('href', '/{@adminUri}/page/delete/' + page.data('id')).find('span').text('Delete ' + title);
-            options.find('.btn-duplicate').attr('href', '/{@adminUri}/page/duplicate/' + page.data('id')).find('span').text('Duplicate ' + title);
+
+            if (page.data('root')) {
+                options.find('.btn-delete').hide();
+                options.find('.btn-duplicate').hide();
+            } else {
+                options.find('.btn-delete').show();
+                options.find('.btn-duplicate').show();
+                options.find('.btn-delete').attr('href', '/{@adminUri}/page/delete/' + page.data('id')).find('span').text('Delete ' + title);
+                options.find('.btn-duplicate').attr('href', '/{@adminUri}/page/duplicate/' + page.data('id')).find('span').text('Duplicate ' + title);
+            }
 
             options.fadeIn();
         });
