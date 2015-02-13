@@ -35,7 +35,7 @@ class Application extends \b8\Application
         }
 
         $this->router->clearRoutes();
-        $this->router->register('/', ['controller' => 'Page', 'action' => 'View']);
+        Event::trigger('RegisterRoutes', $this->router);
         $this->router->register('/:controller/:action', ['namespace' => 'Controller', 'action' => 'index']);
 
         $route = '/'.$this->config->get('site.admin_uri').'/:controller/:action';
@@ -136,13 +136,13 @@ class Application extends \b8\Application
         try {
             $rtn = parent::handleRequest();
         } catch (HttpException $ex) {
-            if (defined('CMS_ENV') && CMS_ENV == 'development') {
+            if (defined('CMS_ENV') && CMS_ENV == 'development' && !array_key_exists('ex', $_GET)) {
                 throw $ex;
             }
 
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
-            if (defined('CMS_ENV') && CMS_ENV == 'development') {
+            if (defined('CMS_ENV') && CMS_ENV == 'development' && !array_key_exists('ex', $_GET)) {
                 throw $ex;
             }
 
@@ -184,9 +184,13 @@ class Application extends \b8\Application
     public function getController()
     {
         if (empty($this->controller)) {
+            $class = null;
             $controller = $this->toPhpName($this->route['controller']);
             $controllerClass = '\\Octo\\' . $this->route['namespace'];
-            $class = $controllerClass::getClass($controller);
+
+            if (class_exists($controllerClass)) {
+                $class = $controllerClass::getClass($controller);
+            }
 
             if (!is_null($class)) {
                 $this->controller = $this->loadController($class);

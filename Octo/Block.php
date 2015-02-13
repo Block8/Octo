@@ -269,7 +269,7 @@ abstract class Block
             $page = $this->page;
 
             while ($rtn === $default) {
-                if (!$page->getParentId()) {
+                if (!$page || !$page->getParentId()) {
                     break;
                 }
 
