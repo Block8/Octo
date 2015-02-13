@@ -265,12 +265,6 @@ $(document).ready(function () {
 
     $('.select2').select2();
 
-    $('.sa-datepicker').daterangepicker({
-        format: 'YYYY-MM-DD',
-        singleDatePicker: true,
-        timePicker: false
-    });
-
     $('.octo-image-picker').each(function () {
         var input = $(this);
         var img = $('<img>');

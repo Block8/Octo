@@ -10,12 +10,12 @@ class AssetManager
 
     public function addCss($module, $name)
     {
-        $this->css[] = ['module' => $module, 'name' => $name];
+        $this->css[$module . '.' . $name] = ['module' => $module, 'name' => $name];
     }
 
     public function addJs($module, $name)
     {
-        $this->js[] = ['module' => $module, 'name' => $name];
+        $this->js[$module . '.' . $name] = ['module' => $module, 'name' => $name];
     }
 
     public function getCss()
