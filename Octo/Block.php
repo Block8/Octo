@@ -2,6 +2,7 @@
 
 namespace Octo;
 
+use b8\Config;
 use b8\Http\Response;
 use b8\Http\Request;
 use Octo\Pages\Model\Page;
@@ -60,81 +61,15 @@ abstract class Block
 
     public static function getBlocks()
     {
-        return array_merge(self::getBuiltInBlocks(), self::getSiteBlocks());
-    }
+        $blocks = Config::getInstance()->get('Octo.namespaces.blocks');
+        $rtn = [];
 
-    protected static function getBuiltInBlocks()
-    {
-        $blocks = array();
-
-        $config = \b8\Config::getInstance();
-        $moduleManager = $config->get('ModuleManager');
-        $modules = $moduleManager->getEnabled()['Octo'];
-
-        foreach (glob(CMS_PATH . '*/Block') as $directory) {
-            $module = basename(dirname($directory));
-
-            if (!in_array($module, $modules)) {
-                continue;
-            }
-
-            $directoryIterator = new \DirectoryIterator($directory);
-
-            foreach ($directoryIterator as $file) {
-                if ($file->isDot()) {
-                    continue;
-                }
-
-                if ($file->isFile() && $file->getExtension() == 'php') {
-                    $className = $file->getBasename('.php');
-                    $namespace = "\\Octo\\$module\\Block";
-
-                    $blocks[$className] = self::getBlockInformation($namespace, $className);
-                }
-            }
+        foreach ($blocks as $block => $namespace) {
+            $namespace .= '\\Block';
+            $rtn[$block] = self::getBlockInformation($namespace, $block);
         }
 
-        return $blocks;
-    }
-
-    protected static function getSiteBlocks()
-    {
-        $blocks = array();
-
-        $config = \b8\Config::getInstance();
-        $moduleManager = $config->get('ModuleManager');
-        $modules = $moduleManager->getEnabled();
-
-        if (!array_key_exists($config->get('site.namespace'), $modules)) {
-            return [];
-        }
-
-        $modules = $modules[$config->get('site.namespace')];
-
-        foreach (glob(APP_PATH . $config->get('site.namespace'). '/*/Block') as $directory) {
-            $module = basename(dirname($directory));
-
-            if (!in_array($module, $modules)) {
-                continue;
-            }
-
-            $directoryIterator = new \DirectoryIterator($directory);
-
-            foreach ($directoryIterator as $file) {
-                if ($file->isDot()) {
-                    continue;
-                }
-
-                if ($file->isFile() && $file->getExtension() == 'php') {
-                    $className = $file->getBasename('.php');
-                    $namespace = "\\".$config->get('site.namespace')."\\$module\\Block";
-
-                    $blocks[$className] = self::getBlockInformation($namespace, $className);
-                }
-            }
-        }
-
-        return $blocks;
+        return $rtn;
     }
 
     protected static function getBlockInformation($namespace, $block)
