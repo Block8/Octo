@@ -41,4 +41,20 @@ class AssetController extends Octo\Controller
         $this->response->setHeader('Content-Type', 'text/css');
         return file_get_contents($path);
     }
+
+    public function img($module)
+    {
+        $parts = array_slice(func_get_args(), 1);
+        $name = implode('/', $parts);
+
+        $paths = Config::getInstance()->get('Octo.paths.modules');
+        $path = $paths[$module] . 'Public/img/' . $name;
+
+        if (!file_exists($path)) {
+            throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
+        }
+
+        $this->response->disableLayout();
+        return file_get_contents($path);
+    }
 }
