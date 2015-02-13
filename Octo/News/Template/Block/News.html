@@ -1,9 +1,0 @@
-{for articles}
-<div class="news-item">
-    <a class="news-link" href="{@value.full_url}">{@value.title}</a>
-    <p class="news-date">{@value.updated_date.formatted}</p>
-</div>
-
-{pagination uri: pagination.uri; current: pagination.current; total: pagination.total; limit: pagination.limit}
-{/for}
-
