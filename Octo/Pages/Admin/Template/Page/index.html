@@ -78,6 +78,8 @@
             if (page.data('root')) {
                 options.find('.btn-delete').hide();
                 options.find('.btn-duplicate').hide();
+            } else if (page.data('children')) {
+                options.find('.btn-delete').hide();
             } else {
                 options.find('.btn-delete').show();
                 options.find('.btn-duplicate').show();

@@ -3,7 +3,8 @@
                         data-updated="{date_format date: item.latestVersion.updated_date}"
                         data-author="{@item.latestVersion.User.name}"
                         data-locked="{if item.isLocked}1{/if}"
-                        data-root="{ifnot value.parent_id}1{/ifnot}">
+                        data-root="{ifnot value.parent_id}1{/ifnot}"
+                        data-children="{if value.hasChildren}1{/if}">
     {if value.hasChildren}
     <i class="open-arrow fa fa-caret-right"></i>
     {/if}
