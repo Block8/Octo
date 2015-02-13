@@ -428,7 +428,10 @@ class PageController extends Controller
                 $page->setActive(1);
             }
 
-            if ($pageData['parent_id'] != $page->getParentId()) {
+            $newParent = $pageData['parent_id'];
+            $curParent = $page->getParentId();
+
+            if ($newParent != $curParent && !is_null($page->getParentId()) && $newParent != $page->getId()) {
                 $page->setParentId($pageData['parent_id']);
                 $page->generateUri();
             }
