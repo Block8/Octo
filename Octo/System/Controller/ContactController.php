@@ -5,7 +5,7 @@ namespace Octo\System\Controller;
 use Octo\Block;
 use Octo\Controller;
 use Octo\Store;
-use Octo\Template;
+use Octo\Html\Template;
 use b8\Http\Response\RedirectResponse;
 
 class ContactController extends Controller
@@ -52,7 +52,7 @@ class ContactController extends Controller
             return;
         }
 
-        $view = Template::getPublicTemplate('Mailshot/unsubscribe');
+        $view = Template::load('Mailshot/unsubscribe');
         $view->message = $message;
         $view->confirmLink = $confirmLink;
 

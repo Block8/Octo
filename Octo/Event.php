@@ -40,6 +40,10 @@ class Event
 
     public static function getEventManager()
     {
+        if (empty(self::$manager)) {
+            self::init();
+        }
+
         return self::$manager;
     }
 }

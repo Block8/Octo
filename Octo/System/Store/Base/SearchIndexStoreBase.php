@@ -14,6 +14,7 @@ use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\SearchIndex;
+use Octo\System\Model\SearchIndexCollection;
 
 /**
  * SearchIndex Base Store
@@ -49,6 +50,13 @@ trait SearchIndexStoreBase
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
+        // This is the primary key, so try and get from cache:
+        $cacheResult = $this->getFromCache($value);
+
+        if (!empty($cacheResult)) {
+            return $cacheResult;
+        }
+
 
         $query = new Query($this->getNamespace('SearchIndex').'\Model\SearchIndex', $useConnection);
         $query->select('*')->from('search_index')->limit(1);
@@ -57,7 +65,11 @@ trait SearchIndexStoreBase
 
         try {
             $query->execute();
-            return $query->fetch();
+            $result = $query->fetch();
+
+            $this->setCache($value, $result);
+
+            return $result;
         } catch (PDOException $ex) {
             throw new StoreException('Could not get SearchIndex by Id', 0, $ex);
         }
@@ -110,7 +122,7 @@ trait SearchIndexStoreBase
 
         try {
             $query->execute();
-            return $query->fetchAll();
+            return new SearchIndexCollection($query->fetchAll());
         } catch (PDOException $ex) {
             throw new StoreException('Could not get SearchIndex by Word', 0, $ex);
         }

@@ -3,7 +3,7 @@ namespace Octo;
 
 use b8;
 use b8\View;
-use Octo\Template;
+use Octo\Html\Template;
 
 /**
  * Class Form
@@ -21,7 +21,7 @@ class Form extends b8\Form
     public function getView($view)
     {
         if (Template::exists('Form/' . $view)) {
-            $view = Template::getPublicTemplate('Form/' . $view);
+            $view = Template::load('Form/' . $view);
             return $view;
         }
 

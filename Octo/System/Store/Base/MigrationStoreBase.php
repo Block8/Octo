@@ -14,6 +14,7 @@ use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\Migration;
+use Octo\System\Model\MigrationCollection;
 
 /**
  * Migration Base Store
@@ -49,6 +50,13 @@ trait MigrationStoreBase
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
+        // This is the primary key, so try and get from cache:
+        $cacheResult = $this->getFromCache($value);
+
+        if (!empty($cacheResult)) {
+            return $cacheResult;
+        }
+
 
         $query = new Query($this->getNamespace('Migration').'\Model\Migration', $useConnection);
         $query->select('*')->from('migration')->limit(1);
@@ -57,7 +65,11 @@ trait MigrationStoreBase
 
         try {
             $query->execute();
-            return $query->fetch();
+            $result = $query->fetch();
+
+            $this->setCache($value, $result);
+
+            return $result;
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Migration by Id', 0, $ex);
         }

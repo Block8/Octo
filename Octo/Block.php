@@ -7,7 +7,7 @@ use b8\Http\Response;
 use b8\Http\Request;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
-use Octo\Template;
+use Octo\Html\Template;
 
 abstract class Block
 {
@@ -98,6 +98,18 @@ abstract class Block
         throw new \Exception('Block type ' . $type . ' does not exist');
     }
 
+    public static function exists($type)
+    {
+        $config = \b8\Config::getInstance();
+        $block = $config->get('Octo.namespaces.blocks.'.$type);
+
+        if (!empty($block)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function __construct($content)
     {
         $this->content = $content;
@@ -119,15 +131,8 @@ abstract class Block
         $parts = explode('\\', get_class($this));
         $class = array_pop($parts);
 
-        if (isset($this->templateParams['template'])) {
-            try {
-                $this->view = Template::getPublicTemplate('Block/' . $this->templateParams['template']);
-            } catch (\Exception $e) {
-                // TODO: Something with this
-                throw $e;
-            }
-        } else {
-            $this->view = Template::getPublicTemplate('Block/' . $class);
+        if (Template::exists('Block/' . $class)) {
+            $this->view = Template::load('Block/' . $class);
         }
 
         $rtn = $this->renderNow();
@@ -141,17 +146,11 @@ abstract class Block
             return '';
         }
 
-        if (!is_string($rtn)) {
-            $rtn = $this->view->render();
+        if (!empty($rtn)) {
+            return $rtn;
         }
 
-        if (!empty($rtn) && isset($this->templateParams['wrapper'])) {
-            $wrapper = Template::getPublicTemplate('Block/' . $this->templateParams['wrapper']);
-            $wrapper->content = $rtn;
-            $rtn = $wrapper->render();
-        }
-
-        return $rtn;
+        return $this->view;
     }
 
     abstract public function renderNow();
@@ -159,21 +158,6 @@ abstract class Block
     public function setRequest(Request &$request)
     {
         $this->request =& $request;
-    }
-
-    public function setResponse(Response &$response)
-    {
-        $this->response =& $response;
-    }
-
-    public function setUriExtension($uri)
-    {
-        $this->uri = $uri;
-    }
-
-    public function setTemplateParams(array $args)
-    {
-        $this->templateParams = $args;
     }
 
     public function setPage(Page &$page)
@@ -186,36 +170,12 @@ abstract class Block
         $this->pageVersion =& $pageVersion;
     }
 
-    public function setDataStore(array &$dataStore)
-    {
-        $this->dataStore =& $dataStore;
-    }
-
     public function getContent($tagId, $default = null)
     {
         $rtn = $default;
 
         if (array_key_exists($tagId, $this->content)) {
             $rtn = $this->content[$tagId];
-        }
-
-        $hasInherit = array_key_exists('inherit', $this->templateParams);
-        if ($rtn === $default && $hasInherit && $this->templateParams['inherit']) {
-            $page = $this->page;
-
-            while ($rtn === $default) {
-                if (!$page || !$page->getParentId()) {
-                    break;
-                }
-
-                $page = $page->getParent();
-                $content = $page->getCurrentVersion()->getContentItem()->getContent();
-                $content = json_decode($content, true);
-
-                if (isset($content[$this->templateParams['id']][$tagId])) {
-                    $rtn = $content[$this->templateParams['id']][$tagId];
-                }
-            }
         }
 
         return $rtn;

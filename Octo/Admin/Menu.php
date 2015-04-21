@@ -70,7 +70,11 @@ class Menu
      */
     public function getRoot($title)
     {
-        return $this->menu[$title];
+        if (array_key_exists($title, $this->menu)) {
+            return $this->menu[$title];
+        }
+
+        return null;
     }
 
     /**

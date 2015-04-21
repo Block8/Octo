@@ -263,7 +263,17 @@ $(document).ready(function () {
         return confirm('Are you sure?');
     });
 
-    $('.select2').select2();
+    $('.select2').select2({
+        formatResult: function (item) {
+            var element = $(item.element);
+
+            if (element.parents('select').hasClass('icon')) {
+                return '<i class="fa fa-'+element.val()+'"></i>&nbsp; ' + element.val();
+            }
+
+            return element.text();
+        }
+    });
 
     $('.octo-image-picker').each(function () {
         var input = $(this);

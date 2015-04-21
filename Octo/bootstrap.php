@@ -12,6 +12,8 @@ if (isset($_SERVER['APPLICATION_ENV'])) {
 
 date_default_timezone_set('Europe/London');
 
+error_reporting(E_ALL ^ E_STRICT);
+
 // Set up xdebug
 ini_set('xdebug.var_display_max_depth', 5);
 ini_set('xdebug.var_display_max_children', 256);
@@ -104,6 +106,9 @@ if (!defined('IS_CONSOLE')) {
         }
 
         $response = $app->handleRequest();
+
+        //var_dump(\b8\Database::$queryCount);
+        //var_dump(\b8\Database::$queries);
 
         die($response);
 

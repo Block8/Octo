@@ -13,7 +13,7 @@ use Octo\Admin\Menu;
 use Octo\BlockManager;
 use Octo\System\Model\Log;
 use Octo\Store;
-use Octo\Template;
+use Octo\Html\Template;
 
 /**
  * Class Application
@@ -164,7 +164,7 @@ class Application extends \b8\Application
 
             $this->response->setResponseCode($code);
 
-            $template = Template::getPublicTemplate('Error/' . $code);
+            $template = Template::load('Error/' . $code);
             $blockManager = new BlockManager();
             $blockManager->setRequest($this->request);
             $blockManager->setResponse($this->response);

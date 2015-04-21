@@ -6,7 +6,7 @@ use b8\Http\Request;
 use b8\Http\Response;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
-use Octo\Template;
+use Octo\Html\Template;
 
 class BlockManager
 {
@@ -108,7 +108,7 @@ class BlockManager
     public function attachToTemplate(Template $template)
     {
         $template->addFunction('block', [$this, 'renderBlock']);
-        $template->addFunction('has_content', function ($args) {
+        $template->addFunction('hasContent', function ($args) {
             if (!empty($this->content[$args['id']])) {
                 return true;
             } else {

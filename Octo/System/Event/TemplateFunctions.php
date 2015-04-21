@@ -1,18 +1,25 @@
 <?php
 namespace Octo\System\Event;
 
+use DateTime;
 use b8\Config;
 use Octo\Event\Listener;
 use Octo\Event\Manager;
 use Octo\Template;
+use Octo\Html;
 
 class TemplateFunctions extends Listener
 {
     public function registerListeners(Manager $manager)
     {
-        $manager->registerListener('AdminTemplateLoaded', array($this, 'globalTemplateFunctions'));
-        $manager->registerListener('PublicTemplateLoaded', array($this, 'globalTemplateFunctions'));
         $manager->registerListener('AdminTemplateLoaded', array($this, 'adminTemplateFunctions'));
+        $manager->registerListener('PublicTemplateLoaded', array($this, 'publicTemplateFunctions'));
+    }
+
+    public function publicTemplateFunctions(Html\Template &$template)
+    {
+        $template->now = new DateTime();
+        $template->config = Config::getInstance();
     }
 
     public function adminTemplateFunctions(Template &$template)
@@ -21,10 +28,6 @@ class TemplateFunctions extends Listener
             return $_SESSION['user']->canAccess($args['uri']);
         });
 
-    }
-
-    public function globalTemplateFunctions(Template &$template)
-    {
         $config = Config::getInstance();
         $template->addFunction('date_format', function ($args) {
             $date = $args['date'];

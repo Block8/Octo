@@ -1,9 +1,9 @@
 <section class="form-group {@ccss}">
     {if label}<label>{@label}</label>{/if}
 
-	<select id="{@id}" class="form-control {@css}" name="{@name}">
+	<select id="{@id}" class="form-control {@css}" {ifnot multiple}name="{@name}"{/ifnot}{if multiple}name="{@name}[]" multiple{/if}>
         {for options}
-		<option value="{@key}"{if parent.value == key} selected="selected"{/if}>{@value}</option>
+		<option value="{@key}"{if value.selected} selected="selected"{/if}>{@value.title}</option>
         {/for}
 	</select>
 

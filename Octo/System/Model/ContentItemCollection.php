@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * ContentItem model collection
+ */
+
+namespace Octo\System\Model;
+
+use Octo;
+use b8\Model\Collection;
+
+/**
+ * ContentItem Model Collection
+ */
+class ContentItemCollection extends Collection
+{
+    /**
+     * Add a ContentItem model to the collection.
+     * @param string $key
+     * @param ContentItem $value
+     * @return ContentItemCollection
+     */
+    public function add($key, ContentItem $value)
+    {
+        return parent::add($key, $value);
+    }
+
+    /**
+     * @param $key
+     * @return ContentItem|null
+     */
+    public function get($key)
+    {
+        return parent::get($key);
+    }
+}

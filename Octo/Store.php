@@ -84,6 +84,14 @@ abstract class Store extends \b8\Store
         return $rtn;
     }
 
+    public function all()
+    {
+        $query = new Database\Query($this->modelName, 'read');
+        $query->select('*')->from($this->tableName)->execute();
+        $class = $this->modelName . 'Collection';
+        return new $class($query->fetchAll());
+    }
+
     /**
      * @param $page
      * @param $perPage

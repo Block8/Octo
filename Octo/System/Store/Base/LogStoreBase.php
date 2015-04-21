@@ -14,6 +14,7 @@ use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\Log;
+use Octo\System\Model\LogCollection;
 
 /**
  * Log Base Store
@@ -49,6 +50,13 @@ trait LogStoreBase
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
+        // This is the primary key, so try and get from cache:
+        $cacheResult = $this->getFromCache($value);
+
+        if (!empty($cacheResult)) {
+            return $cacheResult;
+        }
+
 
         $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
         $query->select('*')->from('log')->limit(1);
@@ -57,7 +65,11 @@ trait LogStoreBase
 
         try {
             $query->execute();
-            return $query->fetch();
+            $result = $query->fetch();
+
+            $this->setCache($value, $result);
+
+            return $result;
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Log by Id', 0, $ex);
         }
@@ -110,7 +122,7 @@ trait LogStoreBase
 
         try {
             $query->execute();
-            return $query->fetchAll();
+            return new LogCollection($query->fetchAll());
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Log by Type', 0, $ex);
         }
@@ -164,7 +176,7 @@ trait LogStoreBase
 
         try {
             $query->execute();
-            return $query->fetchAll();
+            return new LogCollection($query->fetchAll());
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Log by Scope', 0, $ex);
         }
@@ -218,7 +230,7 @@ trait LogStoreBase
 
         try {
             $query->execute();
-            return $query->fetchAll();
+            return new LogCollection($query->fetchAll());
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Log by UserId', 0, $ex);
         }

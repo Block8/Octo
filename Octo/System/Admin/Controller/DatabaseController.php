@@ -12,9 +12,16 @@ class DatabaseController extends Controller
 {
     public static function registerMenus(Menu $menu)
     {
-        if ($_SESSION['user']->getIsAdmin() && !Config::getInstance()->get('b8.hide_database')) {
-            $menu->addRoot('Database', '/database')->setIcon('cogs');
+        $dev = $menu->getRoot('Developer');
+
+        if (!$dev) {
+            $dev = $menu->addRoot('Developer', '/developer', false)->setIcon('cogs');
         }
+
+        $database = new Menu\Item('Database Migrations', '/database');
+        $database->addChild(new Menu\Item('Run', '/database/run-migrations', true));
+        $database->addChild(new Menu\Item('Mark as Run', '/database/mark-as-run', true));
+        $dev->addChild($database);
     }
 
     public function init()

@@ -14,6 +14,7 @@ use b8\Database\Query\Criteria;
 use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\Contact;
+use Octo\System\Model\ContactCollection;
 
 /**
  * Contact Base Store
@@ -49,6 +50,13 @@ trait ContactStoreBase
         if (is_null($value)) {
             throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
         }
+        // This is the primary key, so try and get from cache:
+        $cacheResult = $this->getFromCache($value);
+
+        if (!empty($cacheResult)) {
+            return $cacheResult;
+        }
+
 
         $query = new Query($this->getNamespace('Contact').'\Model\Contact', $useConnection);
         $query->select('*')->from('contact')->limit(1);
@@ -57,7 +65,11 @@ trait ContactStoreBase
 
         try {
             $query->execute();
-            return $query->fetch();
+            $result = $query->fetch();
+
+            $this->setCache($value, $result);
+
+            return $result;
         } catch (PDOException $ex) {
             throw new StoreException('Could not get Contact by Id', 0, $ex);
         }
