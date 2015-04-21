@@ -263,7 +263,7 @@ $(document).ready(function () {
         return confirm('Are you sure?');
     });
 
-    $('.select2').select2({
+    $('select.select2, input.select2').select2({
         formatResult: function (item) {
             var element = $(item.element);
 
