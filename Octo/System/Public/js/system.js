@@ -111,11 +111,24 @@ window.pageEditor = Class.extend({
 
                 content[name].push(serialized[i].value);
             } else {
-                content[name] = serialized[i].value;
+                if (serialized[i].value != '' && serialized[i] != '<p></p>') {
+                    content[name] = serialized[i].value;
+                }
             }
         }
 
-        self.content[formId] = content;
+        var itemsCount = 0;
+        for (var idx in content) {
+            itemsCount++;
+            break;
+        }
+
+        if (itemsCount > 0) {
+            self.content[formId] = content;
+        } else if (self.content[formId]) {
+            delete self.content[formId];
+        }
+
         self.saveContent();
     },
 
