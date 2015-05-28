@@ -78,3 +78,7 @@
 input[type=checkbox] {
     margin-right: 10px;
 }
+
+.form-group {
+    position: relative;
+}

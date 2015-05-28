@@ -106,7 +106,7 @@ trait SearchIndexStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return SearchIndex[]
+     * @return SearchIndexCollection
      */
     public function getByWord($value, $options = [], $useConnection = 'read')
     {

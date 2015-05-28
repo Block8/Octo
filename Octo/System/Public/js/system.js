@@ -399,6 +399,8 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('.datetime-picker').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
 });
 
 // Sortable
@@ -408,3 +410,4 @@ var fixHelper = function(e, ui) {
     });
     return ui;
 };
+
