@@ -146,7 +146,7 @@ abstract class Block
             return '';
         }
 
-        if (!empty($rtn)) {
+        if (!is_null($rtn)) {
             return $rtn;
         }
 

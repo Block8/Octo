@@ -20,6 +20,14 @@ class TemplateFunctions extends Listener
     {
         $template->now = new DateTime();
         $template->config = Config::getInstance();
+
+        $template->addFunction('replace', function ($source, $find, $replace) {
+            return str_replace($find, $replace, $source);
+        });
+
+        $template->addFunction('regexReplace', function ($source, $find, $replace) {
+            return preg_replace('/'.$find.'/', $replace, $source);
+        });
     }
 
     public function adminTemplateFunctions(Template &$template)

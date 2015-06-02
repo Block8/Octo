@@ -106,7 +106,7 @@ trait LogStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return Log[]
+     * @return LogCollection
      */
     public function getByType($value, $options = [], $useConnection = 'read')
     {
@@ -160,7 +160,7 @@ trait LogStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return Log[]
+     * @return LogCollection
      */
     public function getByScope($value, $options = [], $useConnection = 'read')
     {
@@ -214,7 +214,7 @@ trait LogStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return Log[]
+     * @return LogCollection
      */
     public function getByUserId($value, $options = [], $useConnection = 'read')
     {

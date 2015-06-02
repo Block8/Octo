@@ -106,7 +106,7 @@ trait SettingStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return Setting[]
+     * @return SettingCollection
      */
     public function getByKey($value, $options = [], $useConnection = 'read')
     {
@@ -160,7 +160,7 @@ trait SettingStoreBase
      * @param array $options Limits, offsets, etc.
      * @param string $useConnection Connection type to use.
      * @throws StoreException
-     * @return Setting[]
+     * @return SettingCollection
      */
     public function getByScope($value, $options = [], $useConnection = 'read')
     {
