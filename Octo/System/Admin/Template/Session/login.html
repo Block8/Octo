@@ -9,58 +9,116 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="/asset/css/System/AdminLTE">
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
     <![endif]-->
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <meta name="google-signin-client_id" content="">
+
 </head>
-<body style="background-color: #444;">
+<body class="login-page" style="background-color: #444;">
 
-<div class="form-box" id="login-box" style="box-shadow: 0 0 25px rgba(0,0,0,0.5); margin-bottom: 40px;">
-    <div class="header" style="background-color: #3c8dbc; border-color: #367fa9">Sign In</div>
-    <form action="/{@adminUri}/session/login" method="POST">
-        <div class="body bg-gray">
-            {if GlobalMessage:error}
-            <div class="alert alert-danger fade in">
-                <strong>Error:</strong> {@GlobalMessage:error}
-            </div>
-            {/if}
-
-            {if GlobalMessage:success}
-            <div class="alert alert-success fade in">
-                {@GlobalMessage:success}
-            </div>
-            {/if}
-
-            {if GlobalMessage:info}
-            <div class="alert alert-info fade in">
-                {@GlobalMessage:info}
-            </div>
-            {/if}
-
-            {if errorMessage}
-            <div class="alert alert-danger fade in" style="margin-top: -20px;">
-                <i class="fa-fw fa fa-times"></i>
-                <strong>Error:</strong> {@errorMessage}
-            </div>
-            {/if}
-
-            <div class="form-group">
-                <input type="text" name="email" class="form-control" placeholder="Email Address" required>
-            </div>
-            <div class="form-group">
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
-            </div>
-            <!-- div class="form-group">
-                <input type="checkbox" name="remember_me"/> Remember me
-            </div -->
+<div class="login-box">
+    <div class="login-box-body">
+        <p class="login-box-msg">Sign in to {@config.site.name}</p>
+        {if GlobalMessage:error}
+        <div class="alert alert-danger fade in">
+            <strong>Error:</strong> {@GlobalMessage:error}
         </div>
-        <div class="footer">
-            <button type="submit" class="btn btn-primary btn-block">Sign me in</button>
+        {/if}
 
-            <p><a href="/{@adminUri}/session/forgot-password">I forgot my password</a></p>
+        {if GlobalMessage:success}
+        <div class="alert alert-success fade in">
+            {@GlobalMessage:success}
         </div>
-    </form>
-</div>
+        {/if}
+
+        {if GlobalMessage:info}
+        <div class="alert alert-info fade in">
+            {@GlobalMessage:info}
+        </div>
+        {/if}
+
+        {if errorMessage}
+        <div class="alert alert-danger fade in" style="margin-top: -20px;">
+            <i class="fa-fw fa fa-times"></i>
+            <strong>Error:</strong> {@errorMessage}
+        </div>
+        {/if}
+
+        <form action="/{@adminUri}/session/login" method="POST">
+            <input id="login-type" name="ltype" type="hidden" value="password">
+
+            <div class="form-group has-feedback">
+                <input id="email" name="email" type="email" class="form-control" placeholder="Enter your Email Address"/>
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input id="password" name="password" type="password" class="form-control" placeholder="Enter your Password"/>
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-4 col-xs-offset-8">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                </div><!-- /.col -->
+            </div>
+        </form>
+
+        <div class="social-auth-links text-center">
+            <p>- OR -</p>
+            <!-- a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a -->
+            <a id="google-signin" href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google"></i> Sign in with Google</a>
+        </div><!-- /.social-auth-links -->
+
+        <p><a href="/{@adminUri}/session/forgot-password">I forgot my password</a></p>
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+
+
+<script>
+    var googleUser = {};
+
+    var startApp = function() {
+        gapi.load('auth2', function(){
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            auth2 = gapi.auth2.init({
+                client_id: '701947833163-2b7iaoj3qqp7qsd0pfi9unrc02mqnfvs.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin'
+            });
+
+            attachSignin(document.getElementById('google-signin'));
+        });
+    };
+
+    function attachSignin(element) {
+        auth2.attachClickHandler(element, {},
+                onSignIn,
+                function(error) {
+                    alert(JSON.stringify(error, undefined, 2));
+                }
+        );
+    }
+
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+
+        $('#login-type').val('google');
+        $('#email').val(profile.getEmail());
+        $('#password').val(googleUser.getAuthResponse().id_token);
+
+        $('form').submit();
+    }
+
+    $(document).ready(function () {
+        startApp();
+    })
+
+</script>
 </body>
 </html>
