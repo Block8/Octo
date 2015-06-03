@@ -271,6 +271,51 @@ function pagePicker(id, label, value)
     return section;
 }
 
+function userPicker(id, label, value)
+{
+    var section = $('<section></section>').addClass('control-group');
+    var label2 = $('<label></label>').addClass('input');
+    var input = $('<input>').attr('id', id).attr('type', 'text');
+    input.css('width', '100%');
+    section.append(label2);
+
+    label2.append(label);
+    label2.append(input);
+    input.css('width', '100%');
+    input.val(value);
+
+    input.select2({
+        placeholder: "Search for a user",
+        minimumInputLength: 1,
+        initSelection : function(element, callback) {
+            if (value) {
+                $.getJSON('/'+window.adminUri+'/user/autocomplete?q=' + value, function (data) {
+                    console.log(data)
+                    if (data.results[0]) {
+                        callback(data.results[0]);
+                    }
+                });
+            }
+
+        },
+        ajax: {
+            url: '/'+window.adminUri+'/user/autocomplete',
+            dataType: 'json',
+            data: function(term) {
+                return {
+                    q: term
+                };
+            },
+            results: function(data) {
+                return data;
+            }
+        }
+    });
+
+
+    return section;
+}
+
 $(document).ready(function () {
     $('.btn-delete').on('click', function () {
         return confirm('Are you sure?');

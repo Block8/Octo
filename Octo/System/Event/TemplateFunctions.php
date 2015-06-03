@@ -70,6 +70,14 @@ class TemplateFunctions extends Listener
                     $format = 'g:ia';
                     break;
 
+                case 'system_date':
+                    $format = 'Y-m-d';
+                    break;
+
+                case 'system_datetime':
+                    $format = 'Y-m-d H:i:s';
+                    break;
+
                 default:
                     $format = 'jS F Y, g:ia';
                     break;
@@ -99,6 +107,14 @@ class TemplateFunctions extends Listener
 
             return false;
         });
+
+        $theme = 'blue';
+
+        if (!is_null($config->get('site.admin_theme', null))) {
+            $theme = $config->get('site.admin_theme');
+        }
+
+        $template->set('theme', $theme);
     }
 
     protected function friendlyDate(\DateTime $date)

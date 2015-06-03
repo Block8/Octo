@@ -54,4 +54,25 @@ class UserStore extends Octo\Store
             return array();
         }
     }
+
+    public function search($query)
+    {
+        $query = 'SELECT * FROM `user` WHERE `name` LIKE \'%'.$query.'%\'';
+
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new User($item);
+            };
+
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
 }

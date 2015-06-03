@@ -319,4 +319,25 @@ class UserController extends Controller
 
         $this->view->form = $form;
     }
+
+    public function autocomplete()
+    {
+        if (is_numeric($this->getParam('q'))) {
+            $user = $this->userStore->getById($this->getParam('q'));
+
+            if ($user) {
+                die(json_encode(['more' => false, 'results' => [['id' => $user->getId(), 'text' => $user->getName()]]]));
+            }
+        }
+
+        $users = $this->userStore->search($this->getParam('q', ''));
+
+        $rtn = ['results' => [], 'more' => false];
+
+        foreach ($users as $user) {
+            $rtn['results'][] = ['id' => $user->getId(), 'text' => $user->getName()];
+        }
+
+        die(json_encode($rtn));
+    }
 }
