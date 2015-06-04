@@ -33,7 +33,8 @@
     "require": {
         "block8/b8framework": "dev-master",
         "symfony/console": "2.*",
-        "phpmailer/phpmailer": "5.2.*"
+        "phpmailer/phpmailer": "5.2.*",
+        "google/apiclient": "*"
     },
 
     "autoload": {
@@ -41,7 +42,6 @@
     },
 
     "bin": [
-        "octocmd",
-        "Octo/Public/assets"
+        "octocmd"
     ]
 }
