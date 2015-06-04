@@ -1,0 +1,61 @@
+<div style="z-index: 10000; width: 300px; position: absolute; right: 0; bottom: 0;" class="contact-card">
+    <div style="box-shadow: 0 0 30px rgba(0,0,0,0.1);" class="box {if contact.is_blocked}box-danger{/if} {ifnot contact.is_blocked}box-success{/if}" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+
+        <div class="box-header" role="heading">
+            <img style="float: left; margin-right: 10px;" src="//www.gravatar.com/avatar/{hash value: contact.email}?d=mm&s=48" class="img-circle" alt="User Image" />
+
+
+            <h3 class="box-title">{@contact.first_name} {@contact.last_name}</h3>
+
+            <div class="box-tools pull-right" role="menu">
+                <div class="btn-group">
+                    <a class="btn btn-default btn-sm" href="mailto:{@contact.email}"><i class="fa fa-email"></i> Email</a>
+
+                    <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="" href="/{@adminUri}/contact/edit/{@contact.id}">Edit Contact</a></li>
+
+                        {if contact.is_blocked}
+                        <li><a href="/{@adminUri}/contact/unblock/{@contact.id}" class="">Unblock Contact</a></li>
+                        {/if}
+
+                        {ifnot contact.is_blocked}
+                        <li><a href="/{@adminUri}/contact/block/{@contact.id}" class="">Block Contact</a></li>
+                        {/ifnot}
+
+                        {if canAccess(uri: "/contact/delete")}
+                        <li>
+                            <a href="/{@adminUri}/contact/delete/{@value.id}" class="btn-delete">Delete Contact</a>
+                        </li>
+                        {/if}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div role="content">
+
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Email</th>
+                        <td>{@contact.email}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>{@contact.phone}</td>
+                    </tr>
+                    <tr>
+                        <th>Company</th>
+                        <td>{@contact.company}</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>

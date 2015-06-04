@@ -1,6 +1,7 @@
 <?php
 namespace Octo\System\Admin\Controller;
 
+use b8\Config;
 use b8\Form;
 use b8\Http\Response\RedirectResponse;
 use Octo\Store;
@@ -30,8 +31,13 @@ class ContactController extends Controller
 
     public static function registerMenus(Menu $menu)
     {
+        /** @var \Octo\AssetManager $assets */
+        $assets = Config::getInstance()->get('Octo.AssetManager');
+        $assets->addJs('System', 'contact');
+
         $thisMenu = $menu->addRoot('Contacts', '/contact')->setIcon('users');
         $thisMenu->addChild(new Menu\Item('Add Contact', '/contact/add'));
+        $thisMenu->addChild(new Menu\Item('Contact Popup', '/contact/popup', true));
         $thisMenu->addChild(new Menu\Item('Manage Contacts', '/contact'));
         $thisMenu->addChild(new Menu\Item('Edit Contact', '/contact/edit', true));
 
@@ -58,6 +64,12 @@ class ContactController extends Controller
         }
 
         die(json_encode($rtn));
+    }
+
+    public function popup($contactId)
+    {
+        $this->view->contact = $this->contactStore->getById($contactId);
+        $this->response->disableLayout();
     }
 
     public function block($contactId)
