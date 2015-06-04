@@ -1,4 +1,4 @@
-<div style="z-index: 10000; width: 300px; position: absolute; right: 0; bottom: 0;" class="contact-card">
+<div style="z-index: 10000; width: 300px; position: absolute; right: 0; bottom: 0;" class="contact-card contact-{@contact.id}">
     <div style="box-shadow: 0 0 30px rgba(0,0,0,0.1);" class="box {if contact.is_blocked}box-danger{/if} {ifnot contact.is_blocked}box-success{/if}" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
 
         <div class="box-header" role="heading">

@@ -4,6 +4,7 @@ namespace Octo\System\Admin\Controller;
 use b8\Config;
 use b8\Form;
 use b8\Http\Response\RedirectResponse;
+use Octo\Event;
 use Octo\Store;
 use Octo\Admin\Controller;
 use Octo\Admin\Menu;
@@ -111,6 +112,14 @@ class ContactController extends Controller
             $contact->setValues($this->getParams());
             $contact = $this->contactStore->save($contact);
 
+            $data = [
+                'model' => $contact,
+                'content_id' => $contact->getId(),
+                'content' => $contact->getFirstName() . ' ' . $contact->getLastName() . ' ' . $contact->getCompany(),
+            ];
+
+            Event::trigger('ContentPublished', $data);
+
             $this->response = new RedirectResponse();
             $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/contact/edit/'.$contact->getId());
             return;
@@ -127,6 +136,14 @@ class ContactController extends Controller
         if ($this->request->getMethod() == 'POST') {
             $contact->setValues($this->getParams());
             $contact = $this->contactStore->save($contact);
+
+            $data = [
+                'model' => $contact,
+                'content_id' => $contact->getId(),
+                'content' => $contact->getFirstName() . ' ' . $contact->getLastName() . ' ' . $contact->getCompany(),
+            ];
+
+            Event::trigger('ContentPublished', $data);
 
             $this->response = new RedirectResponse();
             $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/contact/edit/'.$contact->getId());
