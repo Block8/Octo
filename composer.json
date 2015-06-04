@@ -41,7 +41,6 @@
     },
 
     "bin": [
-        "octocmd",
-        "Octo/Public/assets"
+        "octocmd"
     ]
 }
