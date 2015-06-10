@@ -229,7 +229,8 @@ class Application extends \b8\Application
         $log->setLink($uri);
         $log->save();
 
-        $response = new RedirectResponse();
+        $response = new RedirectResponse($response);
         $response->setHeader('Location', '/'.$this->config->get('site.admin_uri'));
+        $response->flush();
     }
 }
