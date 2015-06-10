@@ -14,7 +14,7 @@
                     {loop users}
                     <tr>
                         <td>
-                            {if item.is_admin}<i class="fa fa-key" style="color: brown; margin-right: 10px;"></i> {/if}
+                            {if item.is_admin}<i class="fa fa-key" style="color: green; margin-right: 10px;"></i> {/if}
                             {ifnot item.is_admin}<i class="fa fa-user" style="margin-right: 10px;"></i> {/ifnot}
                             {@item.name}
                         </td>
@@ -27,9 +27,11 @@
                                     <li>
                                         <a href="/{@adminUri}/user/edit/{@item.id}">Edit</a>
                                     </li>
+                                    {ifnot item.is_admin}
                                     <li>
                                         <a href="/{@adminUri}/user/permissions/{@item.id}">Manage Permissions</a>
                                     </li>
+                                    {/ifnot}
                                     <li class="divider"></li>
                                     <li>
                                         <a href="/{@adminUri}/user/delete/{@item.id}" class="btn-delete">Delete</a>
