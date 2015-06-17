@@ -11,7 +11,7 @@ window.basicCkEditor = {
     resizeEnabled: false,
     extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
-    contentsCss: '/assets/style.css',
+    contentsCss: '/assets/editor-style.css',
     height: '200px'
 };
 
@@ -28,7 +28,7 @@ window.smallCkEditor = {
     resizeEnabled: false,
     extraPlugins: 'octolink,youtube,cmsfile,cmsimage,scayt,undo',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
-    contentsCss: '/assets/style.css',
+    contentsCss: '/assets/editor-style.css',
     height: '100px'
 };
 
@@ -49,7 +49,7 @@ window.fullCkEditor = {
     alllowedContent: true,
     height: '300px',
     stylesSet: 'styles:/assets/js/ckeditor_styles.js',
-    contentsCss: '/assets/style.css',
+    contentsCss: '/assets/editor-style.css',
     bodyClass: 'main'
 };
 
