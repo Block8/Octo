@@ -35,12 +35,15 @@ class Application extends \b8\Application
         }
 
         $this->router->clearRoutes();
-        Event::trigger('RegisterRoutes', $this->router);
+        Event::trigger('BackupRoutes', $this->router);
         $this->router->register('/:controller/:action', ['namespace' => 'Controller', 'action' => 'index']);
 
         $route = '/'.$this->config->get('site.admin_uri').'/:controller/:action';
         $defaults = ['namespace' => 'Admin\\Controller', 'controller' => 'Dashboard', 'action' => 'index'];
         $request =& $this->request;
+
+        Event::trigger('PrimaryRoutes', $this->router);
+
 
         $denied = [$this, 'permissionDenied'];
 
