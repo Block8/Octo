@@ -26,6 +26,8 @@ class Application extends \b8\Application
      */
     public function init()
     {
+        Event::trigger('BeforeSystemInit', $this);
+
         $path = $this->request->getPath();
 
         if (substr($path, -1) == '/' && $path != '/') {
@@ -44,7 +46,11 @@ class Application extends \b8\Application
 
         $denied = [$this, 'permissionDenied'];
 
-        return $this->registerRouter($route, $defaults, $request, $denied);
+        $rtn = $this->registerRouter($route, $defaults, $request, $denied);
+
+        Event::trigger('AfterSystemInit', $rtn);
+
+        return $rtn;
     }
 
     /**
