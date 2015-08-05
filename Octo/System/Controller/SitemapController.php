@@ -5,7 +5,7 @@ namespace Octo\System\Controller;
 use Octo\Controller;
 use Octo\Pages\Model\Page;
 use Octo\Store;
-use Octo\Template;
+use Octo\Html\Template;
 use Octo\BlockManager;
 use Octo\Event;
 use Octo\Menu\Store\MenuItemStore;
@@ -154,61 +154,10 @@ class SitemapController extends Controller
     public function index()
     {
         $sitemap = array();
-        $view = Template::getPublicTemplate('sitemap');
+        $view = Template::load('sitemap', 'System');
 
-        $topMenu = $this->menuItemStore->getForMenu(1);
-
-        $record['uri'] = '/';
-        $record['title'] = 'Home';
-        $record['active'] = false;
-
-        $sitemap[] = $record;
-        foreach ($topMenu as $menuItem) {
-            $this->page = $this->pageStore->getById($menuItem->getPageId());
-            $this->version = $this->page->getCurrentVersion();
-
-            $record = array();
-
-            $record['uri'] = $this->page->getUri();
-            $record['title'] = $this->version->getShortTitle();
-
-            $rtn = $this->getChildrenPages();
-
-            if (count($rtn)) {
-                $record['active'] =  true;
-                $record['children'] = $rtn;
-            } else {
-                $record['active'] =  false;
-            }
-
-            $sitemap[] = $record;
-        }
-
-        $view->items = $sitemap;
-
-        $dataStore = [
-            'breadcrumb' => [
-                ['uri' => '/', 'title' => 'Home', 'active' => false],
-                ['uri' => '/sitemap', 'title' => 'Sitemap', 'active' => true]
-            ]
-        ];
-
-        $blockManager = new BlockManager();
-        $blockManager->setDataStore($dataStore);
-        $blockManager->setRequest($this->request);
-        $blockManager->setResponse($this->response);
-        $blockManager->attachToTemplate($view);
-
+        $view->root = $this->pageStore->getHomepage();
         $output = $view->render();
-
-        $data = [
-            'page' => null,
-            'version' => null,
-            'output' => &$output,
-            'datastore' => $blockManager->getDataStore(),
-        ];
-
-        Event::trigger('PageLoaded', $data);
 
         return $output;
     }
