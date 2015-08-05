@@ -26,6 +26,8 @@ class Application extends \b8\Application
      */
     public function init()
     {
+        Event::trigger('BeforeSystemInit', $this);
+
         $path = $this->request->getPath();
 
         if (substr($path, -1) == '/' && $path != '/') {
@@ -35,16 +37,23 @@ class Application extends \b8\Application
         }
 
         $this->router->clearRoutes();
-        Event::trigger('RegisterRoutes', $this->router);
+        Event::trigger('BackupRoutes', $this->router);
         $this->router->register('/:controller/:action', ['namespace' => 'Controller', 'action' => 'index']);
 
         $route = '/'.$this->config->get('site.admin_uri').'/:controller/:action';
         $defaults = ['namespace' => 'Admin\\Controller', 'controller' => 'Dashboard', 'action' => 'index'];
         $request =& $this->request;
 
+        Event::trigger('PrimaryRoutes', $this->router);
+
+
         $denied = [$this, 'permissionDenied'];
 
-        return $this->registerRouter($route, $defaults, $request, $denied);
+        $rtn = $this->registerRouter($route, $defaults, $request, $denied);
+
+        Event::trigger('AfterSystemInit', $rtn);
+
+        return $rtn;
     }
 
     /**
@@ -229,7 +238,8 @@ class Application extends \b8\Application
         $log->setLink($uri);
         $log->save();
 
-        $response = new RedirectResponse();
+        $response = new RedirectResponse($response);
         $response->setHeader('Location', '/'.$this->config->get('site.admin_uri'));
+        $response->flush();
     }
 }
