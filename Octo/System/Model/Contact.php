@@ -34,8 +34,17 @@ class Contact extends Octo\Model
 
     public function setAddress($value)
     {
+        if (is_null($this->data['postcode'])) {
+            $matches = [];
+
+            if (preg_match('/([a-zA-Z]{1,2}[0-9]{1,2}\s?[0-9][a-zA-Z]{1,2})/', $value, $matches)) {
+                $this->setPostcode($matches[1]);
+                $value = str_replace($matches[1], '', $value);
+            }
+        }
+
         if (is_array($value)) {
-            $value = json_encode($value);
+            $value = implode(', ', $value);
         }
 
         $this->validateString('Address', $value);
@@ -46,16 +55,5 @@ class Contact extends Octo\Model
 
         $this->data['address'] = $value;
         $this->setModified('address');
-    }
-
-    public function getAddress()
-    {
-        $value = $this->data['address'];
-
-        if (is_string($value)) {
-            $value = json_decode($value, true);
-        }
-
-        return $value;
     }
 }

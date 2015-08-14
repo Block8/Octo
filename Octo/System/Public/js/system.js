@@ -317,7 +317,7 @@ function userPicker(id, label, value)
 }
 
 $(document).ready(function () {
-    $('.btn-delete').on('click', function () {
+    $('.btn-delete, .btn-danger').on('click', function () {
         return confirm('Are you sure?');
     });
 

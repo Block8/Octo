@@ -17,13 +17,19 @@ class DashboardWidget extends Listener
 
     public function getStatistics(&$stats)
     {
-        $contactStore = Store::get('Contact');
-        $stats[] = [
-            'title' => 'Contacts',
-            'count' => number_format($contactStore->getTotal()),
-            'icon' => 'person-stalker',
-            'color' => 'aqua',
-            'link' => '/contact',
-        ];
+        /** @var \Octo\System\Model\User $user */
+        $user = $_SESSION['user'];
+
+        if ($user->canAccess('/contact')) {
+            $contactStore = Store::get('Contact');
+
+            $stats[] = [
+                'title' => 'Contacts',
+                'count' => number_format($contactStore->getTotal()),
+                'icon' => 'person-stalker',
+                'color' => 'aqua',
+                'link' => '/contact',
+            ];
+        }
     }
 }
