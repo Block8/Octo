@@ -20,6 +20,7 @@ class TemplateFunctions extends Listener
     {
         $template->now = new DateTime();
         $template->config = Config::getInstance();
+        $template->session = $_SESSION;
 
         $template->addFunction('replace', function ($source, $find, $replace) {
             return str_replace($find, $replace, $source);
@@ -88,7 +89,9 @@ class TemplateFunctions extends Listener
 
         $template->set('date_now', new \DateTime());
         $template->set('adminUri', $config->get('site.admin_uri'));
+
         $template->set('config', $config);
+
         $template->addFunction('pagination', array($this, 'handlePagination'));
         $template->addFunction('var_dump', function ($args) {
             ob_start();
