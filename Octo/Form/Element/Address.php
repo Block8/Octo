@@ -24,6 +24,7 @@ class Address extends FieldSet
         $address2 = Text::create($address2, 'Address 2', false);
         $town = Text::create($town, 'Town', true);
         $postcode = Text::create($postcode, 'Postcode', true);
+        $postcode->setClass('postcode');
 
         $this->addField($address1);
         $this->addField($address2);

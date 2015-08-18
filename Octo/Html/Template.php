@@ -59,9 +59,14 @@ class Template extends HtmlTemplate
         return null;
     }
 
-    public function render()
+    public function render($internal = false)
     {
-        Event::trigger('HtmlTemplateRender', $this);
-        return parent::render();
+        $code = parent::render($internal);
+
+        if (!$internal) {
+            Event::trigger('OnTemplateRender', $code);
+        }
+
+        return $code;
     }
 }
