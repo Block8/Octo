@@ -61,7 +61,7 @@ abstract class Store extends \b8\Store
         $values = array();
         $qParams = array();
         foreach ($modified as $key) {
-            $cols[] = $key;
+            $cols[] = '`' . $key . '`';
             $values[] = ':' . $key;
             $qParams[':' . $key] = $data[$key];
         }

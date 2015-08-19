@@ -15,4 +15,13 @@ class Module extends Octo\Module
     {
         return dirname(__FILE__) . '/';
     }
+
+    public function init()
+    {
+        $app = $this->config->get('Octo');
+        $app['bypass_auth']['session'] = true;
+        $this->config->set('Octo', $app);
+
+        return parent::init();
+    }
 }

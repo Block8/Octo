@@ -66,31 +66,45 @@ class Application extends \b8\Application
      */
     public function registerRouter($route, $defaults, $request, $denied)
     {
-        $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$request, &$denied) {
+        $bypass = $this->config->get('Octo.bypass_auth');
+
+        $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$bypass, &$request, &$denied) {
             if (!empty($_GET['session_auth'])) {
                 session_id($_GET['session_auth']);
             }
 
-            session_start();
-
-            if ($route['controller'] != 'session') {
-                if (!empty($_SESSION['user_id'])) {
-                    return $this->setupUserProperties($route, $response, $denied);
-                }
-
-                if ($request->isAjax()) {
-                    $response->setResponseCode(401);
-                    $response->setContent('');
-                } else {
-                    $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
-                    $response = new RedirectResponse($this->response);
-                    $response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/session/login');
-                }
-
-                return false;
+            if (session_status() != PHP_SESSION_ACTIVE) {
+                session_start();
             }
 
-            return true;
+            if (array_key_exists($route['controller'], $bypass)) {
+                $bypass = $bypass[$route['controller']];
+
+                // If we're bypassing authentication for an entire controller:
+                if ($bypass === true) {
+                    return true;
+                }
+
+                // If we're bypassing authentication for a specific action:
+                if (is_array($bypass) && in_array($route['action'], $bypass)) {
+                    return true;
+                }
+            }
+
+            if (!empty($_SESSION['user_id'])) {
+                return $this->setupUserProperties($route, $response, $denied);
+            }
+
+            if ($request->isAjax()) {
+                $response->setResponseCode(401);
+                $response->setContent('');
+            } else {
+                $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
+                $response = new RedirectResponse($this->response);
+                $response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/session/login');
+            }
+
+            return false;
         });
     }
 

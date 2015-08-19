@@ -5,6 +5,7 @@ use DateTime;
 use b8\Config;
 use Octo\Event\Listener;
 use Octo\Event\Manager;
+use Octo\System\Model\Setting;
 use Octo\Template;
 use Octo\Html;
 
@@ -89,8 +90,9 @@ class TemplateFunctions extends Listener
 
         $template->set('date_now', new \DateTime());
         $template->set('adminUri', $config->get('site.admin_uri'));
-
         $template->set('config', $config);
+        $template->set('settings', Setting::getAllAsArray());
+        $template->set('GET', $_GET);
 
         $template->addFunction('pagination', array($this, 'handlePagination'));
         $template->addFunction('var_dump', function ($args) {

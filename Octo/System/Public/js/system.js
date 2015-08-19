@@ -321,6 +321,50 @@ $(document).ready(function () {
         return confirm('Are you sure?');
     });
 
+    $('input.switch').each(function () {
+        var check = $(this);
+        check.hide();
+
+        var onText = check.data('on') || 'On';
+        var offText = check.data('off') || 'Off';
+
+        var group = $('<div></div>').addClass('btn-group');
+        var onSwitch = $('<button><i class="fa fa-check"></i> '+onText+'</button>').addClass('btn btn-sm btn-default');
+        var offSwitch = $('<button><i class="fa fa-close"></i> '+offText+'</button>').addClass('btn btn-sm btn-default');
+
+        group.append(onSwitch);
+        group.append(offSwitch);
+
+        if (check.prop('checked')) {
+            onSwitch.addClass('active btn-success').removeClass('btn-default');
+        } else {
+            offSwitch.addClass('active btn-danger').removeClass('btn-default');
+        }
+
+        onSwitch.on('click', function (e) {
+            e.preventDefault();
+
+            offSwitch.removeClass('active btn-danger').addClass('btn-default');
+            onSwitch.addClass('active btn-success').removeClass('btn-default');
+
+            check.prop('checked', true);
+            check.trigger('change');
+        });
+
+        offSwitch.on('click', function (e) {
+            e.preventDefault();
+
+            onSwitch.removeClass('active btn-success').addClass('btn-default');
+            offSwitch.addClass('active btn-danger').removeClass('btn-default');
+
+            check.prop('checked', false);
+            check.trigger('change');
+        });
+
+        group.css({'margin-right': '15px'});
+        check.after(group);
+    });
+
     $('select.select2, input.select2').select2({
         formatResult: function (item) {
             var element = $(item.element);
@@ -455,4 +499,7 @@ var fixHelper = function(e, ui) {
     });
     return ui;
 };
+
+
+
 

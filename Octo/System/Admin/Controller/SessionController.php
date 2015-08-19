@@ -31,6 +31,8 @@ class SessionController extends Controller
             $this->view->siteLogo = true;
         }
 
+        $_SESSION['auth'] = 'login';
+
         $this->view->emailFieldLabel = 'Email Address';
         $this->userStoreName = 'User';
         $this->userGetMethod = 'getByEmail';
@@ -38,10 +40,6 @@ class SessionController extends Controller
         Event::trigger('beforeLogin', $this);
 
         if ($this->request->getMethod() == 'POST') {
-            if ($this->getParam('ltype', 'password') == 'google') {
-                return $this->googleAuth();
-            }
-
             $ugMethod = $this->userGetMethod;
             $user = Store::get($this->userStoreName)->$ugMethod($this->getParam('email'));
 
@@ -71,7 +69,7 @@ class SessionController extends Controller
     {
         $_SESSION = array();
         session_destroy();
-        header('Location: /' . $this->config->get('site.admin_uri'));
+        header('Location: /' . $this->config->get('site.admin_uri') . '/session/login?logout=1');
         die;
     }
 
@@ -136,44 +134,5 @@ OUT;
         $this->view->key = $key;
 
         return;
-    }
-
-    protected function googleAuth()
-    {
-        $email = $this->getParam('email', '');
-        $token = $this->getParam('password', '');
-
-
-        $client = new \Google_Client();
-        $client->setClientId('701947833163-2b7iaoj3qqp7qsd0pfi9unrc02mqnfvs.apps.googleusercontent.com');
-        $client->setClientSecret('b0RCWuNUQPW0sH1GI253BTKm');
-        $client->setRedirectUri($this->config->get('site.url').'/'.$this->config->get('site.admin_uri').'/session/login');
-        $client->setScopes('email');
-
-        $data = $client->verifyIdToken($token)->getAttributes();
-
-        if (empty($data['payload']['email']) || $data['payload']['email'] != $email) {
-            $this->errorMessage('There was a problem signing you in, please try again.', true);
-            header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/session/login');
-            die;
-        }
-
-        $user = $this->userStore->getByEmail($email);
-
-        if (is_null($user)) {
-            $this->errorMessage('You do not have permission to sign in.', true);
-            header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/session/login');
-            die;
-        }
-
-        $_SESSION['user_id'] = $user->getId();
-        $url = '/' . $this->config->get('site.admin_uri');
-
-        if (isset($_SESSION['previous_url'])) {
-            $url = $_SESSION['previous_url'];
-        }
-
-        header('Location: ' . $url);
-        die;
     }
 }
