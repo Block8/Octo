@@ -40,16 +40,22 @@ class Application extends \b8\Application
         Event::trigger('BackupRoutes', $this->router);
         $this->router->register('/:controller/:action', ['namespace' => 'Controller', 'action' => 'index']);
 
+
+
         $route = '/'.$this->config->get('site.admin_uri').'/:controller/:action';
         $defaults = ['namespace' => 'Admin\\Controller', 'controller' => 'Dashboard', 'action' => 'index'];
         $request =& $this->request;
 
         Event::trigger('PrimaryRoutes', $this->router);
 
-
         $denied = [$this, 'permissionDenied'];
 
         $rtn = $this->registerRouter($route, $defaults, $request, $denied);
+
+        $this->router->register('/robots.txt', ['controller' => 'Page'], function (&$route, Response &$response) {
+            header('Content-Type: text/plain');
+            die('User-Agent: *' . PHP_EOL . 'Disallow: /manage/' . PHP_EOL . 'Allow: /');
+        });
 
         Event::trigger('AfterSystemInit', $rtn);
 
