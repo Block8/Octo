@@ -74,4 +74,32 @@ trait ContactStoreBase
             throw new StoreException('Could not get Contact by Id', 0, $ex);
         }
     }
+    /**
+    * @param $value
+    * @param string $useConnection Connection type to use.
+    * @throws StoreException
+    * @return Contact
+    */
+    public function getByEmail($value, $useConnection = 'read')
+    {
+        if (is_null($value)) {
+            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
+        }
+
+        $query = new Query($this->getNamespace('Contact').'\Model\Contact', $useConnection);
+        $query->select('*')->from('contact')->limit(1);
+        $query->where('`email` = :email');
+        $query->bind(':email', $value);
+
+        try {
+            $query->execute();
+            $result = $query->fetch();
+
+            $this->setCache($value, $result);
+
+            return $result;
+        } catch (PDOException $ex) {
+            throw new StoreException('Could not get Contact by Email', 0, $ex);
+        }
+    }
 }

@@ -25,6 +25,9 @@ trait ContactBase
         $this->data['email'] = null;
         $this->getters['email'] = 'getEmail';
         $this->setters['email'] = 'setEmail';
+        $this->data['password_hash'] = null;
+        $this->getters['password_hash'] = 'getPasswordHash';
+        $this->setters['password_hash'] = 'setPasswordHash';
         $this->data['phone'] = null;
         $this->getters['phone'] = 'getPhone';
         $this->setters['phone'] = 'setPhone';
@@ -81,6 +84,18 @@ trait ContactBase
     public function getEmail()
     {
         $rtn = $this->data['email'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of PasswordHash / password_hash.
+    *
+    * @return string
+    */
+    public function getPasswordHash()
+    {
+        $rtn = $this->data['password_hash'];
 
         return $rtn;
     }
@@ -258,6 +273,23 @@ trait ContactBase
 
         $this->data['email'] = $value;
         $this->setModified('email');
+    }
+
+    /**
+    * Set the value of PasswordHash / password_hash.
+    *
+    * @param $value string
+    */
+    public function setPasswordHash($value)
+    {
+        $this->validateString('PasswordHash', $value);
+
+        if ($this->data['password_hash'] === $value) {
+            return;
+        }
+
+        $this->data['password_hash'] = $value;
+        $this->setModified('password_hash');
     }
 
     /**

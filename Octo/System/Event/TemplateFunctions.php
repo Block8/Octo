@@ -5,6 +5,7 @@ use DateTime;
 use b8\Config;
 use Octo\Event\Listener;
 use Octo\Event\Manager;
+use Octo\Member;
 use Octo\System\Model\Setting;
 use Octo\Template;
 use Octo\Html;
@@ -21,6 +22,7 @@ class TemplateFunctions extends Listener
     {
         $template->now = new DateTime();
         $template->config = Config::getInstance();
+        $template->member = Member::getInstance();
 
         if (isset($_SESSION) && is_array($_SESSION)) {
             $template->session = $_SESSION;
