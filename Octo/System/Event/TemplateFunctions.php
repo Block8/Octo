@@ -21,7 +21,10 @@ class TemplateFunctions extends Listener
     {
         $template->now = new DateTime();
         $template->config = Config::getInstance();
-        $template->session = $_SESSION;
+
+        if (isset($_SESSION) && is_array($_SESSION)) {
+            $template->session = $_SESSION;
+        }
 
         $template->addFunction('replace', function ($source, $find, $replace) {
             return str_replace($find, $replace, $source);
