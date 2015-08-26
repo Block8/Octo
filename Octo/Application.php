@@ -158,6 +158,14 @@ class Application extends \b8\Application
     {
         try {
             $rtn = parent::handleRequest();
+
+            if (extension_loaded('newrelic')) {
+                $site = $this->toPhpName($this->config->get('site.name'));
+                $controller = $this->toPhpName($this->route['controller']);
+                $action = $this->toPhpName($this->route['action']);
+
+                newrelic_name_transaction($site . '.' . $controller . '.' . $action);
+            }
         } catch (HttpException $ex) {
             if (defined('CMS_ENV') && CMS_ENV == 'development' && !array_key_exists('ex', $_GET)) {
                 throw $ex;
