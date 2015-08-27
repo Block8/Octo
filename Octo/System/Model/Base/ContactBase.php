@@ -31,6 +31,9 @@ trait ContactBase
         $this->data['phone'] = null;
         $this->getters['phone'] = 'getPhone';
         $this->setters['phone'] = 'setPhone';
+        $this->data['mobile'] = null;
+        $this->getters['mobile'] = 'getMobile';
+        $this->setters['mobile'] = 'setMobile';
         $this->data['title'] = null;
         $this->getters['title'] = 'getTitle';
         $this->setters['title'] = 'setTitle';
@@ -108,6 +111,18 @@ trait ContactBase
     public function getPhone()
     {
         $rtn = $this->data['phone'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Mobile / mobile.
+    *
+    * @return string
+    */
+    public function getMobile()
+    {
+        $rtn = $this->data['mobile'];
 
         return $rtn;
     }
@@ -307,6 +322,23 @@ trait ContactBase
 
         $this->data['phone'] = $value;
         $this->setModified('phone');
+    }
+
+    /**
+    * Set the value of Mobile / mobile.
+    *
+    * @param $value string
+    */
+    public function setMobile($value)
+    {
+        $this->validateString('Mobile', $value);
+
+        if ($this->data['mobile'] === $value) {
+            return;
+        }
+
+        $this->data['mobile'] = $value;
+        $this->setModified('mobile');
     }
 
     /**

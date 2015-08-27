@@ -22,9 +22,7 @@ class MemberController extends Controller
             $member = Store::get('Contact')->getByEmail($this->getParam('email'));
 
             if ($member && password_verify($this->getParam('password', ''), $member->getPasswordHash())) {
-                $_SESSION[Member::getSessionKey()] = $member->getId();
-
-                Event::trigger('memberLogin', $member);
+                Member::getInstance()->login($member);
 
                 $this->response = new RedirectResponse($this->response);
                 $this->response->setHeader('Location', $this->getParam('rtn', '/'));
