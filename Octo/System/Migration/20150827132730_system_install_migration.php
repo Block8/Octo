@@ -97,6 +97,24 @@ class SystemInstallMigration extends AbstractMigration
             $table->addColumn('is_blocked', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 0]);
         }
 
+        $table->save();
+
+        // Update all the columns to ensure they match spec:
+        $table->changeColumn('email', 'string', ['limit' => 250, 'null' => false]);
+        $table->changeColumn('password_hash', 'string', ['limit' => 250, 'null' => true, 'default' => null]);
+        $table->changeColumn('phone', 'string', ['limit' => 100, 'null' => true, 'default' => null]);
+        $table->changeColumn('mobile', 'string', ['limit' => 100, 'null' => true, 'default' => null]);
+        $table->changeColumn('title', 'string', ['limit' => 10, 'null' => true, 'default' => null]);
+        $table->changeColumn('gender', 'string', ['limit' => 10, 'null' => true, 'default' => null]);
+        $table->changeColumn('first_name', 'string', ['limit' => 100, 'null' => true, 'default' => null]);
+        $table->changeColumn('last_name', 'string', ['limit' => 100, 'null' => true, 'default' => null]);
+        $table->changeColumn('address', 'text', ['limit' => MysqlAdapter::TEXT_REGULAR, 'null' => true, 'default' => null]);
+        $table->changeColumn('postcode', 'string', ['limit' => 10, 'null' => true, 'default' => null]);
+        $table->changeColumn('date_of_birth', 'datetime', ['null' => true, 'default' => null]);
+        $table->changeColumn('company', 'string', ['limit' => 250, 'null' => true, 'default' => null]);
+        $table->changeColumn('marketing_optin', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 0]);
+        $table->changeColumn('is_blocked', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 0]);
+
         if (!$table->hasIndex('email')) {
             $table->addIndex('email', ['unique' => true]);
         }
@@ -116,6 +134,10 @@ class SystemInstallMigration extends AbstractMigration
         if (!$table->hasColumn('content')) {
             $table->addColumn('content', 'text', ['limit' => MysqlAdapter::TEXT_LONG, 'null' => false, 'default' => null]);
         }
+
+        $table->save();
+
+        $table->changeColumn('content', 'text', ['limit' => MysqlAdapter::TEXT_LONG, 'null' => false, 'default' => null]);
 
         $table->save();
     }
@@ -156,6 +178,16 @@ class SystemInstallMigration extends AbstractMigration
         if (!$table->hasColumn('link')) {
             $table->addColumn('link', 'string', ['limit' => 500, 'null' => true, 'default' => null]);
         }
+
+        $table->save();
+
+        $table->changeColumn('type', 'integer', ['null' => true, 'default' => null]);
+        $table->changeColumn('scope', 'string', ['limit' => 32, 'null' => true, 'default' => null]);
+        $table->changeColumn('scope_id', 'string', ['limit' => 32, 'null' => true, 'default' => null]);
+        $table->changeColumn('user_id', 'integer', ['signed' => false, 'null' => true, 'default' => null]);
+        $table->changeColumn('message', 'string', ['limit' => 500, 'null' => false]);
+        $table->changeColumn('log_date', 'datetime');
+        $table->changeColumn('link', 'string', ['limit' => 500, 'null' => true, 'default' => null]);
 
         if (!$table->hasIndex('scope')) {
             $table->addIndex('scope', ['unique' => false]);
@@ -198,6 +230,12 @@ class SystemInstallMigration extends AbstractMigration
         }
 
         $table->save();
+
+        $table->changeColumn('user_id', 'integer', ['signed' => false, 'null' => false]);
+        $table->changeColumn('uri', 'string', ['limit' => 500, 'null' => false]);
+        $table->changeColumn('can_access', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 0]);
+
+        $table->save();
     }
 
     protected function createSearchIndex()
@@ -224,6 +262,13 @@ class SystemInstallMigration extends AbstractMigration
         if (!$table->hasColumn('instances')) {
             $table->addColumn('instances', 'integer', ['null' => false, 'default' => 1]);
         }
+
+        $table->save();
+
+        $table->changeColumn('word', 'string', ['limit' => 50, 'null' => false]);
+        $table->changeColumn('model', 'string', ['limit' => 50, 'null' => false]);
+        $table->changeColumn('content_id', 'string', ['limit' => 32, 'null' => false]);
+        $table->changeColumn('instances', 'integer', ['null' => false, 'default' => 1]);
 
         if (!$table->hasIndex(['word', 'instances', 'model', 'content_id'])) {
             $table->addIndex(['word', 'instances', 'model', 'content_id'], ['unique' => false]);
@@ -256,6 +301,13 @@ class SystemInstallMigration extends AbstractMigration
         if (!$table->hasColumn('hidden')) {
             $table->addColumn('hidden', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => true, 'default' => 0]);
         }
+
+        $table->save();
+
+        $table->changeColumn('key', 'string', ['limit' => 100, 'null' => false]);
+        $table->changeColumn('value', 'text', ['null' => true]);
+        $table->changeColumn('scope', 'string', ['limit' => 100, 'null' => false]);
+        $table->changeColumn('hidden', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => true, 'default' => 0]);
 
         if (!$table->hasIndex(['key', 'scope'])) {
             $table->addIndex(['key', 'scope'], ['unique' => true]);
@@ -308,6 +360,17 @@ class SystemInstallMigration extends AbstractMigration
         if (!$table->hasColumn('active')) {
             $table->addColumn('active', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 1]);
         }
+
+        $table->save();
+
+        $table->changeColumn('email', 'string', ['limit' => 250, 'null' => false]);
+        $table->changeColumn('hash', 'string', ['limit' => 250, 'null' => false]);
+        $table->changeColumn('name', 'string', ['limit' => 250, 'null' => true, 'default' => null]);
+        $table->changeColumn('is_admin', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 0]);
+        $table->changeColumn('is_hidden', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 0]);
+        $table->changeColumn('date_added', 'datetime', ['null' => true, 'default' => null]);
+        $table->changeColumn('date_active', 'datetime', ['null' => true, 'default' => null]);
+        $table->changeColumn('active', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'null' => false, 'default' => 1]);
 
         if (!$table->hasIndex(['email'])) {
             $table->addIndex(['email'], ['unique' => true]);
