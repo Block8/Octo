@@ -104,4 +104,11 @@ class Member
 
         return $form;
     }
+
+    public function login(Contact $contact)
+    {
+        $_SESSION[self::getSessionKey()] = $contact->getId();
+        $this->active = $contact;
+        Event::trigger('memberLogin', $member);
+    }
 }
