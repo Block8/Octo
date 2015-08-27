@@ -30,7 +30,7 @@ $conf = [
         'octo' => [
             'adapter' => 'mysql',
             'host' => end($writeServers),
-            'name' => 'octo_phinx',
+            'name' => $config->get('b8.database.name'),
             'user' => $config->get('b8.database.username'),
             'pass' => $config->get('b8.database.password'),
         ],

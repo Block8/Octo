@@ -43,6 +43,9 @@ trait UserBase
         $this->data['active'] = null;
         $this->getters['active'] = 'getActive';
         $this->setters['active'] = 'setActive';
+        $this->data['date_active'] = null;
+        $this->getters['date_active'] = 'getDateActive';
+        $this->setters['date_active'] = 'setDateActive';
 
         // Foreign keys:
     }
@@ -142,6 +145,22 @@ trait UserBase
     public function getActive()
     {
         $rtn = $this->data['active'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of DateActive / date_active.
+    *
+    * @return \DateTime
+    */
+    public function getDateActive()
+    {
+        $rtn = $this->data['date_active'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
 
         return $rtn;
     }
@@ -291,5 +310,22 @@ trait UserBase
 
         $this->data['active'] = $value;
         $this->setModified('active');
+    }
+
+    /**
+    * Set the value of DateActive / date_active.
+    *
+    * @param $value \DateTime
+    */
+    public function setDateActive($value)
+    {
+        $this->validateDate('DateActive', $value);
+
+        if ($this->data['date_active'] === $value) {
+            return;
+        }
+
+        $this->data['date_active'] = $value;
+        $this->setModified('date_active');
     }
 }

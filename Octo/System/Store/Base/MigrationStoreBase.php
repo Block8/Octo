@@ -25,53 +25,18 @@ trait MigrationStoreBase
     {
         $this->tableName = 'migration';
         $this->modelName = '\Octo\System\Model\Migration';
-        $this->primaryKey = 'id';
+        $this->primaryKey = '';
     }
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return Migration
-    */
+     * @param $value
+     * @param $useConnection
+     * @deprecated
+     * @throws StoreException
+     */
     public function getByPrimaryKey($value, $useConnection = 'read')
     {
-        return $this->getById($value, $useConnection);
+        throw new StoreException('getByPrimaryKey is not implemented for this store, as the table has no primary key.');
     }
 
 
-    /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return Migration
-    */
-    public function getById($value, $useConnection = 'read')
-    {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-        // This is the primary key, so try and get from cache:
-        $cacheResult = $this->getFromCache($value);
-
-        if (!empty($cacheResult)) {
-            return $cacheResult;
-        }
-
-
-        $query = new Query($this->getNamespace('Migration').'\Model\Migration', $useConnection);
-        $query->select('*')->from('migration')->limit(1);
-        $query->where('`id` = :id');
-        $query->bind(':id', $value);
-
-        try {
-            $query->execute();
-            $result = $query->fetch();
-
-            $this->setCache($value, $result);
-
-            return $result;
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Migration by Id', 0, $ex);
-        }
-    }
 }
