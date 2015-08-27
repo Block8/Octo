@@ -28,6 +28,19 @@ class Application extends \b8\Application
     {
         Event::trigger('BeforeSystemInit', $this);
 
+        if (!defined('IS_CONSOLE')) {
+            $this->initHttpRequest();
+        }
+
+        Event::trigger('AfterSystemInit', $rtn);
+
+        return $rtn;
+    }
+
+    public function initHttpRequest()
+    {
+        Event::trigger('BeforeHttpRequestInit', $this);
+
         $path = $this->request->getPath();
 
         if (substr($path, -1) == '/' && $path != '/') {
@@ -39,8 +52,6 @@ class Application extends \b8\Application
         $this->router->clearRoutes();
         Event::trigger('BackupRoutes', $this->router);
         $this->router->register('/:controller/:action', ['namespace' => 'Controller', 'action' => 'index']);
-
-
 
         $route = '/'.$this->config->get('site.admin_uri').'/:controller/:action';
         $defaults = ['namespace' => 'Admin\\Controller', 'controller' => 'Dashboard', 'action' => 'index'];
@@ -57,9 +68,7 @@ class Application extends \b8\Application
             die('User-Agent: *' . PHP_EOL . 'Disallow: /manage/' . PHP_EOL . 'Allow: /');
         });
 
-        Event::trigger('AfterSystemInit', $rtn);
-
-        return $rtn;
+        Event::trigger('AfterHttpRequestInit', $this);
     }
 
     /**

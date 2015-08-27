@@ -3,11 +3,19 @@
 // Set up constants:
 if (!defined('CMS_PATH')) {
     define('CMS_PATH', dirname(__FILE__) . '/');
-    define('CMS_BASE_PATH', dirname(CMS_PATH . '../'));
+    define('CMS_BASE_PATH', realpath(CMS_PATH . '../') . '/');
 }
 
 if (isset($_SERVER['APPLICATION_ENV'])) {
     define('CMS_ENV', $_SERVER['APPLICATION_ENV']);
+}
+
+if (!defined('APP_PATH')) {
+    if (stripos(CMS_BASE_PATH, 'vendor/block8/octo') !== false) {
+        define('APP_PATH', realpath(CMS_BASE_PATH . '../../../') . '/');
+    } else {
+        define('APP_PATH', getcwd() . '/');
+    }
 }
 
 date_default_timezone_set('Europe/London');
