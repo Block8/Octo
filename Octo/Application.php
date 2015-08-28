@@ -133,10 +133,14 @@ class Application extends \b8\Application
      */
     protected function setupUserProperties($route, $response, $denied)
     {
+        /** @var \Octo\System\Model\User $user */
         $user = Store::get('User')->getByPrimaryKey($_SESSION['user_id']);
 
         if ($user && $user->getActive()) {
             $_SESSION['user'] = $user;
+
+            $user->setDateActive(new \DateTime());
+            Store::get('User')->save($user);
 
             $uri = '/';
 
