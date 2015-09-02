@@ -298,11 +298,13 @@ trait UserBase
     /**
     * Set the value of Active / active.
     *
+    * Must not be null.
     * @param $value int
     */
     public function setActive($value)
     {
         $this->validateInt('Active', $value);
+        $this->validateNotNull('Active', $value);
 
         if ($this->data['active'] === $value) {
             return;
