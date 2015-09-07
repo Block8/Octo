@@ -35,6 +35,17 @@ class TemplateFunctions extends Listener
         $template->addFunction('regexReplace', function ($source, $find, $replace) {
             return preg_replace('/'.$find.'/', $replace, $source);
         });
+
+        $template->addFunction('wordLimit', function ($string, $wordLimit)
+        {
+            if (str_word_count($string, 0) > $wordLimit) {
+                $words = str_word_count($string, 2);
+                $pos = array_keys($words);
+                $string = trim(substr($string, 0, $pos[$wordLimit])) . '...';
+            }
+
+            return $string;
+        });
     }
 
     public function adminTemplateFunctions(Template &$template)
