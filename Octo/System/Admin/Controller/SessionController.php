@@ -46,7 +46,7 @@ class SessionController extends Controller
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
                 $_SESSION['user_id'] = $user->getId();
 
-                $url = '/' . $this->config->get('site.admin_uri');
+                $url = $this->config->get('site.full_admin_url');
 
                 if (isset($_SESSION['previous_url'])) {
                     $url = $_SESSION['previous_url'];
@@ -69,8 +69,8 @@ class SessionController extends Controller
     {
         $_SESSION = array();
         session_destroy();
-        header('Location: /' . $this->config->get('site.admin_uri') . '/session/login?logout=1');
-        die;
+
+        $this->redirect('/session/login?logout=1');
     }
 
     public function forgotPassword()
@@ -88,14 +88,14 @@ class SessionController extends Controller
             $key = md5(date('Y-m-d') . $user->getHash());
             $name = $user->getName();
             $siteName = $this->config->get('site.name');
-            $url = $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri') . '/';
+            $url = $this->config->get('site.full_admin_url');
 
             $message = <<<OUT
 Dear {$name},
 
 You have received this email because you, or someone else, has requested a password reset for {$siteName}.
 
-If this was you, please click the following link to reset your password: {$url}session/reset-password/{$userId}/{$key}
+If this was you, please click the following link to reset your password: {$url}/session/reset-password/{$userId}/{$key}
 
 Otherwise, please ignore this email and no action will be taken.
 
@@ -126,8 +126,7 @@ OUT;
 
             $_SESSION['user_id'] = $user->getId();
 
-            header('Location: ' . $this->config->get('site.url') . '/' . $this->config->get('site.admin_uri'));
-            die;
+            $this->redirect('/');
         }
 
         $this->view->userId = $userId;

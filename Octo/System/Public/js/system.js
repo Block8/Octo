@@ -135,7 +135,7 @@ window.pageEditor = Class.extend({
     saveContent: function () {
         var self = this;
 
-        $.post('/'+window.adminUri+'/page/save/' + this.id, {content: JSON.stringify(this.content)}, function (response) {
+        $.post(window.adminUri + '/page/save/' + this.id, {content: JSON.stringify(this.content)}, function (response) {
             response = JSON.parse(response);
 
             if (self.content_id != response.content_id) {
@@ -149,7 +149,7 @@ window.pageEditor = Class.extend({
     saveMetaData: function() {
         $('.pace').removeClass('hide');
 
-        $.post('/'+window.adminUri+'/page/save/' + this.id, {page: this.page}, function () {
+        $.post(window.adminUri + '/page/save/' + this.id, {page: this.page}, function () {
             document.getElementById('page-preview').contentWindow.location.reload();
             $('.page-save-notice').addClass('alert-success').removeClass('alert-warning').text('Saved.').fadeOut('slow');
         });
@@ -212,7 +212,7 @@ function imagePicker(id, label, value)
         minimumInputLength: 1,
         width: '100%',
         ajax: {
-            url: '/'+window.adminUri+'/media/autocomplete/images',
+            url: window.adminUri + '/media/autocomplete/images',
             dataType: 'json',
             data: function(term) {
                 return {
@@ -253,7 +253,7 @@ function pagePicker(id, label, value)
         minimumInputLength: 1,
         width: '560px',
         ajax: {
-            url: '/'+window.adminUri+'/page/autocomplete',
+            url: window.adminUri + '/page/autocomplete',
             dataType: 'json',
             data: function(term) {
                 return {
@@ -289,7 +289,7 @@ function userPicker(id, label, value)
         minimumInputLength: 1,
         initSelection : function(element, callback) {
             if (value) {
-                $.getJSON('/'+window.adminUri+'/user/autocomplete?q=' + value, function (data) {
+                $.getJSON(window.adminUri + '/user/autocomplete?q=' + value, function (data) {
                     console.log(data)
                     if (data.results[0]) {
                         callback(data.results[0]);
@@ -299,7 +299,7 @@ function userPicker(id, label, value)
 
         },
         ajax: {
-            url: '/'+window.adminUri+'/user/autocomplete',
+            url: window.adminUri + '/user/autocomplete',
             dataType: 'json',
             data: function(term) {
                 return {
@@ -393,7 +393,7 @@ $(document).ready(function () {
                     img.attr('src', '/media/render/' + input.val() + '/160/90');
                     img.show();
 
-                    $.getJSON('/'+window.adminUri+'/media/autocomplete/images?q=' + input.val(), function (data) {
+                    $.getJSON(window.adminUri + '/media/autocomplete/images?q=' + input.val(), function (data) {
                         if (data.results[0]) {
                             callback(data.results[0]);
                         }
@@ -402,7 +402,7 @@ $(document).ready(function () {
 
             },
             ajax: {
-                url: '/'+window.adminUri+'/media/autocomplete/images',
+                url: window.adminUri + '/media/autocomplete/images',
                 dataType: 'json',
                 data: function(term) {
                     return {
@@ -432,7 +432,7 @@ $(document).ready(function () {
             initSelection : function(element, callback) {
 
                 if (input.val()) {
-                    $.getJSON('/'+window.adminUri+'/media/autocomplete/files?q=' + input.val(), function (data) {
+                    $.getJSON(window.adminUri + '/media/autocomplete/files?q=' + input.val(), function (data) {
                         if (data.results[0]) {
                             callback(data.results[0]);
                         }
@@ -441,7 +441,7 @@ $(document).ready(function () {
 
             },
             ajax: {
-                url: '/'+window.adminUri+'/media/autocomplete/files',
+                url: window.adminUri + '/media/autocomplete/files',
                 dataType: 'json',
                 data: function(term) {
                     return {
@@ -466,7 +466,7 @@ $(document).ready(function () {
             initSelection : function(element, callback) {
 
                 if (input.val()) {
-                    $.getJSON('/'+window.adminUri+'/page/autocomplete?q=' + input.val(), function (data) {
+                    $.getJSON(window.adminUri + '/page/autocomplete?q=' + input.val(), function (data) {
                         if (data.results[0]) {
                             callback(data.results[0]);
                         }
@@ -475,7 +475,7 @@ $(document).ready(function () {
 
             },
             ajax: {
-                url: '/'+window.adminUri+'/page/autocomplete',
+                url: window.adminUri + '/page/autocomplete',
                 dataType: 'json',
                 data: function(term) {
                     return {

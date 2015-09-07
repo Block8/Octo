@@ -32,16 +32,19 @@ class AssetManager extends Listener
 
     protected function getAssetCode()
     {
+        /** @var \b8\Config */
+        $config = Config::getInstance();
+        $paths = $config->get('Octo.paths.modules');
+
         /** @var \Octo\AssetManager $assets */
-        $paths = Config::getInstance()->get('Octo.paths.modules');
-        $assets = Config::getInstance()->get('Octo.AssetManager');
+        $assets = $config->get('Octo.AssetManager');
         $inject = ['css' => '', 'js' => ''];
 
         foreach ($assets->getCss() as $css) {
             $path = $paths[$css['module']] . 'Public/css/' . $css['name'] . '.js';
 
             if (is_file($path)) {
-                $href = '/asset/css/'.$css['module'].'/'.$css['name'] . '?t=' . filemtime($path);
+                $href = $config->get('site.url').'/asset/css/'.$css['module'].'/'.$css['name'].'?t='.filemtime($path);
                 $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$href.'">';
             }
         }
@@ -50,7 +53,7 @@ class AssetManager extends Listener
             $path = $paths[$js['module']] . 'Public/js/' . $js['name'] . '.js';
 
             if (is_file($path)) {
-                $href = '/asset/js/'.$js['module'].'/'.$js['name'] . '?t=' . filemtime($path);
+                $href = $config->get('site.url').'/asset/js/'.$js['module'].'/'.$js['name'].'?t='.filemtime($path);
                 $inject['js'] .= '<script src="'.$href.'"></script>';
             }
         }

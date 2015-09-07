@@ -62,6 +62,8 @@ if (is_file(APP_PATH . 'siteconfig.php')) {
     require_once(APP_PATH . 'siteconfig.php');
 }
 
+$_SETTINGS['site']['full_admin_url'] = $_SETTINGS['site']['url'] . '/' . $_SETTINGS['site']['admin_uri'];
+
 $config->setArray($_SETTINGS);
 $moduleManager->initialiseModules();
 

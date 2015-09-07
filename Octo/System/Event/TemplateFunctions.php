@@ -105,7 +105,7 @@ class TemplateFunctions extends Listener
         });
 
         $template->set('date_now', new \DateTime());
-        $template->set('adminUri', $config->get('site.admin_uri'));
+        $template->set('adminUri', $config->get('site.full_admin_url'));
         $template->set('config', $config);
         $template->set('settings', Setting::getAllAsArray());
         $template->set('GET', $_GET);

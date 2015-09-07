@@ -13,19 +13,19 @@
 
                     <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="" href="/{@adminUri}/contact/edit/{@contact.id}">Edit Contact</a></li>
+                        <li><a class="" href="{@adminUri}/contact/edit/{@contact.id}">Edit Contact</a></li>
 
                         {if contact.is_blocked}
-                        <li><a href="/{@adminUri}/contact/unblock/{@contact.id}" class="">Unblock Contact</a></li>
+                        <li><a href="{@adminUri}/contact/unblock/{@contact.id}" class="">Unblock Contact</a></li>
                         {/if}
 
                         {ifnot contact.is_blocked}
-                        <li><a href="/{@adminUri}/contact/block/{@contact.id}" class="">Block Contact</a></li>
+                        <li><a href="{@adminUri}/contact/block/{@contact.id}" class="">Block Contact</a></li>
                         {/ifnot}
 
                         {if canAccess(uri: "/contact/delete")}
                         <li>
-                            <a href="/{@adminUri}/contact/delete/{@contact.id}" class="btn-delete">Delete Contact</a>
+                            <a href="{@adminUri}/contact/delete/{@contact.id}" class="btn-delete">Delete Contact</a>
                         </li>
                         {/if}
 

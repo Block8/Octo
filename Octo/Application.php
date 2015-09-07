@@ -44,8 +44,8 @@ class Application extends \b8\Application
         $path = $this->request->getPath();
 
         if (substr($path, -1) == '/' && $path != '/') {
-            header('HTTP/1.1 301 Moved Permanently', true, 301);
-            header('Location: ' . substr($path, 0, -1));
+            header('HTTP/1.1 302 Moved Permanently', true, 301);
+            header('Location: ' . $this->config->get('site.url') . substr($path, 0, -1));
             die;
         }
 
@@ -116,7 +116,7 @@ class Application extends \b8\Application
             } else {
                 $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
                 $response = new RedirectResponse($this->response);
-                $response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/session/login');
+                $response->setHeader('Location', $this->config->get('site.full_admin_url').'/session/login');
             }
 
             return false;
@@ -280,7 +280,7 @@ class Application extends \b8\Application
         $log->save();
 
         $response = new RedirectResponse($response);
-        $response->setHeader('Location', '/'.$this->config->get('site.admin_uri'));
+        $response->setHeader('Location', $this->config->get('site.full_admin_url'));
         $response->flush();
     }
 }

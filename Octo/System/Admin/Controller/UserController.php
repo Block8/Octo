@@ -88,7 +88,7 @@ class UserController extends Controller
 
                     $this->successMessage($params['name'] . ' was added successfully.', true);
 
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/user');
+                    $this->redirect('/user');
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error adding the user. Please try again.');
                 }
@@ -137,7 +137,7 @@ class UserController extends Controller
                     $user = $this->userStore->save($user);
                     $this->successMessage($params['name'] . ' was edited successfully.', true);
 
-                    header('Location: /' . $this->config->get('site.admin_uri') . '/user');
+                    $this->redirect('/user');
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the user. Please try again.');
                 }
@@ -155,7 +155,7 @@ class UserController extends Controller
         $user = $this->userStore->getById($userId);
         $this->userStore->delete($user);
         $this->successMessage($user->getName() . ' was deleted successfully.', true);
-        header('Location: /' . $this->config->get('site.admin_uri') . '/user/');
+        $this->redirect('/user');
     }
 
     protected function userForm($values, $type = 'add')
@@ -164,9 +164,9 @@ class UserController extends Controller
         $form->setMethod('POST');
 
         if ($type == 'add') {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/user/add');
+            $form->setAction($this->config->get('site.full_admin_url') . '/user/add');
         } else {
-            $form->setAction('/' . $this->config->get('site.admin_uri') . '/user/edit/' . $values['id']);
+            $form->setAction($this->config->get('site.full_admin_url') . '/user/edit/' . $values['id']);
         }
 
         $form->setClass('smart-form');

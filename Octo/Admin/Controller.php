@@ -249,4 +249,11 @@ abstract class Controller extends \b8\Controller
     {
         return $this->request;
     }
+
+    protected function redirect($to)
+    {
+        $this->response = new Response\RedirectResponse($this->response);
+        $this->response->setHeader('Location', $this->config->get('site.full_admin_url') . $to);
+        $this->response->flush();
+    }
 }

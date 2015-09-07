@@ -125,7 +125,7 @@ class Item
 
         if ($forDisplay) {
             $config = Config::getInstance();
-            $link = '/' . $config->get('site.admin_uri') . $link;
+            $link = $config->get('site.full_admin_url') . $link;
         }
 
         return $link;
@@ -188,7 +188,7 @@ class Item
     public function isActive()
     {
         $config = Config::getInstance();
-        $parts = explode('/'.$config->get('site.admin_uri').'/', $_SERVER['REQUEST_URI']);
+        $parts = explode($config->get('site.full_admin_url').'/', $_SERVER['REQUEST_URI']);
 
         if (count($parts) < 2) {
             return;

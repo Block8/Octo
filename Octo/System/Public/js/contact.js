@@ -4,7 +4,7 @@ $(document).ready(function () {
         $('.contact-card').remove();
         $(this).css({'display': 'relative'});
 
-        $.get('/'+window.adminUri+'/contact/popup/' + $(this).data('id'), function (data) {
+        $.get(window.adminUri + '/contact/popup/' + $(this).data('id'), function (data) {
             $(this).append(data);
         });
     });
@@ -74,7 +74,7 @@ function showContactCard(contactId, el) {
     el.css({'position': 'relative'});
 
     // Load the card and append it to the element we're attached to:
-    $.get('/'+window.adminUri+'/contact/popup/' + contactId, function (contactCard) {
+    $.get(window.adminUri + '/contact/popup/' + contactId, function (contactCard) {
         el.append(contactCard);
 
         $('body').on('click', function (e) {

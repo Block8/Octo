@@ -34,7 +34,7 @@ CKEDITOR.plugins.add( 'octolink', {
                                         width: '560px',
                                         dropdownCss: {'z-index': 99999},
                                         ajax: {
-                                            url: '/'+window.adminUri+'/page/autocomplete/uri',
+                                            url: window.adminUri + '/page/autocomplete/uri',
                                             dataType: 'json',
                                             data: function(term) {
                                                 return {

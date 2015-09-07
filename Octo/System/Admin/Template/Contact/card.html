@@ -6,11 +6,11 @@
         {if canAccess(uri: "/contact/block")}
         <div class="box-tools pull-right" role="menu">
             {if contact.is_blocked}
-            <a href="/{@adminUri}/contact/unblock/{@contact.id}" class="btn btn-success">Unblock</a>
+            <a href="{@adminUri}/contact/unblock/{@contact.id}" class="btn btn-success">Unblock</a>
             {/if}
 
             {ifnot contact.is_blocked}
-            <a href="/{@adminUri}/contact/block/{@contact.id}" class="btn btn-danger">Block</a>
+            <a href="{@adminUri}/contact/block/{@contact.id}" class="btn btn-danger">Block</a>
             {/ifnot}
         </div>
         {/if}
