@@ -63,18 +63,16 @@ if (is_file(APP_PATH . 'siteconfig.php')) {
 }
 
 $_SETTINGS['site']['full_admin_url'] = $_SETTINGS['site']['url'] . '/' . $_SETTINGS['site']['admin_uri'];
+$_SETTINGS['Octo']['AssetManager'] = new \Octo\AssetManager();
 
 $config->setArray($_SETTINGS);
 $moduleManager->initialiseModules();
-
-$assetManager = new \Octo\AssetManager();
 
 $templatePath = realpath(APP_PATH . $_SETTINGS['site']['namespace'] . '/Template');
 define('SITE_TEMPLATE_PATH', $templatePath);
 
 if (is_dir($templatePath)) {
     $settings = $config->get('Octo');
-    $settings['AssetManager'] = $assetManager;
     $settings['paths']['templates'][] = $templatePath . '/';
     $config->set('Octo', $settings);
 }

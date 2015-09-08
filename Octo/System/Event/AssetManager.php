@@ -41,12 +41,16 @@ class AssetManager extends Listener
         $inject = ['css' => '', 'js' => ''];
 
         foreach ($assets->getCss() as $css) {
-            $path = $paths[$css['module']] . 'Public/css/' . $css['name'] . '.js';
+            $path = $paths[$css['module']] . 'Public/css/' . $css['name'] . '.css';
 
             if (is_file($path)) {
                 $href = $config->get('site.url').'/asset/css/'.$css['module'].'/'.$css['name'].'?t='.filemtime($path);
                 $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$href.'">';
             }
+        }
+
+        foreach ($assets->getExternalJs() as $js) {
+            $inject['js'] .= '<script src="'.$js.'"></script>';
         }
 
         foreach ($assets->getJs() as $js) {
@@ -56,10 +60,6 @@ class AssetManager extends Listener
                 $href = $config->get('site.url').'/asset/js/'.$js['module'].'/'.$js['name'].'?t='.filemtime($path);
                 $inject['js'] .= '<script src="'.$href.'"></script>';
             }
-        }
-
-        foreach ($assets->getExternalJs() as $js) {
-            $inject['js'] .= '<script src="'.$js.'"></script>';
         }
 
         return $inject;
