@@ -114,12 +114,7 @@ if (!defined('IS_CONSOLE')) {
         }
 
         $response = $app->handleRequest();
-
-        //var_dump(\b8\Database::$queryCount);
-        //var_dump(\b8\Database::$queries);
-
-        die($response);
-
+        print $response;
     } catch (Exception $ex) {
         // Global everything has broken catch-all handler.
         throw $ex;
