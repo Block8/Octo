@@ -85,6 +85,7 @@ class Member
         $form = new Form();
         $form->setMethod('POST');
         $form->setAction('/member/login');
+        $form->disableValidation();
 
         if (!is_null($returnUrl)) {
             $rtn = new Hidden();
