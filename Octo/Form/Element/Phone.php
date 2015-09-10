@@ -25,7 +25,6 @@ class Phone extends Text
         /** @var \Octo\AssetManager $assets */
         $assets = Config::getInstance()->get('Octo.AssetManager');
         $assets->addJs('Forms', 'phoneformat');
-
         $view->type = 'tel';
     }
 }

@@ -1,14 +1,19 @@
 <?php
 namespace Octo\Form\Element;
 
+use b8\Config;
 use b8\Form\Element;
 use b8\Form\FieldSet;
 use b8\Form\Element\Text;
 
 class Address extends FieldSet
 {
-    public function __construct($name = null)
+    protected $countryEnabled = false;
+
+    public function __construct($name = null, $includeCountry = false)
     {
+        $this->countryEnabled = $includeCountry;
+
         parent::__construct($name);
 
         $address1 = $name . '[address1]';
@@ -30,6 +35,10 @@ class Address extends FieldSet
         $this->addField($address2);
         $this->addField($town);
         $this->addField($postcode);
+
+        if ($includeCountry) {
+            $this->addField(Country::create($name . '[country]', 'Country', true, 'country'));
+        }
     }
 
     public function setRequired($required)
