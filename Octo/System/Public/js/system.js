@@ -382,25 +382,12 @@ $(document).ready(function () {
         var img = $('<img>');
         img.insertAfter(input).css({'margin': '10px 0'}).hide();
 
+        console.log('INPUTTYING')
         input.select2({
             placeholder: "Search for an image",
             allowClear: true,
             minimumInputLength: 1,
             width: '100%',
-            initSelection : function(element, callback) {
-
-                if (input.val()) {
-                    img.attr('src', '/media/render/' + input.val() + '/160/90');
-                    img.show();
-
-                    $.getJSON(window.adminUri + '/media/autocomplete/images?q=' + input.val(), function (data) {
-                        if (data.results[0]) {
-                            callback(data.results[0]);
-                        }
-                    });
-                }
-
-            },
             ajax: {
                 url: window.adminUri + '/media/autocomplete/images',
                 dataType: 'json',
@@ -419,6 +406,10 @@ $(document).ready(function () {
             img.attr('src', '/media/render/' + $(this).val() + '/160/90');
             img.show();
         });
+
+        if (input.val() != '') {
+            input.trigger('change');
+        }
     });
 
     $('.octo-file-picker').each(function () {
