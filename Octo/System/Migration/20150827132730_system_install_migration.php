@@ -42,7 +42,7 @@ class SystemInstallMigration extends AbstractMigration
         }
 
         if (!$table->hasColumn('email')) {
-            $table->addColumn('email', 'string', ['limit' => 250, 'null' => false]);
+            $table->addColumn('email', 'string', ['limit' => 250, 'null' => true]);
         }
 
         if (!$table->hasColumn('password_hash')) {
@@ -100,7 +100,7 @@ class SystemInstallMigration extends AbstractMigration
         $table->save();
 
         // Update all the columns to ensure they match spec:
-        $table->changeColumn('email', 'string', ['limit' => 250, 'null' => false]);
+        $table->changeColumn('email', 'string', ['limit' => 250, 'null' => true]);
         $table->changeColumn('password_hash', 'string', ['limit' => 250, 'null' => true, 'default' => null]);
         $table->changeColumn('phone', 'string', ['limit' => 100, 'null' => true, 'default' => null]);
         $table->changeColumn('mobile', 'string', ['limit' => 100, 'null' => true, 'default' => null]);
