@@ -26,11 +26,26 @@ class Application extends \b8\Application
      */
     public function init()
     {
+        Event::trigger('BeforeSystemInit', $this);
+
+        if (!defined('IS_CONSOLE')) {
+            $this->initHttpRequest();
+        }
+
+        Event::trigger('AfterSystemInit', $rtn);
+
+        return $rtn;
+    }
+
+    public function initHttpRequest()
+    {
+        Event::trigger('BeforeHttpRequestInit', $this);
+
         $path = $this->request->getPath();
 
         if (substr($path, -1) == '/' && $path != '/') {
-            header('HTTP/1.1 301 Moved Permanently', true, 301);
-            header('Location: ' . substr($path, 0, -1));
+            header('HTTP/1.1 302 Moved Permanently', true, 301);
+            header('Location: ' . $this->config->get('site.url') . substr($path, 0, -1));
             die;
         }
 
@@ -44,10 +59,16 @@ class Application extends \b8\Application
 
         Event::trigger('PrimaryRoutes', $this->router);
 
-
         $denied = [$this, 'permissionDenied'];
 
-        return $this->registerRouter($route, $defaults, $request, $denied);
+        $rtn = $this->registerRouter($route, $defaults, $request, $denied);
+
+        $this->router->register('/robots.txt', ['controller' => 'Page'], function (&$route, Response &$response) {
+            header('Content-Type: text/plain');
+            die('User-Agent: *' . PHP_EOL . 'Disallow: /manage/' . PHP_EOL . 'Allow: /');
+        });
+
+        Event::trigger('AfterHttpRequestInit', $this);
     }
 
     /**
@@ -60,31 +81,45 @@ class Application extends \b8\Application
      */
     public function registerRouter($route, $defaults, $request, $denied)
     {
-        $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$request, &$denied) {
+        $bypass = $this->config->get('Octo.bypass_auth');
+
+        $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$bypass, &$request, &$denied) {
             if (!empty($_GET['session_auth'])) {
                 session_id($_GET['session_auth']);
             }
 
-            session_start();
-
-            if ($route['controller'] != 'session') {
-                if (!empty($_SESSION['user_id'])) {
-                    return $this->setupUserProperties($route, $response, $denied);
-                }
-
-                if ($request->isAjax()) {
-                    $response->setResponseCode(401);
-                    $response->setContent('');
-                } else {
-                    $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
-                    $response = new RedirectResponse($this->response);
-                    $response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/session/login');
-                }
-
-                return false;
+            if (session_status() != PHP_SESSION_ACTIVE) {
+                session_start();
             }
 
-            return true;
+            if (array_key_exists($route['controller'], $bypass)) {
+                $bypass = $bypass[$route['controller']];
+
+                // If we're bypassing authentication for an entire controller:
+                if ($bypass === true) {
+                    return true;
+                }
+
+                // If we're bypassing authentication for a specific action:
+                if (is_array($bypass) && in_array($route['action'], $bypass)) {
+                    return true;
+                }
+            }
+
+            if (!empty($_SESSION['user_id'])) {
+                return $this->setupUserProperties($route, $response, $denied);
+            }
+
+            if ($request->isAjax()) {
+                $response->setResponseCode(401);
+                $response->setContent('');
+            } else {
+                $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
+                $response = new RedirectResponse($this->response);
+                $response->setHeader('Location', $this->config->get('site.full_admin_url').'/session/login');
+            }
+
+            return false;
         });
     }
 
@@ -98,10 +133,14 @@ class Application extends \b8\Application
      */
     protected function setupUserProperties($route, $response, $denied)
     {
+        /** @var \Octo\System\Model\User $user */
         $user = Store::get('User')->getByPrimaryKey($_SESSION['user_id']);
 
         if ($user && $user->getActive()) {
             $_SESSION['user'] = $user;
+
+            $user->setDateActive(new \DateTime());
+            Store::get('User')->save($user);
 
             $uri = '/';
 
@@ -138,6 +177,14 @@ class Application extends \b8\Application
     {
         try {
             $rtn = parent::handleRequest();
+
+            if (extension_loaded('newrelic')) {
+                $site = $this->toPhpName($this->config->get('site.name'));
+                $controller = $this->toPhpName($this->route['controller']);
+                $action = $this->toPhpName($this->route['action']);
+
+                newrelic_name_transaction($site . '.' . $controller . '.' . $action);
+            }
         } catch (HttpException $ex) {
             if (defined('CMS_ENV') && CMS_ENV == 'development' && !array_key_exists('ex', $_GET)) {
                 throw $ex;
@@ -233,7 +280,7 @@ class Application extends \b8\Application
         $log->save();
 
         $response = new RedirectResponse($response);
-        $response->setHeader('Location', '/'.$this->config->get('site.admin_uri'));
+        $response->setHeader('Location', $this->config->get('site.full_admin_url'));
         $response->flush();
     }
 }

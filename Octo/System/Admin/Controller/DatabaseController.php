@@ -27,7 +27,7 @@ class DatabaseController extends Controller
     public function init()
     {
         if (!$_SESSION['user']->getIsAdmin()) {
-            $this->response->setHeader('Location', '/' . $this->config->get('site.admin_uri'));
+            $this->redirect('/');
         }
     }
 
@@ -69,8 +69,7 @@ class DatabaseController extends Controller
             $this->successMessage('All database migrations ran successfully.', true);
         }
 
-        $this->response = new \b8\Http\Response\RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/database');
+        $this->redirect('/database');
     }
 
     public function markAsRun()
@@ -79,7 +78,6 @@ class DatabaseController extends Controller
         $runner->markAllAsRun();
         $this->successMessage('All database migrations ran successfully.', true);
 
-        $this->response = new \b8\Http\Response\RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/database');
+        $this->redirect('/database');
     }
 }

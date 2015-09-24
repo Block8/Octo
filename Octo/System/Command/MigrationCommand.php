@@ -6,7 +6,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use b8\Database;
-use Octo\Database\MigrationRunner;
 
 class MigrationCommand extends Command
 {
@@ -19,13 +18,8 @@ class MigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        unset($input, $output);
+        unset($input);
 
-        try {
-            $runner = new MigrationRunner();
-            $runner->runMigrations();
-        } catch (\Exception $ex) {
-            print $ex->getMessage() . PHP_EOL;
-        }
+        passthru(APP_PATH . 'vendor/bin/phinx migrate -c "' . CMS_PATH . 'phinx.php"');
     }
 }

@@ -81,8 +81,7 @@ class ContactController extends Controller
         $contact->setIsBlocked(1);
         $this->contactStore->save($contact);
 
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', $_SERVER['HTTP_REFERER']);
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function unblock($contactId)
@@ -93,8 +92,7 @@ class ContactController extends Controller
         $contact->setIsBlocked(0);
         $this->contactStore->save($contact);
 
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', $_SERVER['HTTP_REFERER']);
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function index()
@@ -119,10 +117,7 @@ class ContactController extends Controller
             ];
 
             Event::trigger('ContentPublished', $data);
-
-            $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/contact/edit/'.$contact->getId());
-            return;
+            $this->redirect('/contact/edit/'.$contact->getId());
         }
 
         $this->view->form = $this->contactForm();
@@ -144,10 +139,7 @@ class ContactController extends Controller
             ];
 
             Event::trigger('ContentPublished', $data);
-
-            $this->response = new RedirectResponse();
-            $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri').'/contact/edit/'.$contact->getId());
-            return;
+            $this->redirect('/contact/edit/'.$contact->getId());
         }
 
         $form = $this->contactForm();;
@@ -164,9 +156,7 @@ class ContactController extends Controller
         }
 
         $this->successMessage('Contact deleted.', true);
-
-        $this->response = new RedirectResponse();
-        $this->response->setHeader('Location', '/'.$this->config->get('site.admin_uri') . '/contact');
+        $this->redirect('/contact');
     }
 
 

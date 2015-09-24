@@ -38,6 +38,15 @@ class Contact extends Octo\Model
             $value = json_encode($value);
         }
 
+        if (is_null($this->data['postcode'])) {
+            $matches = [];
+
+            if (preg_match('/([a-zA-Z]{1,2}[0-9]{1,2}\s?[0-9][a-zA-Z]{1,2})/', $value, $matches)) {
+                $this->setPostcode($matches[1]);
+                $value = str_replace($matches[1], '', $value);
+            }
+        }
+
         $this->validateString('Address', $value);
 
         if ($this->data['address'] === $value) {
@@ -50,12 +59,23 @@ class Contact extends Octo\Model
 
     public function getAddress()
     {
-        $value = $this->data['address'];
+        $address = ['address1' => null, 'address2' => null, 'town' => null];
 
-        if (is_string($value)) {
-            $value = json_decode($value, true);
+        if (!empty($this->data['address'])) {
+            $addressString = $this->data['address'];
+            $addressArray = json_decode($addressString, true);
+
+            if (is_null($addressArray)) {
+                $addressArray = explode(PHP_EOL, $addressString);
+
+                $address['address1'] = array_shift($addressArray);
+                $address['town'] = array_pop($addressArray);
+                $address['address2'] = implode(', ', $addressArray);
+            } else {
+                $address = $addressArray;
+            }
         }
 
-        return $value;
+        return $address;
     }
 }

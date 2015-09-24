@@ -25,9 +25,15 @@ trait ContactBase
         $this->data['email'] = null;
         $this->getters['email'] = 'getEmail';
         $this->setters['email'] = 'setEmail';
+        $this->data['password_hash'] = null;
+        $this->getters['password_hash'] = 'getPasswordHash';
+        $this->setters['password_hash'] = 'setPasswordHash';
         $this->data['phone'] = null;
         $this->getters['phone'] = 'getPhone';
         $this->setters['phone'] = 'setPhone';
+        $this->data['mobile'] = null;
+        $this->getters['mobile'] = 'getMobile';
+        $this->setters['mobile'] = 'setMobile';
         $this->data['title'] = null;
         $this->getters['title'] = 'getTitle';
         $this->setters['title'] = 'setTitle';
@@ -86,6 +92,18 @@ trait ContactBase
     }
 
     /**
+    * Get the value of PasswordHash / password_hash.
+    *
+    * @return string
+    */
+    public function getPasswordHash()
+    {
+        $rtn = $this->data['password_hash'];
+
+        return $rtn;
+    }
+
+    /**
     * Get the value of Phone / phone.
     *
     * @return string
@@ -93,6 +111,18 @@ trait ContactBase
     public function getPhone()
     {
         $rtn = $this->data['phone'];
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Mobile / mobile.
+    *
+    * @return string
+    */
+    public function getMobile()
+    {
+        $rtn = $this->data['mobile'];
 
         return $rtn;
     }
@@ -261,6 +291,23 @@ trait ContactBase
     }
 
     /**
+    * Set the value of PasswordHash / password_hash.
+    *
+    * @param $value string
+    */
+    public function setPasswordHash($value)
+    {
+        $this->validateString('PasswordHash', $value);
+
+        if ($this->data['password_hash'] === $value) {
+            return;
+        }
+
+        $this->data['password_hash'] = $value;
+        $this->setModified('password_hash');
+    }
+
+    /**
     * Set the value of Phone / phone.
     *
     * @param $value string
@@ -275,6 +322,23 @@ trait ContactBase
 
         $this->data['phone'] = $value;
         $this->setModified('phone');
+    }
+
+    /**
+    * Set the value of Mobile / mobile.
+    *
+    * @param $value string
+    */
+    public function setMobile($value)
+    {
+        $this->validateString('Mobile', $value);
+
+        if ($this->data['mobile'] === $value) {
+            return;
+        }
+
+        $this->data['mobile'] = $value;
+        $this->setModified('mobile');
     }
 
     /**

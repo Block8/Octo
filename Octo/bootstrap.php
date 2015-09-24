@@ -3,11 +3,19 @@
 // Set up constants:
 if (!defined('CMS_PATH')) {
     define('CMS_PATH', dirname(__FILE__) . '/');
-    define('CMS_BASE_PATH', dirname(CMS_PATH . '../'));
+    define('CMS_BASE_PATH', realpath(CMS_PATH . '../') . '/');
 }
 
 if (isset($_SERVER['APPLICATION_ENV'])) {
     define('CMS_ENV', $_SERVER['APPLICATION_ENV']);
+}
+
+if (!defined('APP_PATH')) {
+    if (stripos(CMS_BASE_PATH, 'vendor/block8/octo') !== false) {
+        define('APP_PATH', realpath(CMS_BASE_PATH . '../../../') . '/');
+    } else {
+        define('APP_PATH', getcwd() . '/');
+    }
 }
 
 date_default_timezone_set('Europe/London');
@@ -54,17 +62,17 @@ if (is_file(APP_PATH . 'siteconfig.php')) {
     require_once(APP_PATH . 'siteconfig.php');
 }
 
+$_SETTINGS['site']['full_admin_url'] = $_SETTINGS['site']['url'] . '/' . $_SETTINGS['site']['admin_uri'];
+$_SETTINGS['Octo']['AssetManager'] = new \Octo\AssetManager();
+
 $config->setArray($_SETTINGS);
 $moduleManager->initialiseModules();
-
-$assetManager = new \Octo\AssetManager();
 
 $templatePath = realpath(APP_PATH . $_SETTINGS['site']['namespace'] . '/Template');
 define('SITE_TEMPLATE_PATH', $templatePath);
 
 if (is_dir($templatePath)) {
     $settings = $config->get('Octo');
-    $settings['AssetManager'] = $assetManager;
     $settings['paths']['templates'][] = $templatePath . '/';
     $config->set('Octo', $settings);
 }
@@ -106,12 +114,7 @@ if (!defined('IS_CONSOLE')) {
         }
 
         $response = $app->handleRequest();
-
-        //var_dump(\b8\Database::$queryCount);
-        //var_dump(\b8\Database::$queries);
-
-        die($response);
-
+        print $response;
     } catch (Exception $ex) {
         // Global everything has broken catch-all handler.
         throw $ex;

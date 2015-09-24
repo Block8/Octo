@@ -2,6 +2,7 @@
 namespace Octo;
 
 use b8;
+use b8\Config;
 use b8\View;
 use Octo\Html\Template;
 
@@ -11,6 +12,17 @@ use Octo\Html\Template;
  */
 class Form extends b8\Form
 {
+    protected $validation = true;
+
+    public function enableValidation()
+    {
+        $this->validation = true;
+    }
+
+    public function disableValidation()
+    {
+        $this->validation = false;
+    }
 
     /**
      * Get the view for the form
@@ -26,6 +38,19 @@ class Form extends b8\Form
         }
 
         return new View($view, B8_PATH . 'Form/View/');
+    }
+
+    protected function onPreRender(&$view)
+    {
+        /** @var \Octo\AssetManager $assets */
+        $assets = Config::getInstance()->get('Octo.AssetManager');
+
+        if ($this->validation) {
+            $view->validation = true;
+            $assets->addJs('Forms', 'validation');
+        }
+
+        parent::onPreRender($view);
     }
 
     /**

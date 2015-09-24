@@ -67,8 +67,7 @@ class ContactStore extends Octo\Store
             $stmt = $database->prepare($query);
             $stmt->bindValue(':email', $details['email']);
 
-            if ($stmt->execute()) {
-                $res = $stmt->fetch(Database::FETCH_ASSOC);
+            if ($stmt->execute() && $res = $stmt->fetch(Database::FETCH_ASSOC)) {
                 return new Contact($res);
             }
         }

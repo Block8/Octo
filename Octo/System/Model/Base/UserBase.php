@@ -40,6 +40,9 @@ trait UserBase
         $this->data['date_added'] = null;
         $this->getters['date_added'] = 'getDateAdded';
         $this->setters['date_added'] = 'setDateAdded';
+        $this->data['date_active'] = null;
+        $this->getters['date_active'] = 'getDateActive';
+        $this->setters['date_active'] = 'setDateActive';
         $this->data['active'] = null;
         $this->getters['active'] = 'getActive';
         $this->setters['active'] = 'setActive';
@@ -126,6 +129,22 @@ trait UserBase
     public function getDateAdded()
     {
         $rtn = $this->data['date_added'];
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of DateActive / date_active.
+    *
+    * @return \DateTime
+    */
+    public function getDateActive()
+    {
+        $rtn = $this->data['date_active'];
 
         if (!empty($rtn)) {
             $rtn = new \DateTime($rtn);
@@ -277,13 +296,32 @@ trait UserBase
     }
 
     /**
+    * Set the value of DateActive / date_active.
+    *
+    * @param $value \DateTime
+    */
+    public function setDateActive($value)
+    {
+        $this->validateDate('DateActive', $value);
+
+        if ($this->data['date_active'] === $value) {
+            return;
+        }
+
+        $this->data['date_active'] = $value;
+        $this->setModified('date_active');
+    }
+
+    /**
     * Set the value of Active / active.
     *
+    * Must not be null.
     * @param $value int
     */
     public function setActive($value)
     {
         $this->validateInt('Active', $value);
+        $this->validateNotNull('Active', $value);
 
         if ($this->data['active'] === $value) {
             return;

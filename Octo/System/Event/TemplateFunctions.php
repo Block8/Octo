@@ -5,6 +5,8 @@ use DateTime;
 use b8\Config;
 use Octo\Event\Listener;
 use Octo\Event\Manager;
+use Octo\Member;
+use Octo\System\Model\Setting;
 use Octo\Template;
 use Octo\Html;
 
@@ -20,6 +22,11 @@ class TemplateFunctions extends Listener
     {
         $template->now = new DateTime();
         $template->config = Config::getInstance();
+        $template->member = Member::getInstance();
+
+        if (isset($_SESSION) && is_array($_SESSION)) {
+            $template->session = $_SESSION;
+        }
 
         $template->addFunction('replace', function ($source, $find, $replace) {
             return str_replace($find, $replace, $source);
@@ -27,6 +34,17 @@ class TemplateFunctions extends Listener
 
         $template->addFunction('regexReplace', function ($source, $find, $replace) {
             return preg_replace('/'.$find.'/', $replace, $source);
+        });
+
+        $template->addFunction('wordLimit', function ($string, $wordLimit)
+        {
+            if (str_word_count($string, 0) > $wordLimit) {
+                $words = str_word_count($string, 2);
+                $pos = array_keys($words);
+                $string = trim(substr($string, 0, $pos[$wordLimit])) . '...';
+            }
+
+            return $string;
         });
     }
 
@@ -87,8 +105,11 @@ class TemplateFunctions extends Listener
         });
 
         $template->set('date_now', new \DateTime());
-        $template->set('adminUri', $config->get('site.admin_uri'));
+        $template->set('adminUri', $config->get('site.full_admin_url'));
         $template->set('config', $config);
+        $template->set('settings', Setting::getAllAsArray());
+        $template->set('GET', $_GET);
+
         $template->addFunction('pagination', array($this, 'handlePagination'));
         $template->addFunction('var_dump', function ($args) {
             ob_start();

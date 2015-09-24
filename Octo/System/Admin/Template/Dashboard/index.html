@@ -1,48 +1,57 @@
 
-<!-- Small boxes (Stat box) -->
-<div class="row">
-    {for statistics}
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-        <!-- small box -->
-        <div class="small-box bg-{@value.color}">
-            <div class="inner">
-                <h3>
-                    {@value.count}
-                </h3>
-                <p>
-                    {@value.title}
-                </p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-{@value.icon}"></i>
-            </div>
 
-            <a href="/{@adminUri}{@value.link}" class="small-box-footer">
-                Jump to {@value.title} <i class="fa fa-arrow-circle-right"></i>
-            </a>
+<div class="row">
+    <div class="col-lg-8 col-md-6 col-sm-6">
+
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            {for statistics}
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                <!-- small box -->
+                <div class="small-box bg-{@value.color}">
+                    <div class="inner">
+                        <h3>
+                            {@value.count}
+                        </h3>
+                        <p>
+                            {@value.title}
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-{@value.icon}"></i>
+                    </div>
+
+
+                    <a href="{@adminUri}{@value.link}" class="small-box-footer">
+                        {ifnot value.link_title}
+                        View {@value.title} <i class="fa fa-arrow-circle-right"></i>
+                        {/ifnot}
+                        {if value.link_title}
+                        {@value.link_title} <i class="fa fa-arrow-circle-right"></i>
+                        {/if}
+                    </a>
+                </div>
+            </div><!-- ./col -->
+            {/for}
+        </div><!-- /.row -->
+
+
+        <div class="row">
+            {for widgets}
+            {@value.html}
+            {/for}
         </div>
-    </div><!-- ./col -->
-    {/for}
-</div><!-- /.row -->
+    </div>
 
-<div class="row">
     <div class="col-lg-4 col-md-6 col-sm-6">
         <ul class="timeline">
             {for timeline}
-                {@value}
+            {@value}
             {/for}
 
             <li>
                 <i class="fa fa-clock-o"></i>
             </li>
         </ul>
-    </div>
-
-    <div class="col-lg-8 col-md-6 col-sm-6">
-        <div class="row">
-            {for widgets}
-            {@value.html}
-            {/for}
-        </div>
     </div>
 </div>

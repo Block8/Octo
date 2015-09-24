@@ -249,4 +249,15 @@ abstract class Controller extends \b8\Controller
     {
         return $this->request;
     }
+
+    protected function redirect($to)
+    {
+        if (!in_array(substr($to, 0, 6), ['http:/', 'https:'])) {
+            $to = $this->config->get('site.full_admin_url') . $to;
+        }
+
+        $this->response = new Response\RedirectResponse($this->response);
+        $this->response->setHeader('Location', $to);
+        $this->response->flush();
+    }
 }

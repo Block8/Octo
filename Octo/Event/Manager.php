@@ -40,13 +40,17 @@ class Manager
         }
     }
 
-    public function registerListener($event, $callback)
+    public function registerListener($event, $callback, $priority = false)
     {
         if (!array_key_exists($event, $this->listeners)) {
             $this->listeners[$event] =  [];
         }
 
-        $this->listeners[$event][] = $callback;
+        if ($priority) {
+            array_unshift($this->listeners[$event], $callback);
+        } else {
+            array_push($this->listeners[$event], $callback);
+        }
     }
 
     public function triggerEvent($event, &$data = null)
@@ -58,8 +62,14 @@ class Manager
         $rtn = true;
 
         foreach ($this->listeners[$event] as $callback) {
-            if (!$callback($data)) {
+            $continue = true;
+
+            if (!$callback($data, $continue)) {
                 $rtn = false;
+            }
+
+            if (!$continue) {
+                break;
             }
         }
 

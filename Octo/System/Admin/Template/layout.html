@@ -10,8 +10,7 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 
 
@@ -20,17 +19,14 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js" type="text/javascript"></script>
 
     <!-- Octo -->
-    <script src="/asset/js/System/class"></script>
-    <script src="/asset/js/System/system"></script>
-    <script>window.adminUri = '{@adminUri}';</script>
+    <script src="{@config.site.url}/asset/js/System/class"></script>
+    <script src="{@config.site.url}/asset/js/System/system"></script>
+    <script>
+        window.adminUri = '{@adminUri}';
+    </script>
 
-
-    <link rel="stylesheet" type="text/css" href="/asset/css/System/AdminLTE">
-    <link rel="stylesheet" type="text/css" href="/asset/css/System/octo">
-
-    {if siteCss}
-    <link href="/assets/backoffice.css" rel="stylesheet" type="text/css">
-    {/if}
+    <link rel="stylesheet" type="text/css" href="{@config.site.url}/asset/css/System/AdminLTE">
+    <link rel="stylesheet" type="text/css" href="{@config.site.url}/asset/css/System/octo">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -43,13 +39,13 @@
 <body class="skin-{@theme}">
 <div class="wrapper">
     <header class="main-header">
-        <a href="/{@adminUri}" class="logo">
+        <a href="{@adminUri}" class="logo">
             {if siteLogo}
             <img src="/assets/images/cms-logo.png" alt="" style="max-width: 150px">
             {/if}
 
             {ifnot siteLogo}
-            <img src="/asset/img/System/logo.png" alt="" style="max-width: 150px">
+            <img src="{@config.site.url}/asset/img/System/logo.png" alt="" style="max-width: 150px">
             {/ifnot}
         </a>
 
@@ -84,10 +80,10 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="/{@adminUri}/user/profile" class="btn btn-default btn-flat">Edit Profile</a>
+                                    <a href="{@adminUri}/user/profile" class="btn btn-default btn-flat">Edit Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="/{@adminUri}/session/logout" class="btn btn-default btn-flat">Sign out</a>
+                                    <a href="{@adminUri}/session/logout" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>
@@ -113,7 +109,7 @@
             </div>
         </div>
         <!-- search form -->
-        <form action="/{@adminUri}/search" method="GET" class="sidebar-form">
+        <form action="{@adminUri}/search" method="GET" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
                             <span class="input-group-btn">
@@ -141,12 +137,12 @@
 
     <ol class="breadcrumb">
         <li>
-            <a href="/{@adminUri}">{@siteName}</a>
+            <a href="{@adminUri}">{@siteName}</a>
         </li>
 
         {for breadcrumb}
         <li>
-            {if item.link}<a href="/{@adminUri}{@item.link}">{/if}{@item.title}{if item.link}</a>{/if}
+            {if item.link}<a href="{@adminUri}{@item.link}">{/if}{@item.title}{if item.link}</a>{/if}
         </li>
         {/for}
     </ol>
@@ -188,7 +184,7 @@
 </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/ckeditor.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/adapters/jquery.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
@@ -197,19 +193,19 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
 
-<script src="/asset/js/System/AdminLTE/app" type="text/javascript"></script>
-<script src="/asset/js/System/jquery.tablednd"></script>
-<script src="/asset/js/System/plupload/plupload.full.min"></script>
+<script src="{@config.site.url}/asset/js/System/AdminLTE/app" type="text/javascript"></script>
+<script src="{@config.site.url}/asset/js/System/jquery.tablednd"></script>
+<script src="{@config.site.url}/asset/js/System/plupload/plupload.full.min"></script>
 
-<script src="/asset/js/System/ckeditor/init"></script>
-<script src="/asset/js/System/ckeditor/cmsfile/plugin"></script>
-<script src="/asset/js/System/ckeditor/cmsimage/plugin"></script>
-<script src="/asset/js/System/ckeditor/octolink/plugin"></script>
-<script src="/asset/js/System/ckeditor/youtube/plugin"></script>
-<script src="/asset/js/System/ckeditor/youtube/lang/en"></script>
+<script src="{@config.site.url}/asset/js/System/ckeditor/init"></script>
+<script src="{@config.site.url}/asset/js/System/ckeditor/cmsfile/plugin"></script>
+<script src="{@config.site.url}/asset/js/System/ckeditor/cmsimage/plugin"></script>
+<script src="{@config.site.url}/asset/js/System/ckeditor/octolink/plugin"></script>
+<script src="{@config.site.url}/asset/js/System/ckeditor/youtube/plugin"></script>
+<script src="{@config.site.url}/asset/js/System/ckeditor/youtube/lang/en"></script>
 
 
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/asset/js/System/excanvas.min"></script><![endif]-->
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{@config.site.url}/asset/js/System/excanvas.min"></script><![endif]-->
 
 </body>
 </html>

@@ -45,4 +45,48 @@ class Setting extends Octo\Model
         $setting->setValue($value);
         $settingStore->save($setting);
     }
+
+    public static function getForScope($scope)
+    {
+        /** @var \Octo\System\Store\SettingStore $settingStore */
+        $settingStore = Store::get('Setting');
+        $settings = $settingStore->getByScope($scope);
+        $rtn = [];
+
+        foreach ($settings as $setting) {
+            $rtn[$setting->getKey()] = $setting->getValue();
+        }
+
+        return $rtn;
+    }
+
+    public static function setForScope($scope, array $settings)
+    {
+        /** @var \Octo\System\Store\SettingStore $settingStore */
+        $settingStore = Store::get('Setting');
+
+        foreach ($settings as $key => $value) {
+            $setting = new self();
+            $setting->setKey($key);
+            $setting->setValue($value);
+            $setting->setScope($scope);
+
+            $settingStore->saveByReplace($setting);
+        }
+    }
+
+    public static function getAllAsArray()
+    {
+        /** @var \Octo\System\Store\SettingStore $settingStore */
+        $settingStore = Store::get('Setting');
+        $settings = $settingStore->all();
+
+        $rtn = [];
+
+        foreach ($settings as $setting) {
+            $rtn[$setting->getScope() . '_' . $setting->getKey()] = $setting->getValue();
+        }
+
+        return $rtn;
+    }
 }
