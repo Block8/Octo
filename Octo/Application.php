@@ -186,13 +186,13 @@ class Application extends \b8\Application
                 newrelic_name_transaction($site . '.' . $controller . '.' . $action);
             }
         } catch (HttpException $ex) {
-            if (defined('CMS_ENV') && CMS_ENV == 'development' && !array_key_exists('ex', $_GET)) {
+            if ((defined('CMS_ENV') && CMS_ENV == 'development') || array_key_exists('ex', $_GET)) {
                 throw $ex;
             }
 
             $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (Exception $ex) {
-            if (defined('CMS_ENV') && CMS_ENV == 'development' && !array_key_exists('ex', $_GET)) {
+            if ((defined('CMS_ENV') && CMS_ENV == 'development') || array_key_exists('ex', $_GET)) {
                 throw $ex;
             }
 
