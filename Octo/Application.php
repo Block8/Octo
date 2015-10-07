@@ -13,7 +13,7 @@ use Octo\Admin\Menu;
 use Octo\BlockManager;
 use Octo\System\Model\Log;
 use Octo\Store;
-use Octo\Html\Template;
+use Octo\Template;
 
 /**
  * Class Application
@@ -210,6 +210,14 @@ class Application extends \b8\Application
      */
     protected function handleHttpError($code)
     {
+        try {
+            $template = new Template('Error/' . $code);
+            $content = $template->render();
+            $content = str_replace('{!@octo.meta}', '<title>Error</title>', $content);
+            $this->response->setContent($content);
+        } catch (\Exception $ex) {}
+
+        /*
         if (Template::exists('Error/' . $code)) {
 
             $this->response->setResponseCode($code);
@@ -224,6 +232,7 @@ class Application extends \b8\Application
             $content = str_replace('{!@octo.meta}', '<title>Error</title>', $content);
             $this->response->setContent($content);
         }
+        */
 
         return $this->response;
     }

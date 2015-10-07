@@ -7,7 +7,7 @@ use b8\Http\Response;
 use b8\Http\Request;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
-use Octo\Html\Template;
+use Octo\Template;
 
 abstract class Block
 {
@@ -131,8 +131,10 @@ abstract class Block
         $parts = explode('\\', get_class($this));
         $class = array_pop($parts);
 
-        if (Template::exists('Block/' . $class)) {
-            $this->view = Template::load('Block/' . $class);
+        try {
+            $this->view = new Template('Block/' . $class);
+        } catch (\Exception $ex) {
+            $this->view = null;
         }
 
         $rtn = $this->renderNow();

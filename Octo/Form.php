@@ -4,7 +4,7 @@ namespace Octo;
 use b8;
 use b8\Config;
 use b8\View;
-use Octo\Html\Template;
+use Octo\Template;
 
 /**
  * Class Form
@@ -28,16 +28,15 @@ class Form extends b8\Form
      * Get the view for the form
      *
      * @param $view
-     * @return View|null|Template
+     * @return View|Template
      */
     public function getView($view)
     {
-        if (Template::exists('Form/' . $view)) {
-            $view = Template::load('Form/' . $view);
-            return $view;
+        try {
+            return new Template('Form/' . $view);
+        } catch (\Exception $ex) {
+            return new View($view, B8_PATH . 'Form/View/');
         }
-
-        return new View($view, B8_PATH . 'Form/View/');
     }
 
     protected function onPreRender(&$view)

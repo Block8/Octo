@@ -5,6 +5,7 @@ use b8\Config;
 use Octo\Event\Listener;
 use Octo\Event\Manager;
 use Octo\Template;
+use Octo\Admin\Template as AdminTemplate;
 use Octo\Html;
 
 class AssetManager extends Listener

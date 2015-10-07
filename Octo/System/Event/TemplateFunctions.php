@@ -8,7 +8,6 @@ use Octo\Event\Manager;
 use Octo\Member;
 use Octo\System\Model\Setting;
 use Octo\Template;
-use Octo\Html;
 
 class TemplateFunctions extends Listener
 {
@@ -16,9 +15,31 @@ class TemplateFunctions extends Listener
     {
         $manager->registerListener('AdminTemplateLoaded', array($this, 'adminTemplateFunctions'));
         $manager->registerListener('PublicTemplateLoaded', array($this, 'publicTemplateFunctions'));
+        $manager->registerListener('TemplateInit', array($this, 'templateInit'));
     }
 
-    public function publicTemplateFunctions(Html\Template &$template)
+    public function templateInit(array &$functions)
+    {
+        $functions['replace'] = function ($source, $find, $replace) {
+            return str_replace($find, $replace, $source);
+        };
+
+        $functions['regexReplace'] = function ($source, $find, $replace) {
+            return preg_replace('/'.$find.'/', $replace, $source);
+        };
+
+        $functions['wordLimit'] = function ($string, $wordLimit) {
+            if (str_word_count($string, 0) > $wordLimit) {
+                $words = str_word_count($string, 2);
+                $pos = array_keys($words);
+                $string = trim(substr($string, 0, $pos[$wordLimit])) . '...';
+            }
+
+            return $string;
+        };
+    }
+
+    public function publicTemplateFunctions(Template &$template)
     {
         $template->now = new DateTime();
         $template->config = Config::getInstance();
@@ -27,25 +48,6 @@ class TemplateFunctions extends Listener
         if (isset($_SESSION) && is_array($_SESSION)) {
             $template->session = $_SESSION;
         }
-
-        $template->addFunction('replace', function ($source, $find, $replace) {
-            return str_replace($find, $replace, $source);
-        });
-
-        $template->addFunction('regexReplace', function ($source, $find, $replace) {
-            return preg_replace('/'.$find.'/', $replace, $source);
-        });
-
-        $template->addFunction('wordLimit', function ($string, $wordLimit)
-        {
-            if (str_word_count($string, 0) > $wordLimit) {
-                $words = str_word_count($string, 2);
-                $pos = array_keys($words);
-                $string = trim(substr($string, 0, $pos[$wordLimit])) . '...';
-            }
-
-            return $string;
-        });
     }
 
     public function adminTemplateFunctions(Template &$template)

@@ -34,7 +34,8 @@
         "block8/b8framework": "dev-master",
         "symfony/console": "2.*",
         "phpmailer/phpmailer": "5.2.*",
-        "google/apiclient": "*"
+        "google/apiclient": "*",
+        "twig/twig": "~1.0"
     },
 
     "autoload": {

@@ -3,111 +3,158 @@
 namespace Octo;
 
 use b8\Config;
-use b8\View;
-use Octo\Template as PublicTemplate;
-use Octo\Admin\Template as AdminTemplate;
 use Octo\Event;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
-class Template extends View\Template
+class Template
 {
-    protected static $templateType = 'templates';
+    /**
+     * @var bool
+     */
+    protected static $initialised = false;
 
-    public static function exists($template, $module = null)
+    /**
+     * @var \Twig_Loader_Filesystem
+     */
+    protected static $loader;
+
+    /**
+     * @var \Twig_Environment
+     */
+    protected static $twig;
+
+    /**
+     * @var string|bool
+     */
+    protected static $cache;
+
+    /**
+     * @var \Twig_TemplateInterface
+     */
+    protected $template;
+
+    /**
+     * @var string
+     */
+    protected $templateName;
+
+    /**
+     * @var array
+     */
+    protected $variables = [];
+
+    /**
+     * Sets up the twig template loader.
+     */
+    public static function init()
     {
-        if (!empty($module)) {
-            var_dump(debug_backtrace());
+        self::$loader = new Twig_Loader_Filesystem();
+
+        $config = Config::getInstance();
+
+        foreach (array_reverse($config->get('Octo.paths.templates', [])) as $path) {
+            self::$loader->addPath($path);
         }
 
-        if (!is_null(static::getPath($template, $module))) {
-            return true;
+        foreach (array_reverse($config->get('Octo.paths.admin_templates', [])) as $path) {
+            self::$loader->addPath($path, 'admin');
         }
 
-        return false;
+        $cachePath = APP_PATH . 'storage/cache/';
+
+        if (is_dir($cachePath) && is_writeable($cachePath)) {
+            self::$cache = $cachePath;
+        } else {
+            self::$cache = false;
+        }
+
+        self::$twig = new Twig_Environment(self::$loader, [
+            'charset' => 'UTF-8',
+            'cache' => self::$cache,
+            'auto_reload' => true,
+            'strict_variables' => false,
+        ]);
+
+        $functions = [];
+        Event::trigger('TemplateInit', $functions);
+
+        foreach ($functions as $name => $callable) {
+            self::addFunction($name, $callable);
+        }
+
+        self::$initialised = true;
     }
 
-    public static function getPath($template, $module = null)
+    public static function addFunction($functionName, callable $function)
     {
-        $config = Config::getInstance();
-        $paths = array_reverse($config->get('Octo.paths.' . static::$templateType, []));
+        self::$twig->addFunction(new \Twig_SimpleFunction($functionName, $function));
+    }
 
-        foreach ($paths as $moduleName => $path) {
-            if (!is_null($module) && $moduleName !== $module) {
-                $path .= $module . '/';
-            }
+    /**
+     * Load a template.
+     * @param string $template
+     * @param string $namespace
+     */
+    public function __construct($template, $namespace = null)
+    {
+        if (!self::$initialised) {
+            self::init();
+        }
 
-            if (file_exists($path . $template . '.html')) {
-                return $path;
-            }
+        $template = $template . '.twig';
+
+        if (!is_null($namespace)) {
+            $template = '@' . $namespace . '/' . $template;
+        }
+
+        $this->templateName = $template;
+        $this->template = self::$twig->loadTemplate($template);
+
+        Event::trigger('PublicTemplateLoaded', $this);
+    }
+
+    public function render()
+    {
+        return $this->template->render($this->variables);
+    }
+
+    public function get($key)
+    {
+        if (array_key_exists($key, $this->variables)) {
+            return $this->variables[$key];
         }
 
         return null;
     }
 
-    public static function getAdminTemplate($template, $module = null)
+    public function set($key, $value)
     {
-        $rtn = null;
-
-        $path = AdminTemplate::getPath($template, $module);
-
-        if (!is_null($path)) {
-            $templateSrc = file_get_contents($path . $template . '.html');
-            $rtn = new AdminTemplate($templateSrc);
-            Event::trigger('AdminTemplateLoaded', $rtn);
-
-            return $rtn;
-        }
-
-        throw new \Exception('Template does not exist: ' . $template);
+        $this->variables[$key] = $value;
     }
 
-    public static function getPublicTemplate($template, $module = null)
+    public function getContext()
     {
-        $rtn = null;
-
-        $path = PublicTemplate::getPath($template, $module);
-
-        if (!is_null($path)) {
-            $templateSrc = file_get_contents($path . $template . '.html');
-            $rtn = new PublicTemplate($templateSrc);
-            Event::trigger('PublicTemplateLoaded', $rtn);
-
-            return $rtn;
-        }
-
-        throw new \Exception('Template does not exist: ' . $template);
+        return $this->variables;
     }
 
-    public function includeTemplate($args, &$view)
+    public function setContext($context)
     {
-        if ($view instanceof AdminTemplate) {
-            $template = static::getAdminTemplate($args['template']);
-        } else {
-            $template = static::getPublicTemplate($args['template']);
-        }
-
-        unset($args['template']);
-
-        foreach ($args as $key => $val) {
-            $template->{$key} = $val;
-        }
-
-        return $template->render();
+        $this->variables = $context;
     }
 
-    public function render()
+    public function __get($key)
     {
-        $code = parent::render();
-        Event::trigger('OnTemplateRender', $code);
-        return $code;
+        return $this->get($key);
     }
 
-    public function getTemplateCode()
+    public function __set($key, $value)
     {
-        return $this->viewCode;
+        $this->set($key, $value);
     }
 
-    public function setTemplateCode($code)
+    public function __toString()
     {
-        $this->viewCode = $code;
+        return $this->render();
     }
 }
