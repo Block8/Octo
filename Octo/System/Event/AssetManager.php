@@ -13,7 +13,6 @@ class AssetManager extends Listener
     public function registerListeners(Manager $manager)
     {
         $manager->registerListener('OnTemplateRender', array($this, 'injectAssets'));
-        $manager->registerListener('OnHtmlTemplateRender', array($this, 'injectAssets'));
     }
 
     public function injectAssets(&$html)

@@ -10,7 +10,7 @@ use b8\Http\Response\RedirectResponse;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form;
-use Octo\Html\Template;
+use Octo\Template;
 use Octo\Member;
 use Octo\Store;
 use Octo\System\Model\Contact;
@@ -19,7 +19,7 @@ class MemberController extends Controller
 {
     public function login()
     {
-        $view = Template::load('login', 'Member');
+        $view = new Template('Member/login');
         $view->form = Member::getInstance()->getLoginForm($this->getParam('rtn', '/'));
 
         Event::trigger('beforeMemberLogin', $this);
@@ -57,7 +57,7 @@ class MemberController extends Controller
 
     public function forgotPassword()
     {
-        $view = Template::load('forgot-password', 'Member');
+        $view = new Template('Member/forgot-password');
         $view->text = '<strong>Please fill in your email address below and we\'ll send you a link to reset your password.</strong><br><br>';
         $view->form = $this->forgotPasswordForm();
 
@@ -71,7 +71,7 @@ class MemberController extends Controller
             if (!is_null($member)) {
                 $key = $this->getResetKey($member);
 
-                $email = Template::load('forgot-password-email', 'Member');
+                $email = new Template('Member/forgot-password-email');
                 $email->member = $member;
                 $email->key = $key;
 
@@ -91,7 +91,7 @@ class MemberController extends Controller
 
     public function resetPassword($memberId)
     {
-        $view = Template::load('forgot-password', 'Member');
+        $view = new Template('Member/forgot-password');
         $member = Store::get('Contact')->getById($memberId);
         $key = $this->getParam('k', null);
 

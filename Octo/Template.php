@@ -116,7 +116,10 @@ class Template
 
     public function render()
     {
-        return $this->template->render($this->variables);
+        $output = $this->template->render($this->variables);
+        Event::trigger('OnTemplateRender', $output);
+
+        return $output;
     }
 
     public function get($key)
