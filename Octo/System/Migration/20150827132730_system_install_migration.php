@@ -37,7 +37,7 @@ class SystemInstallMigration extends AbstractMigration
         $table = $this->table('contact', ['id' => false, 'primary_key' => ['id']]);
 
         if (!$this->hasTable('contact')) {
-            $table->addColumn('id', 'integer', ['signed' => false]);
+            $table->addColumn('id', 'integer', ['signed' => false, 'identity' => true]);
             $table->create();
         }
 
@@ -147,7 +147,7 @@ class SystemInstallMigration extends AbstractMigration
         $table = $this->table('log', ['id' => false, 'primary_key' => ['id']]);
 
         if (!$this->hasTable('log')) {
-            $table->addColumn('id', 'integer', ['signed' => false]);
+            $table->addColumn('id', 'integer', ['signed' => false, 'identity' => true]);
             $table->create();
         }
 
@@ -209,7 +209,7 @@ class SystemInstallMigration extends AbstractMigration
         $table = $this->table('permission', ['id' => false, 'primary_key' => ['id']]);
 
         if (!$this->hasTable('permission')) {
-            $table->addColumn('id', 'integer', ['signed' => false]);
+            $table->addColumn('id', 'integer', ['signed' => false, 'identity' => true]);
             $table->create();
         }
 
@@ -243,7 +243,7 @@ class SystemInstallMigration extends AbstractMigration
         $table = $this->table('search_index', ['id' => false, 'primary_key' => ['id']]);
 
         if (!$this->hasTable('search_index')) {
-            $table->addColumn('id', 'integer', ['signed' => false]);
+            $table->addColumn('id', 'integer', ['signed' => false, 'identity' => true]);
             $table->create();
         }
 
@@ -282,7 +282,7 @@ class SystemInstallMigration extends AbstractMigration
         $table = $this->table('setting', ['id' => false, 'primary_key' => ['id']]);
 
         if (!$this->hasTable('setting')) {
-            $table->addColumn('id', 'integer', ['signed' => false]);
+            $table->addColumn('id', 'integer', ['signed' => false, 'identity' => true]);
             $table->create();
         }
 
@@ -325,7 +325,7 @@ class SystemInstallMigration extends AbstractMigration
         $table = $this->table('user', ['id' => false, 'primary_key' => ['id']]);
 
         if (!$this->hasTable('user')) {
-            $table->addColumn('id', 'integer', ['signed' => false]);
+            $table->addColumn('id', 'integer', ['signed' => false, 'identity' => true]);
             $table->create();
         }
 
