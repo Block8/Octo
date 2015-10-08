@@ -8,6 +8,7 @@ use Octo\Event\Manager;
 use Octo\Member;
 use Octo\System\Model\Setting;
 use Octo\Template;
+use Octo\Admin\Template as AdminTemplate;
 
 class TemplateFunctions extends Listener
 {
@@ -50,7 +51,7 @@ class TemplateFunctions extends Listener
         }
     }
 
-    public function adminTemplateFunctions(Template &$template)
+    public function adminTemplateFunctions(AdminTemplate &$template)
     {
         $template->addFunction('canAccess', function ($args) {
             return $_SESSION['user']->canAccess($args['uri']);
