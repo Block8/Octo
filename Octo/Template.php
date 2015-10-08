@@ -61,9 +61,9 @@ class Template
             self::$loader->addPath($path, 'admin');
         }
 
-        $cachePath = APP_PATH . 'storage/cache/';
+        $cachePath = realpath(APP_PATH . 'storage/cache/');
 
-        if (is_dir($cachePath) && is_writeable($cachePath)) {
+        if ($cachePath && is_dir($cachePath) && is_writeable($cachePath)) {
             self::$cache = $cachePath;
         } else {
             self::$cache = false;
