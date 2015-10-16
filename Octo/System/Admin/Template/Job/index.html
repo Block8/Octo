@@ -1,0 +1,54 @@
+<div class="box box-primary">
+    <div class="box-body no-padding">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Status</th>
+                <th>Job</th>
+                <th>Message</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th width="150px">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {for jobs}
+            <tr>
+
+                <td width="1">
+                    {if value.status == 0}
+                    <span class="label label-info">Pending</span>
+                    {/if}
+
+                    {if value.status == 1}
+                    <span class="label label-warning">Running</span>
+                    {/if}
+
+                    {if value.status == 2}
+                    <span class="label label-success">Success</span>
+                    {/if}
+
+                    {if value.status == 3}
+                    <span class="label label-danger">Failed</span>
+                    {/if}
+                </td>
+                <td>{job_name type: value.type}</td>
+                <td>{@value.message}</td>
+                <td>{date_format date: value.date_created; format: "friendly"}</td>
+                <td>{date_format date: value.date_updated; format: "friendly"}</td>
+                <td>
+                    {if canAccess(uri: "/job/delete")}
+                    <a class="btn btn-danger btn-sm" href="{@adminUri}/job/delete/{@value.id}">Delete</a>
+                    {/if}
+                    {if value.status == 0}
+                        {if canAccess(uri: "/job/queue")}
+                        <a class="btn btn-info btn-sm" href="{@adminUri}/job/retry/{@value.id}">Retry</a>
+                        {/if}
+                    {/if}
+                </td>
+            </tr>
+            {/for}
+            </tbody>
+        </table>
+    </div>
+</div>

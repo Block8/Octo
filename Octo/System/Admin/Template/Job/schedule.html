@@ -1,0 +1,89 @@
+<div class="box box-primary">
+    <div class="box-body no-padding">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Frequency</th>
+                <th>Job</th>
+                <th>Last Status</th>
+                <th>Last Message</th>
+                <th>Last Run</th>
+            </tr>
+            </thead>
+            <tbody>
+            {for schedule}
+            <tr>
+                <td width="150">
+                    {if value.frequency == 60}
+                    Every Minute
+                    {/if}
+
+                    {if value.frequency == 300}
+                    5 Minutes
+                    {/if}
+
+                    {if value.frequency == 900}
+                    15 Minutes
+                    {/if}
+
+                    {if value.frequency == 1800}
+                    30 Minutes
+                    {/if}
+
+                    {if value.frequency == 3600}
+                    Every Hour
+                    {/if}
+
+                    {if value.frequency == 10800}
+                    Every 3 Hours
+                    {/if}
+
+                    {if value.frequency == 43200}
+                    Every 12 Hours
+                    {/if}
+
+                    {if value.frequency == 86400}
+                    Every Day
+                    {/if}
+
+                    {if value.frequency == 172800}
+                    Every Other Day
+                    {/if}
+
+                    {if value.frequency == 604800}
+                    Every Week
+                    {/if}
+                </td>
+
+                <td>{job_name type: value.type}</td>
+                <td width="150">
+                    {ifnot value.CurrentJob.id}
+                    <span class="label label-danger">Not Yet Run</span>
+                    {/ifnot}
+
+                    {if value.CurrentJob.id}
+                    {if value.CurrentJob.status == 0}
+                    <span class="label label-info">Pending</span>
+                    {/if}
+
+                    {if value.CurrentJob.status == 1}
+                    <span class="label label-warning">Running</span>
+                    {/if}
+
+                    {if value.CurrentJob.status == 2}
+                    <span class="label label-success">Success</span>
+                    {/if}
+
+                    {if value.CurrentJob.status == 3}
+                    <span class="label label-danger">Failed</span>
+                    {/if}
+                    {/if}
+                </td>
+                <td>{@value.CurrentJob.message}</td>
+                <td>{date_format date: value.CurrentJob.date_updated; format: "friendly"}</td>
+            </tr>
+            {/for}
+            </tbody>
+        </table>
+    </div>
+</div>

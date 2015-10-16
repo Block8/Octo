@@ -35,7 +35,8 @@
         "symfony/console": "2.*",
         "phpmailer/phpmailer": "5.2.*",
         "google/apiclient": "*",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "pda/pheanstalk": "~3.1"
     },
 
     "autoload": {

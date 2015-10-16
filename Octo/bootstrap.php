@@ -103,6 +103,18 @@ if ($rtn == 0) {
     define('SYSTEM_PDF_AVAILABLE', false);
 }
 
+
+$cachePath = realpath(APP_PATH . 'storage/cache/');
+
+if ($cachePath && is_dir($cachePath) && is_writeable($cachePath)) {
+    define('OCTO_CACHE_PATH', $cachePath);
+    define('OCTO_CACHE_ENABLED', true);
+} else {
+    define('OCTO_CACHE_PATH', null);
+    define('OCTO_CACHE_ENABLED', false);
+}
+
+
 if (!defined('IS_CONSOLE')) {
     try {
         $appClass = $config->get('site.namespace') . '\\Application';

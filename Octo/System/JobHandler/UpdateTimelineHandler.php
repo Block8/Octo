@@ -1,44 +1,26 @@
 <?php
 
-namespace Octo\System\Command;
+namespace Octo\System\JobHandler;
 
-use b8\Config;
-use b8\Database;
+use Octo\Job\Handler;
 use Octo\Store;
-use Octo\Event;
 use Octo\System\Model\Log;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Build a search index for the site
- *
- */
-
-class UpdateTimeline extends Command
+class UpdateTimelineHandler extends Handler
 {
-    protected $systemModels;
-
-    /**
-     * @var \Octo\System\Store\LogStore
-     */
-    protected $logStore;
-
-    protected function configure()
+    public static function getJobTypes()
     {
-        $this
-            ->setName('timeline:update')
-            ->setDescription('Update the admin timeline.');
+        return [
+            'Octo.System.UpdateTimeline' => 'Update Timeline',
+        ];
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function run()
     {
-        unset($input);
-        unset($output);
-
         $this->updateUploads('images');
         $this->updateUploads('files');
+
+        return true;
     }
 
     protected function updateUploads($scope)

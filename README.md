@@ -18,12 +18,22 @@ To get started:
 ## Dependencies
 
 ### Block 8
-* **[b8 framework](https://github.com/block8/b8framework)** - Underlying PHP framework for the system
 
 ### Third Party
-* [Bootstrap CSS](http://getbootstrap.com/) - CSS framework for the CMS and most sites based upon it
-* [Admin LTE](https://github.com/almasaeed2010/AdminLTE) - Bootstrap theme and extended CSS theme for the CMS admin area.
-* [File type icons](http://treetog.deviantart.com/art/File-Type-Icons-199693041) - File type icons
-* [Symfony/Console](https://github.com/symfony/console) - Foundation for creating console commands (in our case, `./octocmd`)
-* [PHP 5.5 Password Compat](https://github.com/ircmaxell/password_compat) - Polyfill for the PHP 5.5 `password_hash()` / `password_verify()` functionality.
-* [Twitter PHP library](https://github.com/dg/twitter-php) - Twitter API library.
+Octo would not be possible without the help of the following open source projects:
+
+#### Back-end
+* [b8 framework](https://github.com/block8/b8framework) by Block 8 (@block8)
+* [Twig](https://github.com/twigphp/Twig) by Fabien Potencier (@fabpot)
+* [Symfony Console](https://github.com/symfony/console) by Symfony (@symfony)
+* [Phinx](https://github.com/robmorgan/phinx) by Rob Morgan (@robmorgan)
+* [PHP 5.5 Password Compat](https://github.com/ircmaxell/password_compat) by Anthony Ferrara (@ircmaxell)
+* [Pheanstalk](https://github.com/pda/pheanstalk) by Paul Annesley (@pda)
+* [Google API Client](https://github.com/google/google-api-php-client) by Google (@google)
+* [Twitter PHP library](https://github.com/dg/twitter-php) by David Grudl (@dg)
+
+#### Front-end
+* [Bootstrap CSS](http://getbootstrap.com/) by Mark Otto (@mdo) & Jacob (@fat)
+* [Admin LTE](https://github.com/almasaeed2010/AdminLTE) by Abdullah Almsaeed (@almasaeed2010)
+* [Select2](https://github.com/select2/select2) by Kevin Brown (@kevin-brown) and Igor Vaynberg (@ivaynberg)
+* [CKEditor](http://ckeditor.com/) by CKSource (@ckeditor)
