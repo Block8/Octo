@@ -69,9 +69,9 @@ class ModuleManager
 
     protected function autoloadModulesFromComposer()
     {
-        $config = json_decode(file_get_contents(APP_PATH . 'composer.lock'), true);
+        $config = json_decode(file_get_contents(APP_PATH . 'vendor/composer/installed.json'), true);
 
-        foreach ($config['packages'] as $package) {
+        foreach ($config as $package) {
             if (isset($package['autoload']['psr-4'])) {
                 $this->autoloadComposerModule($package);
             }
