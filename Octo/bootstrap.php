@@ -118,7 +118,10 @@ if ($cachePath && is_dir($cachePath) && is_writeable($cachePath)) {
 $host = $config->get('Octo.worker.host');
 
 define('OCTO_QUEUE_ENABLED', !empty($host));
-define('OCTO_QUEUE', 'Octo.' . md5($config->get('site.url')));
+
+$queue = $config->get('Octo.worker.queue', 'Octo.' . md5($config->get('site.namespace')));
+
+define('OCTO_QUEUE', $queue);
 
 
 if (!defined('IS_CONSOLE')) {

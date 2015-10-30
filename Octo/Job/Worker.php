@@ -77,8 +77,6 @@ class Worker
 
         while ($this->run) {
             $beanstalkJob = $this->pheanstalk->reserve(900);
-
-
             $jobData = json_decode($beanstalkJob->getData(), true);
 
             // Delete invalid jobs:
