@@ -47,4 +47,9 @@ class User extends Octo\Model
 
         return false;
     }
+
+    public function getAvatar($size = 100)
+    {
+        return 'https://www.gravatar.com/avatar/'.md5($this->getEmail()).'?d=mm&s='.$size;
+    }
 }
