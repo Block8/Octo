@@ -26,9 +26,17 @@ class Address extends FieldSet
         }
 
         $address1 = Text::create($address1, 'Address 1', true);
+        $address1->setId($name . '_address1');
+
         $address2 = Text::create($address2, 'Address 2', false);
+        $address2->setId($name . '_address2');
+
         $town = Text::create($town, 'Town', true);
+        $town->setId($name . '_town');
+
         $postcode = Text::create($postcode, 'Postcode', true);
+        $postcode->setId($name . '_postcode');
+
         $postcode->setClass('postcode');
 
         $this->addField($address1);
@@ -37,7 +45,9 @@ class Address extends FieldSet
         $this->addField($postcode);
 
         if ($includeCountry) {
-            $this->addField(Country::create($name . '[country]', 'Country', true, 'country'));
+            $country = Country::create($name . '[country]', 'Country', true, 'country');
+            $country->setId($name . '_country');
+            $this->addField($country);
         }
     }
 
@@ -48,7 +58,7 @@ class Address extends FieldSet
                 $child->setRequired(true);
             }
 
-            $this->children[$this->getName() . '[address2]']->setRequired(false);
+            $this->children[$this->getName() . '_address2']->setRequired(false);
         } else {
             foreach ($this->children as &$child) {
                 $child->setRequired(false);
