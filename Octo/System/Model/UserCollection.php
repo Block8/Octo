@@ -20,7 +20,7 @@ class UserCollection extends Collection
      * @param User $value
      * @return UserCollection
      */
-    public function add($key, User $value)
+    public function addUser($key, User $value)
     {
         return parent::add($key, $value);
     }

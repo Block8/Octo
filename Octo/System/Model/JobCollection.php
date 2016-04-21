@@ -20,7 +20,7 @@ class JobCollection extends Collection
      * @param Job $value
      * @return JobCollection
      */
-    public function add($key, Job $value)
+    public function addJob($key, Job $value)
     {
         return parent::add($key, $value);
     }

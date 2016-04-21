@@ -40,12 +40,12 @@ trait UserBase
         $this->data['date_added'] = null;
         $this->getters['date_added'] = 'getDateAdded';
         $this->setters['date_added'] = 'setDateAdded';
-        $this->data['active'] = null;
-        $this->getters['active'] = 'getActive';
-        $this->setters['active'] = 'setActive';
         $this->data['date_active'] = null;
         $this->getters['date_active'] = 'getDateActive';
         $this->setters['date_active'] = 'setDateActive';
+        $this->data['active'] = null;
+        $this->getters['active'] = 'getActive';
+        $this->setters['active'] = 'setActive';
 
         // Foreign keys:
     }
@@ -138,18 +138,6 @@ trait UserBase
     }
 
     /**
-    * Get the value of Active / active.
-    *
-    * @return int
-    */
-    public function getActive()
-    {
-        $rtn = $this->data['active'];
-
-        return $rtn;
-    }
-
-    /**
     * Get the value of DateActive / date_active.
     *
     * @return \DateTime
@@ -161,6 +149,18 @@ trait UserBase
         if (!empty($rtn)) {
             $rtn = new \DateTime($rtn);
         }
+
+        return $rtn;
+    }
+
+    /**
+    * Get the value of Active / active.
+    *
+    * @return int
+    */
+    public function getActive()
+    {
+        $rtn = $this->data['active'];
 
         return $rtn;
     }
@@ -296,6 +296,23 @@ trait UserBase
     }
 
     /**
+    * Set the value of DateActive / date_active.
+    *
+    * @param $value \DateTime
+    */
+    public function setDateActive($value)
+    {
+        $this->validateDate('DateActive', $value);
+
+        if ($this->data['date_active'] === $value) {
+            return;
+        }
+
+        $this->data['date_active'] = $value;
+        $this->setModified('date_active');
+    }
+
+    /**
     * Set the value of Active / active.
     *
     * Must not be null.
@@ -312,22 +329,5 @@ trait UserBase
 
         $this->data['active'] = $value;
         $this->setModified('active');
-    }
-
-    /**
-    * Set the value of DateActive / date_active.
-    *
-    * @param $value \DateTime
-    */
-    public function setDateActive($value)
-    {
-        $this->validateDate('DateActive', $value);
-
-        if ($this->data['date_active'] === $value) {
-            return;
-        }
-
-        $this->data['date_active'] = $value;
-        $this->setModified('date_active');
     }
 }

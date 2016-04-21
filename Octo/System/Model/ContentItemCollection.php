@@ -20,7 +20,7 @@ class ContentItemCollection extends Collection
      * @param ContentItem $value
      * @return ContentItemCollection
      */
-    public function add($key, ContentItem $value)
+    public function addContentItem($key, ContentItem $value)
     {
         return parent::add($key, $value);
     }

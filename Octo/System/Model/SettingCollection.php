@@ -20,7 +20,7 @@ class SettingCollection extends Collection
      * @param Setting $value
      * @return SettingCollection
      */
-    public function add($key, Setting $value)
+    public function addSetting($key, Setting $value)
     {
         return parent::add($key, $value);
     }

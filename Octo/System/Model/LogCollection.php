@@ -20,7 +20,7 @@ class LogCollection extends Collection
      * @param Log $value
      * @return LogCollection
      */
-    public function add($key, Log $value)
+    public function addLog($key, Log $value)
     {
         return parent::add($key, $value);
     }

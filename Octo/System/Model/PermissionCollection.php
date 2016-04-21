@@ -20,7 +20,7 @@ class PermissionCollection extends Collection
      * @param Permission $value
      * @return PermissionCollection
      */
-    public function add($key, Permission $value)
+    public function addPermission($key, Permission $value)
     {
         return parent::add($key, $value);
     }

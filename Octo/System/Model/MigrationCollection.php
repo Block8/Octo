@@ -20,7 +20,7 @@ class MigrationCollection extends Collection
      * @param Migration $value
      * @return MigrationCollection
      */
-    public function add($key, Migration $value)
+    public function addMigration($key, Migration $value)
     {
         return parent::add($key, $value);
     }

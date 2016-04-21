@@ -20,7 +20,7 @@ class SearchIndexCollection extends Collection
      * @param SearchIndex $value
      * @return SearchIndexCollection
      */
-    public function add($key, SearchIndex $value)
+    public function addSearchIndex($key, SearchIndex $value)
     {
         return parent::add($key, $value);
     }

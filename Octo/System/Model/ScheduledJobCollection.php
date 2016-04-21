@@ -20,7 +20,7 @@ class ScheduledJobCollection extends Collection
      * @param ScheduledJob $value
      * @return ScheduledJobCollection
      */
-    public function add($key, ScheduledJob $value)
+    public function addScheduledJob($key, ScheduledJob $value)
     {
         return parent::add($key, $value);
     }

@@ -20,7 +20,7 @@ class ContactCollection extends Collection
      * @param Contact $value
      * @return ContactCollection
      */
-    public function add($key, Contact $value)
+    public function addContact($key, Contact $value)
     {
         return parent::add($key, $value);
     }
