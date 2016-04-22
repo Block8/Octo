@@ -41,6 +41,11 @@ class SendEmailHandler extends Handler
         // Enable SMTP if required:
         if (isset($config->site['smtp_server'])) {
             $mail->IsSMTP();
+
+            $mail->SMTPAuth = true;
+            $mail->Username = $config->get('site.smtp_username', null);
+            $mail->Password = $config->get('site.smtp_password', null);
+
             $mail->Host = $config->site['smtp_server'];
         }
 
