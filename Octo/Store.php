@@ -77,7 +77,14 @@ abstract class Store extends \b8\Store
                 $newId = !empty($data[$this->primaryKey]) ? $data[$this->primaryKey] : Database::getConnection(
                     'write'
                 )->lastInsertId();
+
+
+                $enabled = $this->cacheEnabled;
+                $this->cacheEnabled = false;
                 $rtn = $this->getByPrimaryKey($newId, 'write');
+                $this->cacheEnabled = $enabled;
+
+                $this->setCache($data[$this->primaryKey], $rtn);
             }
         }
 
