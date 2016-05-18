@@ -38,4 +38,12 @@ class AssetManager
     {
         return $this->externalJs;
     }
+
+    public function reset()
+    {
+        $this->css = [];
+        $this->js = [];
+        $this->image = [];
+        $this->externalJs = [];
+    }
 }
