@@ -3,6 +3,7 @@
 namespace Octo\Job;
 
 use b8\Config;
+use b8\Database;
 use Octo\Store;
 use Octo\System\Model\Job;
 use Octo\System\Store\JobStore;
@@ -16,12 +17,25 @@ class Manager
      * @param int $delay (seconds)
      * @return Job
      */
-    public static function create(Job $job, $priority = Job::PRIORITY_NORMAL, $delay = 0) {
-        $job->setDateCreated(new \DateTime());
-        $job->setDateUpdated(new \DateTime());
-        $job->setStatus(0);
+    public static function create(Job $createJob, $priority = Job::PRIORITY_NORMAL, $delay = 0) {
+        $createJob->setDateCreated(new \DateTime());
+        $createJob->setDateUpdated(new \DateTime());
+        $createJob->setStatus(0);
 
-        $job = self::save($job);
+
+        $job = self::save($createJob);
+
+        if (is_null($job)) {
+            $newData = $createJob->getDataArray();
+            unset($newData['id']);
+
+            $job = self::save(new Job($newData));
+
+            if (is_null($job)) {
+                throw new \Exception('Failed to create job: ' . $createJob->getType());
+            }
+        }
+
         $job = self::queue($job, $priority, $delay);
 
         return $job;
