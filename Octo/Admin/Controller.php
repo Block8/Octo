@@ -89,7 +89,7 @@ abstract class Controller extends \b8\Controller
 
         // No output, but we do have a legacy view to render:
         if (empty($output) && !empty($this->view)) {
-            $this->template->output = $this->view->render();
+            $output = $this->view->render();
         }
 
         // Has output, handle legacy style layout for it:
@@ -97,10 +97,12 @@ abstract class Controller extends \b8\Controller
             $this->template->output = $output;
         }
 
-        $this->template->set('title', $this->title);
-        $this->template->set('subtitle', $this->subtitle);
-        $this->template->set('breadcrumb', $this->breadcrumb);
-        $output = $this->template->render();
+        if ($this->response->hasLayout()) {
+            $this->template->set('title', $this->title);
+            $this->template->set('subtitle', $this->subtitle);
+            $this->template->set('breadcrumb', $this->breadcrumb);
+            $output = $this->template->render();
+        }
 
         $this->response->setContent($output);
         return $this->response;
