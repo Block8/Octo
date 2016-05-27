@@ -109,7 +109,14 @@ class Template
         $this->templateName = $template;
         $this->template = self::$twig->loadTemplate($template);
 
-        Event::trigger('PublicTemplateLoaded', $this);
+        Event::trigger('Template.Loaded', $this);
+
+        if ($namespace == 'admin') {
+            Event::trigger('Template.Loaded.Admin', $this);
+        } else {
+            Event::trigger('PublicTemplateLoaded', $this);
+            Event::trigger('Template.Loaded.Public', $this);
+        }
     }
 
     public function render()

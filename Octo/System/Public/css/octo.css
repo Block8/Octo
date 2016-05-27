@@ -84,3 +84,22 @@ input[type=checkbox] {
 .form-group {
     position: relative;
 }
+
+
+.sidebar-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 230px;
+    padding: 0 10px 5px 0;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    text-align: right;
+}
+
+.sidebar-footer img {
+    height: 35px;
+}

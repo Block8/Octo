@@ -14,9 +14,14 @@ class TemplateFunctions extends Listener
 {
     public function registerListeners(Manager $manager)
     {
-        $manager->registerListener('AdminTemplateLoaded', array($this, 'adminTemplateFunctions'));
-        $manager->registerListener('PublicTemplateLoaded', array($this, 'publicTemplateFunctions'));
+        $manager->registerListener('Template.Loaded', array($this, 'templateLoaded'));
+        $manager->registerListener('Template.Loaded.Public', array($this, 'publicTemplateLoaded'));
+        $manager->registerListener('Template.Loaded.Admin', array($this, 'adminTemplateLoaded'));
+
         $manager->registerListener('TemplateInit', array($this, 'templateInit'));
+
+        // Legacy admin templates:
+        $manager->registerListener('AdminTemplateLoaded', array($this, 'adminTemplateFunctions'));
     }
 
     public function templateInit(array &$functions)
@@ -38,17 +43,37 @@ class TemplateFunctions extends Listener
 
             return $string;
         };
+
+        $functions['canAccess'] = function ($uri) {
+            return $_SESSION['user']->canAccess($uri);
+        };
+
+        $functions['md5'] = function ($string) {
+            return md5($string);
+        };
     }
 
-    public function publicTemplateFunctions(Template &$template)
+    public function templateLoaded(Template &$template)
     {
-        $template->now = new DateTime();
-        $template->config = Config::getInstance();
-        $template->member = Member::getInstance();
+        $config = Config::getInstance();
+        $template->set('now', new DateTime());
+        $template->set('config', $config);
+        $template->set('settings', Setting::getAllAsArray());
+        $template->set('adminUri', $config->get('site.full_admin_url'));
 
         if (isset($_SESSION) && is_array($_SESSION)) {
-            $template->session = $_SESSION;
+            $template->set('session', $_SESSION);
         }
+    }
+
+    public function publicTemplateLoaded(Template &$template)
+    {
+        $template->member = Member::getInstance();
+    }
+
+    public function adminTemplateLoaded(Template &$template)
+    {
+
     }
 
     public function adminTemplateFunctions(AdminTemplate &$template)

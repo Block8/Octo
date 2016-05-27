@@ -1,0 +1,38 @@
+<div class="col-sm-6 block">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Recently Active</h3>
+
+            <div class="box-tools pull-right">
+                <span class="label label-primary">{{ users|length }} Users</span>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <ul class="users-list clearfix">
+                {% for user in users %}
+                <li>
+
+                    {% if canAccess('/user/edit') %}
+                        <a href="{{ adminUri }}/user/edit/{{ user.id }}">
+                            <img src="//www.gravatar.com/avatar/{{ md5(user.email) }}?d=mm" alt="{{ user.name }}">
+                        </a>
+                        <a class="users-list-name" href="{{ adminUri }}/user/edit/{{ user.id }}">{{ user.name }}</a>
+                    {% else %}
+                        <img src="//www.gravatar.com/avatar/{{ md5(user.email) }}?d=mm" alt="{{ user.name }}">
+                        {{ user.name }}
+                    {% endif %}
+
+                    <span class="users-list-date">{{ user.date_active|date("g:ia") }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if canAccess('/user/edit') %}
+            <div class="box-footer text-center">
+                <a href="/user" class="uppercase">View All Users</a>
+            </div>
+        {% endif %}
+    </div>
+</div>

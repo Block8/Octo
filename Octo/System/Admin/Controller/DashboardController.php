@@ -16,13 +16,9 @@ class DashboardController extends Controller
         $this->setTitle('Dashboard', $this->config->get('site.name'));
         $this->addBreadcrumb('Dashboard', '/');
 
-        $dashboardOverridden = !Event::trigger('DashboardOverride', $this->view);
-
-        if (!$dashboardOverridden) {
-            $this->view->timeline = $this->loadTimeline();
-            $this->loadDashboardWidgets();
-            $this->loadDashboardStatistics();
-        }
+        $this->template->timeline = $this->loadTimeline();
+        $this->loadDashboardWidgets();
+        $this->loadDashboardStatistics();
     }
 
     protected function loadTimeline()
@@ -135,7 +131,7 @@ class DashboardController extends Controller
             return 0;
         });
 
-        $this->view->widgets = $widgets;
+        $this->template->widgets = $widgets;
     }
 
     protected function loadDashboardStatistics()
@@ -144,6 +140,6 @@ class DashboardController extends Controller
 
         Event::trigger('DashboardStatistics', $stats);
 
-        $this->view->statistics = $stats;
+        $this->template->statistics = $stats;
     }
 }

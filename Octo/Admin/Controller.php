@@ -5,7 +5,8 @@ use b8\Config;
 use b8\Http\Request;
 use b8\Http\Response;
 use Octo\Admin\Menu;
-use Octo\Admin\Template;
+use Octo\Admin\Template as LegacyTemplate;
+use Octo\Template;
 
 /**
  * Class Controller
@@ -36,6 +37,15 @@ abstract class Controller extends \b8\Controller
     protected $layout;
 
     /**
+     * @var \Octo\Template Twig template for this controller.
+     */
+    public $template;
+
+    protected $title;
+    protected $subtitle;
+    protected $breadcrumb;
+
+    /**
      * @param Config $config
      * @param Request $request
      * @param Response $response
@@ -44,24 +54,10 @@ abstract class Controller extends \b8\Controller
     {
         $class = explode('\\', get_class($this));
         $this->className = substr(array_pop($class), 0, -10);
-        $this->layout = Template::getAdminTemplate('layout');
 
         if (isset($_SESSION['user'])) {
             $this->menu = new Menu();
             $this->currentUser = $_SESSION['user'];
-        }
-
-        $this->layout->siteName = $config->get('site.name');
-        $this->layout->breadcrumb = array();
-        $this->layout->currentUser = $this->currentUser;
-        $this->layout->menu = $this->menu;
-
-        if (file_exists(APP_PATH . 'public/assets/backoffice.css')) {
-            $this->layout->siteCss = true;
-        }
-
-        if (file_exists(APP_PATH . 'public/assets/images/cms-logo.png')) {
-            $this->layout->siteLogo = true;
         }
 
         return parent::__construct($config, $request, $response);
@@ -83,51 +79,82 @@ abstract class Controller extends \b8\Controller
      */
     public function handleAction($action, $params)
     {
-        try {
-            $thisClass = explode('\\', get_class($this));
-            $module = $thisClass[1];
-
-            $this->view = Template::getAdminTemplate($this->className . '/' . $action, $module);
-            $this->view->currentUser = $this->currentUser;
-        } catch (\Exception $ex) {
-            $error = '<div class="alert alert-danger">You have not created a view for: ';
-            $error .= $this->className . '/' . $action . '</div>';
-            $this->view = new Template($error);
-        }
-
-        // Set up GlobalMessage:
-        if (!empty($this->view)) {
-            if (!empty($_SESSION['GlobalMessage']['success'])) {
-                $this->view->GlobalMessage()->success = $_SESSION['GlobalMessage']['success'];
-                unset($_SESSION['GlobalMessage']['success']);
-            }
-
-            if (!empty($_SESSION['GlobalMessage']['error'])) {
-                $this->view->GlobalMessage()->error = $_SESSION['GlobalMessage']['error'];
-                unset($_SESSION['GlobalMessage']['error']);
-            }
-
-            if (!empty($_SESSION['GlobalMessage']['info'])) {
-                $this->view->GlobalMessage()->info = $_SESSION['GlobalMessage']['info'];
-                unset($_SESSION['GlobalMessage']['info']);
-            }
-        }
-
+        $this->setupTemplate($this->className, $action);
         $output = parent::handleAction($action, $params);
 
-        if (empty($output) && !empty($this->view)) {
-            $output = $this->view->render();
+        // No output and no template set:
+        if (empty($output) && empty($this->template)) {
+            throw new \Exception('No output or template for ' . $this->className . '.' . $action);
         }
+
+        // No output, but we do have a legacy view to render:
+        if (empty($output) && !empty($this->view)) {
+            $this->template->output = $this->view->render();
+        }
+
+        // Has output, handle legacy style layout for it:
+        if (!empty($output) && $this->response->hasLayout()) {
+            $this->template->output = $output;
+        }
+
+        $this->template->set('title', $this->title);
+        $this->template->set('subtitle', $this->subtitle);
+        $this->template->set('breadcrumb', $this->breadcrumb);
+        $output = $this->template->render();
 
         $this->response->setContent($output);
+        return $this->response;
+    }
 
-        if ($this->response->hasLayout()) {
-            $this->layout->user = $_SESSION['user'];
-            $this->layout->content = $this->response->getContent();
-            $this->response->setContent($this->layout->render());
+    protected function setupTemplate($controller, $action)
+    {
+        try {
+            $this->template = new Template($controller . '/' . $action, 'admin');
+        } catch (\Exception $ex) {
+            $this->setupLegacyTemplate($controller, $action);
         }
 
-        return $this->response;
+        if (empty($this->template)) {
+            return;
+        }
+
+        $this->template->set('siteName', $this->config->get('site.name'));
+        $this->template->set('breadcrumb', array());
+        $this->template->set('currentUser', $this->currentUser);
+        $this->template->set('user', $this->currentUser);
+        $this->template->set('menu', $this->menu);
+
+        if (file_exists(APP_PATH . 'public/assets/backoffice.css')) {
+            $this->template->set('siteCss', true);
+        }
+
+        if (file_exists(APP_PATH . 'public/assets/images/cms-logo.png')) {
+            $this->template->set('siteLogo', true);
+        }
+
+        if (!empty($_SESSION['GlobalMessage']['success'])) {
+            $this->template->globalSuccessMessage = $_SESSION['GlobalMessage']['success'];
+            unset($_SESSION['GlobalMessage']['success']);
+        }
+
+        if (!empty($_SESSION['GlobalMessage']['error'])) {
+            $this->template->globalErrorMessage = $_SESSION['GlobalMessage']['error'];
+            unset($_SESSION['GlobalMessage']['error']);
+        }
+
+        if (!empty($_SESSION['GlobalMessage']['info'])) {
+            $this->template->globalInfoMessage = $_SESSION['GlobalMessage']['info'];
+            unset($_SESSION['GlobalMessage']['info']);
+        }
+    }
+
+    protected function setupLegacyTemplate($controller, $action)
+    {
+        if (LegacyTemplate::exists($controller . '/' . $action)) {
+            $this->template = new Template('legacy', 'admin');
+            $this->view = LegacyTemplate::getAdminTemplate($controller . '/' . $action);
+            $this->view->currentUser = $this->currentUser;
+        }
     }
 
     /**
@@ -142,8 +169,8 @@ abstract class Controller extends \b8\Controller
             $_SESSION['GlobalMessage']['success'] = $message;
         }
 
-        if (!empty($this->view)) {
-            $this->view->GlobalMessage()->success = $message;
+        if (!empty($this->template)) {
+            $this->template->globalSuccessMessage = $message;
         }
     }
 
@@ -159,8 +186,8 @@ abstract class Controller extends \b8\Controller
             $_SESSION['GlobalMessage']['error'] = $message;
         }
 
-        if (!empty($this->view)) {
-            $this->view->GlobalMessage()->error = $message;
+        if (!empty($this->template)) {
+            $this->template->globalErrorMessage = $message;
         }
     }
 
@@ -176,8 +203,8 @@ abstract class Controller extends \b8\Controller
             $_SESSION['GlobalMessage']['info'] = $message;
         }
 
-        if (!empty($this->view)) {
-            $this->view->GlobalMessage()->info = $message;
+        if (!empty($this->template)) {
+            $this->template->globalInfoMessage = $message;
         }
     }
 
@@ -186,8 +213,8 @@ abstract class Controller extends \b8\Controller
      */
     public function setTitle($title, $subtitle = null)
     {
-        $this->layout->title = $title;
-        $this->layout->subtitle = $subtitle;
+        $this->title = $title;
+        $this->subtitle = $subtitle;
     }
 
     /**
@@ -198,9 +225,7 @@ abstract class Controller extends \b8\Controller
      */
     public function addBreadcrumb($title, $link = null)
     {
-        $breadcrumb = $this->layout->breadcrumb;
-        $breadcrumb[] = array('title' => $title, 'link' => $link);
-        $this->layout->breadcrumb = $breadcrumb;
+        $this->breadcrumb[] = array('title' => $title, 'link' => $link);
     }
 
     /**
@@ -210,10 +235,7 @@ abstract class Controller extends \b8\Controller
      */
     public function popBreadcrumb()
     {
-        $breadcrumbs = $this->layout->breadcrumb;
-        $item = array_pop($breadcrumbs);
-        $this->layout->breadcrumb = $breadcrumbs;
-        return $item;
+        return array_pop($this->breadcrumb);
     }
 
     /**

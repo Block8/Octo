@@ -2,7 +2,7 @@
 
 namespace Octo\System\Event;
 
-use Octo\Admin\Template;
+use Octo\Template;
 use Octo\Event\Listener;
 use Octo\Event\Manager;
 use Octo\Store;
@@ -43,7 +43,7 @@ class DashboardWidget extends Listener
         /** @var \Octo\System\Store\UserStore $store */
         $store = Store::get('User');
 
-        $view = Template::getAdminTemplate('Dashboard/recent-users', 'System');
+        $view = new Template('Dashboard/recent-users', 'admin');
         $view->users = $store->getRecentUsers();
 
         $widgets[] = ['order' => 1, 'html' => $view->render()];

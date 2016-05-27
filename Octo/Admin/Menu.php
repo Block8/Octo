@@ -24,7 +24,8 @@ class Menu
         $menu = $this->menu;
         $this->menu = [];
         sort($menu);
-        $this->addRoot('Dashboard', '/', false)->setIcon('home');
+        $this->addRoot('Visit Site', '@', false)->setIcon('home');
+        $this->addRoot('Admin Dashboard', '/', false)->setIcon('dashboard');
         $this->menu = array_merge($this->menu, $menu);
     }
 

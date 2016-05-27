@@ -84,6 +84,8 @@ class Application extends \b8\Application
         $bypass = $this->config->get('Octo.bypass_auth');
 
         $this->router->register($route, $defaults, function (&$route, Response &$response) use (&$bypass, &$request, &$denied) {
+            define('OCTO_ADMIN', true);
+
             if (!empty($_GET['session_auth'])) {
                 session_id($_GET['session_auth']);
             }

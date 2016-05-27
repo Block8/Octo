@@ -121,10 +121,15 @@ class Item
             return '#';
         }
 
+        $config = Config::getInstance();
+
+        if ($forDisplay && $this->link == '@') {
+            return $config->get('site.url');
+        }
+
         $link = $this->link;
 
         if ($forDisplay) {
-            $config = Config::getInstance();
             $link = $config->get('site.full_admin_url') . $link;
         }
 
@@ -144,7 +149,8 @@ class Item
         if ($hasVisibleChildren || $this->isRoot()) {
 
             $icon = ($this->icon ? '<i class="fa fa-lg fa-fw fa-' . $this->icon . '"></i> ' : '');
-            $rtn .= '<a href="'.$this->getLink().'">';
+
+            $rtn .= '<a href="'.$this->getLink().'"' .($this->link == '@' ? ' target="_blank"' : ''). '>';
             $rtn .= $icon. '<span class="menu-item-parent">' . $this->title . '</span>';
 
             if ($hasVisibleChildren) {
