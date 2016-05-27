@@ -37,6 +37,25 @@ class UserStore extends Octo\Store
             return [];
         }
     }
+
+    public function getRecentUsers()
+    {
+        $query = 'SELECT * FROM `user` WHERE UNIX_TIMESTAMP(date_active) > (UNIX_TIMESTAMP() - 3600) ORDER BY date_active DESC';
+        $stmt = Database::getConnection('read')->prepare($query);
+
+        if ($stmt->execute()) {
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $map = function ($item) {
+                return new User($item);
+            };
+            $rtn = array_map($map, $res);
+
+            return $rtn;
+        } else {
+            return [];
+        }
+    }
     
     public function getNames()
     {

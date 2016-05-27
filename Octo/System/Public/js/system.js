@@ -365,15 +365,16 @@ $(document).ready(function () {
         check.after(group);
     });
 
-    $('select.select2, input.select2').select2({
-        formatResult: function (item) {
+    $('select.select2, input.select2').addClass('initialised').select2({
+        templateResult: function (item) {
             var element = $(item.element);
 
             if (element.parents('select').hasClass('icon')) {
-                return '<i class="fa fa-'+element.val()+'"></i>&nbsp; ' + element.val();
+                var itemHtml = '<span><i class="fa fa-'+element.val()+'"></i>&nbsp; ' + item.text + '</span>';
+                return $(itemHtml);
             }
 
-            return element.text();
+            return item.text;
         }
     });
 

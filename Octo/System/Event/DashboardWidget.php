@@ -13,6 +13,8 @@ class DashboardWidget extends Listener
     public function registerListeners(Manager $manager)
     {
         $manager->registerListener('DashboardStatistics', array($this, 'getStatistics'));
+        $manager->registerListener('DashboardWidgets', array($this, 'getWidget'));
+
     }
 
     public function getStatistics(&$stats)
@@ -33,5 +35,17 @@ class DashboardWidget extends Listener
                 'link_title' => 'View Contacts',
             ];
         }
+    }
+
+    public function getWidget(&$widgets)
+    {
+        // Recently active users:
+        /** @var \Octo\System\Store\UserStore $store */
+        $store = Store::get('User');
+
+        $view = Template::getAdminTemplate('Dashboard/recent-users', 'System');
+        $view->users = $store->getRecentUsers();
+
+        $widgets[] = ['order' => 1, 'html' => $view->render()];
     }
 }
