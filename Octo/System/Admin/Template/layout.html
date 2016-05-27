@@ -211,6 +211,17 @@
 <script src="{@config.site.url}/asset/js/System/ckeditor/youtube/plugin"></script>
 <script src="{@config.site.url}/asset/js/System/ckeditor/youtube/lang/en"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/packery/2.1.0/packery.pkgd.min.js"></script>
+<script>
+    $(window).load(function () {
+        $('.packery-blocks').packery({
+            itemSelector: '.block',
+            gutter: 0,
+            resize: true
+        });
+    });
+</script>
+
 
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{@config.site.url}/asset/js/System/excanvas.min"></script><![endif]-->
 

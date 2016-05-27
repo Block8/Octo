@@ -1,12 +1,9 @@
-
-
 <div class="row">
-    <div class="col-lg-8 col-md-6 col-sm-6">
+    <div class="col-md-8">
+        <div class="row packery-blocks clearfix">
 
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
             {for statistics}
-            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-sm-6 col-md-4 block">
                 <!-- small box -->
                 <div class="small-box bg-{@value.color}">
                     <div class="inner">
@@ -33,17 +30,15 @@
                 </div>
             </div><!-- ./col -->
             {/for}
-        </div><!-- /.row -->
 
-
-        <div class="row">
             {for widgets}
             {@value.html}
             {/for}
+
         </div>
     </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-6">
+    <div class="col-md-4">
         <ul class="timeline">
             {for timeline}
             {@value}
@@ -55,3 +50,12 @@
         </ul>
     </div>
 </div>
+
+<style>
+    .packery-blocks {
+    }
+
+    .block table tbody tr td {
+        padding: 10px 20px;
+    }
+</style>
