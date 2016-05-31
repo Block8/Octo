@@ -64,6 +64,10 @@ class TemplateFunctions extends Listener
         if (isset($_SESSION) && is_array($_SESSION)) {
             $template->set('session', $_SESSION);
         }
+
+        if (!empty($_SESSION['user'])) {
+            $template->set('user', $_SESSION['user']);
+        }
     }
 
     public function publicTemplateLoaded(Template &$template)

@@ -12,16 +12,24 @@
             <ul class="users-list clearfix">
                 {% for user in users %}
                 <li>
+                    {% set active = (now.getTimestamp() - user.date_active.getTimestamp()) < 300 %}
+                    {% set uri = '#' %}
 
                     {% if canAccess('/user/edit') %}
-                        <a href="{{ adminUri }}/user/edit/{{ user.id }}">
-                            <img src="//www.gravatar.com/avatar/{{ md5(user.email) }}?d=mm" alt="{{ user.name }}">
-                        </a>
-                        <a class="users-list-name" href="{{ adminUri }}/user/edit/{{ user.id }}">{{ user.name }}</a>
-                    {% else %}
-                        <img src="//www.gravatar.com/avatar/{{ md5(user.email) }}?d=mm" alt="{{ user.name }}">
-                        {{ user.name }}
+                        {% set uri = adminUri  ~ "/user/edit/" ~  user.id %}
                     {% endif %}
+
+                    <a href="{{ uri }}">
+                        <img src="//www.gravatar.com/avatar/{{ md5(user.email) }}?d=mm" alt="{{ user.name }}">
+                    </a>
+
+
+                    <a class="users-list-name" href="{{ uri }}">
+                        {% if active %}
+                            <i class="fa fa-circle text-success"></i>&nbsp;
+                        {% endif %}
+                        {{ user.name }}
+                    </a>
 
                     <span class="users-list-date">{{ user.date_active|date("g:ia") }}</span>
                 </li>

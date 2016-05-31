@@ -103,3 +103,15 @@ input[type=checkbox] {
 .sidebar-footer img {
     height: 35px;
 }
+
+.select2-results__option span {
+    display: inline-block;
+}
+
+.select2-results__option img.item-thumb {
+    margin-right: 25px;
+}
+
+.select2-results__option small {
+    color: #888;
+}

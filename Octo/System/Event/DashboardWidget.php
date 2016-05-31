@@ -24,16 +24,18 @@ class DashboardWidget extends Listener
 
         if ($user->canAccess('/contact')) {
             $contactStore = Store::get('Contact');
-
             $total = $contactStore->getTotal();
-            $stats[] = [
-                'title' => $total == 1 ? 'Contact' : 'Contacts',
-                'count' => number_format($total),
-                'icon' => 'person-stalker',
-                'color' => 'aqua',
-                'link' => '/contact',
-                'link_title' => 'View Contacts',
-            ];
+
+            if ($total) {
+                $stats[] = [
+                    'title' => $total == 1 ? 'Contact' : 'Contacts',
+                    'count' => number_format($total),
+                    'icon' => 'person-stalker',
+                    'color' => 'aqua',
+                    'link' => '/contact',
+                    'link_title' => 'View Contacts',
+                ];
+            }
         }
     }
 
