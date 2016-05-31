@@ -1,115 +1,75 @@
 CKEDITOR.plugins.add( 'cmsimage', {
     icons: 'cmsimage',
     init: function( editor ) {
-        editor.addCommand( 'cmsimageDialog', new CKEDITOR.dialogCommand( 'cmsimageDialog', {
-            allowedContent: 'img{id,alt,width,height,src,class}'
-        } ) );
+
+        editor.addCommand('octoImage', {
+            exec: function (e) {
+
+                var form = $('<form class="form">');
+                var group1 = $('<div class="form-group">');
+                var group2 = $('<div class="form-group">');
+                var image = $('<select class="form-control octo-image-picker"></select>');
+                var width = $('<input class="form-control" value="auto">');
+                var height = $('<input class="form-control" value="auto">');
+                var imageClass = $('<input class="form-control" value="img-responsive">');
+
+                form.append(group1);
+                form.append(group2);
+
+                group1.append('<label>Select an image</label>');
+                group1.append(image);
+                group2.append('<label>Image width</label>');
+                group2.append(width);
+                group2.append('<label>Image height</label>');
+                group2.append(height);
+                group2.append('<label>Image class</label>');
+                group2.append(imageClass);
+
+                var insertButton = $('<button class="btn btn-primary">Insert &raquo;</button>');
+
+                var imageDialog = createDialog(e.name + '_image', {
+                    show: true,
+                    allowClose: true,
+                    title: 'Insert image',
+                    body: form,
+                    button: insertButton
+                });
+
+                convertSelectToImagePicker(image);
+
+                insertButton.on('click', function (e) {
+                    e.preventDefault();
+
+                    var createdImage = editor.document.createElement('img');
+                    var imageWidth = width.val() != '' ? width.val() : 'auto';
+                    var imageHeight = height.val() != '' ? height.val() : 'auto';
+
+                    if (imageClass.val() != '') {
+                        createdImage.setAttribute('class', imageClass.val());
+                    }
+
+                    var imageUrl = '/media/render/' + image.val();
+
+                    if (imageWidth != 'auto' || imageHeight != 'auto') {
+                        imageUrl += '/' + imageWidth + '/' + imageHeight;
+                    }
+
+                    createdImage.setAttribute( 'src', imageUrl );
+                    editor.insertElement( createdImage );
+
+                    imageDialog.modal('hide');
+                    imageDialog.on('hidden.bs.modal', function () {
+                        imageDialog.remove();
+                    })
+                });
+            }
+        });
+
         editor.ui.addButton( 'cmsimage', {
             label: 'Insert Image',
-            command: 'cmsimageDialog',
+            command: 'octoImage',
             toolbar: 'insert',
             icon : '/asset/img/System/cmsimage.png'
         });
-
-        var html = '';
-        var scope = 'images';
-
-        getImages(scope).done(function(response) {
-            var data = JSON.parse(response);
-            var images = [];
-            for(var i = 0; i < data.length; i++) {
-                images.push([data[i].title, data[i].id]);
-            }
-
-            CKEDITOR.dialog.add( 'cmsimageDialog', function ( editor ) {
-                return {
-                    title: 'Insert Image',
-                    minWidth: 400,
-                    minHeight: 200,
-                    contents: [
-                        {
-                            id: 'fields',
-                            elements: [
-                                {
-                                    type: 'select',
-                                    id: 'image',
-                                    label: 'Choose Image:<br /><br />',
-                                    items: images,
-                                    onChange: function(e) {
-                                        var src = '<img src="/media/render/' + e.data.value + '/200/auto">';
-                                        if($('#image_container').length < 1) {
-                                            $('#' + e.sender.domId).append('<br /><div style="display: block; min-height: 100px; min-width: 100px;" id="image_container">' + src + '</div>');
-                                        } else {
-                                            $('#image_container').html(src);
-                                        }
-                                    }
-                                },
-                                {
-                                    type: 'text',
-                                    id: 'width',
-                                    label: 'Width (pixels) (optional):<br /><br />'
-                                },
-                                {
-                                    type: 'text',
-                                    id: 'height',
-                                    label: 'Height (pixels) (optional):<br /><br />'
-                                },
-                                {
-                                    type: 'text',
-                                    id: 'alt',
-                                    label: 'Alt/title text (optional):<br /><br />'
-                                },
-                                {
-                                    type: 'text',
-                                    id: 'imgclass',
-                                    label: 'Responsive image (default):<br /><br />',
-                                    default: 'img-responsive'
-                                }
-                            ]
-                        }
-                    ],
-                    onOk: function(e) {
-                        var dialog   = this;
-                        var image    = editor.document.createElement('img');
-                        var id       = dialog.getValueOf( 'fields', 'image' );
-
-                        var width    = dialog.getValueOf( 'fields', 'width' );
-                        var height   = dialog.getValueOf( 'fields', 'height' );
-                        var alt      = dialog.getValueOf( 'fields', 'alt' );
-                        var imgclass = dialog.getValueOf( 'fields', 'imgclass' );
-
-                        if (width != '') {
-                            image.setAttribute( 'width', width );
-                        }
-                        if (height != '') {
-                            image.setAttribute( 'height', height );
-                        }
-                        if (alt != '') {
-                            image.setAttribute( 'alt', alt );
-                        }
-                        if (imgclass != '') {
-                            image.setAttribute( 'class', imgclass );
-                        }
-
-                        image.setAttribute( 'src', '/media/render/' + id + '/' );
-                        editor.insertElement( image );
-                    }
-                }
-            });
-        });
-
     }
 });
-
-
-
-function getImages(scope)
-{
-    // TODO: Eventually, this needs to check for scopes - for now, just images
-    // TODO: Maybe a search function?
-    return $.ajax({
-        type: "GET",
-        url: "/media/ajax/" + scope,
-        data: {}
-    });
-}

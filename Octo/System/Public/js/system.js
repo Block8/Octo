@@ -380,48 +380,7 @@ $(document).ready(function () {
 
     $('.octo-image-picker').each(function () {
         var input = $(this);
-        var img = $('<img>');
-        img.insertAfter(input).css({'margin': '10px 0'}).hide();
-
-        input.select2({
-            placeholder: "Search for an image",
-            allowClear: true,
-            minimumInputLength: 1,
-            width: '100%',
-            ajax: {
-                url: window.adminUri + '/media/autocomplete/images',
-                dataType: 'json',
-                data: function(term) {
-                    return {
-                        q: term
-                    };
-                },
-                results: function(data) {
-                    return data;
-                }
-            },
-            templateResult: function (item) {
-                var itemHtml = '' +
-                    '<span><img class="item-thumb" src="/media/render/'+item.id+'/100/60"></span>' +
-                    '<span>' +
-                    '<strong>'+item.text+'</strong><br><small>'+item.filename+'</small>' +
-                    '</span>';
-                return $(itemHtml);
-            }
-        });
-
-        input.on('change', function () {
-            var val = $(this).val();
-
-            if (val) {
-                img.attr('src', '/media/render/' + $(this).val() + '/160/90');
-                img.show();
-            }
-        });
-
-        if (input.val() != '') {
-            input.trigger('change');
-        }
+        convertSelectToImagePicker(input);
     });
 
     $('.octo-file-picker').each(function () {
@@ -518,4 +477,48 @@ var fixHelper = function(e, ui) {
 
 
 
+function convertSelectToImagePicker(input)
+{
+    var img = $('<img>');
+    img.insertAfter(input).css({'margin': '10px 0'}).hide();
 
+    input.select2({
+        placeholder: "Search for an image",
+        allowClear: true,
+        minimumInputLength: 1,
+        width: '100%',
+        ajax: {
+            url: window.adminUri + '/media/autocomplete/images',
+            dataType: 'json',
+            data: function(term) {
+                return {
+                    q: term
+                };
+            },
+            results: function(data) {
+                return data;
+            }
+        },
+        templateResult: function (item) {
+            var itemHtml = '' +
+                '<span><img class="item-thumb" src="/media/render/'+item.id+'/100/60"></span>' +
+                '<span>' +
+                '<strong>'+item.text+'</strong><br><small>'+item.filename+'</small>' +
+                '</span>';
+            return $(itemHtml);
+        }
+    });
+
+    input.on('change', function () {
+        var val = $(this).val();
+
+        if (val) {
+            img.attr('src', '/media/render/' + $(this).val() + '/160/90');
+            img.show();
+        }
+    });
+
+    if (input.val() != '') {
+        input.trigger('change');
+    }
+}
