@@ -1,5 +1,5 @@
-CKEDITOR.plugins.add( 'cmsimage', {
-    icons: 'cmsimage',
+CKEDITOR.plugins.add( 'octo.image', {
+    icons: 'octo.image',
     init: function( editor ) {
 
         editor.addCommand('octoImage', {
@@ -35,7 +35,7 @@ CKEDITOR.plugins.add( 'cmsimage', {
                     button: insertButton
                 });
 
-                convertSelectToImagePicker(image);
+                Octo.Forms.createImagePicker(image);
 
                 insertButton.on('click', function (e) {
                     e.preventDefault();
@@ -65,11 +65,11 @@ CKEDITOR.plugins.add( 'cmsimage', {
             }
         });
 
-        editor.ui.addButton( 'cmsimage', {
+        editor.ui.addButton('octo.image', {
             label: 'Insert Image',
             command: 'octoImage',
             toolbar: 'insert',
-            icon : '/asset/img/System/cmsimage.png'
+            icon : '/asset/img/System/octo.image.png'
         });
     }
 });
