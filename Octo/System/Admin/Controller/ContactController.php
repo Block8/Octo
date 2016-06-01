@@ -97,7 +97,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $this->view->contacts = $this->contactStore->all();
+        $this->template->contacts = $this->contactStore->all();
     }
 
     public function add()

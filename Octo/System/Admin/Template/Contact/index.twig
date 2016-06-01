@@ -1,0 +1,76 @@
+{% extends "@admin/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+        {% for contact in contacts %}
+            <div class="col-lg-4">
+                <div class="box {{ contact.is_blocked ? 'box-danger' : 'box-success' }}" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+
+                    <div class="box-header" role="heading">
+                        <img style="float: left; margin-right: 10px;" src="//www.gravatar.com/avatar/{{ md5(contact.email) }}?d=mm&s=48" class="img-circle" alt="User Image" />
+
+
+                        <h3 class="box-title">{{ contact.first_name }} {{ contact.last_name }}</h3>
+
+                        <div class="box-tools pull-right" role="menu">
+                            <div class="btn-group">
+                                {% if user.canAccess("/contact/edit") %}
+                                    <a class="btn btn-default btn-sm" href="{{ adminUri }}/contact/edit/{{ value.id }}">Edit</a>
+                                {% endif %}
+
+                                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    {% if contact.is_blocked %}
+                                        <li><a href="{{ adminUri }}/contact/unblock/{{ contact.id }}" class="">Unblock</a></li>
+                                    {% else %}
+                                        <li><a href="{{ adminUri }}/contact/block/{{ contact.id }}" class="">Block</a></li>
+                                    {% endif %}
+
+                                    {% if user.canAccess("/contact/delete") %}
+                                        <li>
+                                            <a href="{{ adminUri }}/contact/delete/{{ value.id }}" class="btn-delete">Delete</a>
+                                        </li>
+                                    {% endif %}
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="content">
+
+                        <div class="box-body no-padding">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{ contact.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone</th>
+                                    <td>{{ contact.phone }}</td>
+                                </tr>
+
+                                {% if contact.company %}
+                                    <tr>
+                                        <th>Company</th>
+                                        <td>{{ contact.company }}</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        {% else %}
+            <div class="col-sm-12">
+                <div class="alert alert-warning">
+                    You don't have any contacts yet. <a href="{{ adminUri }}/contact/add">Create one?</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
