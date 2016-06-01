@@ -48,7 +48,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $this->view->users = $this->userStore->getAll();
+        $this->template->users = $this->userStore->getAll();
     }
 
     public function add()
