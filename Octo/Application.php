@@ -187,6 +187,8 @@ class Application extends \b8\Application
 
                 newrelic_name_transaction($site . '.' . $controller . '.' . $action);
             }
+        } catch (HttpException\NotFoundException $ex) {
+            $rtn = $this->handleHttpError($ex->getErrorCode());
         } catch (HttpException $ex) {
             if ((defined('CMS_ENV') && CMS_ENV == 'development') || array_key_exists('ex', $_GET)) {
                 throw $ex;
@@ -214,28 +216,13 @@ class Application extends \b8\Application
     {
         try {
             $template = new Template('Error/' . $code);
+            $template->set('page', ['title' => 'Error ' . $code . ' - ' . Response::$codes[$code]]);
             $content = $template->render();
-            $content = str_replace('{!@octo.meta}', '<title>Error</title>', $content);
+            
+            $this->response->setResponseCode($code);
             $this->response->setContent($content);
         } catch (\Exception $ex) {}
-
-        /*
-        if (Template::exists('Error/' . $code)) {
-
-            $this->response->setResponseCode($code);
-
-            $template = Template::load('Error/' . $code);
-            $blockManager = new BlockManager();
-            $blockManager->setRequest($this->request);
-            $blockManager->setResponse($this->response);
-            $blockManager->attachToTemplate($template);
-
-            $content = $template->render();
-            $content = str_replace('{!@octo.meta}', '<title>Error</title>', $content);
-            $this->response->setContent($content);
-        }
-        */
-
+        
         return $this->response;
     }
 
