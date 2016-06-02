@@ -64,6 +64,8 @@ Octo.Forms.createImagePicker = function (input) {
         if (val) {
             img.attr('src', '/media/render/' + $(this).val() + '/160/90');
             img.show();
+        } else {
+            img.hide();
         }
     });
 
