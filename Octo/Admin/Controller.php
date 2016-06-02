@@ -96,15 +96,16 @@ abstract class Controller extends \b8\Controller
         if (!empty($output) && $this->response->hasLayout()) {
             $this->template->output = $output;
         }
-
-        if ($this->response->hasLayout()) {
-            $this->template->set('title', $this->title);
-            $this->template->set('subtitle', $this->subtitle);
-            $this->template->set('breadcrumb', $this->breadcrumb);
-            $output = $this->template->render();
+        
+        if (!empty($output) && !$this->response->hasLayout()) {
+            return $output;
         }
 
-        $this->response->setContent($output);
+        $this->template->set('title', $this->title);
+        $this->template->set('subtitle', $this->subtitle);
+        $this->template->set('breadcrumb', $this->breadcrumb);
+
+        $this->response->setContent($this->template->render());
         return $this->response;
     }
 

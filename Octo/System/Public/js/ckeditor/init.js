@@ -10,8 +10,8 @@ window.basicCkEditor = {
     removePlugins: 'elementspath',
     resizeEnabled: false,
     extraPlugins: 'octo.link,octo.image,scayt,undo',
-    stylesSet: 'styles:/assets/js/ckeditor_styles.js',
-    contentsCss: '/assets/editor-style.css',
+    stylesSet: 'styles:/asset/js/site/ckeditor',
+    contentsCss: '/asset/css/site/ckeditor',
     height: '200px'
 };
 
@@ -27,8 +27,8 @@ window.smallCkEditor = {
     removePlugins: 'elementspath',
     resizeEnabled: false,
     extraPlugins: 'octo.link,octo.image,scayt,undo',
-    stylesSet: 'styles:/assets/js/ckeditor_styles.js',
-    contentsCss: '/assets/editor-style.css',
+    stylesSet: 'styles:/asset/js/site/ckeditor',
+    contentsCss: '/asset/css/site/ckeditor',
     height: '100px'
 };
 
@@ -48,8 +48,8 @@ window.fullCkEditor = {
     extraPlugins: 'octo.link,octo.image,scayt,undo',
     alllowedContent: true,
     height: '300px',
-    stylesSet: 'styles:/assets/js/ckeditor_styles.js',
-    contentsCss: '/assets/editor-style.css',
+    stylesSet: 'styles:/asset/js/site/ckeditor',
+    contentsCss: '/asset/css/site/ckeditor',
     bodyClass: 'main'
 };
 

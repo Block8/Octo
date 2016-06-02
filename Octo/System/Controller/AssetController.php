@@ -12,43 +12,39 @@ class AssetController extends Octo\Controller
     {
         $parts = array_slice(func_get_args(), 1);
         $name = implode('/', $parts);
+        $path = $this->getPath($module) . '/js/' . $name . '.js';
+        $rtn = '';
 
-        $paths = Config::getInstance()->get('Octo.paths.modules');
-        $path = $paths[$module] . 'Public/js/' . $name . '.js';
-
-        if (!file_exists($path)) {
-            throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
+        if (file_exists($path)) {
+            $rtn = file_get_contents($path);
         }
 
         $this->response->disableLayout();
         $this->response->setHeader('Content-Type', 'application/javascript');
-        return file_get_contents($path);
+        return $rtn;
     }
 
     public function css($module)
     {
         $parts = array_slice(func_get_args(), 1);
         $name = implode('/', $parts);
+        $path = $this->getPath($module) . '/css/' . $name . '.css';
+        $rtn = '';
 
-        $paths = Config::getInstance()->get('Octo.paths.modules');
-        $path = $paths[$module] . 'Public/css/' . $name . '.css';
-
-        if (!file_exists($path)) {
-            throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
+        if (file_exists($path)) {
+            $rtn = file_get_contents($path);
         }
 
         $this->response->disableLayout();
         $this->response->setHeader('Content-Type', 'text/css');
-        return file_get_contents($path);
+        return $rtn;
     }
 
     public function img($module)
     {
         $parts = array_slice(func_get_args(), 1);
         $name = implode('/', $parts);
-
-        $paths = Config::getInstance()->get('Octo.paths.modules');
-        $path = $paths[$module] . 'Public/img/' . $name;
+        $path = $this->getPath($module) . '/img/' . $name;
 
         if (!file_exists($path)) {
             throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
@@ -56,5 +52,16 @@ class AssetController extends Octo\Controller
 
         $this->response->disableLayout();
         return file_get_contents($path);
+    }
+
+    protected function getPath($module)
+    {
+        if ($module == 'site') {
+            $siteNamespace = $this->config->get('site.namespace');
+            return APP_PATH . $siteNamespace . '/Public/';
+        }
+
+        $paths = Config::getInstance()->get('Octo.paths.modules');
+        return $paths[$module] . 'Public/';
     }
 }
