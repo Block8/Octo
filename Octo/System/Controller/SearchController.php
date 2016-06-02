@@ -2,8 +2,6 @@
 
 namespace Octo\System\Controller;
 
-use Octo\Block;
-use Octo\BlockManager;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Store;
@@ -26,10 +24,14 @@ class SearchController extends Controller
         $query = $this->getParam('q', '');
         $results = $this->searchStore->search($query);
         $results = array_map([$this, 'render'], $results);
+        $results = array_filter($results);
 
         $view = new Template('Search/results');
         $view->query = $query;
         $view->results = $results;
+        $view->page = [
+            'title' => 'Search results for "'.$query.'" on ' . $this->config->get('site.name')
+        ];
 
         $output = $view->render();
 
