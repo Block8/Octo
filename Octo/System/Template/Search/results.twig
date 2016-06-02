@@ -1,0 +1,7 @@
+<h1>Search results for '{{ query }}'</h1>
+
+<div class="search-results">
+    {% for result in results %}
+        {{ result|raw }}
+    {% endfor %}
+</div>
