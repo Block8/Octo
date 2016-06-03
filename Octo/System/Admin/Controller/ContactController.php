@@ -122,7 +122,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $this->template->contacts = $this->contactStore->all();
+        $this->template->contacts = $this->contactStore->getList();
     }
 
     public function add()

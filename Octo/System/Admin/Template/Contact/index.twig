@@ -1,13 +1,22 @@
 {% extends "@admin/layout.twig" %}
 
 {% block content %}
+
     <div class="row">
         <div class="packery-blocks clearfix">
         {% for contact in contacts %}
+            {% if contact.is_blocked %}
+                {% set cls = 'bg-red' %}
+            {% elseif contact.marketing_optin %}
+                {% set cls = 'bg-green' %}
+            {% else %}
+                {% set cls = 'bg-yellow' %}
+            {% endif %}
+
             <div class="col-lg-4 col-sm-6">
             <div class="box box-widget widget-user">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header {{ contact.is_blocked ? 'bg-red' : 'bg-green' }}">
+                <div class="widget-user-header {{ cls }}">
                     <h3 class="widget-user-username">{{ contact.first_name }} {{ contact.last_name }}</h3>
                     <h5 class="widget-user-desc">{{ contact.email }}</h5>
                 </div>
