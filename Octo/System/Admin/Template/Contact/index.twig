@@ -2,6 +2,82 @@
 
 {% block content %}
     <div class="row">
+        <div class="packery-blocks clearfix">
+        {% for contact in contacts %}
+            <div class="col-lg-4 col-sm-6">
+            <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header {{ contact.is_blocked ? 'bg-red' : 'bg-green' }}">
+                    <h3 class="widget-user-username">{{ contact.first_name }} {{ contact.last_name }}</h3>
+                    <h5 class="widget-user-desc">{{ contact.email }}</h5>
+                </div>
+
+                <div class="widget-user-image">
+                    <img class="img-circle" src="//www.gravatar.com/avatar/{{ md5(contact.email) }}?d=mm&s=125" alt="User Avatar">
+                </div>
+
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                {% if contact.is_blocked %}
+                                    <h5 class="description-header text-red">Blocked</h5>
+                                    <span class="description-text"><a href="{{ adminUri }}/contact/unblock/{{ contact.id }}">Unblock</a></span>
+                                {% else %}
+                                    <h5 class="description-header text-green">Unblocked</h5>
+                                    <span class="description-text"><a href="{{ adminUri }}/contact/block/{{ contact.id }}">Block</a></span>
+                                {% endif %}
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="description-block border-right">
+                                <h5 class="description-header text-green"><a href="{{ adminUri }}/contact/edit/{{ contact.id }}">Edit</a></h5>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+
+                        <!-- /.col -->
+                        <div class="col-sm-4">
+                            <div class="description-block">
+                                {% if contact.marketing_optin %}
+                                    <h5 class="description-header text-green">Marketing On</h5>
+                                    <span class="description-text"><a href="{{ adminUri }}/contact/opt-out/{{ contact.id }}">Opt Out</a></span>
+                                {% else %}
+                                    <h5 class="description-header text-red">Marketing Off</h5>
+                                    <span class="description-text"><a href="{{ adminUri }}/contact/opt-in/{{ contact.id }}">Opt In</a></span>
+                                {% endif %}
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col --
+                        <div class="col-sm-4">
+                            <div class="description-block">
+                                <h5 class="description-header">Joined</h5>
+                                <span class="description-text">{{ contact.date_created|date('F jS Y') }}</span>
+                            </div>
+                            <!-- /.description-block --
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+            </div>
+        {% else %}
+            <div class="col-sm-12">
+                <div class="alert alert-warning">
+                    You don't have any contacts yet. <a href="{{ adminUri }}/contact/add">Create one?</a>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+
+
+    <!--div class="row">
         {% for contact in contacts %}
             <div class="col-lg-4">
                 <div class="box {{ contact.is_blocked ? 'box-danger' : 'box-success' }}" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
@@ -72,5 +148,5 @@
                 </div>
             </div>
         {% endfor %}
-    </div>
+    </div -->
 {% endblock %}
