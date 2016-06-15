@@ -6,7 +6,7 @@ if (!defined('CMS_PATH')) {
     define('CMS_BASE_PATH', realpath(CMS_PATH . '../') . '/');
 }
 
-if (isset($_SERVER['APPLICATION_ENV'])) {
+if (isset($_SERVER['APPLICATION_ENV']) && !defined('CMS_ENV')) {
     define('CMS_ENV', $_SERVER['APPLICATION_ENV']);
 }
 
