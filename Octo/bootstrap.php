@@ -6,7 +6,7 @@ if (!defined('CMS_PATH')) {
     define('CMS_BASE_PATH', realpath(CMS_PATH . '../') . '/');
 }
 
-if (isset($_SERVER['APPLICATION_ENV'])) {
+if (isset($_SERVER['APPLICATION_ENV']) && !defined('CMS_ENV')) {
     define('CMS_ENV', $_SERVER['APPLICATION_ENV']);
 }
 
@@ -67,6 +67,15 @@ $_SETTINGS['Octo']['AssetManager'] = new \Octo\AssetManager();
 
 $config->setArray($_SETTINGS);
 $moduleManager->initialiseModules();
+
+
+$host = $config->get('b8.database.servers.write');
+$user = $config->get('b8.database.username');
+$pass = $config->get('b8.database.password');
+$name = $config->get('b8.database.name');
+
+\Block8\Database\Connection::setConfig($host, $user, $pass, $name);
+\Octo\Store::setNamespaces($config->get('app.namespaces'));
 
 $templatePath = realpath(APP_PATH . $_SETTINGS['site']['namespace'] . '/Template');
 define('SITE_TEMPLATE_PATH', $templatePath);

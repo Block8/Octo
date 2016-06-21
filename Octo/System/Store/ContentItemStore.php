@@ -12,7 +12,6 @@ use Octo;
  * ContentItem Store
  * @uses Octo\System\Store\Base\ContentItemStoreBase
  */
-class ContentItemStore extends Octo\Store
+class ContentItemStore extends Base\ContentItemStoreBase
 {
-    use Base\ContentItemStoreBase;
-}
+	}

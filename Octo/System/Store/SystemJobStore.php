@@ -12,11 +12,9 @@ use Octo;
 /**
  * SystemJob Store
  */
-class SystemJobStore extends Octo\Store
+class SystemJobStore extends Base\SystemJobStoreBase
 {
-    use Base\SystemJobStoreBase;
-
-    public function getNextJob()
+	public function getNextJob()
     {
         $query = new Query('\Octo\System\Model\SystemJob');
         $query->select('*')->from('system_job')->order('run_date', 'ASC')->limit(1);

@@ -13,11 +13,9 @@ use Octo;
  * Migration Store
  * @uses Octo\System\Store\Base\MigrationStoreBase
  */
-class MigrationStore extends Octo\Store
+class MigrationStore extends Base\MigrationStoreBase
 {
-    use Base\MigrationStoreBase;
-
-    public function runMigration(array $migration)
+	public function runMigration(array $migration)
     {
         $pdo = Database::getConnection('write');
         $pdo->beginTransaction();

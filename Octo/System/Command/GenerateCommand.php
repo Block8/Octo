@@ -3,7 +3,9 @@
 namespace Octo\System\Command;
 
 use b8\Config;
-use b8\Database;
+use Block8\Database\Connection;
+use Block8\Database\Mapper;
+use Octo\Database\CodeGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,11 +23,16 @@ class GenerateCommand extends Command
     {
         unset($input, $output);
 
-        $connection = Database::getConnection();
-        $namespaces = Config::getInstance()->get('app.namespaces');
+        $c = Config::getInstance();
+        
+        $connection = Connection::get();
 
-        $paths = Config::getInstance()->get('Octo.paths.namespaces');
-        $gen = new Database\CodeGenerator($connection, $namespaces, $paths, true);
+        $namespaces = $c->get('app.namespaces');
+        $paths = $c->get('Octo.paths.namespaces');
+
+        $mapper = new Mapper($connection);
+
+        $gen = new CodeGenerator($mapper, $namespaces, $paths);
         $gen->generateModels();
         $gen->generateStores();
     }

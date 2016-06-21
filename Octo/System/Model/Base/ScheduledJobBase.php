@@ -6,109 +6,123 @@
 
 namespace Octo\System\Model\Base;
 
-use b8\Store\Factory;
+use Octo\Model;
+use Octo\Store;
 
 /**
  * ScheduledJob Base Model
  */
-trait ScheduledJobBase
+class ScheduledJobBase extends Model
 {
     protected function init()
     {
-        $this->tableName = 'scheduled_job';
-        $this->modelName = 'ScheduledJob';
+        $this->table = 'scheduled_job';
+        $this->model = 'ScheduledJob';
 
         // Columns:
+        
         $this->data['id'] = null;
         $this->getters['id'] = 'getId';
         $this->setters['id'] = 'setId';
+        
         $this->data['type'] = null;
         $this->getters['type'] = 'getType';
         $this->setters['type'] = 'setType';
+        
         $this->data['data'] = null;
         $this->getters['data'] = 'getData';
         $this->setters['data'] = 'setData';
+        
         $this->data['frequency'] = null;
         $this->getters['frequency'] = 'getFrequency';
         $this->setters['frequency'] = 'setFrequency';
+        
         $this->data['current_job_id'] = null;
         $this->getters['current_job_id'] = 'getCurrentJobId';
         $this->setters['current_job_id'] = 'setCurrentJobId';
-
+        
         // Foreign keys:
+        
         $this->getters['CurrentJob'] = 'getCurrentJob';
         $this->setters['CurrentJob'] = 'setCurrentJob';
+        
     }
+
+    
     /**
-    * Get the value of Id / id.
-    *
-    * @return int
-    */
-    public function getId()
-    {
+     * Get the value of Id / id
+     * @return int
+     */
+
+     public function getId()
+     {
         $rtn = $this->data['id'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of Type / type.
-    *
-    * @return string
-    */
-    public function getType()
-    {
+     * Get the value of Type / type
+     * @return string
+     */
+
+     public function getType()
+     {
         $rtn = $this->data['type'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of Data / data.
-    *
-    * @return string
-    */
-    public function getData()
-    {
+     * Get the value of Data / data
+     * @return array|null
+     */
+
+     public function getData()
+     {
         $rtn = $this->data['data'];
 
-        return $rtn;
-    }
+        $rtn = json_decode($rtn, true);
 
+        if (empty($rtn)) {
+            $rtn = null;
+        }
+
+        return $rtn;
+     }
+    
     /**
-    * Get the value of Frequency / frequency.
-    *
-    * @return int
-    */
-    public function getFrequency()
-    {
+     * Get the value of Frequency / frequency
+     * @return int
+     */
+
+     public function getFrequency()
+     {
         $rtn = $this->data['frequency'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of CurrentJobId / current_job_id.
-    *
-    * @return int
-    */
-    public function getCurrentJobId()
-    {
+     * Get the value of CurrentJobId / current_job_id
+     * @return int
+     */
+
+     public function getCurrentJobId()
+     {
         $rtn = $this->data['current_job_id'];
 
         return $rtn;
-    }
-
-
+     }
+    
+    
     /**
-    * Set the value of Id / id.
-    *
-    * Must not be null.
-    * @param $value int
-    */
-    public function setId($value)
+     * Set the value of Id / id
+     * @param $value int
+     */
+    public function setId(int $value)
     {
-        $this->validateInt('Id', $value);
+
         $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
@@ -118,16 +132,14 @@ trait ScheduledJobBase
         $this->data['id'] = $value;
         $this->setModified('id');
     }
-
+    
     /**
-    * Set the value of Type / type.
-    *
-    * Must not be null.
-    * @param $value string
-    */
-    public function setType($value)
+     * Set the value of Type / type
+     * @param $value string
+     */
+    public function setType(string $value)
     {
-        $this->validateString('Type', $value);
+
         $this->validateNotNull('Type', $value);
 
         if ($this->data['type'] === $value) {
@@ -137,16 +149,14 @@ trait ScheduledJobBase
         $this->data['type'] = $value;
         $this->setModified('type');
     }
-
+    
     /**
-    * Set the value of Data / data.
-    *
-    * Must not be null.
-    * @param $value string
-    */
+     * Set the value of Data / data
+     * @param $value array|null
+     */
     public function setData($value)
     {
-        $this->validateString('Data', $value);
+        $this->validateJson($value);
         $this->validateNotNull('Data', $value);
 
         if ($this->data['data'] === $value) {
@@ -156,16 +166,14 @@ trait ScheduledJobBase
         $this->data['data'] = $value;
         $this->setModified('data');
     }
-
+    
     /**
-    * Set the value of Frequency / frequency.
-    *
-    * Must not be null.
-    * @param $value int
-    */
-    public function setFrequency($value)
+     * Set the value of Frequency / frequency
+     * @param $value int
+     */
+    public function setFrequency(int $value)
     {
-        $this->validateInt('Frequency', $value);
+
         $this->validateNotNull('Frequency', $value);
 
         if ($this->data['frequency'] === $value) {
@@ -175,20 +183,20 @@ trait ScheduledJobBase
         $this->data['frequency'] = $value;
         $this->setModified('frequency');
     }
-
+    
     /**
-    * Set the value of CurrentJobId / current_job_id.
-    *
-    * @param $value int
-    */
+     * Set the value of CurrentJobId / current_job_id
+     * @param $value int
+     */
     public function setCurrentJobId($value)
     {
-        $this->validateInt('CurrentJobId', $value);
 
-        // As this is a foreign key, empty values should be treated as null:
+
+        // As this column is a foreign key, empty values should be considered null.
         if (empty($value)) {
             $value = null;
         }
+
 
 
         if ($this->data['current_job_id'] === $value) {
@@ -198,33 +206,40 @@ trait ScheduledJobBase
         $this->data['current_job_id'] = $value;
         $this->setModified('current_job_id');
     }
+    
+    
     /**
-    * Get the Job model for this ScheduledJob by Id.
-    *
-    * @uses \Octo\System\Store\JobStore::getById()
-    * @uses \Octo\System\Model\Job
-    * @return \Octo\System\Model\Job
-    */
+     * Get the Job model for this  by Id.
+     *
+     * @uses \Octo\System\Store\JobStore::getById()
+     * @uses \Octo\System\Model\Job
+     * @return \Octo\System\Model\Job
+     */
     public function getCurrentJob()
     {
         $key = $this->getCurrentJobId();
 
         if (empty($key)) {
-            return null;
+           return null;
         }
 
-        return Factory::getStore('Job', 'Octo\System')->getById($key);
+        return Store::get('Job')->getById($key);
     }
 
     /**
-    * Set CurrentJob - Accepts an ID, an array representing a Job or a Job model.
-    *
-    * @param $value mixed
-    */
+     * Set CurrentJob - Accepts an ID, an array representing a Job or a Job model.
+     * @throws \Exception
+     * @param $value mixed
+     */
     public function setCurrentJob($value)
     {
-        // Is this an instance of Job?
-        if ($value instanceof \Octo\System\Model\Job) {
+        // Is this a scalar value representing the ID of this foreign key?
+        if (is_scalar($value)) {
+            return $this->setCurrentJobId($value);
+        }
+
+        // Is this an instance of CurrentJob?
+        if (is_object($value) && $value instanceof \Octo\System\Model\Job) {
             return $this->setCurrentJobObject($value);
         }
 
@@ -233,15 +248,15 @@ trait ScheduledJobBase
             return $this->setCurrentJobId($value['id']);
         }
 
-        // Is this a scalar value representing the ID of this foreign key?
-        return $this->setCurrentJobId($value);
+        // None of the above? That's a problem!
+        throw new \Exception('Invalid value for CurrentJob.');
     }
 
     /**
-    * Set CurrentJob - Accepts a Job model.
-    *
-    * @param $value \Octo\System\Model\Job
-    */
+     * Set CurrentJob - Accepts a Job model.
+     *
+     * @param $value \Octo\System\Model\Job
+     */
     public function setCurrentJobObject(\Octo\System\Model\Job $value)
     {
         return $this->setCurrentJobId($value->getId());

@@ -46,6 +46,9 @@ class ContactController extends Controller
         $thisMenu->addChild(new Menu\Item('Contact Autocomplete', '/contact/autocomplete', true));
         $thisMenu->addChild(new Menu\Item('Block Contact', '/contact/block', true));
         $thisMenu->addChild(new Menu\Item('Unblock Contact', '/contact/unblock', true));
+
+        $thisMenu->addChild(new Menu\Item('Opt-In Contact', '/contact/opt-in', true));
+        $thisMenu->addChild(new Menu\Item('Opt-Out Contact', '/contact/opt-out', true));
     }
 
     public function autocomplete()
@@ -95,9 +98,31 @@ class ContactController extends Controller
         $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
+    public function optIn($contactId)
+    {
+        $contact = $this->contactStore->getById($contactId);
+        $this->successMessage('Contact opted-in!', true);
+
+        $contact->setMarketingOptin(1);
+        $this->contactStore->save($contact);
+
+        $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function optOut($contactId)
+    {
+        $contact = $this->contactStore->getById($contactId);
+        $this->successMessage('Contact opted-out!', true);
+
+        $contact->setMarketingOptin(0);
+        $this->contactStore->save($contact);
+
+        $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
     public function index()
     {
-        $this->template->contacts = $this->contactStore->all();
+        $this->template->contacts = $this->contactStore->getList();
     }
 
     public function add()
@@ -143,7 +168,7 @@ class ContactController extends Controller
         }
 
         $form = $this->contactForm();;
-        $form->setValues($contact->getDataArray());
+        $form->setValues($contact->toArray());
         $this->view->form = $form;
     }
 

@@ -13,11 +13,6 @@ class Search extends Listener
      */
     protected $searchStore;
 
-    public function __construct()
-    {
-        $this->searchStore = Store::get('SearchIndex');
-    }
-
     public function registerListeners(Manager $manager)
     {
         $manager->registerListener('ContentPublished', array($this, 'addToSearchIndex'));
@@ -25,6 +20,7 @@ class Search extends Listener
 
     public function addToSearchIndex(&$data)
     {
+        $this->searchStore = Store::get('SearchIndex');
         $class = get_class($data['model']);
         $class = explode('\\', $class);
         $class = end($class);

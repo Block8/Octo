@@ -14,11 +14,9 @@ use PDOException;
 /**
  * ScheduledJob Store
  */
-class ScheduledJobStore extends Octo\Store
+class ScheduledJobStore extends Base\ScheduledJobStoreBase
 {
-    use Base\ScheduledJobStoreBase;
-
-    /**
+	/**
      * Get jobs due to be scheduled.
      */
     public function getJobsToSchedule()

@@ -26,7 +26,7 @@ class Manager
         $job = self::save($createJob);
 
         if (is_null($job)) {
-            $newData = $createJob->getDataArray();
+            $newData = $createJob->toArray();
             unset($newData['id']);
 
             $job = self::save(new Job($newData));

@@ -1,0 +1,168 @@
+{{ "<?php" }}
+
+/**
+ * {{ table.php_name }} base model for table: {{ name }}
+ */
+
+namespace {{ itemNamespace }}\Model\Base;
+
+use Octo\Model;
+use Octo\Store;
+
+/**
+ * {{ table.php_name }} Base Model
+ */
+class {{ table.php_name }}Base extends Model
+{
+    protected function init()
+    {
+        $this->table = '{{ name }}';
+        $this->model = '{{ table.php_name }}';
+
+        // Columns:
+        {% for column in table.columns %}
+
+        $this->data['{{ column.name }}'] = null;
+        $this->getters['{{ column.name }}'] = 'get{{ column.php_name }}';
+        $this->setters['{{ column.name }}'] = 'set{{ column.php_name }}';
+        {% endfor %}
+
+        // Foreign keys:
+        {% for fk in table.relationships.toOne %}
+
+        $this->getters['{{ fk.php_name }}'] = 'get{{ fk.php_name }}';
+        $this->setters['{{ fk.php_name }}'] = 'set{{ fk.php_name }}';
+        {% endfor %}
+
+    }
+
+    {% for column in table.columns %}
+
+    /**
+     * Get the value of {{ column.php_name }} / {{ column.name }}
+     * @return {{ column.php_type }}
+     */
+
+     public function get{{ column.php_name }}()
+     {
+        $rtn = $this->data['{{ column.name }}'];
+{% if column.validate_date %}
+
+        if (!empty($rtn)) {
+            $rtn = new \DateTime($rtn);
+        }
+{% endif %}
+{% if column.is_json %}
+
+        $rtn = json_decode($rtn, true);
+
+        if (empty($rtn)) {
+            $rtn = null;
+        }
+{% endif %}
+
+        return $rtn;
+     }
+    {% endfor %}
+
+    {% for column in table.columns %}
+
+    /**
+     * Set the value of {{ column.php_name }} / {{ column.name }}
+     * @param $value {{ column.php_type }}
+     */
+    public function set{{ column.php_name }}({{ column.param_type != null and column.validate_null ? column.param_type ~ ' ' : '' }}$value)
+    {
+{% if column.validate_date %}        $this->validateDate('{{ column.php_name }}', $value);{% endif %}
+{% if column.is_json %}        $this->validateJson($value);{% endif %}
+
+{% if column.is_foreign_key %}
+
+        // As this column is a foreign key, empty values should be considered null.
+        if (empty($value)) {
+            $value = null;
+        }
+
+{% endif %}
+{% if column.validate_null %}        $this->validateNotNull('{{ column.php_name }}', $value);{% endif %}
+
+
+        if ($this->data['{{ column.name }}'] === $value) {
+            return;
+        }
+
+        $this->data['{{ column.name }}'] = $value;
+        $this->setModified('{{ column.name }}');
+    }
+    {% endfor %}
+
+    {% for item in table.relationships.toOne %}
+
+    /**
+     * Get the {{ item.table_php_name }} model for this {{ parent.table.php_name }} by {{ item.col_php }}.
+     *
+     * @uses \{{ getNamespace(item.table_php_name) }}\Store\{{ item.table_php_name }}Store::getBy{{ item.col_php }}()
+     * @uses \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}
+     * @return \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}
+     */
+    public function get{{ item.php_name }}()
+    {
+        $key = $this->get{{ item.from_col_php }}();
+
+        if (empty($key)) {
+           return null;
+        }
+
+        return Store::get('{{ item.table_php_name }}')->getBy{{ item.col_php }}($key);
+    }
+
+    /**
+     * Set {{ item.php_name }} - Accepts an ID, an array representing a {{ item.table_php_name }} or a {{ item.table_php_name }} model.
+     * @throws \Exception
+     * @param $value mixed
+     */
+    public function set{{ item.php_name }}($value)
+    {
+        // Is this a scalar value representing the ID of this foreign key?
+        if (is_scalar($value)) {
+            return $this->set{{ item.from_col_php }}($value);
+        }
+
+        // Is this an instance of {{ item.php_name }}?
+        if (is_object($value) && $value instanceof \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}) {
+            return $this->set{{ item.php_name }}Object($value);
+        }
+
+        // Is this an array representing a {{ item.table_php_name }} item?
+        if (is_array($value) && !empty($value['{{ item.col }}'])) {
+            return $this->set{{ item.from_col_php }}($value['{{ item.col }}']);
+        }
+
+        // None of the above? That's a problem!
+        throw new \Exception('Invalid value for {{ item.php_name }}.');
+    }
+
+    /**
+     * Set {{ item.php_name }} - Accepts a {{ item.table_php_name }} model.
+     *
+     * @param $value \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}
+     */
+    public function set{{ item.php_name }}Object(\{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }} $value)
+    {
+        return $this->set{{ item.from_col_php }}($value->get{{ item.col_php }}());
+    }
+{% endfor %}
+{% for rel in table.relationships.toMany %}
+
+    public function {{ rel.table_php }}s()
+    {
+{% if rel.link %}
+        $query = Store::get('{{ rel.table_php }}')->where('{{ rel.link.table }}.{{ rel.link.column1 }}', $this->data['{{ rel.thisCol }}']);
+        $query->join('{{ rel.link.table }}', '{{ rel.link.table }}.{{ rel.link.column2 }}', '{{ rel.table }}.{{ rel.fromCol }}');
+        return $query;
+{% else %}
+        return Store::get('{{ rel.table_php }}')->where('{{ rel.fromCol }}', $this->data['{{ rel.thisCol }}']);
+{% endif %}
+    }
+{% endfor %}
+}

@@ -2,16 +2,11 @@
 
 /**
  * ContentItem base store for table: content_item
+
  */
 
 namespace Octo\System\Store\Base;
 
-use PDOException;
-use b8\Cache;
-use b8\Database;
-use b8\Database\Query;
-use b8\Database\Query\Criteria;
-use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\ContentItem;
 use Octo\System\Model\ContentItemCollection;
@@ -19,59 +14,39 @@ use Octo\System\Model\ContentItemCollection;
 /**
  * ContentItem Base Store
  */
-trait ContentItemStoreBase
+class ContentItemStoreBase extends Store
 {
-    protected function init()
-    {
-        $this->tableName = 'content_item';
-        $this->modelName = '\Octo\System\Model\ContentItem';
-        $this->primaryKey = 'id';
-    }
+    protected $table = 'content_item';
+    protected $model = 'Octo\System\Model\ContentItem';
+    protected $key = 'id';
+
     /**
     * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return ContentItem
+    * @return ContentItem|null
     */
-    public function getByPrimaryKey($value, $useConnection = 'read')
+    public function getByPrimaryKey($value)
     {
-        return $this->getById($value, $useConnection);
+        return $this->getById($value);
     }
 
 
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return ContentItem
-    */
-    public function getById($value, $useConnection = 'read')
+     * Get a ContentItem object by Id.
+     * @param $value
+     * @return ContentItem|null
+     */
+    public function getById(string $value)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
         // This is the primary key, so try and get from cache:
-        $cacheResult = $this->getFromCache($value);
+        $cacheResult = $this->cacheGet($value);
 
         if (!empty($cacheResult)) {
             return $cacheResult;
         }
 
+        $rtn = $this->where('id', $value)->first();
+        $this->cacheSet($value, $rtn);
 
-        $query = new Query($this->getNamespace('ContentItem').'\Model\ContentItem', $useConnection);
-        $query->select('*')->from('content_item')->limit(1);
-        $query->where('`id` = :id');
-        $query->bind(':id', $value);
-
-        try {
-            $query->execute();
-            $result = $query->fetch();
-
-            $this->setCache($value, $result);
-
-            return $result;
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get ContentItem by Id', 0, $ex);
-        }
+        return $rtn;
     }
 }

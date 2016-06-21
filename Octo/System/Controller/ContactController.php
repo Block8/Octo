@@ -36,7 +36,7 @@ class ContactController extends Controller
 
             if ($unsubscriberHash === $this->contactStore->getUnsubscribeHash($contact->getId(), $unsubscriberEmail)) {
                 $contact->setMarketingOptin(0);
-                $this->contactStore->saveByUpdate($contact);
+                $this->contactStore->update($contact);
 
                 $message = 'Good-bye! You’ve successfully unsubscribed yourself from the email list.';
             }

@@ -58,7 +58,6 @@ class TemplateFunctions extends Listener
         $config = Config::getInstance();
         $template->set('now', new DateTime());
         $template->set('config', $config);
-        $template->set('settings', Setting::getAllAsArray());
         $template->set('adminUri', $config->get('site.full_admin_url'));
 
         if (isset($_SESSION) && is_array($_SESSION)) {
@@ -68,6 +67,10 @@ class TemplateFunctions extends Listener
         if (!empty($_SESSION['user'])) {
             $template->set('user', $_SESSION['user']);
         }
+
+        try {
+            $template->set('settings', Setting::getAllAsArray());
+        } catch (\Exception $ex) {}
     }
 
     public function publicTemplateLoaded(Template &$template)

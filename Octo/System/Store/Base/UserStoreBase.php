@@ -2,16 +2,11 @@
 
 /**
  * User base store for table: user
+
  */
 
 namespace Octo\System\Store\Base;
 
-use PDOException;
-use b8\Cache;
-use b8\Database;
-use b8\Database\Query;
-use b8\Database\Query\Criteria;
-use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\User;
 use Octo\System\Model\UserCollection;
@@ -19,87 +14,49 @@ use Octo\System\Model\UserCollection;
 /**
  * User Base Store
  */
-trait UserStoreBase
+class UserStoreBase extends Store
 {
-    protected function init()
-    {
-        $this->tableName = 'user';
-        $this->modelName = '\Octo\System\Model\User';
-        $this->primaryKey = 'id';
-    }
+    protected $table = 'user';
+    protected $model = 'Octo\System\Model\User';
+    protected $key = 'id';
+
     /**
     * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return User
+    * @return User|null
     */
-    public function getByPrimaryKey($value, $useConnection = 'read')
+    public function getByPrimaryKey($value)
     {
-        return $this->getById($value, $useConnection);
+        return $this->getById($value);
     }
 
 
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return User
-    */
-    public function getById($value, $useConnection = 'read')
+     * Get a User object by Id.
+     * @param $value
+     * @return User|null
+     */
+    public function getById(int $value)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
         // This is the primary key, so try and get from cache:
-        $cacheResult = $this->getFromCache($value);
+        $cacheResult = $this->cacheGet($value);
 
         if (!empty($cacheResult)) {
             return $cacheResult;
         }
 
+        $rtn = $this->where('id', $value)->first();
+        $this->cacheSet($value, $rtn);
 
-        $query = new Query($this->getNamespace('User').'\Model\User', $useConnection);
-        $query->select('*')->from('user')->limit(1);
-        $query->where('`id` = :id');
-        $query->bind(':id', $value);
-
-        try {
-            $query->execute();
-            $result = $query->fetch();
-
-            $this->setCache($value, $result);
-
-            return $result;
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get User by Id', 0, $ex);
-        }
+        return $rtn;
     }
+
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return User
-    */
-    public function getByEmail($value, $useConnection = 'read')
+     * Get a User object by Email.
+     * @param $value
+     * @return User|null
+     */
+    public function getByEmail(string $value)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('User').'\Model\User', $useConnection);
-        $query->select('*')->from('user')->limit(1);
-        $query->where('`email` = :email');
-        $query->bind(':email', $value);
-
-        try {
-            $query->execute();
-            $result = $query->fetch();
-
-            $this->setCache($value, $result);
-
-            return $result;
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get User by Email', 0, $ex);
-        }
+        return $this->where('email', $value)->first();
     }
 }

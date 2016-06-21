@@ -14,11 +14,9 @@ use Octo\System\Model\User;
  * Permission Store
  * @uses Octo\System\Store\Base\PermissionStoreBase
  */
-class PermissionStore extends Octo\Store
+class PermissionStore extends Base\PermissionStoreBase
 {
-    use Base\PermissionStoreBase;
-
-    public function updatePermissions($userId, $perms)
+	public function updatePermissions($userId, $perms)
     {
         $pdo = Database::getConnection('write');
 

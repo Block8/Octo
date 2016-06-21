@@ -14,11 +14,9 @@ use Octo\System\Model\Contact;
  * Contact Store
  * @uses Octo\System\Store\Base\ContactStoreBase
  */
-class ContactStore extends Octo\Store
+class ContactStore extends Base\ContactStoreBase
 {
-    use Base\ContactStoreBase;
-
-    /**
+	/**
      * Get the total number of submissions in the system.
      * @param string $useConnection
      * @return int
@@ -119,5 +117,12 @@ class ContactStore extends Octo\Store
     {
         $hashSecret = 'z!Fx~36N66>io3Bskhjsfsjd8JjCd4+Ld-s2^ca{19Q/5u';
         return sha1($unsubId . $email . $hashSecret);
+    }
+
+    public function getList()
+    {
+        $query = new Database\Query('\Octo\System\Model\Contact', 'read');
+        $query->select('*')->from('contact')->order('first_name', 'ASC')->order('last_name', 'ASC')->execute();
+        return new Octo\System\Model\ContactCollection($query->fetchAll());
     }
 }

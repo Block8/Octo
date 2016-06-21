@@ -147,7 +147,7 @@ class UserController extends Controller
             }
         }
 
-        $this->view->form = $this->userForm($user->getDataArray(), 'edit')->render();
+        $this->view->form = $this->userForm($user->toArray(), 'edit')->render();
     }
 
     public function delete($userId)

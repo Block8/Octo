@@ -14,11 +14,9 @@ use Octo\Store;
  * User Model
  * @uses Octo\System\Model\Base\UserBaseBase
  */
-class User extends Octo\Model
+class User extends Base\UserBase
 {
-    use Base\UserBase;
-
-    protected $permissionsArray;
+	protected $permissionsArray;
 
     public function canAccess($uri)
     {

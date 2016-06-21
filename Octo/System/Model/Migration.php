@@ -10,9 +10,7 @@ use Octo;
 /**
  * Migration Model
  */
-class Migration extends Octo\Model
+class Migration extends Base\MigrationBase
 {
-    use Base\MigrationBase;
-
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+	// This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

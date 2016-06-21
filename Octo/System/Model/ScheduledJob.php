@@ -10,9 +10,7 @@ use Octo;
 /**
  * ScheduledJob Model
  */
-class ScheduledJob extends Octo\Model
+class ScheduledJob extends Base\ScheduledJobBase
 {
-    use Base\ScheduledJobBase;
-
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+	// This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }
