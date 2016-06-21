@@ -6,62 +6,72 @@
 
 namespace Octo\System\Model\Base;
 
-use b8\Store\Factory;
+use Octo\Model;
+use Octo\Store;
 
 /**
  * ContentItem Base Model
  */
-trait ContentItemBase
+class ContentItemBase extends Model
 {
     protected function init()
     {
-        $this->tableName = 'content_item';
-        $this->modelName = 'ContentItem';
+        $this->table = 'content_item';
+        $this->model = 'ContentItem';
 
         // Columns:
+        
         $this->data['id'] = null;
         $this->getters['id'] = 'getId';
         $this->setters['id'] = 'setId';
+        
         $this->data['content'] = null;
         $this->getters['content'] = 'getContent';
         $this->setters['content'] = 'setContent';
-
+        
         // Foreign keys:
+        
     }
+
+    
     /**
-    * Get the value of Id / id.
-    *
-    * @return string
-    */
-    public function getId()
-    {
+     * Get the value of Id / id
+     * @return string
+     */
+
+     public function getId()
+     {
         $rtn = $this->data['id'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of Content / content.
-    *
-    * @return string
-    */
-    public function getContent()
-    {
+     * Get the value of Content / content
+     * @return array|null
+     */
+
+     public function getContent()
+     {
         $rtn = $this->data['content'];
 
+        $rtn = json_decode($rtn, true);
+
+        if (empty($rtn)) {
+            $rtn = null;
+        }
+
         return $rtn;
-    }
-
-
+     }
+    
+    
     /**
-    * Set the value of Id / id.
-    *
-    * Must not be null.
-    * @param $value string
-    */
-    public function setId($value)
+     * Set the value of Id / id
+     * @param $value string
+     */
+    public function setId(string $value)
     {
-        $this->validateString('Id', $value);
+
         $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
@@ -71,16 +81,14 @@ trait ContentItemBase
         $this->data['id'] = $value;
         $this->setModified('id');
     }
-
+    
     /**
-    * Set the value of Content / content.
-    *
-    * Must not be null.
-    * @param $value string
-    */
+     * Set the value of Content / content
+     * @param $value array|null
+     */
     public function setContent($value)
     {
-        $this->validateString('Content', $value);
+        $this->validateJson($value);
         $this->validateNotNull('Content', $value);
 
         if ($this->data['content'] === $value) {
@@ -89,5 +97,11 @@ trait ContentItemBase
 
         $this->data['content'] = $value;
         $this->setModified('content');
+    }
+    
+    
+    public function PageVersions()
+    {
+        return Store::get('PageVersion')->where('content_item_id', $this->data['id']);
     }
 }

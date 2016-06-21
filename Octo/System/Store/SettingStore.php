@@ -14,11 +14,9 @@ use Octo\System\Model\Setting;
  * Setting Store
  * @uses Octo\System\Store\Base\SettingStoreBase
  */
-class SettingStore extends Octo\Store
+class SettingStore extends Base\SettingStoreBase
 {
-    use Base\SettingStoreBase;
-
-    public function getSettingValue($scope, $key)
+	public function getSettingValue($scope, $key)
     {
         $query = 'SELECT setting.* FROM setting WHERE scope = :scope AND `key` = :key LIMIT 1';
         $stmt = Database::getConnection('read')->prepare($query);

@@ -39,7 +39,7 @@ class TwitterUtilities
                     $t->setPosted($s->created_at);
                     $t->setCreatedDate(new \DateTime());
                     $t->setScope('stream');
-                    $tweetStore->saveByInsert($t);
+                    $tweetStore->insert($t);
                 }
             }
         }

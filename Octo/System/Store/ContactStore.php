@@ -14,11 +14,9 @@ use Octo\System\Model\Contact;
  * Contact Store
  * @uses Octo\System\Store\Base\ContactStoreBase
  */
-class ContactStore extends Octo\Store
+class ContactStore extends Base\ContactStoreBase
 {
-    use Base\ContactStoreBase;
-
-    /**
+	/**
      * Get the total number of submissions in the system.
      * @param string $useConnection
      * @return int

@@ -13,11 +13,9 @@ use Octo\Store;
  * Log Model
  * @uses Octo\System\Model\Base\LogBaseBase
  */
-class Log extends Octo\Model
+class Log extends Base\LogBase
 {
-    use Base\LogBase;
-
-    const TYPE_CREATE = 2;
+	const TYPE_CREATE = 2;
     const TYPE_DELETE = 4;
     const TYPE_EDIT = 8;
     const TYPE_PERMISSION = 16;

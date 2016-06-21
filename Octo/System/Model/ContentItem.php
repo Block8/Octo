@@ -10,9 +10,7 @@ use Octo;
 /**
  * ContentItem Model
  */
-class ContentItem extends Octo\Model
+class ContentItem extends Base\ContentItemBase
 {
-    use Base\ContentItemBase;
-
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+	// This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

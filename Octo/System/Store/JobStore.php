@@ -10,9 +10,7 @@ use Octo;
 /**
  * Job Store
  */
-class JobStore extends Octo\Store
+class JobStore extends Base\JobStoreBase
 {
-    use Base\JobStoreBase;
-
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+	// This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

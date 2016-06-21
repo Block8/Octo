@@ -72,25 +72,9 @@ class JobController extends Controller
 
     public function index()
     {
-        $handlers = $this->handlers;
-
-        $this->view->addFunction('job_name',  function ($args) use ($handlers) {
-            return $handlers[$args['type']]['name'];
-        });
-
-        $jobs = $this->jobStore->all()->sort(function (Job $a, Job $b) {
-            if ($a->getDateUpdated() < $b->getDateCreated()) {
-                return 1;
-            }
-
-            if ($a->getDateUpdated() > $b->getDateCreated()) {
-                return -1;
-            }
-
-            return 0;
-        });
-
-        $this->view->jobs = $jobs;
+        $jobs = $this->jobStore->find()->order('date_updated', 'DESC')->limit(200)->get();
+        $this->template->set('jobs', $jobs);
+        $this->template->set('handlers', $this->handlers);
     }
 
     public function schedule()

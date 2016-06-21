@@ -12,11 +12,9 @@ use Octo;
  * Contact Model
  * @uses Octo\System\Model\Base\ContactBaseBase
  */
-class Contact extends Octo\Model
+class Contact extends Base\ContactBase
 {
-    use Base\ContactBase;
-
-    public function setDateOfBirth($value)
+	public function setDateOfBirth($value)
     {
         if (is_array($value)) {
             $value = new \DateTime($value['year'] . '-' . $value['month'] . '-' . $value['day']);

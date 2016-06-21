@@ -6,107 +6,114 @@
 
 namespace Octo\System\Model\Base;
 
-use b8\Store\Factory;
+use Octo\Model;
+use Octo\Store;
 
 /**
  * SearchIndex Base Model
  */
-trait SearchIndexBase
+class SearchIndexBase extends Model
 {
     protected function init()
     {
-        $this->tableName = 'search_index';
-        $this->modelName = 'SearchIndex';
+        $this->table = 'search_index';
+        $this->model = 'SearchIndex';
 
         // Columns:
+        
         $this->data['id'] = null;
         $this->getters['id'] = 'getId';
         $this->setters['id'] = 'setId';
+        
         $this->data['word'] = null;
         $this->getters['word'] = 'getWord';
         $this->setters['word'] = 'setWord';
+        
         $this->data['model'] = null;
         $this->getters['model'] = 'getModel';
         $this->setters['model'] = 'setModel';
+        
         $this->data['content_id'] = null;
         $this->getters['content_id'] = 'getContentId';
         $this->setters['content_id'] = 'setContentId';
+        
         $this->data['instances'] = null;
         $this->getters['instances'] = 'getInstances';
         $this->setters['instances'] = 'setInstances';
-
+        
         // Foreign keys:
+        
     }
+
+    
     /**
-    * Get the value of Id / id.
-    *
-    * @return int
-    */
-    public function getId()
-    {
+     * Get the value of Id / id
+     * @return int
+     */
+
+     public function getId()
+     {
         $rtn = $this->data['id'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of Word / word.
-    *
-    * @return string
-    */
-    public function getWord()
-    {
+     * Get the value of Word / word
+     * @return string
+     */
+
+     public function getWord()
+     {
         $rtn = $this->data['word'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of Model / model.
-    *
-    * @return string
-    */
-    public function getModel()
-    {
+     * Get the value of Model / model
+     * @return string
+     */
+
+     public function getModel()
+     {
         $rtn = $this->data['model'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of ContentId / content_id.
-    *
-    * @return string
-    */
-    public function getContentId()
-    {
+     * Get the value of ContentId / content_id
+     * @return string
+     */
+
+     public function getContentId()
+     {
         $rtn = $this->data['content_id'];
 
         return $rtn;
-    }
-
+     }
+    
     /**
-    * Get the value of Instances / instances.
-    *
-    * @return int
-    */
-    public function getInstances()
-    {
+     * Get the value of Instances / instances
+     * @return int
+     */
+
+     public function getInstances()
+     {
         $rtn = $this->data['instances'];
 
         return $rtn;
-    }
-
-
+     }
+    
+    
     /**
-    * Set the value of Id / id.
-    *
-    * Must not be null.
-    * @param $value int
-    */
-    public function setId($value)
+     * Set the value of Id / id
+     * @param $value int
+     */
+    public function setId(int $value)
     {
-        $this->validateInt('Id', $value);
+
         $this->validateNotNull('Id', $value);
 
         if ($this->data['id'] === $value) {
@@ -116,16 +123,14 @@ trait SearchIndexBase
         $this->data['id'] = $value;
         $this->setModified('id');
     }
-
+    
     /**
-    * Set the value of Word / word.
-    *
-    * Must not be null.
-    * @param $value string
-    */
-    public function setWord($value)
+     * Set the value of Word / word
+     * @param $value string
+     */
+    public function setWord(string $value)
     {
-        $this->validateString('Word', $value);
+
         $this->validateNotNull('Word', $value);
 
         if ($this->data['word'] === $value) {
@@ -135,16 +140,14 @@ trait SearchIndexBase
         $this->data['word'] = $value;
         $this->setModified('word');
     }
-
+    
     /**
-    * Set the value of Model / model.
-    *
-    * Must not be null.
-    * @param $value string
-    */
-    public function setModel($value)
+     * Set the value of Model / model
+     * @param $value string
+     */
+    public function setModel(string $value)
     {
-        $this->validateString('Model', $value);
+
         $this->validateNotNull('Model', $value);
 
         if ($this->data['model'] === $value) {
@@ -154,16 +157,14 @@ trait SearchIndexBase
         $this->data['model'] = $value;
         $this->setModified('model');
     }
-
+    
     /**
-    * Set the value of ContentId / content_id.
-    *
-    * Must not be null.
-    * @param $value string
-    */
-    public function setContentId($value)
+     * Set the value of ContentId / content_id
+     * @param $value string
+     */
+    public function setContentId(string $value)
     {
-        $this->validateString('ContentId', $value);
+
         $this->validateNotNull('ContentId', $value);
 
         if ($this->data['content_id'] === $value) {
@@ -173,16 +174,14 @@ trait SearchIndexBase
         $this->data['content_id'] = $value;
         $this->setModified('content_id');
     }
-
+    
     /**
-    * Set the value of Instances / instances.
-    *
-    * Must not be null.
-    * @param $value int
-    */
-    public function setInstances($value)
+     * Set the value of Instances / instances
+     * @param $value int
+     */
+    public function setInstances(int $value)
     {
-        $this->validateInt('Instances', $value);
+
         $this->validateNotNull('Instances', $value);
 
         if ($this->data['instances'] === $value) {
@@ -192,4 +191,5 @@ trait SearchIndexBase
         $this->data['instances'] = $value;
         $this->setModified('instances');
     }
-}
+    
+    }

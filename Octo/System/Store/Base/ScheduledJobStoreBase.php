@@ -2,16 +2,11 @@
 
 /**
  * ScheduledJob base store for table: scheduled_job
+
  */
 
 namespace Octo\System\Store\Base;
 
-use PDOException;
-use b8\Cache;
-use b8\Database;
-use b8\Database\Query;
-use b8\Database\Query\Criteria;
-use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\ScheduledJob;
 use Octo\System\Model\ScheduledJobCollection;
@@ -19,113 +14,57 @@ use Octo\System\Model\ScheduledJobCollection;
 /**
  * ScheduledJob Base Store
  */
-trait ScheduledJobStoreBase
+class ScheduledJobStoreBase extends Store
 {
-    protected function init()
-    {
-        $this->tableName = 'scheduled_job';
-        $this->modelName = '\Octo\System\Model\ScheduledJob';
-        $this->primaryKey = 'id';
-    }
+    protected $table = 'scheduled_job';
+    protected $model = 'Octo\System\Model\ScheduledJob';
+    protected $key = 'id';
+
     /**
     * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return ScheduledJob
+    * @return ScheduledJob|null
     */
-    public function getByPrimaryKey($value, $useConnection = 'read')
+    public function getByPrimaryKey($value)
     {
-        return $this->getById($value, $useConnection);
+        return $this->getById($value);
     }
 
 
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return ScheduledJob
-    */
-    public function getById($value, $useConnection = 'read')
+     * Get a ScheduledJob object by Id.
+     * @param $value
+     * @return ScheduledJob|null
+     */
+    public function getById(int $value)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
         // This is the primary key, so try and get from cache:
-        $cacheResult = $this->getFromCache($value);
+        $cacheResult = $this->cacheGet($value);
 
         if (!empty($cacheResult)) {
             return $cacheResult;
         }
 
+        $rtn = $this->where('id', $value)->first();
+        $this->cacheSet($value, $rtn);
 
-        $query = new Query($this->getNamespace('ScheduledJob').'\Model\ScheduledJob', $useConnection);
-        $query->select('*')->from('scheduled_job')->limit(1);
-        $query->where('`id` = :id');
-        $query->bind(':id', $value);
-
-        try {
-            $query->execute();
-            $result = $query->fetch();
-
-            $this->setCache($value, $result);
-
-            return $result;
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get ScheduledJob by Id', 0, $ex);
-        }
+        return $rtn;
     }
 
     /**
-     * @param $value
-     * @param array $options Offsets, limits, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
+     * Get all ScheduledJob objects by CurrentJobId.
+     * @return \Octo\System\Model\ScheduledJobCollection
+     */
+    public function getByCurrentJobId($value, $limit = null)
+    {
+        return $this->where('current_job_id', $value)->get($limit);
+    }
+
+    /**
+     * Gets the total number of ScheduledJob by CurrentJobId value.
      * @return int
      */
-    public function getTotalForCurrentJobId($value, $options = [], $useConnection = 'read')
+    public function getTotalByCurrentJobId($value) : int
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('ScheduledJob').'\Model\ScheduledJob', $useConnection);
-        $query->from('scheduled_job')->where('`current_job_id` = :current_job_id');
-        $query->bind(':current_job_id', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            return $query->getCount();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of ScheduledJob by CurrentJobId', 0, $ex);
-        }
-    }
-
-    /**
-     * @param $value
-     * @param array $options Limits, offsets, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
-     * @return ScheduledJobCollection
-     */
-    public function getByCurrentJobId($value, $options = [], $useConnection = 'read')
-    {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('ScheduledJob').'\Model\ScheduledJob', $useConnection);
-        $query->from('scheduled_job')->where('`current_job_id` = :current_job_id');
-        $query->bind(':current_job_id', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            $query->execute();
-            return new ScheduledJobCollection($query->fetchAll());
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get ScheduledJob by CurrentJobId', 0, $ex);
-        }
-
+        return $this->where('current_job_id', $value)->count();
     }
 }

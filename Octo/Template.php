@@ -61,6 +61,8 @@ class Template
             self::$loader->addPath($path, 'admin');
         }
 
+        self::$loader->addPath(CMS_PATH . 'Database/Templates/', 'db');
+
         if (OCTO_CACHE_ENABLED) {
             self::$cache = OCTO_CACHE_PATH;
         } else {
@@ -111,11 +113,19 @@ class Template
 
         Event::trigger('Template.Loaded', $this);
 
-        if ($namespace == 'admin') {
-            Event::trigger('Template.Loaded.Admin', $this);
-        } else {
-            Event::trigger('PublicTemplateLoaded', $this);
-            Event::trigger('Template.Loaded.Public', $this);
+        switch ($namespace) {
+            case 'db':
+                // Do nothing
+                break;
+
+            case 'admin':
+                Event::trigger('Template.Loaded.Admin', $this);
+                break;
+
+            default:
+                Event::trigger('PublicTemplateLoaded', $this);
+                Event::trigger('Template.Loaded.Public', $this);
+                break;
         }
     }
 

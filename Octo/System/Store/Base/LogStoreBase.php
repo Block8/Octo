@@ -2,16 +2,11 @@
 
 /**
  * Log base store for table: log
+
  */
 
 namespace Octo\System\Store\Base;
 
-use PDOException;
-use b8\Cache;
-use b8\Database;
-use b8\Database\Query;
-use b8\Database\Query\Criteria;
-use b8\Exception\StoreException;
 use Octo\Store;
 use Octo\System\Model\Log;
 use Octo\System\Model\LogCollection;
@@ -19,221 +14,93 @@ use Octo\System\Model\LogCollection;
 /**
  * Log Base Store
  */
-trait LogStoreBase
+class LogStoreBase extends Store
 {
-    protected function init()
-    {
-        $this->tableName = 'log';
-        $this->modelName = '\Octo\System\Model\Log';
-        $this->primaryKey = 'id';
-    }
+    protected $table = 'log';
+    protected $model = 'Octo\System\Model\Log';
+    protected $key = 'id';
+
     /**
     * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return Log
+    * @return Log|null
     */
-    public function getByPrimaryKey($value, $useConnection = 'read')
+    public function getByPrimaryKey($value)
     {
-        return $this->getById($value, $useConnection);
+        return $this->getById($value);
     }
 
 
     /**
-    * @param $value
-    * @param string $useConnection Connection type to use.
-    * @throws StoreException
-    * @return Log
-    */
-    public function getById($value, $useConnection = 'read')
+     * Get a Log object by Id.
+     * @param $value
+     * @return Log|null
+     */
+    public function getById(int $value)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
         // This is the primary key, so try and get from cache:
-        $cacheResult = $this->getFromCache($value);
+        $cacheResult = $this->cacheGet($value);
 
         if (!empty($cacheResult)) {
             return $cacheResult;
         }
 
+        $rtn = $this->where('id', $value)->first();
+        $this->cacheSet($value, $rtn);
 
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->select('*')->from('log')->limit(1);
-        $query->where('`id` = :id');
-        $query->bind(':id', $value);
-
-        try {
-            $query->execute();
-            $result = $query->fetch();
-
-            $this->setCache($value, $result);
-
-            return $result;
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Log by Id', 0, $ex);
-        }
+        return $rtn;
     }
 
     /**
-     * @param $value
-     * @param array $options Offsets, limits, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
+     * Get all Log objects by Type.
+     * @return \Octo\System\Model\LogCollection
+     */
+    public function getByType($value, $limit = null)
+    {
+        return $this->where('type', $value)->get($limit);
+    }
+
+    /**
+     * Gets the total number of Log by Type value.
      * @return int
      */
-    public function getTotalForType($value, $options = [], $useConnection = 'read')
+    public function getTotalByType($value) : int
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->from('log')->where('`type` = :type');
-        $query->bind(':type', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            return $query->getCount();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of Log by Type', 0, $ex);
-        }
+        return $this->where('type', $value)->count();
     }
 
     /**
-     * @param $value
-     * @param array $options Limits, offsets, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
-     * @return LogCollection
+     * Get all Log objects by Scope.
+     * @return \Octo\System\Model\LogCollection
      */
-    public function getByType($value, $options = [], $useConnection = 'read')
+    public function getByScope($value, $limit = null)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->from('log')->where('`type` = :type');
-        $query->bind(':type', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            $query->execute();
-            return new LogCollection($query->fetchAll());
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Log by Type', 0, $ex);
-        }
-
+        return $this->where('scope', $value)->get($limit);
     }
 
     /**
-     * @param $value
-     * @param array $options Offsets, limits, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
+     * Gets the total number of Log by Scope value.
      * @return int
      */
-    public function getTotalForScope($value, $options = [], $useConnection = 'read')
+    public function getTotalByScope($value) : int
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->from('log')->where('`scope` = :scope');
-        $query->bind(':scope', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            return $query->getCount();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of Log by Scope', 0, $ex);
-        }
+        return $this->where('scope', $value)->count();
     }
 
     /**
-     * @param $value
-     * @param array $options Limits, offsets, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
-     * @return LogCollection
+     * Get all Log objects by UserId.
+     * @return \Octo\System\Model\LogCollection
      */
-    public function getByScope($value, $options = [], $useConnection = 'read')
+    public function getByUserId($value, $limit = null)
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->from('log')->where('`scope` = :scope');
-        $query->bind(':scope', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            $query->execute();
-            return new LogCollection($query->fetchAll());
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Log by Scope', 0, $ex);
-        }
-
+        return $this->where('user_id', $value)->get($limit);
     }
 
     /**
-     * @param $value
-     * @param array $options Offsets, limits, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
+     * Gets the total number of Log by UserId value.
      * @return int
      */
-    public function getTotalForUserId($value, $options = [], $useConnection = 'read')
+    public function getTotalByUserId($value) : int
     {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->from('log')->where('`user_id` = :user_id');
-        $query->bind(':user_id', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            return $query->getCount();
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get count of Log by UserId', 0, $ex);
-        }
-    }
-
-    /**
-     * @param $value
-     * @param array $options Limits, offsets, etc.
-     * @param string $useConnection Connection type to use.
-     * @throws StoreException
-     * @return LogCollection
-     */
-    public function getByUserId($value, $options = [], $useConnection = 'read')
-    {
-        if (is_null($value)) {
-            throw new StoreException('Value passed to ' . __FUNCTION__ . ' cannot be null.');
-        }
-
-        $query = new Query($this->getNamespace('Log').'\Model\Log', $useConnection);
-        $query->from('log')->where('`user_id` = :user_id');
-        $query->bind(':user_id', $value);
-
-        $this->handleQueryOptions($query, $options);
-
-        try {
-            $query->execute();
-            return new LogCollection($query->fetchAll());
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get Log by UserId', 0, $ex);
-        }
-
+        return $this->where('user_id', $value)->count();
     }
 }

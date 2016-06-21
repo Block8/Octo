@@ -168,7 +168,7 @@ class ContactController extends Controller
         }
 
         $form = $this->contactForm();;
-        $form->setValues($contact->getDataArray());
+        $form->setValues($contact->toArray());
         $this->view->form = $form;
     }
 

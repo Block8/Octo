@@ -10,9 +10,7 @@ use Octo;
 /**
  * Permission Model
  */
-class Permission extends Octo\Model
+class Permission extends Base\PermissionBase
 {
-    use Base\PermissionBase;
-
-    // This class has been left blank so that you can modify it - changes in this file will not be overwritten.
+	// This class has been left blank so that you can modify it - changes in this file will not be overwritten.
 }

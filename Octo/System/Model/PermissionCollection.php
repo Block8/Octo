@@ -6,8 +6,7 @@
 
 namespace Octo\System\Model;
 
-use Octo;
-use b8\Model\Collection;
+use Block8\Database\Model\Collection;
 
 /**
  * Permission Model Collection

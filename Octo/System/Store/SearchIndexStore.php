@@ -15,11 +15,9 @@ use Octo\Store as StoreFactory;
  * SearchIndex Store
  * @uses Octo\System\Store\Base\SearchIndexStoreBase
  */
-class SearchIndexStore extends Octo\Store
+class SearchIndexStore extends Base\SearchIndexStoreBase
 {
-    use Base\SearchIndexStoreBase;
-
-    public function search($string)
+	public function search($string)
     {
         $database = Database::getConnection('read');
 

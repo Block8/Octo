@@ -13,11 +13,9 @@ use Octo\Store;
  * Setting Model
  * @uses Octo\System\Model\Base\SettingBaseBase
  */
-class Setting extends Octo\Model
+class Setting extends Base\SettingBase
 {
-    use Base\SettingBase;
-
-    /**
+	/**
      * Retrieve a setting
      *
      * @param $scope
@@ -71,7 +69,7 @@ class Setting extends Octo\Model
             $setting->setValue($value);
             $setting->setScope($scope);
 
-            $settingStore->saveByReplace($setting);
+            $settingStore->replace($setting);
         }
     }
 

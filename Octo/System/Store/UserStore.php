@@ -15,11 +15,9 @@ use Octo\System\Model\User;
  * User Store
  * @uses Octo\System\Store\Base\UserStoreBase
  */
-class UserStore extends Octo\Store
+class UserStore extends Base\UserStoreBase
 {
-    use Base\UserStoreBase;
-
-    public function getAll($order = 'name ASC')
+	public function getAll($order = 'name ASC')
     {
         $query = 'SELECT * FROM user WHERE `is_hidden` = 0 ORDER BY ' . $order;
         $stmt = Database::getConnection('read')->prepare($query);
