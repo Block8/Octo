@@ -57,7 +57,7 @@ class ContentItemBase extends Model
 
         $rtn = json_decode($rtn, true);
 
-        if (empty($rtn)) {
+        if ($rtn === false) {
             $rtn = null;
         }
 
