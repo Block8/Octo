@@ -12,7 +12,12 @@ class AssetController extends Octo\Controller
     {
         $parts = array_slice(func_get_args(), 1);
         $name = implode('/', $parts);
-        $path = $this->getPath($module) . '/js/' . $name . '.js';
+
+        if ($module == 'site' && empty($name)) {
+            $name = 'site';
+        }
+
+        $path = $this->getPath($module) . 'js/' . $name . '.js';
         $rtn = '';
 
         if (file_exists($path)) {
@@ -20,6 +25,7 @@ class AssetController extends Octo\Controller
         }
 
         $this->response->disableLayout();
+        $this->response->setHeader('Cache-Control', 'public, max-age=86400');
         $this->response->setHeader('Content-Type', 'application/javascript');
         return $rtn;
     }
@@ -28,7 +34,12 @@ class AssetController extends Octo\Controller
     {
         $parts = array_slice(func_get_args(), 1);
         $name = implode('/', $parts);
-        $path = $this->getPath($module) . '/css/' . $name . '.css';
+
+        if ($module == 'site' && empty($name)) {
+            $name = 'site';
+        }
+
+        $path = $this->getPath($module) . 'css/' . $name . '.css';
         $rtn = '';
 
         if (file_exists($path)) {
@@ -36,6 +47,7 @@ class AssetController extends Octo\Controller
         }
 
         $this->response->disableLayout();
+        $this->response->setHeader('Cache-Control', 'public, max-age=86400');
         $this->response->setHeader('Content-Type', 'text/css');
         return $rtn;
     }

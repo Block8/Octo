@@ -35,7 +35,7 @@ class AssetManager extends Listener
         /** @var \b8\Config */
         $config = Config::getInstance();
         $paths = $config->get('Octo.paths.modules');
-
+        
         /** @var \Octo\AssetManager $assets */
         $assets = $config->get('Octo.AssetManager');
         $inject = ['css' => '', 'js' => ''];
@@ -60,6 +60,22 @@ class AssetManager extends Listener
                 $href = $config->get('site.url').'/asset/js/'.$js['module'].'/'.$js['name'].'?t='.filemtime($path);
                 $inject['js'] .= '<script src="'.$href.'"></script>';
             }
+        }
+        
+        // Site CSS and JS:
+        $siteNamespace = $config->get('site.namespace');
+        $path = APP_PATH . $siteNamespace . '/Public/css/site.css';
+
+        if (file_exists($path)) {
+            $href = $config->get('site.url').'/asset/css/site?t='.filemtime($path);
+            $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$href.'">';
+        }
+        
+        $path = APP_PATH . $siteNamespace . '/Public/js/site.js';
+
+        if (file_exists($path)) {
+            $href = $config->get('site.url').'/asset/js/site?t='.filemtime($path);
+            $inject['js'] .= '<script src="'.$href.'"></script>';
         }
 
         return $inject;
