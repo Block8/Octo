@@ -25,7 +25,7 @@ class AssetController extends Octo\Controller
         }
 
         $this->response->disableLayout();
-        $this->response->setHeader('Cache-Control', 'public, max-age=86400');
+        $this->response->setHeader('Cache-Control', 'public, max-age=1209600');
         $this->response->setHeader('Content-Type', 'application/javascript');
         return $rtn;
     }
@@ -47,7 +47,7 @@ class AssetController extends Octo\Controller
         }
 
         $this->response->disableLayout();
-        $this->response->setHeader('Cache-Control', 'public, max-age=86400');
+        $this->response->setHeader('Cache-Control', 'public, max-age=1209600');
         $this->response->setHeader('Content-Type', 'text/css');
         return $rtn;
     }
