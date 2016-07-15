@@ -26,6 +26,11 @@ class Application extends \b8\Application
      */
     public function init()
     {
+        $this->config->set('http', [
+            'request' => &$this->request,
+            'response' => &$this->response,
+        ]);
+
         Event::trigger('BeforeSystemInit', $this);
 
         if (!defined('IS_CONSOLE')) {

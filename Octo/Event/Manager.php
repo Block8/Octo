@@ -6,6 +6,7 @@ use Octo\Event\Listener;
 
 class Manager
 {
+    protected $config;
     protected $listenerClasses = [];
     protected $listeners = [];
 
@@ -34,6 +35,7 @@ class Manager
                 $class = new $className();
 
                 if ($class instanceof Listener) {
+                    $class->init($this->config);
                     $class->registerListeners($this);
                 }
             }

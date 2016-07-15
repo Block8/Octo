@@ -32,8 +32,10 @@ class AssetManager extends Listener
 
     protected function getAssetCode()
     {
-        /** @var \b8\Config */
-        $config = Config::getInstance();
+        $config = $this->config;
+
+        /** @var \b8\Http\Response $response */
+        $response = $config->get('http.response');
         $paths = $config->get('Octo.paths.modules');
         
         /** @var \Octo\AssetManager $assets */
@@ -44,8 +46,10 @@ class AssetManager extends Listener
             $path = $paths[$css['module']] . 'Public/css/' . $css['name'] . '.css';
 
             if (is_file($path)) {
-                $href = $config->get('site.url').'/asset/css/'.$css['module'].'/'.$css['name'].'?t='.filemtime($path);
-                $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$href.'">';
+                $href = '/asset/css/'.$css['module'].'/'.$css['name'].'?t='.filemtime($path);
+                $url = $config->get('site.url') . $href;
+                $response->setHeader('Link', '<'.$href.'>; rel=preload; as=style');
+                $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$url.'">';
             }
         }
 
@@ -57,8 +61,10 @@ class AssetManager extends Listener
             $path = $paths[$js['module']] . 'Public/js/' . $js['name'] . '.js';
 
             if (is_file($path)) {
-                $href = $config->get('site.url').'/asset/js/'.$js['module'].'/'.$js['name'].'?t='.filemtime($path);
-                $inject['js'] .= '<script src="'.$href.'"></script>';
+                $href = '/asset/js/'.$js['module'].'/'.$js['name'].'?t='.filemtime($path);
+                $url = $config->get('site.url') . $href;
+                $response->setHeader('Link', '<'.$href.'>; rel=preload; as=script');
+                $inject['js'] .= '<script src="'.$url.'"></script>';
             }
         }
         
@@ -67,15 +73,19 @@ class AssetManager extends Listener
         $path = APP_PATH . $siteNamespace . '/Public/css/site.css';
 
         if (file_exists($path)) {
-            $href = $config->get('site.url').'/asset/css/site?t='.filemtime($path);
-            $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$href.'">';
+            $href = '/asset/css/site?t='.filemtime($path);
+            $url = $config->get('site.url') . $href;
+            $response->setHeader('Link', '<'.$href.'>; rel=preload; as=style');
+            $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$url.'">';
         }
         
         $path = APP_PATH . $siteNamespace . '/Public/js/site.js';
 
         if (file_exists($path)) {
-            $href = $config->get('site.url').'/asset/js/site?t='.filemtime($path);
-            $inject['js'] .= '<script src="'.$href.'"></script>';
+            $href = '/asset/js/site?t='.filemtime($path);
+            $url = $config->get('site.url') . $href;
+            $response->setHeader('Link', '<'.$href.'>; rel=preload; as=script');
+            $inject['js'] .= '<script src="'.$url.'"></script>';
         }
 
         return $inject;
