@@ -6,6 +6,7 @@
 
 namespace Octo\System\Model\Base;
 
+use DateTime;
 use Octo\Model;
 use Octo\Store;
 
@@ -333,11 +334,6 @@ class UserBase extends Model
     }
     
     
-    public function CalendarEvents()
-    {
-        return Store::get('CalendarEvent')->where('confirmed_by_user_id', $this->data['id']);
-    }
-
     public function Files()
     {
         return Store::get('File')->where('user_id', $this->data['id']);

@@ -40,7 +40,10 @@ class Log extends Base\LogBase
         }
 
         $rtn->setLogDate(new \DateTime());
-        $rtn->setUser($_SESSION['user']);
+
+        if (!empty($_SESSION['user'])) {
+            $rtn->setUser($_SESSION['user']);
+        }
 
         $rtn = Store::get('Log')->save($rtn);
 

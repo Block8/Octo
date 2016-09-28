@@ -5,7 +5,7 @@
 
 namespace Octo\System\Store;
 
-use b8\Database\Query;
+use Block8\Database\Query;
 use Octo;
 use Octo\System\Model\ScheduledJobCollection;
 use b8\Exception\StoreException;
@@ -21,18 +21,8 @@ class ScheduledJobStore extends Base\ScheduledJobStoreBase
      */
     public function getJobsToSchedule()
     {
-        $query = new Query($this->getNamespace('ScheduledJob').'\Model\ScheduledJob', 'read');
-        $query->select('s.*');
-        $query->from('scheduled_job', 's');
-        $query->join('job', 'j', 's.current_job_id = j.id');
-        $query->where('(j.id IS NULL) OR ((UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(j.date_updated)) >= s.frequency AND j.status > 1)');
-
-        try {
-            $query->execute();
-            return new ScheduledJobCollection($query->fetchAll());
-        } catch (PDOException $ex) {
-            throw new StoreException('Could not get ScheduledJob by CurrentJob', 0, $ex);
-        }
-
+        return $this->find()->select('scheduled_job.*')
+                    ->join('job', 'job.id', 'scheduled_job.current_job_id')
+                    ->rawWhere('(job.id IS NULL) OR ((UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(job.date_updated)) >= scheduled_job.frequency AND job.status > 1)')->get();
     }
 }

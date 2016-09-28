@@ -22,6 +22,9 @@ class Manager
         $createJob->setDateUpdated(new \DateTime());
         $createJob->setStatus(0);
 
+        if (!$createJob->getData()) {
+            $createJob->setData([]);
+        }
 
         $job = self::save($createJob);
 

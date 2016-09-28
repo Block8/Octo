@@ -43,7 +43,7 @@ class SchedulerHandler extends Handler
             $job = new Job();
             $job->setType($item->getType());
 
-            $data = json_decode($item->getData(), true);
+            $data = $item->getData();
 
             if (!empty($data) && is_array($data)) {
                 $job->setData($data);
