@@ -275,10 +275,14 @@ abstract class Controller extends \b8\Controller
         return $this->request;
     }
 
-    protected function redirect($to)
+    protected function redirect($to, $successMessage = null)
     {
         if (!in_array(substr($to, 0, 6), ['http:/', 'https:'])) {
             $to = $this->config->get('site.full_admin_url') . $to;
+        }
+
+        if (!empty($successMessage)) {
+            $this->successMessage($successMessage, true);
         }
 
         $this->response = new Response\RedirectResponse($this->response);

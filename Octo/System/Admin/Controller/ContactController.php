@@ -164,7 +164,7 @@ class ContactController extends Controller
             ];
 
             Event::trigger('ContentPublished', $data);
-            $this->redirect('/contact/edit/'.$contact->getId());
+            $this->redirect('/contact', 'Contact updated.');
         }
 
         $form = $this->contactForm();;

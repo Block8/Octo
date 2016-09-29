@@ -17,10 +17,16 @@ abstract class Handler
      */
     protected $worker;
 
-    public function __construct(Job $job, Worker $worker)
+    /**
+     * @var bool
+     */
+    protected $verbose;
+
+    public function __construct(Job $job, Worker $worker, $verbose = false)
     {
         $this->job = $job;
         $this->worker = $worker;
+        $this->verbose = $verbose;
         $this->verifyJob();
     }
 
@@ -50,5 +56,14 @@ abstract class Handler
     public function getMessage()
     {
         return null;
+    }
+
+    protected function debug($message)
+    {
+        if (!$this->verbose) {
+            return;
+        }
+        
+        print date('Y-m-d H:i:s') . ' - ' . $message  . PHP_EOL;
     }
 }

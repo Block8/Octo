@@ -69,7 +69,7 @@ class Worker
     /**
      * Start the worker.
      */
-    public function run()
+    public function run($verbose = false)
     {
         // Set up pheanstalk:
         $this->pheanstalk->watch($this->queue);
@@ -98,7 +98,7 @@ class Worker
             $handlerClass = $this->handlers[$job->getType()]['handler'];
 
             try {
-                $handler = new $handlerClass($job, $this);
+                $handler = new $handlerClass($job, $this, $verbose);
 
                 if (!($handler instanceof Handler)) {
                     throw new \Exception('Job handler does not extend \Octo\Job\Handler.');

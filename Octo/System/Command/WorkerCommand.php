@@ -34,7 +34,8 @@ class WorkerCommand extends Command
             throw new \Exception($error);
         }
 
+
         $worker = new Worker(Config::getInstance()->get('Octo.worker.host'));
-        $worker->run();
+        $worker->run($input->getOption('verbose'));
     }
 }
