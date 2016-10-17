@@ -30,6 +30,10 @@ class Member
     public static function getInstance()
     {
         if (empty(self::$instance)) {
+            if (session_status() != PHP_SESSION_ACTIVE) {
+                session_start();
+            }
+            
             self::$instance = new self();
         }
 
@@ -47,10 +51,6 @@ class Member
 
     public function init()
     {
-        if (session_status() != PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
         $this->store = Store::get('Contact');
 
         if (!empty($_SESSION[$this->getSessionKey()])) {
