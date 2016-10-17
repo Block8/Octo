@@ -43,7 +43,6 @@ class ContactController extends Controller
         $thisMenu->addChild(new Menu\Item('Edit Contact', '/contact/edit', true));
 
         $thisMenu->addChild(new Menu\Item('Contact Autocomplete', '/contact/autocomplete', true));
-        $thisMenu->addChild(new Menu\Item('Contact Autocomplete', '/contact/autocomplete', true));
         $thisMenu->addChild(new Menu\Item('Block Contact', '/contact/block', true));
         $thisMenu->addChild(new Menu\Item('Unblock Contact', '/contact/unblock', true));
 
