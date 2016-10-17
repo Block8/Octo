@@ -47,6 +47,10 @@ class Member
 
     public function init()
     {
+        if (session_status() != PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         $this->store = Store::get('Contact');
 
         if (!empty($_SESSION[$this->getSessionKey()])) {
