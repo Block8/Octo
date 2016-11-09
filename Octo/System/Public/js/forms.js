@@ -17,6 +17,11 @@ Octo.Forms.init = function () {
         Octo.Forms.createFilePicker($(this));
     });
 
+    // Automatically convert select tags with class octo-contact-picker to contact picker elements.
+    $('select.octo-contact-picker').each(function () {
+        Octo.Forms.createContactPicker($(this));
+    });
+
     $('input.switch').each(function () {
         Octo.Forms.createSwitch($(this));
     });
@@ -148,6 +153,43 @@ Octo.Forms.createFilePicker = function (input) {
         },
         ajax: {
             url: window.adminUri + '/media/autocomplete/files',
+            dataType: 'json',
+            data: function(term) {
+                return {
+                    q: term
+                };
+            },
+            results: function(data) {
+                return data;
+            }
+        }
+    });
+};
+
+Octo.Forms.createContactPicker = function (input) {
+    if (input.prop('nodeName') != 'SELECT') {
+        console.error('Octo.Forms: You can only create a contact picker from a SELECT element.');
+        return;
+    }
+
+    input.select2({
+        placeholder: "Search for a contact",
+        allowClear: true,
+        minimumInputLength: 1,
+        width: '100%',
+        initSelection : function(element, callback) {
+
+            if (input.val()) {
+                $.getJSON(window.adminUri + '/contact/autocomplete?q=' + input.val(), function (data) {
+                    if (data.results[0]) {
+                        callback(data.results[0]);
+                    }
+                });
+            }
+
+        },
+        ajax: {
+            url: window.adminUri + '/contact/autocomplete',
             dataType: 'json',
             data: function(term) {
                 return {

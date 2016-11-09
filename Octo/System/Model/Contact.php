@@ -14,6 +14,11 @@ use Octo;
  */
 class Contact extends Base\ContactBase
 {
+    public function getFullName()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
 	public function setDateOfBirth($value)
     {
         if (is_array($value)) {
