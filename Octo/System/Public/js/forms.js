@@ -177,23 +177,12 @@ Octo.Forms.createContactPicker = function (input) {
         allowClear: true,
         minimumInputLength: 1,
         width: '100%',
-        initSelection : function(element, callback) {
-
-            if (input.val()) {
-                $.getJSON(window.adminUri + '/contact/autocomplete?q=' + input.val(), function (data) {
-                    if (data.results[0]) {
-                        callback(data.results[0]);
-                    }
-                });
-            }
-
-        },
         ajax: {
             url: window.adminUri + '/contact/autocomplete',
             dataType: 'json',
             data: function(term) {
                 return {
-                    q: term
+                    q: term.term
                 };
             },
             results: function(data) {

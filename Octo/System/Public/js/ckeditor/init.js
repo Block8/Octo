@@ -91,9 +91,38 @@ CKEDITOR.on('dialogDefinition', function( ev ) {
 });
 
 $(document).ready(function() {
-	$('textarea.ckeditor.small').ckeditor(window.smallCkEditor);
-	$('textarea.ckeditor.basic').ckeditor(window.basicCkEditor);
-    $('textarea.ckeditor.advanced').ckeditor(window.fullCkEditor);
+	$('textarea.ckeditor.small').each(function () {
+        var $ed = $(this);
+        var spec = window.smallCkEditor;
+
+        if ($ed.attr('height')) {
+            spec.height = $ed.attr('height') + 'px';
+        }
+
+        $ed.ckeditor(spec);
+    });
+
+    $('textarea.ckeditor.basic').each(function () {
+        var $ed = $(this);
+        var spec = window.smallCkEditor;
+
+        if ($ed.attr('height')) {
+            spec.height = $ed.attr('height') + 'px';
+        }
+
+        $ed.ckeditor(spec);
+    });
+
+    $('textarea.ckeditor.advanced').each(function () {
+        var $ed = $(this);
+        var spec = window.smallCkEditor;
+
+        if ($ed.attr('height')) {
+            spec.height = $ed.attr('height') + 'px';
+        }
+
+        $ed.ckeditor(spec);
+    });
 
     $("table.dnd").tableDnD();
 
