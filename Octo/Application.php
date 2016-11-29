@@ -130,7 +130,7 @@ class Application extends \b8\Application
                 $response->setResponseCode(401);
                 $response->setContent('');
             } else {
-                $_SESSION['previous_url'] = $_SERVER['REQUEST_URI'];
+                $_SESSION['previous_url'] = $this->config->get('site.url') . $_SERVER['REQUEST_URI'];
                 $response = new RedirectResponse($this->response);
                 $response->setHeader('Location', $this->config->get('site.full_admin_url').'/session/login');
             }

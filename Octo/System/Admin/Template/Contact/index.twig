@@ -3,6 +3,14 @@
 {% block content %}
 
     <div class="row">
+        <div class="col-lg-6 col-lg-offset-6">
+            <div style="text-align: right; margin-bottom: 40px;">
+                <a href="{{ adminUri }}/contact/download" class="btn btn-default" style="margin-left: 30px;"><i class="fa fa-download"></i> Download mailing list</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="packery-blocks clearfix">
         {% for contact in contacts %}
             {% if contact.is_blocked %}

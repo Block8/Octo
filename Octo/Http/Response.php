@@ -44,8 +44,15 @@ class Response extends BaseResponse
 
     public function download($name, $content)
     {
-        $this->header('Content-Disposition', 'attachment; filename="' . $name . '"');
+        $this->disableLayout();
+
+        $this->headers([
+            'Content-Disposition' => 'attachment; filename="' . $name . '"',
+            'Content-Length' => strlen($content),
+        ]);
+
         $this->setContent($content);
+        
         return $this;
     }
 
