@@ -52,8 +52,7 @@ class SessionController extends Controller
                     $url = $_SESSION['previous_url'];
                 }
 
-                header('Location: ' . $url);
-                die;
+                return $this->redirect($url);
             } else {
                 Event::trigger('loginFailed', $this->view);
                 $label = strtolower($this->view->emailFieldLabel);
@@ -70,7 +69,7 @@ class SessionController extends Controller
         $_SESSION = array();
         session_destroy();
 
-        $this->redirect('/session/login?logout=1');
+        return $this->redirect('/session/login?logout=1');
     }
 
     public function forgotPassword()
@@ -126,7 +125,7 @@ OUT;
 
             $_SESSION['user_id'] = $user->getId();
 
-            $this->redirect('/');
+            return $this->redirect('/');
         }
 
         $this->view->userId = $userId;

@@ -6,7 +6,6 @@ use Octo\Block;
 use Octo\Controller;
 use Octo\Store;
 use Octo\Html\Template;
-use b8\Http\Response\RedirectResponse;
 
 class ContactController extends Controller
 {
@@ -46,7 +45,7 @@ class ContactController extends Controller
             $confirmLink = '/contact/unsubscribe?email=' . $unsubscriberEmail;
             $confirmLink .= '&hash=' . $unsubscriberHash . '&confirmed=1';
         } else {
-            $this->response = new RedirectResponse();
+            $this->response->setResponseCode(302);
             $redirect = $this->config->get('site.url');
             $this->response->setHeader('Location', $redirect);
             return;

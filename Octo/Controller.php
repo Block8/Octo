@@ -3,6 +3,8 @@
 namespace Octo;
 
 use b8\Config;
+use Octo\Admin\Controller as AdminController;
+use Octo\Http\Response;
 
 abstract class Controller extends \b8\Controller
 {
@@ -12,18 +14,30 @@ abstract class Controller extends \b8\Controller
     public $assets;
 
     /**
+     * @var \Octo\Http\Response
+     */
+    protected $response;
+
+    /**
      * b8 framework requires that controllers have an init() method
      */
     public function init()
     {
+        Event::trigger('Controller.Loaded', $this);
+        Event::trigger('Controller.Loaded.Public', $this);
+
         $this->assets = Config::getInstance()->get('Octo.AssetManager');
     }
 
-    public function handleAction($action, $params)
+    public function handleAction($action, $params, $raw = false)
     {
         $output = parent::handleAction($action, $params);
-        $this->response->setContent($output);
 
+        if ($raw || $output instanceof Response) {
+            return $output;
+        }
+
+        $this->response->setContent($output);
         return $this->response;
     }
 
@@ -43,5 +57,32 @@ abstract class Controller extends \b8\Controller
         }
 
         return null;
+    }
+
+    protected function redirect($to)
+    {
+        if (!in_array(substr($to, 0, 6), ['http:/', 'https:'])) {
+            $to = $this->config->get('site.url') . $to;
+        }
+
+        $this->response->setResponseCode(302);
+        $this->response->setHeader('Location', $to);
+
+        return $this->response;
+    }
+    
+    public function json($data)
+    {
+        $this->response->disableLayout();
+        $this->response->type('application/json');
+        $this->response->setContent(json_encode($data));
+        return $this->response;
+    }
+
+    public function raw($data)
+    {
+        $this->response->disableLayout();
+        $this->response->setContent($data);
+        return $this->response;
     }
 }

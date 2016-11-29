@@ -59,7 +59,6 @@ function createDialog(id, options)
 
 }
 
-
 window.pageEditor = Class.extend({
     id: null,
     content: {},
@@ -138,7 +137,9 @@ window.pageEditor = Class.extend({
         var self = this;
 
         $.post(window.adminUri + '/page/save/' + this.id, {content: JSON.stringify(this.content)}, function (response) {
-            response = JSON.parse(response);
+            if (typeof response == 'string') {
+                response = JSON.parse(response);
+            }
 
             if (self.content_id != response.content_id) {
                 document.getElementById('page-preview').contentWindow.location.reload();

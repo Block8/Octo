@@ -2,9 +2,10 @@
 
 namespace Octo;
 
+use b8\Http\Request;
 use Exception;
 use b8\Exception\HttpException;
-use b8\Http\Response;
+use Octo\Http\Response;
 use b8\Http\Response\RedirectResponse;
 use Octo;
 use Octo\Admin;
@@ -21,6 +22,14 @@ use Octo\Template;
  */
 class Application extends \b8\Application
 {
+    public function __construct(\b8\Config $config)
+    {
+        $request = new Request();
+        $response = new Response();
+
+        parent::__construct($config, $request, $response);
+    }
+
     /**
      * Setup the application and register basic routes
      */

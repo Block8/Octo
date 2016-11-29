@@ -3,7 +3,6 @@ namespace Octo\System\Admin\Controller;
 
 use b8\Config;
 use b8\Form;
-use b8\Http\Response\RedirectResponse;
 use Octo\Event;
 use Octo\Store;
 use Octo\Admin\Controller;
@@ -66,7 +65,7 @@ class ContactController extends Controller
             $rtn['results'][] = ['id' => $contact->getId(), 'text' => $name];
         }
 
-        die(json_encode($rtn));
+        return $this->json($rtn);
     }
 
     public function popup($contactId)
@@ -78,45 +77,41 @@ class ContactController extends Controller
     public function block($contactId)
     {
         $contact = $this->contactStore->getById($contactId);
-        $this->successMessage('Contact blocked!', true);
 
         $contact->setIsBlocked(1);
         $this->contactStore->save($contact);
 
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        return $this->redirect($_SERVER['HTTP_REFERER'])->success('Contact blocked.');
     }
 
     public function unblock($contactId)
     {
         $contact = $this->contactStore->getById($contactId);
-        $this->successMessage('Contact unblocked!', true);
 
         $contact->setIsBlocked(0);
         $this->contactStore->save($contact);
 
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        return $this->redirect($_SERVER['HTTP_REFERER'])->success('Contact unblocked.');
     }
 
     public function optIn($contactId)
     {
         $contact = $this->contactStore->getById($contactId);
-        $this->successMessage('Contact opted-in!', true);
 
         $contact->setMarketingOptin(1);
         $this->contactStore->save($contact);
 
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        return $this->redirect($_SERVER['HTTP_REFERER'])->success('Contact opted-in.');
     }
 
     public function optOut($contactId)
     {
         $contact = $this->contactStore->getById($contactId);
-        $this->successMessage('Contact opted-out!', true);
 
         $contact->setMarketingOptin(0);
         $this->contactStore->save($contact);
 
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        return $this->redirect($_SERVER['HTTP_REFERER'])->success('Contact opted-out.');
     }
 
     public function index()
@@ -141,7 +136,7 @@ class ContactController extends Controller
             ];
 
             Event::trigger('ContentPublished', $data);
-            $this->redirect('/contact/edit/'.$contact->getId());
+            return $this->redirect('/contact/edit/'.$contact->getId());
         }
 
         $this->view->form = $this->contactForm();
@@ -163,7 +158,7 @@ class ContactController extends Controller
             ];
 
             Event::trigger('ContentPublished', $data);
-            $this->redirect('/contact', 'Contact updated.');
+            return $this->redirect('/contact')->success('Contact updated.');
         }
 
         $form = $this->contactForm();;
@@ -179,8 +174,7 @@ class ContactController extends Controller
             $this->contactStore->delete($contact);
         }
 
-        $this->successMessage('Contact deleted.', true);
-        $this->redirect('/contact');
+        return $this->redirect('/contact')->success('Contact deleted.');
     }
 
 

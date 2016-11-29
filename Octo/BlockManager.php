@@ -3,7 +3,7 @@
 namespace Octo;
 
 use b8\Http\Request;
-use b8\Http\Response;
+use Octo\Http\Response;
 use Octo\Pages\Model\Page;
 use Octo\Pages\Model\PageVersion;
 use Octo\Html\Template;
@@ -31,7 +31,7 @@ class BlockManager
     protected $request;
 
     /**
-     * @var \b8\Http\Response
+     * @var \Octo\Http\Response
      */
     protected $response;
 

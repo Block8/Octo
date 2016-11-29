@@ -6,7 +6,6 @@ use b8\Form\Element\Email;
 use b8\Form\Element\Hidden;
 use b8\Form\Element\Password;
 use b8\Form\Element\Submit;
-use b8\Http\Response\RedirectResponse;
 use Octo\Controller;
 use Octo\Event;
 use Octo\Form;
@@ -30,7 +29,7 @@ class MemberController extends Controller
             if ($member && password_verify($this->getParam('password', ''), $member->getPasswordHash())) {
                 Member::getInstance()->login($member);
 
-                $this->response = new RedirectResponse($this->response);
+                $this->response->setResponseCode(302);
                 $this->response->setHeader('Location', $this->getParam('rtn', '/'));
                 return $this->response;
             } else {
@@ -49,7 +48,7 @@ class MemberController extends Controller
     {
         unset($_SESSION[Member::getSessionKey()]);
 
-        $this->response = new RedirectResponse($this->response);
+        $this->response->setResponseCode(302);
         $this->response->setHeader('Location', $this->getParam('rtn', '/'));
         return $this->response;
     }
@@ -109,7 +108,7 @@ class MemberController extends Controller
             Store::get('Contact')->save($member);
             Member::getInstance()->login($member);
 
-            $this->response = new RedirectResponse();
+            $this->response->setResponseCode(302);
             $this->response->setHeader('Location', $this->config->get('site.url'));
             return;
         }

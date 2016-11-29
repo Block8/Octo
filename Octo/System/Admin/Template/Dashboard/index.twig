@@ -1,46 +1,47 @@
 {% extends "@admin/layout.twig" %}
 
 {% block content %}
+
     <div class="row">
-        <div class="col-md-8">
-            <div class="row packery-blocks clearfix">
-
-                {% for value in statistics %}
-                    <div class="col-sm-6 col-md-4 block">
-                        <!-- small box -->
-                        <div class="small-box bg-{{ value.color }}">
-                            <div class="inner">
-                                <h3>
-                                    {{ value.count }}
-                                </h3>
-                                <p>
-                                    {{ value.title }}
-                                </p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-{{ value.icon }}"></i>
-                            </div>
-
-
-                            <a href="{{ adminUri }}{{ value.link }}" class="small-box-footer">
-                                {% if value.link_title %}
-                                    {{ value.link_title }} <i class="fa fa-arrow-circle-right"></i>
-                                {% else %}
-                                    View {{ value.title }} <i class="fa fa-arrow-circle-right"></i>
-                                {% endif %}
-                            </a>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+            {% for value in statistics %}
+                <!-- small box -->
+                <div class="col-lg-12 col-md-4 col-sm-6">
+                    <div class="small-box bg-{{ value.color }}">
+                        <div class="inner">
+                            <h3>
+                                {{ value.count }}
+                            </h3>
+                            <p>
+                                {{ value.title }}
+                            </p>
                         </div>
-                    </div><!-- ./col -->
-                {% endfor %}
+                        <div class="icon">
+                            <i class="ion ion-{{ value.icon }}"></i>
+                        </div>
 
-                {% for value in widgets %}
-                    {{ value.html|raw }}
-                {% endfor %}
 
+                        <a href="{{ adminUri }}{{ value.link }}" class="small-box-footer">
+                            {% if value.link_title %}
+                                {{ value.link_title }} <i class="fa fa-arrow-circle-right"></i>
+                            {% else %}
+                                View {{ value.title }} <i class="fa fa-arrow-circle-right"></i>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+            {% for value in widgets %}
+                {{ value.html|raw }}
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
             <ul class="timeline">
                 {% for value in timeline %}
                     {{ value|raw }}
@@ -50,6 +51,23 @@
                     <i class="fa fa-clock-o"></i>
                 </li>
             </ul>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row packery-blocks clearfix">
+
+
+
+
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
         </div>
     </div>
 

@@ -29,6 +29,6 @@ class SystemJobController extends Controller
             exec('nohup /usr/bin/php vendor/bin/octocmd ' . $job->getCommand() . ' >/dev/null 2>/dev/null &');
         }
 
-        die('OK');
+        return $this->raw('OK');
     }
 }

@@ -98,8 +98,7 @@ class JobController extends Controller
         $job->setDateUpdated(new \DateTime());
         $this->jobStore->save($job);
 
-        $this->successMessage('Job resubmitted to the queue.', true);
-        $this->redirect('/job');
+        return $this->redirect('/job')->success('Job resubmitted to the queue.');
     }
 
     public function delete($jobId)
@@ -107,12 +106,10 @@ class JobController extends Controller
         try {
             $job = $this->jobStore->getById($jobId);
             Manager::delete($job);
-
-            $this->successMessage('Job deleted.', true);
+            return $this->redirect('/job')->success('Job deleted.');
         } catch (\Exception $ex) {
-            $this->errorMessage('Job could not be deleted, it is likely that it is associated with a scheduled job.');
+            return $this->redirect('/job')
+                        ->error('Job could not be deleted, it is likely that it is associated with a scheduled job.');
         }
-
-        $this->redirect('/job');
     }
 }

@@ -86,9 +86,7 @@ class UserController extends Controller
                     $permission->setUri('/');
                     $this->permissionStore->save($permission);
 
-                    $this->successMessage($params['name'] . ' was added successfully.', true);
-
-                    $this->redirect('/user');
+                    return $this->redirect('/user')->success($params['name'] . ' was added successfully.');
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error adding the user. Please try again.');
                 }
@@ -135,9 +133,8 @@ class UserController extends Controller
                     list($user, $params) = $listenData;
                     
                     $user = $this->userStore->save($user);
-                    $this->successMessage($params['name'] . ' was edited successfully.', true);
 
-                    $this->redirect('/user');
+                    return $this->redirect('/user')->success($params['name'] . ' was edited successfully.');
                 } catch (Exception $e) {
                     $this->errorMessage('There was an error editing the user. Please try again.');
                 }
@@ -154,8 +151,7 @@ class UserController extends Controller
     {
         $user = $this->userStore->getById($userId);
         $this->userStore->delete($user);
-        $this->successMessage($user->getName() . ' was deleted successfully.', true);
-        $this->redirect('/user');
+        return $this->redirect('/user')->success($user->getName() . ' was deleted successfully.');
     }
 
     protected function userForm($values, $type = 'add')
@@ -326,7 +322,13 @@ class UserController extends Controller
             $user = $this->userStore->getById($this->getParam('q'));
 
             if ($user) {
-                die(json_encode(['more' => false, 'results' => [['id' => $user->getId(), 'text' => $user->getName()]]]));
+                return $this->json([
+                    'more' => false,
+                    'results' => [[
+                        'id' => $user->getId(),
+                        'text' => $user->getName()
+                    ]]
+                ]);
             }
         }
 
@@ -338,6 +340,6 @@ class UserController extends Controller
             $rtn['results'][] = ['id' => $user->getId(), 'text' => $user->getName()];
         }
 
-        die(json_encode($rtn));
+        return $this->json($rtn);
     }
 }

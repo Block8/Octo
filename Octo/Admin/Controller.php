@@ -3,16 +3,18 @@ namespace Octo\Admin;
 
 use b8\Config;
 use b8\Http\Request;
-use b8\Http\Response;
+use Octo\Http\Response;
 use Octo\Admin\Menu;
 use Octo\Admin\Template as LegacyTemplate;
+use Octo\Controller as BaseController;
+use Octo\Event;
 use Octo\Template;
 
 /**
  * Class Controller
  * @package Octo\Admin
  */
-abstract class Controller extends \b8\Controller
+abstract class Controller extends BaseController//\b8\Controller
 {
     protected $className = '';
 
@@ -68,6 +70,8 @@ abstract class Controller extends \b8\Controller
      */
     public function init()
     {
+        Event::trigger('Controller.Loaded', $this);
+        Event::trigger('Controller.Loaded.Admin', $this);
     }
 
     /**
@@ -75,12 +79,13 @@ abstract class Controller extends \b8\Controller
      *
      * @param $action
      * @param $params
+     * @param bool $raw
      * @return mixed
      */
-    public function handleAction($action, $params)
+    public function handleAction($action, $params, $raw = false)
     {
         $this->setupTemplate($this->className, $action);
-        $output = parent::handleAction($action, $params);
+        $output = parent::handleAction($action, $params, true);
 
         // No output and no template set:
         if (empty($output) && empty($this->template)) {
@@ -275,18 +280,12 @@ abstract class Controller extends \b8\Controller
         return $this->request;
     }
 
-    protected function redirect($to, $successMessage = null)
+    protected function redirect($to)
     {
         if (!in_array(substr($to, 0, 6), ['http:/', 'https:'])) {
             $to = $this->config->get('site.full_admin_url') . $to;
         }
 
-        if (!empty($successMessage)) {
-            $this->successMessage($successMessage, true);
-        }
-
-        $this->response = new Response\RedirectResponse($this->response);
-        $this->response->setHeader('Location', $to);
-        $this->response->flush();
+        return parent::redirect($to);
     }
 }
