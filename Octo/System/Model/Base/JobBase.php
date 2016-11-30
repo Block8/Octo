@@ -276,10 +276,10 @@ class JobBase extends Model
      * Set the value of Message / message
      * @param $value string
      */
-    public function setMessage(string $value)
+    public function setMessage($value)
     {
 
-        $this->validateNotNull('Message', $value);
+
 
         if ($this->data['message'] === $value) {
             return;
@@ -293,10 +293,10 @@ class JobBase extends Model
      * Set the value of QueueId / queue_id
      * @param $value int
      */
-    public function setQueueId(int $value)
+    public function setQueueId($value)
     {
 
-        $this->validateNotNull('QueueId', $value);
+
 
         if ($this->data['queue_id'] === $value) {
             return;

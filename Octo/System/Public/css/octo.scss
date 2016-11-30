@@ -1,0 +1,158 @@
+.btn-delete {} /*for IDE suggestion*/
+
+.content-wrapper {
+  position: relative;
+}
+
+.message {
+  background: {
+    color: #f0f0f0;
+    repeat: no-repeat;
+    position: 30px 20px;
+    size: 45px;
+  };
+
+  border-bottom: 1px solid #ddd;
+  font-size: 20px;
+  padding: 30px;
+
+  &.success {
+    background-color: #dff0d8;
+    background-image: url('/asset/img/System/icon-success.svg');
+    border-color: #d0e9c6;
+    color: #3c763d;
+    padding-left: 100px;
+  }
+
+  &.info {
+    background-color: #fcf8e3;
+    background-image: url('/asset/img/System/icon-info.svg');
+    border-color: #faf2cc;
+    color: #8a6d3b;
+    padding-left: 100px;
+  }
+
+  &.error {
+    background-color: #f2dede;
+    background-image: url('/asset/img/System/icon-error.svg');
+    border-color: #ebcccc;
+    color: #a94442;
+    padding-left: 100px;
+  }
+}
+
+
+#dead-link-spider div.row:nth-child(odd){
+    background-color: #f0f0f0;
+}
+#dead-link-spider div.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+#dead-link-spider div.row div{
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.tree ul {
+    list-style-type: none;
+}
+
+    .tree ul li div {
+        margin-right: 15px;
+    }
+
+
+
+
+.pageview {
+    font-size: 1.1em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+    .pageview li {
+        cursor: pointer;
+        line-height: 40px;
+        margin: 0;
+        vertical-align: middle;
+    }
+
+        .pageview li ul {
+            background: #fff;
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 15px;
+        }
+
+        .pageview li:hover {
+            background: #fafafa;
+        }
+
+        .pageview li .fa {
+            font-size: 1em;
+            line-height: 25px;
+            width: 25px;
+        }
+
+            .pageview li .fa:first-child {
+                margin-left: 10px;
+            }
+
+        .pageview li .open-arrow {
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+.page-options .btn {
+    font-size: 1.2em;
+    padding-left: 20px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+    .page-options .btn .fa {
+        margin-right: 20px;
+        vertical-align: middle;
+        width: 18px;
+    }
+
+
+input[type=checkbox] {
+    margin-right: 10px;
+}
+
+.form-group {
+    position: relative;
+}
+
+
+.sidebar-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 230px;
+    padding: 0 10px 5px 0;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    text-align: right;
+}
+
+.sidebar-footer img {
+    height: 35px;
+}
+
+.select2-results__option span {
+    display: inline-block;
+}
+
+.select2-results__option img.item-thumb {
+    margin-right: 25px;
+}
+
+.select2-results__option small {
+    color: #888;
+}

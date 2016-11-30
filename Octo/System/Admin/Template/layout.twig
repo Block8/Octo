@@ -136,6 +136,24 @@
 
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="content-wrapper">
+        {% if globalErrorMessage %}
+            <div class="message error">
+                {{ globalErrorMessage }}
+            </div>
+        {% endif %}
+
+        {% if globalSuccessMessage %}
+            <div class="message success">
+                {{ globalSuccessMessage }}
+            </div>
+        {% endif %}
+
+        {% if globalInfoMessage %}
+            <div class="message info">
+                {{ globalInfoMessage }}
+            </div>
+        {% endif %}
+
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
@@ -165,32 +183,6 @@
 
         <!-- Main content -->
         <section class="content">
-
-            <div class="row">
-                <div class="col-lg-12">
-                    {% if globalErrorMessage %}
-                        <div class="alert alert-danger fade in">
-                            <i class="fa fa-ban"></i>
-                            <strong>Error:</strong> {{ globalErrorMessage }}
-                        </div>
-                    {% endif %}
-
-                    {% if globalSuccessMessage %}
-                        <div class="alert alert-success fade in">
-                            <i class="fa fa-check"></i>
-                            {{ globalSuccessMessage }}
-                        </div>
-                    {% endif %}
-
-                    {% if globalInfoMessage %}
-                        <div class="alert alert-info fade in">
-                            <i class="fa fa-info"></i>
-                            {{ globalInfoMessage }}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
             {% block content %}
                 Hello!
             {% endblock %}
@@ -223,6 +215,12 @@
             gutter: 0,
             resize: true
         });
+    });
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('.message').slideUp();
+        }, 3000);
     });
 </script>
 

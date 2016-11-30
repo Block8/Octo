@@ -62,6 +62,20 @@ class AssetController extends Octo\Controller
             throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
         }
 
+        switch (substr($name, -3)) {
+            case 'png':
+                $this->response->type('image/png');
+                break;
+
+            case 'jpg':
+                $this->response->type('image/jpeg');
+                break;
+
+            case 'svg':
+                $this->response->type('image/svg+xml');
+                break;
+        }
+
         $this->response->disableLayout();
         return file_get_contents($path);
     }

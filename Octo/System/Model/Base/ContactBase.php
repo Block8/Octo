@@ -528,6 +528,16 @@ class ContactBase extends Model
     }
     
     
+    public function Apologys()
+    {
+        return Store::get('Apology')->where('contact_id', $this->data['id']);
+    }
+
+    public function Attendees()
+    {
+        return Store::get('Attendee')->where('contact_id', $this->data['id']);
+    }
+
     public function Submissions()
     {
         return Store::get('Submission')->where('contact_id', $this->data['id']);

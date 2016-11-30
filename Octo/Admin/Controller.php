@@ -288,4 +288,9 @@ abstract class Controller extends BaseController//\b8\Controller
 
         return parent::redirect($to);
     }
+
+    protected function return()
+    {
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+    }
 }
