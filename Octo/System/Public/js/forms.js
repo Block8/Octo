@@ -27,9 +27,13 @@ Octo.Forms.init = function () {
     });
 };
 
-Octo.Forms.createImagePicker = function (input) {
+Octo.Forms.createImagePicker = function (input, useLargeImage) {
     if (input.prop('nodeName') != 'SELECT') {
         console.error('Octo.Forms: You can only create an image picker from a SELECT element.');
+        return;
+    }
+
+    if (input.hasClass('octo-picker')) {
         return;
     }
 
@@ -66,8 +70,11 @@ Octo.Forms.createImagePicker = function (input) {
     input.on('change', function () {
         var val = $(this).val();
 
+        var imageSize = useLargeImage ? '' : '/160/90';
+
         if (val) {
-            img.attr('src', '/media/render/' + $(this).val() + '/160/90');
+            img.addClass('img-responsive');
+            img.attr('src', '/media/render/' + $(this).val() + imageSize);
             img.show();
         } else {
             img.hide();
@@ -77,11 +84,17 @@ Octo.Forms.createImagePicker = function (input) {
     if (input.val() != '') {
         input.trigger('change');
     }
+
+    input.addClass('octo-picker');
 };
 
 Octo.Forms.createPagePicker = function (input) {
     if (input.prop('nodeName') != 'SELECT') {
         console.error('Octo.Forms: You can only create a page picker from a SELECT element.');
+        return;
+    }
+
+    if (input.hasClass('octo-picker')) {
         return;
     }
 
@@ -127,11 +140,17 @@ Octo.Forms.createPagePicker = function (input) {
             return $(itemHtml);
         }
     });
+
+    input.addClass('octo-picker');
 };
 
 Octo.Forms.createFilePicker = function (input) {
     if (input.prop('nodeName') != 'SELECT') {
         console.error('Octo.Forms: You can only create a file picker from a SELECT element.');
+        return;
+    }
+
+    if (input.hasClass('octo-picker')) {
         return;
     }
 
@@ -164,11 +183,17 @@ Octo.Forms.createFilePicker = function (input) {
             }
         }
     });
+
+    input.addClass('octo-picker');
 };
 
 Octo.Forms.createContactPicker = function (input) {
     if (input.prop('nodeName') != 'SELECT') {
         console.error('Octo.Forms: You can only create a contact picker from a SELECT element.');
+        return;
+    }
+
+    if (input.hasClass('octo-picker')) {
         return;
     }
 
@@ -190,11 +215,17 @@ Octo.Forms.createContactPicker = function (input) {
             }
         }
     });
+
+    input.addClass('octo-picker');
 };
 
 Octo.Forms.createSwitch = function (check) {
     if (check.prop('nodeName') != 'INPUT' || check.attr('type') != 'checkbox') {
         console.error('Octo.Forms: You can only create an on/off switch from an CHECKBOX element.');
+        return;
+    }
+
+    if (input.hasClass('octo-switch')) {
         return;
     }
 
@@ -238,6 +269,8 @@ Octo.Forms.createSwitch = function (check) {
 
     group.css({'margin-right': '15px'});
     check.after(group);
+
+    input.addClass('octo-switch');
 };
 
 $(document).ready(Octo.Forms.init);

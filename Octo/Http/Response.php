@@ -25,16 +25,19 @@ class Response extends BaseResponse
     public function success($message)
     {
         $_SESSION['GlobalMessage']['success'] = $message;
+        return $this;
     }
 
     public function error($message)
     {
         $_SESSION['GlobalMessage']['error'] = $message;
+        return $this;
     }
 
     public function info($message)
     {
         $_SESSION['GlobalMessage']['info'] = $message;
+        return $this;
     }
 
     public function type($contentType)

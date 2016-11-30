@@ -93,8 +93,6 @@ window.pageEditor = Class.extend({
     },
 
     triggerSaveContent: function (form) {
-        $('.page-save-notice').addClass('alert-warning').removeClass('alert-success').text('Saving...').fadeIn('fast');
-
         var self = this;
         var formId = form.attr('id').replace('block_', '');
         var serialized = form.serializeArray();
@@ -133,8 +131,14 @@ window.pageEditor = Class.extend({
         self.saveContent();
     },
 
+    setContent: function (blockId, content) {
+        var self = this;
+        self.content[blockId] = content;
+    },
+
     saveContent: function () {
         var self = this;
+        $('.page-save-notice').addClass('alert-warning').removeClass('alert-success').text('Saving...').fadeIn('fast');
 
         $.post(window.adminUri + '/page/save/' + this.id, {content: JSON.stringify(this.content)}, function (response) {
             if (typeof response == 'string') {
