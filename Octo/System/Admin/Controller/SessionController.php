@@ -18,6 +18,7 @@ class SessionController extends Controller
 
     public function init()
     {
+        parent::init();
         $this->response->disableLayout();
         $this->userStore = Store::get('User');
     }
@@ -27,21 +28,13 @@ class SessionController extends Controller
      */
     public function login()
     {
-        if (file_exists(APP_PATH . 'public/assets/images/cms-logo.png')) {
-            $this->view->siteLogo = true;
-        }
-
         $_SESSION['auth'] = 'login';
 
-        $this->view->emailFieldLabel = 'Email Address';
-        $this->userStoreName = 'User';
-        $this->userGetMethod = 'getByEmail';
 
         Event::trigger('beforeLogin', $this);
 
         if ($this->request->getMethod() == 'POST') {
-            $ugMethod = $this->userGetMethod;
-            $user = Store::get($this->userStoreName)->$ugMethod($this->getParam('email'));
+            $user = Store::get('User')->getByEmail($this->getParam('email'));
 
             if ($user && password_verify($this->getParam('password', ''), $user->getHash())) {
                 $_SESSION['user_id'] = $user->getId();
@@ -55,8 +48,7 @@ class SessionController extends Controller
                 return $this->redirect($url);
             } else {
                 Event::trigger('loginFailed', $this->view);
-                $label = strtolower($this->view->emailFieldLabel);
-                $this->view->errorMessage = 'Your ' . $label . ' or password were wrong.';
+                $this->template->errorMessage = 'Your email address or password were incorrect.';
             }
         }
     }

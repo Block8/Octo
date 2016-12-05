@@ -14,8 +14,8 @@ class AddWorkerJobs extends AbstractMigration
         $job->addColumn('date_created', 'datetime');
         $job->addColumn('date_updated', 'datetime');
         $job->addColumn('data', 'text', ['limit' => MysqlAdapter::TEXT_REGULAR]);
-        $job->addColumn('message', 'string', ['limit' => 250]);
-        $job->addColumn('queue_id', 'integer');
+        $job->addColumn('message', 'string', ['limit' => 250, 'null' => true, 'default' => null]);
+        $job->addColumn('queue_id', 'integer', ['null' => true, 'default' => null]);
         $job->addIndex('status', ['unique' => false]);
         $job->addIndex('type', ['unique' => false]);
 

@@ -91,7 +91,7 @@ CKEDITOR.on('dialogDefinition', function( ev ) {
 });
 
 $(document).ready(function() {
-	$('textarea.ckeditor.small').each(function () {
+	$('textarea.html-editor.small').each(function () {
         var $ed = $(this);
         var spec = window.smallCkEditor;
 
@@ -102,7 +102,7 @@ $(document).ready(function() {
         $ed.ckeditor(spec);
     });
 
-    $('textarea.ckeditor.basic').each(function () {
+    $('textarea.html-editor.basic').each(function () {
         var $ed = $(this);
         var spec = window.smallCkEditor;
 
@@ -113,7 +113,7 @@ $(document).ready(function() {
         $ed.ckeditor(spec);
     });
 
-    $('textarea.ckeditor.advanced').each(function () {
+    $('textarea.html-editor.advanced').each(function () {
         var $ed = $(this);
         var spec = window.smallCkEditor;
 
@@ -123,8 +123,6 @@ $(document).ready(function() {
 
         $ed.ckeditor(spec);
     });
-
-    $("table.dnd").tableDnD();
 
     // Dirty IE fix for CKEditor in Bootstrap 3 Modal Windows.
     $.fn.modal.Constructor.prototype.enforceFocus = function () {};

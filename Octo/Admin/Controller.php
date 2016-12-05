@@ -14,7 +14,7 @@ use Octo\Template;
  * Class Controller
  * @package Octo\Admin
  */
-abstract class Controller extends BaseController//\b8\Controller
+abstract class Controller extends BaseController
 {
     protected $className = '';
 
@@ -62,7 +62,8 @@ abstract class Controller extends BaseController//\b8\Controller
             $this->currentUser = $_SESSION['user'];
         }
 
-        return parent::__construct($config, $request, $response);
+        parent::__construct($config, $request, $response);
+        Event::trigger('Controller.Loaded.Admin', $this);
     }
 
     /**
@@ -70,8 +71,6 @@ abstract class Controller extends BaseController//\b8\Controller
      */
     public function init()
     {
-        Event::trigger('Controller.Loaded', $this);
-        Event::trigger('Controller.Loaded.Admin', $this);
     }
 
     /**

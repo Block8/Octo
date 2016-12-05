@@ -23,11 +23,11 @@ class AssetManager extends Listener
         $html = $response->getContent();
 
         if (stripos($html, '</head>') !== false) {
-            $html = str_replace('</head>', $inject['css'] . PHP_EOL . '</head>', $html);
+            $html = str_replace('</head>', $inject['header'] . PHP_EOL . '</head>', $html);
         }
 
         if (stripos($html, '</body>') !== false) {
-            $html = str_replace('</body>', $inject['js'] . PHP_EOL . '</body>', $html);
+            $html = str_replace('</body>', $inject['footer'] . PHP_EOL . '</body>', $html);
         }
 
         $response->setContent($html);
@@ -43,34 +43,61 @@ class AssetManager extends Listener
 
         /** @var \Octo\AssetManager $assets */
         $assets = $config->get('Octo.AssetManager');
-        $inject = ['css' => '', 'js' => ''];
+        $inject = ['header' => '', 'footer' => ''];
 
-        foreach ($assets->getCss() as $css) {
-            $path = $paths[$css['module']] . 'Public/css/' . $css['name'] . '.css';
+        foreach ($assets->getAssets() as $asset) {
+            $thisAsset = '';
 
-            if (is_file($path)) {
-                $href = '/asset/css/'.$css['module'].'/'.$css['name'].'?t='.filemtime($path);
-                $url = $config->get('site.url') . $href;
-                $response->setHeader('Link', '<'.$href.'>; rel=preload; as=style');
-                $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$url.'">';
+            switch ($asset['type']) {
+                case 'css':
+                    $path = $paths[$asset['module']] . 'Public/css/' . $asset['name'] . '.css';
+
+                    if (is_file($path)) {
+                        $thisHref = '/asset/css/'.$asset['module'].'/'.$asset['name'].'?t='.filemtime($path);
+                        $url = $config->get('site.url') . $thisHref;
+                        $response->setHeader('Link', '<'.$thisHref.'>; rel=preload; as=style');
+                        $thisAsset = '<link rel="stylesheet" type="text/css" href="'.$url.'">';
+                    }
+                break;
+
+                case 'js':
+                    $path = $paths[$asset['module']] . 'Public/js/' . $asset['name'] . '.js';
+
+                    if (is_file($path)) {
+                        $thisHref = '/asset/js/'.$asset['module'].'/'.$asset['name'].'?t='.filemtime($path);
+                        $url = $config->get('site.url') . $thisHref;
+                        $response->setHeader('Link', '<'.$thisHref.'>; rel=preload; as=script');
+                        $thisAsset = '<script src="'.$url.'"></script>';
+                    }
+                break;
+
+                case 'third-party.css':
+                    $path = $paths[$asset['module']] . 'Public/third-party/' . $asset['name'];
+
+                    if (is_file($path)) {
+                        $thisHref = '/asset/third-party/'.$asset['module'].'/'.$asset['name'].'?t='.filemtime($path);
+                        $url = $config->get('site.url') . $thisHref;
+                        $response->setHeader('Link', '<'.$thisHref.'>; rel=preload; as=style');
+                        $thisAsset = '<link rel="stylesheet" type="text/css" href="'.$url.'">';
+                    }
+                    break;
+
+                case 'third-party.js':
+                    $path = $paths[$asset['module']] . 'Public/third-party/' . $asset['name'];
+
+                    if (is_file($path)) {
+                        $thisHref = '/asset/third-party/'.$asset['module'].'/'.$asset['name'].'?t='.filemtime($path);
+                        $url = $config->get('site.url') . $thisHref;
+                        $response->setHeader('Link', '<'.$thisHref.'>; rel=preload; as=script');
+                        $thisAsset = '<script src="'.$url.'"></script>';
+                    }
+                    break;
+            }
+
+            if (!empty($thisAsset)) {
+                $inject[$asset['head'] ? 'header' : 'footer'] .= $thisAsset . PHP_EOL;
             }
         }
-
-        foreach ($assets->getExternalJs() as $js) {
-            $inject['js'] .= '<script src="'.$js.'"></script>';
-        }
-
-        foreach ($assets->getJs() as $js) {
-            $path = $paths[$js['module']] . 'Public/js/' . $js['name'] . '.js';
-
-            if (is_file($path)) {
-                $href = '/asset/js/'.$js['module'].'/'.$js['name'].'?t='.filemtime($path);
-                $url = $config->get('site.url') . $href;
-                $response->setHeader('Link', '<'.$href.'>; rel=preload; as=script');
-                $inject['js'] .= '<script src="'.$url.'"></script>';
-            }
-        }
-        
 
         if (!defined('OCTO_ADMIN') || OCTO_ADMIN == false) {
             // Site CSS and JS:
@@ -81,7 +108,7 @@ class AssetManager extends Listener
                 $href = '/asset/css/site?t='.filemtime($path);
                 $url = $this->config->get('site.url') . $href;
                 $response->setHeader('Link', '<'.$href.'>; rel=preload; as=style');
-                $inject['css'] .= '<link rel="stylesheet" type="text/css" href="'.$url.'">';
+                $inject['header'] .= '<link rel="stylesheet" type="text/css" href="'.$url.'">';
             }
 
             $path = APP_PATH . $siteNamespace . '/Public/js/site.js';
@@ -90,7 +117,7 @@ class AssetManager extends Listener
                 $href = '/asset/js/site?t='.filemtime($path);
                 $url = $config->get('site.url') . $href;
                 $response->setHeader('Link', '<'.$href.'>; rel=preload; as=script');
-                $inject['js'] .= '<script src="'.$url.'"></script>';
+                $inject['footer'] .= '<script src="'.$url.'"></script>';
             }
         }
 

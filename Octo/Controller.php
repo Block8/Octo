@@ -3,6 +3,7 @@
 namespace Octo;
 
 use b8\Config;
+use b8\Http\Request;
 use Octo\Admin\Controller as AdminController;
 use Octo\Http\Response;
 
@@ -18,15 +19,23 @@ abstract class Controller extends \b8\Controller
      */
     protected $response;
 
+    public function __construct(Config $config, Request $request, Response $response)
+    {
+        parent::__construct($config, $request, $response);
+        $this->assets = Config::getInstance()->get('Octo.AssetManager');
+
+        Event::trigger('Controller.Loaded', $this);
+
+        if (!($this instanceof AdminController)) {
+            Event::trigger('Controller.Loaded.Public', $this);
+        }
+    }
+
     /**
      * b8 framework requires that controllers have an init() method
      */
     public function init()
     {
-        Event::trigger('Controller.Loaded', $this);
-        Event::trigger('Controller.Loaded.Public', $this);
-
-        $this->assets = Config::getInstance()->get('Octo.AssetManager');
     }
 
     public function handleAction($action, $params, $raw = false)

@@ -44,13 +44,8 @@ class TemplateFunctions extends Listener
             return $string;
         };
 
-        $functions['canAccess'] = function ($uri) {
-            return $_SESSION['user']->canAccess($uri);
-        };
-
-        $functions['md5'] = function ($string) {
-            return md5($string);
-        };
+        $functions['canAccess'] = function ($uri) { return $_SESSION['user']->canAccess($uri); };
+        $functions['md5'] = function ($string) { return md5($string); };
     }
 
     public function templateLoaded(Template &$template)
@@ -80,7 +75,6 @@ class TemplateFunctions extends Listener
 
     public function adminTemplateLoaded(Template &$template)
     {
-
     }
 
     public function adminTemplateFunctions(AdminTemplate &$template)

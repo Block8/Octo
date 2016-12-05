@@ -4,46 +4,71 @@ namespace Octo;
 
 class AssetManager
 {
-    protected $css = [];
-    protected $js = [];
-    protected $image = [];
-    protected $externalJs = [];
+    protected static $instance = null;
 
-    public function addCss($module, $name)
+    public static function getInstance()
     {
-        $this->css[$module . '.' . $name] = ['module' => $module, 'name' => $name];
+        if (empty(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
-    public function addJs($module, $name)
+    protected $assets = [];
+    protected $thirdParty = ['js' => [], 'css' => []];
+
+    public function __construct()
     {
-        $this->js[$module . '.' . $name] = ['module' => $module, 'name' => $name];
+        self::$instance = $this;
     }
 
-    public function addExternalJs($url)
+    public function addCss($module, $name, $head = true)
     {
-        $this->externalJs[$url] = $url;
+        $this->assets[md5('css.' . $module . '.' . $name)] =  [
+            'type' => 'css',
+            'module' => $module,
+            'name' => $name,
+            'head' => $head,
+        ];
     }
 
-    public function getCss()
+    public function addJs($module, $name, $head = false)
     {
-        return $this->css;
+        $this->assets[md5('js.' . $module . '.' . $name)] =  [
+            'type' => 'js',
+            'module' => $module,
+            'name' => $name,
+            'head' => $head,
+        ];
     }
 
-    public function getJs()
+    public function addThirdParty($type, $module, $name, $head = false)
     {
-        return $this->js;
+        $this->assets[md5('third-party.' . $module . '.' . $name)] =  [
+            'type' => 'third-party.'.$type,
+            'module' => $module,
+            'name' => $name,
+            'head' => $head,
+        ];
     }
 
-    public function getExternalJs()
+    public function addExternalJs($url, $head = false)
     {
-        return $this->externalJs;
+        $this->assets[md5('external.' . $url)] =  [
+            'type' => 'external',
+            'url' => $url,
+            'head' => $head,
+        ];
+    }
+
+    public function getAssets()
+    {
+        return $this->assets;
     }
 
     public function reset()
     {
-        $this->css = [];
-        $this->js = [];
-        $this->image = [];
-        $this->externalJs = [];
+        $this->assets = [];
     }
 }

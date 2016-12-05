@@ -62,20 +62,24 @@ class AssetController extends Octo\Controller
             throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
         }
 
-        switch (substr($name, -3)) {
-            case 'png':
-                $this->response->type('image/png');
-                break;
+        $this->setResponseType($path);
 
-            case 'jpg':
-                $this->response->type('image/jpeg');
-                break;
+        $this->response->disableLayout();
+        return file_get_contents($path);
+    }
 
-            case 'svg':
-                $this->response->type('image/svg+xml');
-                break;
+    public function thirdParty($module)
+    {
+        $parts = array_slice(func_get_args(), 1);
+        $name = implode('/', $parts);
+        $path = $this->getPath($module) . 'third-party/' . $name;
+
+        if (!file_exists($path)) {
+            throw new NotFoundException('Asset ' . $module . '::' . $name . ' does not exist.');
         }
 
+        $this->setResponseType($path);
+        $this->response->setHeader('Cache-Control', 'public, max-age=1209600');
         $this->response->disableLayout();
         return file_get_contents($path);
     }
@@ -89,5 +93,42 @@ class AssetController extends Octo\Controller
 
         $paths = Config::getInstance()->get('Octo.paths.modules');
         return $paths[$module] . 'Public/';
+    }
+
+    protected function setResponseType($path)
+    {
+        $parts = explode('.', $path);
+        $extension = array_pop($parts);
+
+        switch ($extension) {
+            case 'css':
+                $this->response->type('text/css');
+                break;
+
+            case 'js':
+                $this->response->type('application/javascript');
+                break;
+
+            case 'png':
+                $this->response->type('image/png');
+                break;
+
+            case 'jpg':
+            case 'jpeg':
+                $this->response->type('image/jpeg');
+                break;
+
+            case 'svg':
+                $this->response->type('image/svg+xml');
+                break;
+
+            case 'gif':
+                $this->response->type('image/gif');
+                break;
+
+            default:
+                $this->response->type('text/plain');
+                break;
+        }
     }
 }
