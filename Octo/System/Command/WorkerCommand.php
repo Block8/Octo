@@ -33,8 +33,7 @@ class WorkerCommand extends Command
             $error = 'The worker is not configured. You must set a worker host in your site config file.';
             throw new \Exception($error);
         }
-
-
+        
         $worker = new Worker(Config::getInstance()->get('Octo.worker.host'));
         $worker->run($input->getOption('verbose'));
     }

@@ -51,6 +51,16 @@ class ScheduledJobStoreBase extends Store
     }
 
     /**
+     * Get a ScheduledJob object by Type.
+     * @param $value
+     * @return ScheduledJob|null
+     */
+    public function getByType(string $value)
+    {
+        return $this->where('type', $value)->first();
+    }
+
+    /**
      * Get all ScheduledJob objects by CurrentJobId.
      * @return \Octo\System\Model\ScheduledJobCollection
      */

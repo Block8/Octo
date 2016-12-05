@@ -5,6 +5,9 @@
 .content-wrapper {
   position: relative; }
 
+.tab-pane {
+  position: relative; }
+
 .message {
   background-color: #f0f0f0;
   background-repeat: no-repeat;

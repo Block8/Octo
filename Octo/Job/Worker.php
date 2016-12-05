@@ -4,7 +4,10 @@ namespace Octo\Job;
 
 use b8\Config;
 use Octo\Event;
+use Octo\Store;
 use Octo\System\Model\Job;
+use Octo\System\Model\ScheduledJob;
+use Octo\System\Store\ScheduledJobStore;
 use Pheanstalk\Pheanstalk;
 
 class Worker
@@ -46,18 +49,7 @@ class Worker
         $this->queue = OCTO_QUEUE;
         $this->pheanstalk = new Pheanstalk($this->host);
         $this->handlers = $this->setupHandlers();
-
-        // Create the scheduler on startup:
-        $job = new Job();
-        $job->setType('Octo.System.Scheduler');
-
-        Manager::create($job, Job::PRIORITY_HIGH);
-
-        // Create the scheduler on startup:
-        $job = new Job();
-        $job->setType('Octo.System.Scheduler');
-
-        Manager::create($job, Job::PRIORITY_HIGH);
+        $this->setupScheduledJobs();
 
         // Create the scheduler on startup:
         $job = new Job();
@@ -146,5 +138,39 @@ class Worker
         }
 
         return $rtn;
+    }
+
+    protected function setupScheduledJobs()
+    {
+        $schedule = [];
+        Event::trigger('Job.Schedule', $schedule);
+
+        /** @var ScheduledJobStore $store */
+        $store = Store::get('ScheduledJob');
+
+        foreach ($schedule as $type => $data) {
+            $job = $store->getByType($type);
+
+            if ($job) {
+                continue;
+            }
+
+            $job = new ScheduledJob();
+            $job->setType($type);
+
+            if (!empty($data['frequency'])) {
+                $job->setFrequency((int)$data['frequency']);
+            } else {
+                $job->setFrequency(86400);
+            }
+
+            if (!empty($data['data'])) {
+                $job->setData($data['data']);
+            } else {
+                $job->setData([]);
+            }
+
+            $store->save($job);
+        }
     }
 }
