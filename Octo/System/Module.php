@@ -20,6 +20,8 @@ class Module extends Octo\Module
     {
         $app = $this->config->get('Octo');
         $app['bypass_auth']['session'] = true;
+        $app['bypass_auth']['setup'] = true;
+        
         $this->config->set('Octo', $app);
 
         return parent::init();

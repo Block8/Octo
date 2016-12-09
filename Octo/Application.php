@@ -229,14 +229,14 @@ class Application extends \b8\Application
     protected function handleHttpError($code)
     {
         try {
-            $template = new Template('Error/' . $code);
+            $template = new Template('Error/' . $code, (defined('OCTO_ADMIN') && OCTO_ADMIN ? 'admin' : null));
             $template->set('page', ['title' => 'Error ' . $code . ' - ' . Response::$codes[$code]]);
             $content = $template->render();
-            
+
             $this->response->setResponseCode($code);
             $this->response->setContent($content);
         } catch (\Exception $ex) {}
-        
+
         return $this->response;
     }
 
@@ -294,5 +294,15 @@ class Application extends \b8\Application
         $response = new RedirectResponse($response);
         $response->setHeader('Location', $this->config->get('site.full_admin_url'));
         $response->flush();
+    }
+
+    public function isValidRoute($route)
+    {
+        if ($route['namespace'] == 'Admin\Controller') {
+            var_dump('VALID');
+            return true;
+        }
+
+        return parent::isValidRoute($route);
     }
 }

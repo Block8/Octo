@@ -30,6 +30,9 @@ class SessionController extends Controller
     {
         $_SESSION['auth'] = 'login';
 
+        if ($this->userStore->find()->count() === 0) {
+            return $this->redirect('/setup');
+        }
 
         Event::trigger('beforeLogin', $this);
 

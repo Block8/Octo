@@ -10,7 +10,7 @@ use Octo\Http\Response;
 abstract class Controller extends \b8\Controller
 {
     /**
-     * @var Octo\AssetManager
+     * @var \Octo\AssetManager
      */
     public $assets;
 

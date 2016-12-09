@@ -1,0 +1,14 @@
+body.setup {
+  background: #444;
+  padding-top: 100px;
+
+  .box {
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  svg.octo-logo {
+    display: block;
+    margin: 40px auto;
+    width: 150px;
+  }
+}
