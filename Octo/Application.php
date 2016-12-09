@@ -299,7 +299,6 @@ class Application extends \b8\Application
     public function isValidRoute($route)
     {
         if ($route['namespace'] == 'Admin\Controller') {
-            var_dump('VALID');
             return true;
         }
 
