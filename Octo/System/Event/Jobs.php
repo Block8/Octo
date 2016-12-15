@@ -13,6 +13,7 @@ class Jobs extends Listener
             $handlers[] = 'Octo\System\JobHandler\UpdateTimelineHandler';
             $handlers[] = 'Octo\System\JobHandler\SendEmailHandler';
             $handlers[] = 'Octo\System\JobHandler\SchedulerHandler';
+            $handlers[] = 'Octo\System\JobHandler\CleanupHandler';
         });
 
         $manager->registerListener('Job.Schedule', function (&$handlers) {
