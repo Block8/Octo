@@ -46,6 +46,7 @@ class TemplateFunctions extends Listener
 
         $functions['canAccess'] = function ($uri) { return $_SESSION['user']->canAccess($uri); };
         $functions['md5'] = function ($string) { return md5($string); };
+        $functions['setting'] = function ($scope, $key) { return Setting::get($scope, $key); };
     }
 
     public function templateLoaded(Template &$template)

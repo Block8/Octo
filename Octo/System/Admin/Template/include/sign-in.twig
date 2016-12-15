@@ -1,0 +1,25 @@
+<div class="box box-default box-log-in">
+    <div class="box-body overlay-wrapper" style="">
+
+        <img class="service-logo" src="{{ logo }}" alt="{{ name }}">
+
+        <div class="logged-in" style="display: none">
+            <img class="photo img-circle" src="">
+
+            <p>You are currently logged in to {{ name }} as <strong class="name"></strong> (<span class="email"></span>).</p>
+
+            <div class="log-out-button">
+                <button class="btn btn-danger btn-log-out" id="btn-log-out">Log out of {{ name }} &raquo;</button>
+            </div>
+        </div>
+
+        <div class="logged-out">
+            <h3>{{ title }}</h3>
+            <button class="btn btn-success btn-log-in" id="btn-log-in">Log in with {{ name }} &raquo;</button>
+        </div>
+
+        <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+    </div>
+</div>

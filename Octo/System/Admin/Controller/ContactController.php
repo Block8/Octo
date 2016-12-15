@@ -169,13 +169,6 @@ class ContactController extends Controller
             $contact->setValues($this->getParams());
             $contact = $this->contactStore->save($contact);
 
-            $data = [
-                'model' => $contact,
-                'content_id' => $contact->getId(),
-                'content' => $contact->getFirstName() . ' ' . $contact->getLastName() . ' ' . $contact->getCompany(),
-            ];
-
-            Event::trigger('ContentPublished', $data);
             return $this->redirect('/contact/edit/'.$contact->getId());
         }
 
@@ -189,15 +182,8 @@ class ContactController extends Controller
 
         if ($this->request->getMethod() == 'POST') {
             $contact->setValues($this->getParams());
-            $contact = $this->contactStore->save($contact);
+            $this->contactStore->save($contact);
 
-            $data = [
-                'model' => $contact,
-                'content_id' => $contact->getId(),
-                'content' => $contact->getFirstName() . ' ' . $contact->getLastName() . ' ' . $contact->getCompany(),
-            ];
-
-            Event::trigger('ContentPublished', $data);
             return $this->redirect('/contact')->success('Contact updated.');
         }
 

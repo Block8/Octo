@@ -225,7 +225,7 @@ Octo.Forms.createSwitch = function (check) {
         return;
     }
 
-    if (input.hasClass('octo-switch')) {
+    if (check.hasClass('octo-switch')) {
         return;
     }
 
@@ -270,7 +270,7 @@ Octo.Forms.createSwitch = function (check) {
     group.css({'margin-right': '15px'});
     check.after(group);
 
-    input.addClass('octo-switch');
+    check.addClass('octo-switch');
 };
 
 $(document).ready(Octo.Forms.init);

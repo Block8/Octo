@@ -5,6 +5,7 @@ use Octo\Event\Listener;
 use Octo\Event\Manager;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Searchable;
 
 class Search extends Listener
 {
@@ -15,17 +16,29 @@ class Search extends Listener
 
     public function registerListeners(Manager $manager)
     {
-        $manager->registerListener('ContentPublished', array($this, 'addToSearchIndex'));
+
+        $manager->registerListener('Octo.Model.Updated', [$this, 'modelUpdated']);
+        $manager->registerListener('Octo.Model.Deleted', [$this, 'modelDeleted']);
     }
 
-    public function addToSearchIndex(&$data)
+    public function modelUpdated(Model $model)
     {
-        $this->searchStore = Store::get('SearchIndex');
-        $class = get_class($data['model']);
-        $class = explode('\\', $class);
-        $class = end($class);
-        $this->searchStore->updateSearchIndex($class, $data['content_id'], $data['content']);
+        if ($model instanceof Searchable) {
+            $this->searchStore = Store::get('SearchIndex');
 
-        return true;
+            $this->searchStore->updateSearchIndex(
+                $model->getModelName(),
+                $model->getSearchId(),
+                $model->getSearchContent()
+            );
+        }
+    }
+    
+    public function modelDeleted(Model $model)
+    {
+        if ($model instanceof Searchable) {
+            $this->searchStore = Store::get('SearchIndex');
+            $this->searchStore->removeFromIndex($model->getModelName(), $model->getSearchId());
+        }
     }
 }

@@ -7,13 +7,24 @@
 namespace Octo\System\Model;
 
 use Octo;
+use Octo\System\Searchable;
 
 /**
  * Contact Model
  * @uses Octo\System\Model\Base\ContactBaseBase
  */
-class Contact extends Base\ContactBase
+class Contact extends Base\ContactBase implements Searchable
 {
+    public function getSearchId() : int
+    {
+        return $this->getId();
+    }
+
+    public function getSearchContent() : string
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName() . ' ' . $this->getEmail();
+    }
+
     public function getFullName()
     {
         return $this->getFirstName() . ' ' . $this->getLastName();

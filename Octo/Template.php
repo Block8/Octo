@@ -109,7 +109,7 @@ class Template
         }
 
         $this->templateName = $template;
-        $this->template = self::$twig->loadTemplate($template);
+        $this->template = self::$twig->load($template);
 
         Event::trigger('Template.Loaded', $this);
 

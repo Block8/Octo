@@ -7,6 +7,7 @@
 namespace Octo\System\Store;
 
 use b8\Database;
+use Block8\Database\Connection;
 use Octo;
 use Octo\Pages\Model;
 use Octo\Store as StoreFactory;
@@ -67,6 +68,14 @@ class SearchIndexStore extends Base\SearchIndexStoreBase
             $stmt->bindValue(':count', $count);
             $stmt->execute();
         }
+    }
+
+    public function removeFromIndex($class, $contentId)
+    {
+        $stmt = Connection::get()->prepare('DELETE FROM search_index WHERE model = :model AND content_id = :id');
+        $stmt->bindValue(':model', $class);
+        $stmt->bindValue(':id', $contentId);
+        return $stmt->execute();
     }
 
     protected function extractWords($string)

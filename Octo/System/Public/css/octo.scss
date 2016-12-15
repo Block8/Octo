@@ -166,3 +166,28 @@ input[type=checkbox] {
 .select2-results__option small {
     color: #888;
 }
+
+
+.box-log-in {
+  background: #fbfbfb;
+  img.service-logo {
+    margin: 0 0 20px 0;
+    height: 50px;
+  }
+
+  .box-body {
+    padding: 30px;
+
+    h3 {
+      margin: 0 0 20px;
+    }
+
+    .logged-in {
+      .photo {
+        float: left;
+        margin: 0 25px 25px 0;
+        max-width: 75px;
+      }
+    }
+  }
+}

@@ -19,6 +19,10 @@ class Jobs extends Listener
             $handlers['Octo.System.UpdateTimeline'] = [
                 'frequency' => 900,
             ];
+
+            $handlers['Octo.System.Cleanup'] = [
+                'frequency' => 900,
+            ];
         });
     }
 }
