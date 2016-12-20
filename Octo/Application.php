@@ -79,7 +79,15 @@ class Application extends \b8\Application
 
         $this->router->register('/robots.txt', ['controller' => 'Page'], function (&$route, Response &$response) {
             header('Content-Type: text/plain');
-            die('User-Agent: *' . PHP_EOL . 'Disallow: /manage/' . PHP_EOL . 'Allow: /');
+            $robots = <<<ROBOTS
+User-Agent: *
+Disallow: /manage/
+Allow: /
+
+Sitemap: {$this->config->site['url']}/sitemap.xml
+ROBOTS;
+
+            die($robots);
         });
 
         Event::trigger('AfterHttpRequestInit', $this);

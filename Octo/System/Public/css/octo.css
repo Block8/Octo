@@ -9,7 +9,7 @@ body.setup {
     width: 150px; }
 
 /*for IDE suggestion*/
-.skin-blue .wrapper {
+.octo .wrapper {
   position: inherit; }
 
 .content-wrapper {
