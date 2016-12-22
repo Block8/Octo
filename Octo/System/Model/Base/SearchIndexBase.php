@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\SearchIndex;
 
 /**
  * SearchIndex Base Model
  */
-class SearchIndexBase extends Model
+abstract class SearchIndexBase extends Model
 {
     protected function init()
     {
@@ -52,7 +54,7 @@ class SearchIndexBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -64,7 +66,7 @@ class SearchIndexBase extends Model
      * @return string
      */
 
-     public function getWord()
+     public function getWord() : string
      {
         $rtn = $this->data['word'];
 
@@ -76,7 +78,7 @@ class SearchIndexBase extends Model
      * @return string
      */
 
-     public function getModel()
+     public function getModel() : string
      {
         $rtn = $this->data['model'];
 
@@ -88,7 +90,7 @@ class SearchIndexBase extends Model
      * @return string
      */
 
-     public function getContentId()
+     public function getContentId() : string
      {
         $rtn = $this->data['content_id'];
 
@@ -100,7 +102,7 @@ class SearchIndexBase extends Model
      * @return int
      */
 
-     public function getInstances()
+     public function getInstances() : int
      {
         $rtn = $this->data['instances'];
 
@@ -111,86 +113,82 @@ class SearchIndexBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return SearchIndex
      */
-    public function setId(int $value)
+    public function setId(int $value) : SearchIndex
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Word / word
      * @param $value string
+     * @return SearchIndex
      */
-    public function setWord(string $value)
+    public function setWord(string $value) : SearchIndex
     {
 
-        $this->validateNotNull('Word', $value);
-
-        if ($this->data['word'] === $value) {
-            return;
+        if ($this->data['word'] !== $value) {
+            $this->data['word'] = $value;
+            $this->setModified('word');
         }
 
-        $this->data['word'] = $value;
-        $this->setModified('word');
+        return $this;
     }
     
     /**
      * Set the value of Model / model
      * @param $value string
+     * @return SearchIndex
      */
-    public function setModel(string $value)
+    public function setModel(string $value) : SearchIndex
     {
 
-        $this->validateNotNull('Model', $value);
-
-        if ($this->data['model'] === $value) {
-            return;
+        if ($this->data['model'] !== $value) {
+            $this->data['model'] = $value;
+            $this->setModified('model');
         }
 
-        $this->data['model'] = $value;
-        $this->setModified('model');
+        return $this;
     }
     
     /**
      * Set the value of ContentId / content_id
      * @param $value string
+     * @return SearchIndex
      */
-    public function setContentId(string $value)
+    public function setContentId(string $value) : SearchIndex
     {
 
-        $this->validateNotNull('ContentId', $value);
-
-        if ($this->data['content_id'] === $value) {
-            return;
+        if ($this->data['content_id'] !== $value) {
+            $this->data['content_id'] = $value;
+            $this->setModified('content_id');
         }
 
-        $this->data['content_id'] = $value;
-        $this->setModified('content_id');
+        return $this;
     }
     
     /**
      * Set the value of Instances / instances
      * @param $value int
+     * @return SearchIndex
      */
-    public function setInstances(int $value)
+    public function setInstances(int $value) : SearchIndex
     {
 
-        $this->validateNotNull('Instances', $value);
-
-        if ($this->data['instances'] === $value) {
-            return;
+        if ($this->data['instances'] !== $value) {
+            $this->data['instances'] = $value;
+            $this->setModified('instances');
         }
 
-        $this->data['instances'] = $value;
-        $this->setModified('instances');
+        return $this;
     }
     
-    }
+    
+}

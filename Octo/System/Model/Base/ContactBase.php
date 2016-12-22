@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\Contact;
 
 /**
  * Contact Base Model
  */
-class ContactBase extends Model
+abstract class ContactBase extends Model
 {
     protected function init()
     {
@@ -92,7 +94,7 @@ class ContactBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -104,7 +106,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getEmail()
+     public function getEmail() : ?string
      {
         $rtn = $this->data['email'];
 
@@ -116,7 +118,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getPasswordHash()
+     public function getPasswordHash() : ?string
      {
         $rtn = $this->data['password_hash'];
 
@@ -128,7 +130,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getPhone()
+     public function getPhone() : ?string
      {
         $rtn = $this->data['phone'];
 
@@ -140,7 +142,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getMobile()
+     public function getMobile() : ?string
      {
         $rtn = $this->data['mobile'];
 
@@ -152,7 +154,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getTitle()
+     public function getTitle() : ?string
      {
         $rtn = $this->data['title'];
 
@@ -164,7 +166,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getGender()
+     public function getGender() : ?string
      {
         $rtn = $this->data['gender'];
 
@@ -176,7 +178,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getFirstName()
+     public function getFirstName() : ?string
      {
         $rtn = $this->data['first_name'];
 
@@ -188,7 +190,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getLastName()
+     public function getLastName() : ?string
      {
         $rtn = $this->data['last_name'];
 
@@ -197,12 +199,18 @@ class ContactBase extends Model
     
     /**
      * Get the value of Address / address
-     * @return string
+     * @return array
      */
 
-     public function getAddress()
+     public function getAddress() : ?array
      {
         $rtn = $this->data['address'];
+
+        $rtn = json_decode($rtn, true);
+
+        if ($rtn === false) {
+            $rtn = null;
+        }
 
         return $rtn;
      }
@@ -212,7 +220,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getPostcode()
+     public function getPostcode() : ?string
      {
         $rtn = $this->data['postcode'];
 
@@ -224,12 +232,12 @@ class ContactBase extends Model
      * @return DateTime
      */
 
-     public function getDateOfBirth()
+     public function getDateOfBirth() : ?DateTime
      {
         $rtn = $this->data['date_of_birth'];
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 
         return $rtn;
@@ -240,7 +248,7 @@ class ContactBase extends Model
      * @return string
      */
 
-     public function getCompany()
+     public function getCompany() : ?string
      {
         $rtn = $this->data['company'];
 
@@ -252,7 +260,7 @@ class ContactBase extends Model
      * @return int
      */
 
-     public function getMarketingOptin()
+     public function getMarketingOptin() : int
      {
         $rtn = $this->data['marketing_optin'];
 
@@ -264,7 +272,7 @@ class ContactBase extends Model
      * @return int
      */
 
-     public function getIsBlocked()
+     public function getIsBlocked() : int
      {
         $rtn = $this->data['is_blocked'];
 
@@ -275,271 +283,244 @@ class ContactBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return Contact
      */
-    public function setId(int $value)
+    public function setId(int $value) : Contact
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Email / email
      * @param $value string
+     * @return Contact
      */
-    public function setEmail($value)
+    public function setEmail(?string $value) : Contact
     {
 
-
-
-        if ($this->data['email'] === $value) {
-            return;
+        if ($this->data['email'] !== $value) {
+            $this->data['email'] = $value;
+            $this->setModified('email');
         }
 
-        $this->data['email'] = $value;
-        $this->setModified('email');
+        return $this;
     }
     
     /**
      * Set the value of PasswordHash / password_hash
      * @param $value string
+     * @return Contact
      */
-    public function setPasswordHash($value)
+    public function setPasswordHash(?string $value) : Contact
     {
 
-
-
-        if ($this->data['password_hash'] === $value) {
-            return;
+        if ($this->data['password_hash'] !== $value) {
+            $this->data['password_hash'] = $value;
+            $this->setModified('password_hash');
         }
 
-        $this->data['password_hash'] = $value;
-        $this->setModified('password_hash');
+        return $this;
     }
     
     /**
      * Set the value of Phone / phone
      * @param $value string
+     * @return Contact
      */
-    public function setPhone($value)
+    public function setPhone(?string $value) : Contact
     {
 
-
-
-        if ($this->data['phone'] === $value) {
-            return;
+        if ($this->data['phone'] !== $value) {
+            $this->data['phone'] = $value;
+            $this->setModified('phone');
         }
 
-        $this->data['phone'] = $value;
-        $this->setModified('phone');
+        return $this;
     }
     
     /**
      * Set the value of Mobile / mobile
      * @param $value string
+     * @return Contact
      */
-    public function setMobile($value)
+    public function setMobile(?string $value) : Contact
     {
 
-
-
-        if ($this->data['mobile'] === $value) {
-            return;
+        if ($this->data['mobile'] !== $value) {
+            $this->data['mobile'] = $value;
+            $this->setModified('mobile');
         }
 
-        $this->data['mobile'] = $value;
-        $this->setModified('mobile');
+        return $this;
     }
     
     /**
      * Set the value of Title / title
      * @param $value string
+     * @return Contact
      */
-    public function setTitle($value)
+    public function setTitle(?string $value) : Contact
     {
 
-
-
-        if ($this->data['title'] === $value) {
-            return;
+        if ($this->data['title'] !== $value) {
+            $this->data['title'] = $value;
+            $this->setModified('title');
         }
 
-        $this->data['title'] = $value;
-        $this->setModified('title');
+        return $this;
     }
     
     /**
      * Set the value of Gender / gender
      * @param $value string
+     * @return Contact
      */
-    public function setGender($value)
+    public function setGender(?string $value) : Contact
     {
 
-
-
-        if ($this->data['gender'] === $value) {
-            return;
+        if ($this->data['gender'] !== $value) {
+            $this->data['gender'] = $value;
+            $this->setModified('gender');
         }
 
-        $this->data['gender'] = $value;
-        $this->setModified('gender');
+        return $this;
     }
     
     /**
      * Set the value of FirstName / first_name
      * @param $value string
+     * @return Contact
      */
-    public function setFirstName($value)
+    public function setFirstName(?string $value) : Contact
     {
 
-
-
-        if ($this->data['first_name'] === $value) {
-            return;
+        if ($this->data['first_name'] !== $value) {
+            $this->data['first_name'] = $value;
+            $this->setModified('first_name');
         }
 
-        $this->data['first_name'] = $value;
-        $this->setModified('first_name');
+        return $this;
     }
     
     /**
      * Set the value of LastName / last_name
      * @param $value string
+     * @return Contact
      */
-    public function setLastName($value)
+    public function setLastName(?string $value) : Contact
     {
 
-
-
-        if ($this->data['last_name'] === $value) {
-            return;
+        if ($this->data['last_name'] !== $value) {
+            $this->data['last_name'] = $value;
+            $this->setModified('last_name');
         }
 
-        $this->data['last_name'] = $value;
-        $this->setModified('last_name');
+        return $this;
     }
     
     /**
      * Set the value of Address / address
-     * @param $value string
+     * @param $value array
+     * @return Contact
      */
-    public function setAddress($value)
+    public function setAddress($value) : Contact
     {
+        $this->validateJson($value);
 
-
-
-        if ($this->data['address'] === $value) {
-            return;
+        if ($this->data['address'] !== $value) {
+            $this->data['address'] = $value;
+            $this->setModified('address');
         }
 
-        $this->data['address'] = $value;
-        $this->setModified('address');
+        return $this;
     }
     
     /**
      * Set the value of Postcode / postcode
      * @param $value string
+     * @return Contact
      */
-    public function setPostcode($value)
+    public function setPostcode(?string $value) : Contact
     {
 
-
-
-        if ($this->data['postcode'] === $value) {
-            return;
+        if ($this->data['postcode'] !== $value) {
+            $this->data['postcode'] = $value;
+            $this->setModified('postcode');
         }
 
-        $this->data['postcode'] = $value;
-        $this->setModified('postcode');
+        return $this;
     }
     
     /**
      * Set the value of DateOfBirth / date_of_birth
      * @param $value DateTime
+     * @return Contact
      */
-    public function setDateOfBirth($value)
+    public function setDateOfBirth($value) : Contact
     {
         $this->validateDate('DateOfBirth', $value);
 
-
-        if ($this->data['date_of_birth'] === $value) {
-            return;
+        if ($this->data['date_of_birth'] !== $value) {
+            $this->data['date_of_birth'] = $value;
+            $this->setModified('date_of_birth');
         }
 
-        $this->data['date_of_birth'] = $value;
-        $this->setModified('date_of_birth');
+        return $this;
     }
     
     /**
      * Set the value of Company / company
      * @param $value string
+     * @return Contact
      */
-    public function setCompany($value)
+    public function setCompany(?string $value) : Contact
     {
 
-
-
-        if ($this->data['company'] === $value) {
-            return;
+        if ($this->data['company'] !== $value) {
+            $this->data['company'] = $value;
+            $this->setModified('company');
         }
 
-        $this->data['company'] = $value;
-        $this->setModified('company');
+        return $this;
     }
     
     /**
      * Set the value of MarketingOptin / marketing_optin
      * @param $value int
+     * @return Contact
      */
-    public function setMarketingOptin(int $value)
+    public function setMarketingOptin(int $value) : Contact
     {
 
-        $this->validateNotNull('MarketingOptin', $value);
-
-        if ($this->data['marketing_optin'] === $value) {
-            return;
+        if ($this->data['marketing_optin'] !== $value) {
+            $this->data['marketing_optin'] = $value;
+            $this->setModified('marketing_optin');
         }
 
-        $this->data['marketing_optin'] = $value;
-        $this->setModified('marketing_optin');
+        return $this;
     }
     
     /**
      * Set the value of IsBlocked / is_blocked
      * @param $value int
+     * @return Contact
      */
-    public function setIsBlocked(int $value)
+    public function setIsBlocked(int $value) : Contact
     {
 
-        $this->validateNotNull('IsBlocked', $value);
-
-        if ($this->data['is_blocked'] === $value) {
-            return;
+        if ($this->data['is_blocked'] !== $value) {
+            $this->data['is_blocked'] = $value;
+            $this->setModified('is_blocked');
         }
 
-        $this->data['is_blocked'] = $value;
-        $this->setModified('is_blocked');
+        return $this;
     }
     
     
-    public function Apologys()
-    {
-        return Store::get('Apology')->where('contact_id', $this->data['id']);
-    }
-
-    public function Attendees()
-    {
-        return Store::get('Attendee')->where('contact_id', $this->data['id']);
-    }
-
-    public function Submissions()
-    {
-        return Store::get('Submission')->where('contact_id', $this->data['id']);
-    }
 }

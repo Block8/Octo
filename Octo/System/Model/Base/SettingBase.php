@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\Setting;
 
 /**
  * Setting Base Model
  */
-class SettingBase extends Model
+abstract class SettingBase extends Model
 {
     protected function init()
     {
@@ -52,7 +54,7 @@ class SettingBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -64,7 +66,7 @@ class SettingBase extends Model
      * @return string
      */
 
-     public function getKey()
+     public function getKey() : string
      {
         $rtn = $this->data['key'];
 
@@ -76,7 +78,7 @@ class SettingBase extends Model
      * @return string
      */
 
-     public function getValue()
+     public function getValue() : ?string
      {
         $rtn = $this->data['value'];
 
@@ -88,7 +90,7 @@ class SettingBase extends Model
      * @return string
      */
 
-     public function getScope()
+     public function getScope() : string
      {
         $rtn = $this->data['scope'];
 
@@ -100,7 +102,7 @@ class SettingBase extends Model
      * @return int
      */
 
-     public function getHidden()
+     public function getHidden() : ?int
      {
         $rtn = $this->data['hidden'];
 
@@ -111,86 +113,82 @@ class SettingBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return Setting
      */
-    public function setId(int $value)
+    public function setId(int $value) : Setting
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Key / key
      * @param $value string
+     * @return Setting
      */
-    public function setKey(string $value)
+    public function setKey(string $value) : Setting
     {
 
-        $this->validateNotNull('Key', $value);
-
-        if ($this->data['key'] === $value) {
-            return;
+        if ($this->data['key'] !== $value) {
+            $this->data['key'] = $value;
+            $this->setModified('key');
         }
 
-        $this->data['key'] = $value;
-        $this->setModified('key');
+        return $this;
     }
     
     /**
      * Set the value of Value / value
      * @param $value string
+     * @return Setting
      */
-    public function setValue($value)
+    public function setValue(?string $value) : Setting
     {
 
-
-
-        if ($this->data['value'] === $value) {
-            return;
+        if ($this->data['value'] !== $value) {
+            $this->data['value'] = $value;
+            $this->setModified('value');
         }
 
-        $this->data['value'] = $value;
-        $this->setModified('value');
+        return $this;
     }
     
     /**
      * Set the value of Scope / scope
      * @param $value string
+     * @return Setting
      */
-    public function setScope(string $value)
+    public function setScope(string $value) : Setting
     {
 
-        $this->validateNotNull('Scope', $value);
-
-        if ($this->data['scope'] === $value) {
-            return;
+        if ($this->data['scope'] !== $value) {
+            $this->data['scope'] = $value;
+            $this->setModified('scope');
         }
 
-        $this->data['scope'] = $value;
-        $this->setModified('scope');
+        return $this;
     }
     
     /**
      * Set the value of Hidden / hidden
      * @param $value int
+     * @return Setting
      */
-    public function setHidden($value)
+    public function setHidden(?int $value) : Setting
     {
 
-
-
-        if ($this->data['hidden'] === $value) {
-            return;
+        if ($this->data['hidden'] !== $value) {
+            $this->data['hidden'] = $value;
+            $this->setModified('hidden');
         }
 
-        $this->data['hidden'] = $value;
-        $this->setModified('hidden');
+        return $this;
     }
     
-    }
+    
+}

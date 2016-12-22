@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\Job;
 
 /**
  * Job Base Model
  */
-class JobBase extends Model
+abstract class JobBase extends Model
 {
     protected function init()
     {
@@ -64,7 +66,7 @@ class JobBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -76,7 +78,7 @@ class JobBase extends Model
      * @return string
      */
 
-     public function getType()
+     public function getType() : string
      {
         $rtn = $this->data['type'];
 
@@ -88,7 +90,7 @@ class JobBase extends Model
      * @return int
      */
 
-     public function getStatus()
+     public function getStatus() : int
      {
         $rtn = $this->data['status'];
 
@@ -100,12 +102,12 @@ class JobBase extends Model
      * @return DateTime
      */
 
-     public function getDateCreated()
+     public function getDateCreated() : DateTime
      {
         $rtn = $this->data['date_created'];
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 
         return $rtn;
@@ -116,12 +118,12 @@ class JobBase extends Model
      * @return DateTime
      */
 
-     public function getDateUpdated()
+     public function getDateUpdated() : DateTime
      {
         $rtn = $this->data['date_updated'];
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 
         return $rtn;
@@ -129,10 +131,10 @@ class JobBase extends Model
     
     /**
      * Get the value of Data / data
-     * @return array|null
+     * @return array
      */
 
-     public function getData()
+     public function getData() : ?array
      {
         $rtn = $this->data['data'];
 
@@ -150,7 +152,7 @@ class JobBase extends Model
      * @return string
      */
 
-     public function getMessage()
+     public function getMessage() : ?string
      {
         $rtn = $this->data['message'];
 
@@ -162,7 +164,7 @@ class JobBase extends Model
      * @return int
      */
 
-     public function getQueueId()
+     public function getQueueId() : ?int
      {
         $rtn = $this->data['queue_id'];
 
@@ -173,141 +175,137 @@ class JobBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return Job
      */
-    public function setId(int $value)
+    public function setId(int $value) : Job
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Type / type
      * @param $value string
+     * @return Job
      */
-    public function setType(string $value)
+    public function setType(string $value) : Job
     {
 
-        $this->validateNotNull('Type', $value);
-
-        if ($this->data['type'] === $value) {
-            return;
+        if ($this->data['type'] !== $value) {
+            $this->data['type'] = $value;
+            $this->setModified('type');
         }
 
-        $this->data['type'] = $value;
-        $this->setModified('type');
+        return $this;
     }
     
     /**
      * Set the value of Status / status
      * @param $value int
+     * @return Job
      */
-    public function setStatus(int $value)
+    public function setStatus(int $value) : Job
     {
 
-        $this->validateNotNull('Status', $value);
-
-        if ($this->data['status'] === $value) {
-            return;
+        if ($this->data['status'] !== $value) {
+            $this->data['status'] = $value;
+            $this->setModified('status');
         }
 
-        $this->data['status'] = $value;
-        $this->setModified('status');
+        return $this;
     }
     
     /**
      * Set the value of DateCreated / date_created
      * @param $value DateTime
+     * @return Job
      */
-    public function setDateCreated($value)
+    public function setDateCreated($value) : Job
     {
         $this->validateDate('DateCreated', $value);
-        $this->validateNotNull('DateCreated', $value);
 
-        if ($this->data['date_created'] === $value) {
-            return;
+        if ($this->data['date_created'] !== $value) {
+            $this->data['date_created'] = $value;
+            $this->setModified('date_created');
         }
 
-        $this->data['date_created'] = $value;
-        $this->setModified('date_created');
+        return $this;
     }
     
     /**
      * Set the value of DateUpdated / date_updated
      * @param $value DateTime
+     * @return Job
      */
-    public function setDateUpdated($value)
+    public function setDateUpdated($value) : Job
     {
         $this->validateDate('DateUpdated', $value);
-        $this->validateNotNull('DateUpdated', $value);
 
-        if ($this->data['date_updated'] === $value) {
-            return;
+        if ($this->data['date_updated'] !== $value) {
+            $this->data['date_updated'] = $value;
+            $this->setModified('date_updated');
         }
 
-        $this->data['date_updated'] = $value;
-        $this->setModified('date_updated');
+        return $this;
     }
     
     /**
      * Set the value of Data / data
-     * @param $value array|null
+     * @param $value array
+     * @return Job
      */
-    public function setData($value)
+    public function setData($value) : Job
     {
         $this->validateJson($value);
-        $this->validateNotNull('Data', $value);
 
-        if ($this->data['data'] === $value) {
-            return;
+        if ($this->data['data'] !== $value) {
+            $this->data['data'] = $value;
+            $this->setModified('data');
         }
 
-        $this->data['data'] = $value;
-        $this->setModified('data');
+        return $this;
     }
     
     /**
      * Set the value of Message / message
      * @param $value string
+     * @return Job
      */
-    public function setMessage($value)
+    public function setMessage(?string $value) : Job
     {
 
-
-
-        if ($this->data['message'] === $value) {
-            return;
+        if ($this->data['message'] !== $value) {
+            $this->data['message'] = $value;
+            $this->setModified('message');
         }
 
-        $this->data['message'] = $value;
-        $this->setModified('message');
+        return $this;
     }
     
     /**
      * Set the value of QueueId / queue_id
      * @param $value int
+     * @return Job
      */
-    public function setQueueId($value)
+    public function setQueueId(?int $value) : Job
     {
 
-
-
-        if ($this->data['queue_id'] === $value) {
-            return;
+        if ($this->data['queue_id'] !== $value) {
+            $this->data['queue_id'] = $value;
+            $this->setModified('queue_id');
         }
 
-        $this->data['queue_id'] = $value;
-        $this->setModified('queue_id');
+        return $this;
     }
     
     
-    public function ScheduledJobs()
+
+    public function ScheduledJobs() : Query
     {
         return Store::get('ScheduledJob')->where('current_job_id', $this->data['id']);
     }

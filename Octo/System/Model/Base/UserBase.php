@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\User;
 
 /**
  * User Base Model
  */
-class UserBase extends Model
+abstract class UserBase extends Model
 {
     protected function init()
     {
@@ -68,7 +70,7 @@ class UserBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -80,7 +82,7 @@ class UserBase extends Model
      * @return string
      */
 
-     public function getEmail()
+     public function getEmail() : string
      {
         $rtn = $this->data['email'];
 
@@ -92,7 +94,7 @@ class UserBase extends Model
      * @return string
      */
 
-     public function getHash()
+     public function getHash() : string
      {
         $rtn = $this->data['hash'];
 
@@ -104,7 +106,7 @@ class UserBase extends Model
      * @return string
      */
 
-     public function getName()
+     public function getName() : ?string
      {
         $rtn = $this->data['name'];
 
@@ -116,7 +118,7 @@ class UserBase extends Model
      * @return int
      */
 
-     public function getIsAdmin()
+     public function getIsAdmin() : int
      {
         $rtn = $this->data['is_admin'];
 
@@ -128,7 +130,7 @@ class UserBase extends Model
      * @return int
      */
 
-     public function getIsHidden()
+     public function getIsHidden() : int
      {
         $rtn = $this->data['is_hidden'];
 
@@ -140,12 +142,12 @@ class UserBase extends Model
      * @return DateTime
      */
 
-     public function getDateAdded()
+     public function getDateAdded() : ?DateTime
      {
         $rtn = $this->data['date_added'];
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 
         return $rtn;
@@ -156,12 +158,12 @@ class UserBase extends Model
      * @return DateTime
      */
 
-     public function getDateActive()
+     public function getDateActive() : ?DateTime
      {
         $rtn = $this->data['date_active'];
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 
         return $rtn;
@@ -172,7 +174,7 @@ class UserBase extends Model
      * @return int
      */
 
-     public function getActive()
+     public function getActive() : int
      {
         $rtn = $this->data['active'];
 
@@ -183,173 +185,157 @@ class UserBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return User
      */
-    public function setId(int $value)
+    public function setId(int $value) : User
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Email / email
      * @param $value string
+     * @return User
      */
-    public function setEmail(string $value)
+    public function setEmail(string $value) : User
     {
 
-        $this->validateNotNull('Email', $value);
-
-        if ($this->data['email'] === $value) {
-            return;
+        if ($this->data['email'] !== $value) {
+            $this->data['email'] = $value;
+            $this->setModified('email');
         }
 
-        $this->data['email'] = $value;
-        $this->setModified('email');
+        return $this;
     }
     
     /**
      * Set the value of Hash / hash
      * @param $value string
+     * @return User
      */
-    public function setHash(string $value)
+    public function setHash(string $value) : User
     {
 
-        $this->validateNotNull('Hash', $value);
-
-        if ($this->data['hash'] === $value) {
-            return;
+        if ($this->data['hash'] !== $value) {
+            $this->data['hash'] = $value;
+            $this->setModified('hash');
         }
 
-        $this->data['hash'] = $value;
-        $this->setModified('hash');
+        return $this;
     }
     
     /**
      * Set the value of Name / name
      * @param $value string
+     * @return User
      */
-    public function setName($value)
+    public function setName(?string $value) : User
     {
 
-
-
-        if ($this->data['name'] === $value) {
-            return;
+        if ($this->data['name'] !== $value) {
+            $this->data['name'] = $value;
+            $this->setModified('name');
         }
 
-        $this->data['name'] = $value;
-        $this->setModified('name');
+        return $this;
     }
     
     /**
      * Set the value of IsAdmin / is_admin
      * @param $value int
+     * @return User
      */
-    public function setIsAdmin(int $value)
+    public function setIsAdmin(int $value) : User
     {
 
-        $this->validateNotNull('IsAdmin', $value);
-
-        if ($this->data['is_admin'] === $value) {
-            return;
+        if ($this->data['is_admin'] !== $value) {
+            $this->data['is_admin'] = $value;
+            $this->setModified('is_admin');
         }
 
-        $this->data['is_admin'] = $value;
-        $this->setModified('is_admin');
+        return $this;
     }
     
     /**
      * Set the value of IsHidden / is_hidden
      * @param $value int
+     * @return User
      */
-    public function setIsHidden(int $value)
+    public function setIsHidden(int $value) : User
     {
 
-        $this->validateNotNull('IsHidden', $value);
-
-        if ($this->data['is_hidden'] === $value) {
-            return;
+        if ($this->data['is_hidden'] !== $value) {
+            $this->data['is_hidden'] = $value;
+            $this->setModified('is_hidden');
         }
 
-        $this->data['is_hidden'] = $value;
-        $this->setModified('is_hidden');
+        return $this;
     }
     
     /**
      * Set the value of DateAdded / date_added
      * @param $value DateTime
+     * @return User
      */
-    public function setDateAdded($value)
+    public function setDateAdded($value) : User
     {
         $this->validateDate('DateAdded', $value);
 
-
-        if ($this->data['date_added'] === $value) {
-            return;
+        if ($this->data['date_added'] !== $value) {
+            $this->data['date_added'] = $value;
+            $this->setModified('date_added');
         }
 
-        $this->data['date_added'] = $value;
-        $this->setModified('date_added');
+        return $this;
     }
     
     /**
      * Set the value of DateActive / date_active
      * @param $value DateTime
+     * @return User
      */
-    public function setDateActive($value)
+    public function setDateActive($value) : User
     {
         $this->validateDate('DateActive', $value);
 
-
-        if ($this->data['date_active'] === $value) {
-            return;
+        if ($this->data['date_active'] !== $value) {
+            $this->data['date_active'] = $value;
+            $this->setModified('date_active');
         }
 
-        $this->data['date_active'] = $value;
-        $this->setModified('date_active');
+        return $this;
     }
     
     /**
      * Set the value of Active / active
      * @param $value int
+     * @return User
      */
-    public function setActive(int $value)
+    public function setActive(int $value) : User
     {
 
-        $this->validateNotNull('Active', $value);
-
-        if ($this->data['active'] === $value) {
-            return;
+        if ($this->data['active'] !== $value) {
+            $this->data['active'] = $value;
+            $this->setModified('active');
         }
 
-        $this->data['active'] = $value;
-        $this->setModified('active');
+        return $this;
     }
     
     
-    public function Files()
-    {
-        return Store::get('File')->where('user_id', $this->data['id']);
-    }
 
-    public function Logs()
+    public function Logs() : Query
     {
         return Store::get('Log')->where('user_id', $this->data['id']);
     }
 
-    public function PageVersions()
-    {
-        return Store::get('PageVersion')->where('user_id', $this->data['id']);
-    }
-
-    public function Permissions()
+    public function Permissions() : Query
     {
         return Store::get('Permission')->where('user_id', $this->data['id']);
     }

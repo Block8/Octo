@@ -7,13 +7,15 @@
 namespace {{ itemNamespace }}\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use {{ itemNamespace }}\Model\{{ table.php_name }};
 
 /**
  * {{ table.php_name }} Base Model
  */
-class {{ table.php_name }}Base extends Model
+abstract class {{ table.php_name }}Base extends Model
 {
     protected function init()
     {
@@ -44,13 +46,13 @@ class {{ table.php_name }}Base extends Model
      * @return {{ column.php_type }}
      */
 
-     public function get{{ column.php_name }}()
+     public function get{{ column.php_name }}() : {{ column.validate_null ? column.php_type : "?" ~ column.php_type }}
      {
         $rtn = $this->data['{{ column.name }}'];
 {% if column.validate_date %}
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 {% endif %}
 {% if column.is_json %}
@@ -71,13 +73,13 @@ class {{ table.php_name }}Base extends Model
     /**
      * Set the value of {{ column.php_name }} / {{ column.name }}
      * @param $value {{ column.php_type }}
+     * @return {{ table.php_name }}
      */
-    public function set{{ column.php_name }}({{ column.param_type != null and column.validate_null ? column.param_type ~ ' ' : '' }}$value)
+{% if column.param_type != null %}    public function set{{ column.php_name }}({{ column.validate_null ? column.param_type : '?' ~ column.param_type }} $value){% elseif column.param_type == null %}    public function set{{ column.php_name }}($value){% endif %} : {{ table.php_name }}
     {
-{% if column.validate_date %}        $this->validateDate('{{ column.php_name }}', $value);{% endif %}
-{% if column.is_json %}        $this->validateJson($value);{% endif %}
-
-{% if column.is_foreign_key %}
+{% if column.validate_date %}        $this->validateDate('{{ column.php_name }}', $value);
+{% endif %}{% if column.is_json %}        $this->validateJson($value);
+{% endif %}{% if column.is_foreign_key %}
 
         // As this column is a foreign key, empty values should be considered null.
         if (empty($value)) {
@@ -85,15 +87,13 @@ class {{ table.php_name }}Base extends Model
         }
 
 {% endif %}
-{% if column.validate_null %}        $this->validateNotNull('{{ column.php_name }}', $value);{% endif %}
 
-
-        if ($this->data['{{ column.name }}'] === $value) {
-            return;
+        if ($this->data['{{ column.name }}'] !== $value) {
+            $this->data['{{ column.name }}'] = $value;
+            $this->setModified('{{ column.name }}');
         }
 
-        $this->data['{{ column.name }}'] = $value;
-        $this->setModified('{{ column.name }}');
+        return $this;
     }
     {% endfor %}
 
@@ -153,9 +153,10 @@ class {{ table.php_name }}Base extends Model
         return $this->set{{ item.from_col_php }}($value->get{{ item.col_php }}());
     }
 {% endfor %}
-{% for rel in table.relationships.toMany %}
+{% for rel in table.relationships.toMany %}{% set fromNs = getNamespace(rel.from_php) %}{% if fromNs == "Octo\System" or fromNs == getNamespace(table.php_name) %}
 
-    public function {{ rel.table_php }}s()
+
+    public function {{ rel.table_php }}s() : Query
     {
 {% if rel.link %}
         $query = Store::get('{{ rel.table_php }}')->where('{{ rel.link.table }}.{{ rel.link.column1 }}', $this->data['{{ rel.thisCol }}']);
@@ -164,6 +165,7 @@ class {{ table.php_name }}Base extends Model
 {% else %}
         return Store::get('{{ rel.table_php }}')->where('{{ rel.fromCol }}', $this->data['{{ rel.thisCol }}']);
 {% endif %}
-    }
+    }{% endif %}
 {% endfor %}
+
 }

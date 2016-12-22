@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\Log;
 
 /**
  * Log Base Model
  */
-class LogBase extends Model
+abstract class LogBase extends Model
 {
     protected function init()
     {
@@ -67,7 +69,7 @@ class LogBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -79,7 +81,7 @@ class LogBase extends Model
      * @return int
      */
 
-     public function getType()
+     public function getType() : ?int
      {
         $rtn = $this->data['type'];
 
@@ -91,7 +93,7 @@ class LogBase extends Model
      * @return string
      */
 
-     public function getScope()
+     public function getScope() : ?string
      {
         $rtn = $this->data['scope'];
 
@@ -103,7 +105,7 @@ class LogBase extends Model
      * @return string
      */
 
-     public function getScopeId()
+     public function getScopeId() : ?string
      {
         $rtn = $this->data['scope_id'];
 
@@ -115,7 +117,7 @@ class LogBase extends Model
      * @return int
      */
 
-     public function getUserId()
+     public function getUserId() : ?int
      {
         $rtn = $this->data['user_id'];
 
@@ -127,7 +129,7 @@ class LogBase extends Model
      * @return string
      */
 
-     public function getMessage()
+     public function getMessage() : string
      {
         $rtn = $this->data['message'];
 
@@ -139,12 +141,12 @@ class LogBase extends Model
      * @return DateTime
      */
 
-     public function getLogDate()
+     public function getLogDate() : DateTime
      {
         $rtn = $this->data['log_date'];
 
         if (!empty($rtn)) {
-            $rtn = new \DateTime($rtn);
+            $rtn = new DateTime($rtn);
         }
 
         return $rtn;
@@ -155,7 +157,7 @@ class LogBase extends Model
      * @return string
      */
 
-     public function getLink()
+     public function getLink() : ?string
      {
         $rtn = $this->data['link'];
 
@@ -166,78 +168,74 @@ class LogBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return Log
      */
-    public function setId(int $value)
+    public function setId(int $value) : Log
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Type / type
      * @param $value int
+     * @return Log
      */
-    public function setType($value)
+    public function setType(?int $value) : Log
     {
 
-
-
-        if ($this->data['type'] === $value) {
-            return;
+        if ($this->data['type'] !== $value) {
+            $this->data['type'] = $value;
+            $this->setModified('type');
         }
 
-        $this->data['type'] = $value;
-        $this->setModified('type');
+        return $this;
     }
     
     /**
      * Set the value of Scope / scope
      * @param $value string
+     * @return Log
      */
-    public function setScope($value)
+    public function setScope(?string $value) : Log
     {
 
-
-
-        if ($this->data['scope'] === $value) {
-            return;
+        if ($this->data['scope'] !== $value) {
+            $this->data['scope'] = $value;
+            $this->setModified('scope');
         }
 
-        $this->data['scope'] = $value;
-        $this->setModified('scope');
+        return $this;
     }
     
     /**
      * Set the value of ScopeId / scope_id
      * @param $value string
+     * @return Log
      */
-    public function setScopeId($value)
+    public function setScopeId(?string $value) : Log
     {
 
-
-
-        if ($this->data['scope_id'] === $value) {
-            return;
+        if ($this->data['scope_id'] !== $value) {
+            $this->data['scope_id'] = $value;
+            $this->setModified('scope_id');
         }
 
-        $this->data['scope_id'] = $value;
-        $this->setModified('scope_id');
+        return $this;
     }
     
     /**
      * Set the value of UserId / user_id
      * @param $value int
+     * @return Log
      */
-    public function setUserId($value)
+    public function setUserId(?int $value) : Log
     {
-
 
         // As this column is a foreign key, empty values should be considered null.
         if (empty($value)) {
@@ -245,64 +243,61 @@ class LogBase extends Model
         }
 
 
-
-        if ($this->data['user_id'] === $value) {
-            return;
+        if ($this->data['user_id'] !== $value) {
+            $this->data['user_id'] = $value;
+            $this->setModified('user_id');
         }
 
-        $this->data['user_id'] = $value;
-        $this->setModified('user_id');
+        return $this;
     }
     
     /**
      * Set the value of Message / message
      * @param $value string
+     * @return Log
      */
-    public function setMessage(string $value)
+    public function setMessage(string $value) : Log
     {
 
-        $this->validateNotNull('Message', $value);
-
-        if ($this->data['message'] === $value) {
-            return;
+        if ($this->data['message'] !== $value) {
+            $this->data['message'] = $value;
+            $this->setModified('message');
         }
 
-        $this->data['message'] = $value;
-        $this->setModified('message');
+        return $this;
     }
     
     /**
      * Set the value of LogDate / log_date
      * @param $value DateTime
+     * @return Log
      */
-    public function setLogDate($value)
+    public function setLogDate($value) : Log
     {
         $this->validateDate('LogDate', $value);
-        $this->validateNotNull('LogDate', $value);
 
-        if ($this->data['log_date'] === $value) {
-            return;
+        if ($this->data['log_date'] !== $value) {
+            $this->data['log_date'] = $value;
+            $this->setModified('log_date');
         }
 
-        $this->data['log_date'] = $value;
-        $this->setModified('log_date');
+        return $this;
     }
     
     /**
      * Set the value of Link / link
      * @param $value string
+     * @return Log
      */
-    public function setLink($value)
+    public function setLink(?string $value) : Log
     {
 
-
-
-        if ($this->data['link'] === $value) {
-            return;
+        if ($this->data['link'] !== $value) {
+            $this->data['link'] = $value;
+            $this->setModified('link');
         }
 
-        $this->data['link'] = $value;
-        $this->setModified('link');
+        return $this;
     }
     
     
@@ -359,4 +354,5 @@ class LogBase extends Model
     {
         return $this->setUserId($value->getId());
     }
+
 }

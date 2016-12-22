@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\ContentItem;
 
 /**
  * ContentItem Base Model
  */
-class ContentItemBase extends Model
+abstract class ContentItemBase extends Model
 {
     protected function init()
     {
@@ -40,7 +42,7 @@ class ContentItemBase extends Model
      * @return string
      */
 
-     public function getId()
+     public function getId() : string
      {
         $rtn = $this->data['id'];
 
@@ -49,10 +51,10 @@ class ContentItemBase extends Model
     
     /**
      * Get the value of Content / content
-     * @return array|null
+     * @return array
      */
 
-     public function getContent()
+     public function getContent() : ?array
      {
         $rtn = $this->data['content'];
 
@@ -69,40 +71,35 @@ class ContentItemBase extends Model
     /**
      * Set the value of Id / id
      * @param $value string
+     * @return ContentItem
      */
-    public function setId(string $value)
+    public function setId(string $value) : ContentItem
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Content / content
-     * @param $value array|null
+     * @param $value array
+     * @return ContentItem
      */
-    public function setContent($value)
+    public function setContent($value) : ContentItem
     {
         $this->validateJson($value);
-        $this->validateNotNull('Content', $value);
 
-        if ($this->data['content'] === $value) {
-            return;
+        if ($this->data['content'] !== $value) {
+            $this->data['content'] = $value;
+            $this->setModified('content');
         }
 
-        $this->data['content'] = $value;
-        $this->setModified('content');
+        return $this;
     }
     
     
-    public function PageVersions()
-    {
-        return Store::get('PageVersion')->where('content_item_id', $this->data['id']);
-    }
 }

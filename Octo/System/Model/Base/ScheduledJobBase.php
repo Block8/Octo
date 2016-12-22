@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\ScheduledJob;
 
 /**
  * ScheduledJob Base Model
  */
-class ScheduledJobBase extends Model
+abstract class ScheduledJobBase extends Model
 {
     protected function init()
     {
@@ -55,7 +57,7 @@ class ScheduledJobBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -67,7 +69,7 @@ class ScheduledJobBase extends Model
      * @return string
      */
 
-     public function getType()
+     public function getType() : string
      {
         $rtn = $this->data['type'];
 
@@ -76,10 +78,10 @@ class ScheduledJobBase extends Model
     
     /**
      * Get the value of Data / data
-     * @return array|null
+     * @return array
      */
 
-     public function getData()
+     public function getData() : ?array
      {
         $rtn = $this->data['data'];
 
@@ -97,7 +99,7 @@ class ScheduledJobBase extends Model
      * @return int
      */
 
-     public function getFrequency()
+     public function getFrequency() : int
      {
         $rtn = $this->data['frequency'];
 
@@ -109,7 +111,7 @@ class ScheduledJobBase extends Model
      * @return int
      */
 
-     public function getCurrentJobId()
+     public function getCurrentJobId() : ?int
      {
         $rtn = $this->data['current_job_id'];
 
@@ -120,78 +122,75 @@ class ScheduledJobBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return ScheduledJob
      */
-    public function setId(int $value)
+    public function setId(int $value) : ScheduledJob
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of Type / type
      * @param $value string
+     * @return ScheduledJob
      */
-    public function setType(string $value)
+    public function setType(string $value) : ScheduledJob
     {
 
-        $this->validateNotNull('Type', $value);
-
-        if ($this->data['type'] === $value) {
-            return;
+        if ($this->data['type'] !== $value) {
+            $this->data['type'] = $value;
+            $this->setModified('type');
         }
 
-        $this->data['type'] = $value;
-        $this->setModified('type');
+        return $this;
     }
     
     /**
      * Set the value of Data / data
-     * @param $value array|null
+     * @param $value array
+     * @return ScheduledJob
      */
-    public function setData($value)
+    public function setData($value) : ScheduledJob
     {
         $this->validateJson($value);
-        $this->validateNotNull('Data', $value);
 
-        if ($this->data['data'] === $value) {
-            return;
+        if ($this->data['data'] !== $value) {
+            $this->data['data'] = $value;
+            $this->setModified('data');
         }
 
-        $this->data['data'] = $value;
-        $this->setModified('data');
+        return $this;
     }
     
     /**
      * Set the value of Frequency / frequency
      * @param $value int
+     * @return ScheduledJob
      */
-    public function setFrequency(int $value)
+    public function setFrequency(int $value) : ScheduledJob
     {
 
-        $this->validateNotNull('Frequency', $value);
-
-        if ($this->data['frequency'] === $value) {
-            return;
+        if ($this->data['frequency'] !== $value) {
+            $this->data['frequency'] = $value;
+            $this->setModified('frequency');
         }
 
-        $this->data['frequency'] = $value;
-        $this->setModified('frequency');
+        return $this;
     }
     
     /**
      * Set the value of CurrentJobId / current_job_id
      * @param $value int
+     * @return ScheduledJob
      */
-    public function setCurrentJobId($value)
+    public function setCurrentJobId(?int $value) : ScheduledJob
     {
-
 
         // As this column is a foreign key, empty values should be considered null.
         if (empty($value)) {
@@ -199,13 +198,12 @@ class ScheduledJobBase extends Model
         }
 
 
-
-        if ($this->data['current_job_id'] === $value) {
-            return;
+        if ($this->data['current_job_id'] !== $value) {
+            $this->data['current_job_id'] = $value;
+            $this->setModified('current_job_id');
         }
 
-        $this->data['current_job_id'] = $value;
-        $this->setModified('current_job_id');
+        return $this;
     }
     
     
@@ -262,4 +260,5 @@ class ScheduledJobBase extends Model
     {
         return $this->setCurrentJobId($value->getId());
     }
+
 }

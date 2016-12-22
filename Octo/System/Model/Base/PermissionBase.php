@@ -7,13 +7,15 @@
 namespace Octo\System\Model\Base;
 
 use DateTime;
+use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
+use Octo\System\Model\Permission;
 
 /**
  * Permission Base Model
  */
-class PermissionBase extends Model
+abstract class PermissionBase extends Model
 {
     protected function init()
     {
@@ -51,7 +53,7 @@ class PermissionBase extends Model
      * @return int
      */
 
-     public function getId()
+     public function getId() : int
      {
         $rtn = $this->data['id'];
 
@@ -63,7 +65,7 @@ class PermissionBase extends Model
      * @return int
      */
 
-     public function getUserId()
+     public function getUserId() : int
      {
         $rtn = $this->data['user_id'];
 
@@ -75,7 +77,7 @@ class PermissionBase extends Model
      * @return string
      */
 
-     public function getUri()
+     public function getUri() : string
      {
         $rtn = $this->data['uri'];
 
@@ -87,7 +89,7 @@ class PermissionBase extends Model
      * @return int
      */
 
-     public function getCanAccess()
+     public function getCanAccess() : int
      {
         $rtn = $this->data['can_access'];
 
@@ -98,75 +100,71 @@ class PermissionBase extends Model
     /**
      * Set the value of Id / id
      * @param $value int
+     * @return Permission
      */
-    public function setId(int $value)
+    public function setId(int $value) : Permission
     {
 
-        $this->validateNotNull('Id', $value);
-
-        if ($this->data['id'] === $value) {
-            return;
+        if ($this->data['id'] !== $value) {
+            $this->data['id'] = $value;
+            $this->setModified('id');
         }
 
-        $this->data['id'] = $value;
-        $this->setModified('id');
+        return $this;
     }
     
     /**
      * Set the value of UserId / user_id
      * @param $value int
+     * @return Permission
      */
-    public function setUserId(int $value)
+    public function setUserId(int $value) : Permission
     {
-
 
         // As this column is a foreign key, empty values should be considered null.
         if (empty($value)) {
             $value = null;
         }
 
-        $this->validateNotNull('UserId', $value);
 
-        if ($this->data['user_id'] === $value) {
-            return;
+        if ($this->data['user_id'] !== $value) {
+            $this->data['user_id'] = $value;
+            $this->setModified('user_id');
         }
 
-        $this->data['user_id'] = $value;
-        $this->setModified('user_id');
+        return $this;
     }
     
     /**
      * Set the value of Uri / uri
      * @param $value string
+     * @return Permission
      */
-    public function setUri(string $value)
+    public function setUri(string $value) : Permission
     {
 
-        $this->validateNotNull('Uri', $value);
-
-        if ($this->data['uri'] === $value) {
-            return;
+        if ($this->data['uri'] !== $value) {
+            $this->data['uri'] = $value;
+            $this->setModified('uri');
         }
 
-        $this->data['uri'] = $value;
-        $this->setModified('uri');
+        return $this;
     }
     
     /**
      * Set the value of CanAccess / can_access
      * @param $value int
+     * @return Permission
      */
-    public function setCanAccess(int $value)
+    public function setCanAccess(int $value) : Permission
     {
 
-        $this->validateNotNull('CanAccess', $value);
-
-        if ($this->data['can_access'] === $value) {
-            return;
+        if ($this->data['can_access'] !== $value) {
+            $this->data['can_access'] = $value;
+            $this->setModified('can_access');
         }
 
-        $this->data['can_access'] = $value;
-        $this->setModified('can_access');
+        return $this;
     }
     
     
@@ -223,4 +221,5 @@ class PermissionBase extends Model
     {
         return $this->setUserId($value->getId());
     }
+
 }
