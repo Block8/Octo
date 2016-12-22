@@ -1,0 +1,15 @@
+{% extends "@admin/layout.twig" %}
+
+{% block content %}
+    <style>
+        tr.h th {
+            background: mediumpurple;
+        }
+
+        td.e {
+            width: 50%;
+        }
+    </style>
+
+{{ info|raw }}
+{% endblock %}

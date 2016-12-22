@@ -11,6 +11,7 @@ use Block8\Database\Connection;
 use Octo;
 use Octo\Pages\Model;
 use Octo\Store as StoreFactory;
+use Octo\Store;
 
 /**
  * SearchIndex Store
@@ -38,7 +39,8 @@ class SearchIndexStore extends Base\SearchIndexStoreBase
             $res = $stmt->fetchAll(Database::FETCH_ASSOC);
 
             foreach ($res as $item) {
-                $store = StoreFactory::get($item['model']);
+                $store = Store::get($item['model']);
+
                 if ($store) {
                     $rtn[] = $store->getByPrimaryKey($item['content_id']);
                 }
