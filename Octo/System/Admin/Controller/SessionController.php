@@ -19,7 +19,6 @@ class SessionController extends Controller
     public function init()
     {
         parent::init();
-        $this->response->disableLayout();
         $this->userStore = Store::get('User');
     }
 
