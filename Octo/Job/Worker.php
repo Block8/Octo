@@ -151,12 +151,10 @@ class Worker
         foreach ($schedule as $type => $data) {
             $job = $store->getByType($type);
 
-            if ($job) {
-                continue;
+            if (!$job) {
+                $job = new ScheduledJob();
+                $job->setType($type);
             }
-
-            $job = new ScheduledJob();
-            $job->setType($type);
 
             if (!empty($data['frequency'])) {
                 $job->setFrequency((int)$data['frequency']);

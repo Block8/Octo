@@ -22,7 +22,7 @@ class Jobs extends Listener
             ];
 
             $handlers['Octo.System.Cleanup'] = [
-                'frequency' => 900,
+                'frequency' => 3600,
             ];
         });
     }
