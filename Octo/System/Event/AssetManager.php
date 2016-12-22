@@ -18,6 +18,10 @@ class AssetManager extends Listener
 
     public function injectAssets(Response $response)
     {
+        if (!$response->hasLayout()) {
+            return;
+        }
+
         $inject = $this->getAssetCode();
 
         $html = $response->getContent();

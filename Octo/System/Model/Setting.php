@@ -15,6 +15,22 @@ use Octo\Store;
  */
 class Setting extends Base\SettingBase
 {
+    protected static $settings = [];
+
+    protected static function load()
+    {
+        /** @var \Octo\System\Store\SettingStore $settingStore */
+        $settingStore = Store::get('Setting');
+        $settings = $settingStore->all();
+
+        self::$settings = [];
+
+        foreach ($settings as $setting) {
+            self::$settings[$setting->getScope() . '_' . $setting->getKey()] = $setting->getValue();
+            self::$settings[$setting->getScope()][$setting->getKey()] = $setting->getValue();
+        }
+    }
+
 	/**
      * Retrieve a setting
      *
@@ -24,8 +40,15 @@ class Setting extends Base\SettingBase
      */
     public static function get($scope, $key)
     {
-        $settingStore = Store::get('Setting');
-        return $settingStore->getSettingValue($scope, $key);
+        if (!count(self::$settings)) {
+            self::load();
+        }
+
+        if (isset(self::$settings[$scope][$key])) {
+            return self::$settings[$scope][$key];
+        }
+
+        return null;
     }
 
     /**
@@ -42,20 +65,13 @@ class Setting extends Base\SettingBase
         $setting = $settingStore->getByScopeKey($scope, $key);
         $setting->setValue($value);
         $settingStore->save($setting);
+
+        self::load();
     }
 
     public static function getForScope($scope)
     {
-        /** @var \Octo\System\Store\SettingStore $settingStore */
-        $settingStore = Store::get('Setting');
-        $settings = $settingStore->getByScope($scope);
-        $rtn = [];
-
-        foreach ($settings as $setting) {
-            $rtn[$setting->getKey()] = $setting->getValue();
-        }
-
-        return $rtn;
+        return self::$settings[$scope];
     }
 
     public static function setForScope($scope, array $settings)
@@ -71,20 +87,16 @@ class Setting extends Base\SettingBase
 
             $settingStore->replace($setting);
         }
+
+        self::load();
     }
 
     public static function getAllAsArray()
     {
-        /** @var \Octo\System\Store\SettingStore $settingStore */
-        $settingStore = Store::get('Setting');
-        $settings = $settingStore->all();
-
-        $rtn = [];
-
-        foreach ($settings as $setting) {
-            $rtn[$setting->getScope() . '_' . $setting->getKey()] = $setting->getValue();
+        if (!count(self::$settings)) {
+            self::load();
         }
 
-        return $rtn;
+        return self::$settings;
     }
 }

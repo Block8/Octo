@@ -73,12 +73,14 @@ body.setup {
   line-height: 40px;
   margin: 0;
   vertical-align: middle; }
+  .pageview li.has-children li {
+    padding-left: 15px; }
 
 .pageview li ul {
   background: #fff;
   list-style: none;
   margin: 0;
-  padding: 0 0 0 15px; }
+  padding: 0; }
 
 .pageview li:hover {
   background: #fafafa; }
@@ -86,7 +88,8 @@ body.setup {
 .pageview li .fa {
   font-size: 1em;
   line-height: 25px;
-  width: 25px; }
+  width: 25px;
+  text-align: center; }
 
 .pageview li .fa:first-child {
   margin-left: 10px; }
@@ -94,6 +97,8 @@ body.setup {
 .pageview li .open-arrow {
   cursor: pointer;
   font-size: 1.2em; }
+  .pageview li .open-arrow.fa-refresh {
+    color: orange; }
 
 .page-options .btn {
   font-size: 1.2em;
