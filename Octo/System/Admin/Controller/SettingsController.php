@@ -19,4 +19,20 @@ class SettingsController extends Controller
         $this->setTitle('Settings');
         $this->addBreadcrumb('Settings', '/settings');
     }
+
+    public function info()
+    {
+        ob_start();
+        phpinfo();
+        $info = ob_get_contents();
+        ob_end_clean();
+
+        $matches = [];
+        preg_match('/\<body\>(.*)?\<\/body\>/si', $info, $matches);
+        $info = $matches[0];
+
+        $info = str_replace('<table>', '<table class="table">', $info);
+
+        $this->template->info = $info;
+    }
 }
