@@ -149,7 +149,7 @@ class Worker
         $store = Store::get('ScheduledJob');
 
         foreach ($schedule as $type => $data) {
-            $job = $store->getByType($type);
+            $job = $store->where('type', $type)->first();
 
             if (!$job) {
                 $job = new ScheduledJob();
