@@ -24,8 +24,11 @@ abstract class Store extends Database\Store
     public function insert(Database\Model $model)
     {
         $model = parent::insert($model);
-        Event::trigger('Octo.Model.Created', $model);
-        Event::trigger('Octo.Model.Updated', $model);
+
+        if (!empty($model)) {
+            Event::trigger('Octo.Model.Created', $model);
+            Event::trigger('Octo.Model.Updated', $model);
+        }
 
         return $model;
     }
@@ -33,7 +36,10 @@ abstract class Store extends Database\Store
     public function replace(Database\Model $model)
     {
         $model = parent::replace($model);
-        Event::trigger('Octo.Model.Updated', $model);
+
+        if (!empty($model)) {
+            Event::trigger('Octo.Model.Updated', $model);
+        }
 
         return $model;
     }
@@ -41,7 +47,10 @@ abstract class Store extends Database\Store
     public function update(Database\Model $model)
     {
         $model = parent::update($model);
-        Event::trigger('Octo.Model.Updated', $model);
+
+        if (!empty($model)) {
+            Event::trigger('Octo.Model.Updated', $model);
+        }
 
         return $model;
     }
