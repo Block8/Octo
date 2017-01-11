@@ -328,10 +328,4 @@ abstract class JobBase extends Model
         return $this;
     }
     
-    
-
-    public function ScheduledJobs() : Query
-    {
-        return Store::get('ScheduledJob')->where('current_job_id', $this->data['id']);
-    }
 }

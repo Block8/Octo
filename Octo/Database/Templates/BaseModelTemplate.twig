@@ -12,6 +12,9 @@ use Octo\Model;
 use Octo\Store;
 use {{ itemNamespace }}\Model\{{ table.php_name }};
 use {{ itemNamespace }}\Store\{{ table.php_name }}Store;
+{% for ns in use %}
+use {{ ns }};
+{% endfor %}
 
 /**
  * {{ table.php_name }} Base Model
@@ -137,16 +140,16 @@ abstract class {{ table.php_name }}Base extends Model
     }
     {% endfor %}
 
-    {% for item in table.relationships.toOne %}
+{% for item in table.relationships.toOne %}
 
     /**
      * Get the {{ item.table_php_name }} model for this {{ parent.table.php_name }} by {{ item.col_php }}.
      *
      * @uses \{{ getNamespace(item.table_php_name) }}\Store\{{ item.table_php_name }}Store::getBy{{ item.col_php }}()
-     * @uses \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}
-     * @return \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}
+     * @uses {{ item.table_php_name }}
+     * @return {{ item.table_php_name }}|null
      */
-    public function get{{ item.php_name }}()
+    public function get{{ item.php_name }}() : ?{{ item.table_php_name }}
     {
         $key = $this->get{{ item.from_col_php }}();
 
@@ -154,15 +157,16 @@ abstract class {{ table.php_name }}Base extends Model
            return null;
         }
 
-        return Store::get('{{ item.table_php_name }}')->getBy{{ item.col_php }}($key);
+        return {{ item.table_php_name }}::Store()->getBy{{ item.col_php }}($key);
     }
 
     /**
      * Set {{ item.php_name }} - Accepts an ID, an array representing a {{ item.table_php_name }} or a {{ item.table_php_name }} model.
      * @throws \Exception
      * @param $value mixed
+     * @return {{ table.php_name }}
      */
-    public function set{{ item.php_name }}($value)
+    public function set{{ item.php_name }}($value) : {{ table.php_name }}
     {
         // Is this a scalar value representing the ID of this foreign key?
         if (is_scalar($value)) {
@@ -170,7 +174,7 @@ abstract class {{ table.php_name }}Base extends Model
         }
 
         // Is this an instance of {{ item.php_name }}?
-        if (is_object($value) && $value instanceof \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}) {
+        if (is_object($value) && $value instanceof {{ item.table_php_name }}) {
             return $this->set{{ item.php_name }}Object($value);
         }
 
@@ -186,26 +190,12 @@ abstract class {{ table.php_name }}Base extends Model
     /**
      * Set {{ item.php_name }} - Accepts a {{ item.table_php_name }} model.
      *
-     * @param $value \{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }}
+     * @param $value {{ item.table_php_name }}
+     * @return {{ table.php_name }}
      */
-    public function set{{ item.php_name }}Object(\{{ getNamespace(item.table_php_name) }}\Model\{{ item.table_php_name }} $value)
+    public function set{{ item.php_name }}Object({{ item.table_php_name }} $value) : {{ table.php_name }}
     {
         return $this->set{{ item.from_col_php }}($value->get{{ item.col_php }}());
     }
 {% endfor %}
-{% for rel in table.relationships.toMany %}{% set fromNs = getNamespace(rel.from_php) %}{% if fromNs == "Octo\System" or fromNs == getNamespace(table.php_name) %}
-
-
-    public function {{ rel.table_php }}s() : Query
-    {
-{% if rel.link %}
-        $query = Store::get('{{ rel.table_php }}')->where('{{ rel.link.table }}.{{ rel.link.column1 }}', $this->data['{{ rel.thisCol }}']);
-        $query->join('{{ rel.link.table }}', '{{ rel.link.table }}.{{ rel.link.column2 }}', '{{ rel.table }}.{{ rel.fromCol }}');
-        return $query;
-{% else %}
-        return Store::get('{{ rel.table_php }}')->where('{{ rel.fromCol }}', $this->data['{{ rel.thisCol }}']);
-{% endif %}
-    }{% endif %}
-{% endfor %}
-
 }

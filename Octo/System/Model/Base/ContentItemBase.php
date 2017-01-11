@@ -138,5 +138,4 @@ abstract class ContentItemBase extends Model
         return $this;
     }
     
-    
 }

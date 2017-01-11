@@ -351,15 +351,4 @@ abstract class UserBase extends Model
         return $this;
     }
     
-    
-
-    public function Logs() : Query
-    {
-        return Store::get('Log')->where('user_id', $this->data['id']);
-    }
-
-    public function Permissions() : Query
-    {
-        return Store::get('Permission')->where('user_id', $this->data['id']);
-    }
 }

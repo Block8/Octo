@@ -221,5 +221,4 @@ abstract class SearchIndexBase extends Model
         return $this;
     }
     
-    
 }

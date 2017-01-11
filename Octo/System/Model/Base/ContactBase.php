@@ -533,5 +533,4 @@ abstract class ContactBase extends Model
         return $this;
     }
     
-    
 }

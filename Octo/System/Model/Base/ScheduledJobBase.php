@@ -12,6 +12,7 @@ use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\ScheduledJob;
 use Octo\System\Store\ScheduledJobStore;
+use Octo\System\Model\Job;
 
 /**
  * ScheduledJob Base Model
@@ -236,15 +237,15 @@ abstract class ScheduledJobBase extends Model
         return $this;
     }
     
-    
+
     /**
      * Get the Job model for this  by Id.
      *
      * @uses \Octo\System\Store\JobStore::getById()
-     * @uses \Octo\System\Model\Job
-     * @return \Octo\System\Model\Job
+     * @uses Job
+     * @return Job|null
      */
-    public function getCurrentJob()
+    public function getCurrentJob() : ?Job
     {
         $key = $this->getCurrentJobId();
 
@@ -252,15 +253,16 @@ abstract class ScheduledJobBase extends Model
            return null;
         }
 
-        return Store::get('Job')->getById($key);
+        return Job::Store()->getById($key);
     }
 
     /**
      * Set CurrentJob - Accepts an ID, an array representing a Job or a Job model.
      * @throws \Exception
      * @param $value mixed
+     * @return ScheduledJob
      */
-    public function setCurrentJob($value)
+    public function setCurrentJob($value) : ScheduledJob
     {
         // Is this a scalar value representing the ID of this foreign key?
         if (is_scalar($value)) {
@@ -268,7 +270,7 @@ abstract class ScheduledJobBase extends Model
         }
 
         // Is this an instance of CurrentJob?
-        if (is_object($value) && $value instanceof \Octo\System\Model\Job) {
+        if (is_object($value) && $value instanceof Job) {
             return $this->setCurrentJobObject($value);
         }
 
@@ -284,11 +286,11 @@ abstract class ScheduledJobBase extends Model
     /**
      * Set CurrentJob - Accepts a Job model.
      *
-     * @param $value \Octo\System\Model\Job
+     * @param $value Job
+     * @return ScheduledJob
      */
-    public function setCurrentJobObject(\Octo\System\Model\Job $value)
+    public function setCurrentJobObject(Job $value) : ScheduledJob
     {
         return $this->setCurrentJobId($value->getId());
     }
-
 }

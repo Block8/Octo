@@ -44,9 +44,12 @@ class CodeGenerator extends \Block8\Database\CodeGenerator
             $methods[$column['name']] = $column['php_name'];
         }
 
+        $use = [];
+
         if (isset($table['relationships']['toOne'])) {
             foreach ($table['relationships']['toOne'] as $fk) {
                 $methods[$fk['php_name']] = $fk['php_name'];
+                $use[$fk['table_php_name']] = $this->getNamespace($fk['table_php_name']) . '\\Model\\' . $fk['table_php_name'];
             }
         }
 
@@ -56,6 +59,7 @@ class CodeGenerator extends \Block8\Database\CodeGenerator
         $template->table = $table;
         $template->counts = $this->counts;
         $template->methods = $methods;
+        $template->use = $use;
 
         return $template->render();
     }

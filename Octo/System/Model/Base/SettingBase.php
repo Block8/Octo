@@ -221,5 +221,4 @@ abstract class SettingBase extends Model
         return $this;
     }
     
-    
 }

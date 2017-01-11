@@ -12,6 +12,7 @@ use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Log;
 use Octo\System\Store\LogStore;
+use Octo\System\Model\User;
 
 /**
  * Log Base Model
@@ -324,15 +325,15 @@ abstract class LogBase extends Model
         return $this;
     }
     
-    
+
     /**
      * Get the User model for this  by Id.
      *
      * @uses \Octo\System\Store\UserStore::getById()
-     * @uses \Octo\System\Model\User
-     * @return \Octo\System\Model\User
+     * @uses User
+     * @return User|null
      */
-    public function getUser()
+    public function getUser() : ?User
     {
         $key = $this->getUserId();
 
@@ -340,15 +341,16 @@ abstract class LogBase extends Model
            return null;
         }
 
-        return Store::get('User')->getById($key);
+        return User::Store()->getById($key);
     }
 
     /**
      * Set User - Accepts an ID, an array representing a User or a User model.
      * @throws \Exception
      * @param $value mixed
+     * @return Log
      */
-    public function setUser($value)
+    public function setUser($value) : Log
     {
         // Is this a scalar value representing the ID of this foreign key?
         if (is_scalar($value)) {
@@ -356,7 +358,7 @@ abstract class LogBase extends Model
         }
 
         // Is this an instance of User?
-        if (is_object($value) && $value instanceof \Octo\System\Model\User) {
+        if (is_object($value) && $value instanceof User) {
             return $this->setUserObject($value);
         }
 
@@ -372,11 +374,11 @@ abstract class LogBase extends Model
     /**
      * Set User - Accepts a User model.
      *
-     * @param $value \Octo\System\Model\User
+     * @param $value User
+     * @return Log
      */
-    public function setUserObject(\Octo\System\Model\User $value)
+    public function setUserObject(User $value) : Log
     {
         return $this->setUserId($value->getId());
     }
-
 }
