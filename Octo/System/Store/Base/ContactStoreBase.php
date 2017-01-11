@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\Contact;
 use Octo\System\Model\ContactCollection;
+use Octo\System\Store\ContactStore;
 
 /**
  * Contact Base Store
  */
 class ContactStoreBase extends Store
 {
+    /** @var ContactStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'contact';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\Contact';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return ContactStore
+     */
+    public static function load() : ContactStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new ContactStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value

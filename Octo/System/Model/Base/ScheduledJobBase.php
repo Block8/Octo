@@ -11,47 +11,82 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\ScheduledJob;
+use Octo\System\Store\ScheduledJobStore;
 
 /**
  * ScheduledJob Base Model
  */
 abstract class ScheduledJobBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'scheduled_job';
-        $this->model = 'ScheduledJob';
+    protected $table = 'scheduled_job';
+    protected $model = 'ScheduledJob';
+    protected $data = [
+        'id' => null,
+        'type' => null,
+        'data' => null,
+        'frequency' => null,
+        'current_job_id' => null,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['type'] = null;
-        $this->getters['type'] = 'getType';
-        $this->setters['type'] = 'setType';
-        
-        $this->data['data'] = null;
-        $this->getters['data'] = 'getData';
-        $this->setters['data'] = 'setData';
-        
-        $this->data['frequency'] = null;
-        $this->getters['frequency'] = 'getFrequency';
-        $this->setters['frequency'] = 'setFrequency';
-        
-        $this->data['current_job_id'] = null;
-        $this->getters['current_job_id'] = 'getCurrentJobId';
-        $this->setters['current_job_id'] = 'setCurrentJobId';
-        
-        // Foreign keys:
-        
-        $this->getters['CurrentJob'] = 'getCurrentJob';
-        $this->setters['CurrentJob'] = 'setCurrentJob';
-        
+    protected $getters = [
+        'id' => 'getId',
+        'type' => 'getType',
+        'data' => 'getData',
+        'frequency' => 'getFrequency',
+        'current_job_id' => 'getCurrentJobId',
+        'CurrentJob' => 'getCurrentJob',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'type' => 'setType',
+        'data' => 'setData',
+        'frequency' => 'setFrequency',
+        'current_job_id' => 'setCurrentJobId',
+        'CurrentJob' => 'setCurrentJob',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return ScheduledJobStore
+     */
+    public static function Store() : ScheduledJobStore
+    {
+        return ScheduledJobStore::load();
     }
 
-    
+    /**
+     * Get ScheduledJob by primary key: id
+     * @param int $id
+     * @return ScheduledJob|null
+     */
+    public static function get(int $id) : ?ScheduledJob
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return ScheduledJob
+     */
+    public function save() : ScheduledJob
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save ScheduledJob');
+        }
+
+        if (!($rtn instanceof ScheduledJob)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

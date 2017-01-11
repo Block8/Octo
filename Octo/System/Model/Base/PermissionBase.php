@@ -11,43 +11,79 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Permission;
+use Octo\System\Store\PermissionStore;
 
 /**
  * Permission Base Model
  */
 abstract class PermissionBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'permission';
-        $this->model = 'Permission';
+    protected $table = 'permission';
+    protected $model = 'Permission';
+    protected $data = [
+        'id' => null,
+        'user_id' => null,
+        'uri' => null,
+        'can_access' => 0,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['user_id'] = null;
-        $this->getters['user_id'] = 'getUserId';
-        $this->setters['user_id'] = 'setUserId';
-        
-        $this->data['uri'] = null;
-        $this->getters['uri'] = 'getUri';
-        $this->setters['uri'] = 'setUri';
-        
-        $this->data['can_access'] = null;
-        $this->getters['can_access'] = 'getCanAccess';
-        $this->setters['can_access'] = 'setCanAccess';
-        
-        // Foreign keys:
-        
-        $this->getters['User'] = 'getUser';
-        $this->setters['User'] = 'setUser';
-        
+    protected $getters = [
+        'id' => 'getId',
+        'user_id' => 'getUserId',
+        'uri' => 'getUri',
+        'can_access' => 'getCanAccess',
+        'User' => 'getUser',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'user_id' => 'setUserId',
+        'uri' => 'setUri',
+        'can_access' => 'setCanAccess',
+        'User' => 'setUser',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return PermissionStore
+     */
+    public static function Store() : PermissionStore
+    {
+        return PermissionStore::load();
     }
 
-    
+    /**
+     * Get Permission by primary key: id
+     * @param int $id
+     * @return Permission|null
+     */
+    public static function get(int $id) : ?Permission
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return Permission
+     */
+    public function save() : Permission
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save Permission');
+        }
+
+        if (!($rtn instanceof Permission)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\ScheduledJob;
 use Octo\System\Model\ScheduledJobCollection;
+use Octo\System\Store\ScheduledJobStore;
 
 /**
  * ScheduledJob Base Store
  */
 class ScheduledJobStoreBase extends Store
 {
+    /** @var ScheduledJobStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'scheduled_job';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\ScheduledJob';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return ScheduledJobStore
+     */
+    public static function load() : ScheduledJobStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new ScheduledJobStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value

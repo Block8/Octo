@@ -16,11 +16,11 @@ class TwitterUtilities
     {
         $tweetStore = Store::get('Tweet');
 
-        $consumerKey = Setting::get('twitter', 'consumer_key');
-        $consumerSecret = Setting::get('twitter', 'consumer_secret');
-        $accessToken = Setting::get('twitter', 'access_token');
-        $accessTokenSecret = Setting::get('twitter', 'access_token_secret');
-        $streamSearch = Setting::get('twitter', 'stream_search');
+        $consumerKey = Setting::getSetting('twitter', 'consumer_key');
+        $consumerSecret = Setting::getSetting('twitter', 'consumer_secret');
+        $accessToken = Setting::getSetting('twitter', 'access_token');
+        $accessTokenSecret = Setting::getSetting('twitter', 'access_token_secret');
+        $streamSearch = Setting::getSetting('twitter', 'stream_search');
 
         $twitter = new Twitter($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
@@ -52,10 +52,10 @@ class TwitterUtilities
     {
         $tweetStore = Store::get('Tweet');
 
-        $consumerKey = Setting::get('twitter', 'consumer_key');
-        $consumerSecret = Setting::get('twitter', 'consumer_secret');
-        $accessToken = Setting::get('twitter', 'access_token');
-        $accessTokenSecret = Setting::get('twitter', 'access_token_secret');
+        $consumerKey = Setting::getSetting('twitter', 'consumer_key');
+        $consumerSecret = Setting::getSetting('twitter', 'consumer_secret');
+        $accessToken = Setting::getSetting('twitter', 'access_token');
+        $accessTokenSecret = Setting::getSetting('twitter', 'access_token_secret');
 
         $twitter = new Twitter($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
@@ -98,7 +98,7 @@ class TwitterUtilities
      */
     public static function canCallAPI()
     {
-        $lastCall = Setting::get('twitter', 'last_api_call');
+        $lastCall = Setting::getSetting('twitter', 'last_api_call');
 
         if ($lastCall == null) {
             return true;

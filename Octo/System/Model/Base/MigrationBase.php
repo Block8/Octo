@@ -11,44 +11,70 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Migration;
+use Octo\System\Store\MigrationStore;
 
 /**
  * Migration Base Model
  */
 abstract class MigrationBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'migration';
-        $this->model = 'Migration';
+    protected $table = 'migration';
+    protected $model = 'Migration';
+    protected $data = [
+        'version' => null,
+        'migration_name' => null,
+        'start_time' => null,
+        'end_time' => null,
+        'breakpoint' => 0,
+    ];
 
-        // Columns:
-        
-        $this->data['version'] = null;
-        $this->getters['version'] = 'getVersion';
-        $this->setters['version'] = 'setVersion';
-        
-        $this->data['migration_name'] = null;
-        $this->getters['migration_name'] = 'getMigrationName';
-        $this->setters['migration_name'] = 'setMigrationName';
-        
-        $this->data['start_time'] = null;
-        $this->getters['start_time'] = 'getStartTime';
-        $this->setters['start_time'] = 'setStartTime';
-        
-        $this->data['end_time'] = null;
-        $this->getters['end_time'] = 'getEndTime';
-        $this->setters['end_time'] = 'setEndTime';
-        
-        $this->data['breakpoint'] = null;
-        $this->getters['breakpoint'] = 'getBreakpoint';
-        $this->setters['breakpoint'] = 'setBreakpoint';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'version' => 'getVersion',
+        'migration_name' => 'getMigrationName',
+        'start_time' => 'getStartTime',
+        'end_time' => 'getEndTime',
+        'breakpoint' => 'getBreakpoint',
+    ];
+
+    protected $setters = [
+        'version' => 'setVersion',
+        'migration_name' => 'setMigrationName',
+        'start_time' => 'setStartTime',
+        'end_time' => 'setEndTime',
+        'breakpoint' => 'setBreakpoint',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return MigrationStore
+     */
+    public static function Store() : MigrationStore
+    {
+        return MigrationStore::load();
     }
 
-    
+    /**
+     * @throws \Exception
+     * @return Migration
+     */
+    public function save() : Migration
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save Migration');
+        }
+
+        if (!($rtn instanceof Migration)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Version / version
      * @return int

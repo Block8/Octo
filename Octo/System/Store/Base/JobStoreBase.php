@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\Job;
 use Octo\System\Model\JobCollection;
+use Octo\System\Store\JobStore;
 
 /**
  * Job Base Store
  */
 class JobStoreBase extends Store
 {
+    /** @var JobStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'job';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\Job';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return JobStore
+     */
+    public static function load() : JobStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new JobStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value

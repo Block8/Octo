@@ -33,7 +33,7 @@ class CodeGenerator extends \Block8\Database\CodeGenerator
 
             $column['default_formatted'] = 'null';
 
-            if (!empty($column['default'])) {
+            if (array_key_exists('default', $column) && !is_null($column['default'])) {
                 if (is_numeric($column['default'])) {
                     $column['default_formatted'] = $column['default'];
                 } elseif ($column['default'] != 'CURRENT_TIMESTAMP') {

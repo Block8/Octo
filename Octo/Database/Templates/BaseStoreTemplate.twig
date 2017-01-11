@@ -18,8 +18,16 @@ use {{ itemNamespace }}\Store\{{ table.php_name }}Store;
  */
 class {{ table.php_name }}StoreBase extends Store
 {
+    /** @var {{ table.php_name }}Store $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = '{{ name }}';
+
+    /** @var string */
     protected $model = '{{ itemNamespace }}\Model\{{ table.php_name }}';
+
+    /** @var string */
     protected $key = '{{ table.primary_key.name }}';
 
     /**

@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\Setting;
 use Octo\System\Model\SettingCollection;
+use Octo\System\Store\SettingStore;
 
 /**
  * Setting Base Store
  */
 class SettingStoreBase extends Store
 {
+    /** @var SettingStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'setting';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\Setting';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return SettingStore
+     */
+    public static function load() : SettingStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new SettingStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value

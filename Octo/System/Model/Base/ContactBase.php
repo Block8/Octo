@@ -11,84 +11,110 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Contact;
+use Octo\System\Store\ContactStore;
 
 /**
  * Contact Base Model
  */
 abstract class ContactBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'contact';
-        $this->model = 'Contact';
+    protected $table = 'contact';
+    protected $model = 'Contact';
+    protected $data = [
+        'id' => null,
+        'email' => null,
+        'password_hash' => null,
+        'phone' => null,
+        'mobile' => null,
+        'title' => null,
+        'gender' => null,
+        'first_name' => null,
+        'last_name' => null,
+        'address' => null,
+        'postcode' => null,
+        'date_of_birth' => null,
+        'company' => null,
+        'marketing_optin' => 0,
+        'is_blocked' => 0,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['email'] = null;
-        $this->getters['email'] = 'getEmail';
-        $this->setters['email'] = 'setEmail';
-        
-        $this->data['password_hash'] = null;
-        $this->getters['password_hash'] = 'getPasswordHash';
-        $this->setters['password_hash'] = 'setPasswordHash';
-        
-        $this->data['phone'] = null;
-        $this->getters['phone'] = 'getPhone';
-        $this->setters['phone'] = 'setPhone';
-        
-        $this->data['mobile'] = null;
-        $this->getters['mobile'] = 'getMobile';
-        $this->setters['mobile'] = 'setMobile';
-        
-        $this->data['title'] = null;
-        $this->getters['title'] = 'getTitle';
-        $this->setters['title'] = 'setTitle';
-        
-        $this->data['gender'] = null;
-        $this->getters['gender'] = 'getGender';
-        $this->setters['gender'] = 'setGender';
-        
-        $this->data['first_name'] = null;
-        $this->getters['first_name'] = 'getFirstName';
-        $this->setters['first_name'] = 'setFirstName';
-        
-        $this->data['last_name'] = null;
-        $this->getters['last_name'] = 'getLastName';
-        $this->setters['last_name'] = 'setLastName';
-        
-        $this->data['address'] = null;
-        $this->getters['address'] = 'getAddress';
-        $this->setters['address'] = 'setAddress';
-        
-        $this->data['postcode'] = null;
-        $this->getters['postcode'] = 'getPostcode';
-        $this->setters['postcode'] = 'setPostcode';
-        
-        $this->data['date_of_birth'] = null;
-        $this->getters['date_of_birth'] = 'getDateOfBirth';
-        $this->setters['date_of_birth'] = 'setDateOfBirth';
-        
-        $this->data['company'] = null;
-        $this->getters['company'] = 'getCompany';
-        $this->setters['company'] = 'setCompany';
-        
-        $this->data['marketing_optin'] = null;
-        $this->getters['marketing_optin'] = 'getMarketingOptin';
-        $this->setters['marketing_optin'] = 'setMarketingOptin';
-        
-        $this->data['is_blocked'] = null;
-        $this->getters['is_blocked'] = 'getIsBlocked';
-        $this->setters['is_blocked'] = 'setIsBlocked';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'id' => 'getId',
+        'email' => 'getEmail',
+        'password_hash' => 'getPasswordHash',
+        'phone' => 'getPhone',
+        'mobile' => 'getMobile',
+        'title' => 'getTitle',
+        'gender' => 'getGender',
+        'first_name' => 'getFirstName',
+        'last_name' => 'getLastName',
+        'address' => 'getAddress',
+        'postcode' => 'getPostcode',
+        'date_of_birth' => 'getDateOfBirth',
+        'company' => 'getCompany',
+        'marketing_optin' => 'getMarketingOptin',
+        'is_blocked' => 'getIsBlocked',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'email' => 'setEmail',
+        'password_hash' => 'setPasswordHash',
+        'phone' => 'setPhone',
+        'mobile' => 'setMobile',
+        'title' => 'setTitle',
+        'gender' => 'setGender',
+        'first_name' => 'setFirstName',
+        'last_name' => 'setLastName',
+        'address' => 'setAddress',
+        'postcode' => 'setPostcode',
+        'date_of_birth' => 'setDateOfBirth',
+        'company' => 'setCompany',
+        'marketing_optin' => 'setMarketingOptin',
+        'is_blocked' => 'setIsBlocked',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return ContactStore
+     */
+    public static function Store() : ContactStore
+    {
+        return ContactStore::load();
     }
 
-    
+    /**
+     * Get Contact by primary key: id
+     * @param int $id
+     * @return Contact|null
+     */
+    public static function get(int $id) : ?Contact
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return Contact
+     */
+    public function save() : Contact
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save Contact');
+        }
+
+        if (!($rtn instanceof Contact)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

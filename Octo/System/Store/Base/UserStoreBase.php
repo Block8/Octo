@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\User;
 use Octo\System\Model\UserCollection;
+use Octo\System\Store\UserStore;
 
 /**
  * User Base Store
  */
 class UserStoreBase extends Store
 {
+    /** @var UserStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'user';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\User';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return UserStore
+     */
+    public static function load() : UserStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new UserStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value

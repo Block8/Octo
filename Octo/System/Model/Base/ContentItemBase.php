@@ -11,32 +11,71 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\ContentItem;
+use Octo\System\Store\ContentItemStore;
 
 /**
  * ContentItem Base Model
  */
 abstract class ContentItemBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'content_item';
-        $this->model = 'ContentItem';
+    protected $table = 'content_item';
+    protected $model = 'ContentItem';
+    protected $data = [
+        'id' => null,
+        'content' => null,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['content'] = null;
-        $this->getters['content'] = 'getContent';
-        $this->setters['content'] = 'setContent';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'id' => 'getId',
+        'content' => 'getContent',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'content' => 'setContent',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return ContentItemStore
+     */
+    public static function Store() : ContentItemStore
+    {
+        return ContentItemStore::load();
     }
 
-    
+    /**
+     * Get ContentItem by primary key: id
+     * @param string $id
+     * @return ContentItem|null
+     */
+    public static function get(string $id) : ?ContentItem
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return ContentItem
+     */
+    public function save() : ContentItem
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save ContentItem');
+        }
+
+        if (!($rtn instanceof ContentItem)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return string

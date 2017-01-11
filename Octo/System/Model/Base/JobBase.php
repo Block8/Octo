@@ -11,56 +11,89 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Job;
+use Octo\System\Store\JobStore;
 
 /**
  * Job Base Model
  */
 abstract class JobBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'job';
-        $this->model = 'Job';
+    protected $table = 'job';
+    protected $model = 'Job';
+    protected $data = [
+        'id' => null,
+        'type' => null,
+        'status' => 0,
+        'date_created' => null,
+        'date_updated' => null,
+        'data' => null,
+        'message' => null,
+        'queue_id' => null,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['type'] = null;
-        $this->getters['type'] = 'getType';
-        $this->setters['type'] = 'setType';
-        
-        $this->data['status'] = null;
-        $this->getters['status'] = 'getStatus';
-        $this->setters['status'] = 'setStatus';
-        
-        $this->data['date_created'] = null;
-        $this->getters['date_created'] = 'getDateCreated';
-        $this->setters['date_created'] = 'setDateCreated';
-        
-        $this->data['date_updated'] = null;
-        $this->getters['date_updated'] = 'getDateUpdated';
-        $this->setters['date_updated'] = 'setDateUpdated';
-        
-        $this->data['data'] = null;
-        $this->getters['data'] = 'getData';
-        $this->setters['data'] = 'setData';
-        
-        $this->data['message'] = null;
-        $this->getters['message'] = 'getMessage';
-        $this->setters['message'] = 'setMessage';
-        
-        $this->data['queue_id'] = null;
-        $this->getters['queue_id'] = 'getQueueId';
-        $this->setters['queue_id'] = 'setQueueId';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'id' => 'getId',
+        'type' => 'getType',
+        'status' => 'getStatus',
+        'date_created' => 'getDateCreated',
+        'date_updated' => 'getDateUpdated',
+        'data' => 'getData',
+        'message' => 'getMessage',
+        'queue_id' => 'getQueueId',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'type' => 'setType',
+        'status' => 'setStatus',
+        'date_created' => 'setDateCreated',
+        'date_updated' => 'setDateUpdated',
+        'data' => 'setData',
+        'message' => 'setMessage',
+        'queue_id' => 'setQueueId',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return JobStore
+     */
+    public static function Store() : JobStore
+    {
+        return JobStore::load();
     }
 
-    
+    /**
+     * Get Job by primary key: id
+     * @param int $id
+     * @return Job|null
+     */
+    public static function get(int $id) : ?Job
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return Job
+     */
+    public function save() : Job
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save Job');
+        }
+
+        if (!($rtn instanceof Job)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

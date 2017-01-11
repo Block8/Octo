@@ -11,44 +11,80 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\SearchIndex;
+use Octo\System\Store\SearchIndexStore;
 
 /**
  * SearchIndex Base Model
  */
 abstract class SearchIndexBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'search_index';
-        $this->model = 'SearchIndex';
+    protected $table = 'search_index';
+    protected $model = 'SearchIndex';
+    protected $data = [
+        'id' => null,
+        'word' => null,
+        'model' => null,
+        'content_id' => null,
+        'instances' => 1,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['word'] = null;
-        $this->getters['word'] = 'getWord';
-        $this->setters['word'] = 'setWord';
-        
-        $this->data['model'] = null;
-        $this->getters['model'] = 'getModel';
-        $this->setters['model'] = 'setModel';
-        
-        $this->data['content_id'] = null;
-        $this->getters['content_id'] = 'getContentId';
-        $this->setters['content_id'] = 'setContentId';
-        
-        $this->data['instances'] = null;
-        $this->getters['instances'] = 'getInstances';
-        $this->setters['instances'] = 'setInstances';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'id' => 'getId',
+        'word' => 'getWord',
+        'model' => 'getModel',
+        'content_id' => 'getContentId',
+        'instances' => 'getInstances',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'word' => 'setWord',
+        'model' => 'setModel',
+        'content_id' => 'setContentId',
+        'instances' => 'setInstances',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return SearchIndexStore
+     */
+    public static function Store() : SearchIndexStore
+    {
+        return SearchIndexStore::load();
     }
 
-    
+    /**
+     * Get SearchIndex by primary key: id
+     * @param int $id
+     * @return SearchIndex|null
+     */
+    public static function get(int $id) : ?SearchIndex
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return SearchIndex
+     */
+    public function save() : SearchIndex
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save SearchIndex');
+        }
+
+        if (!($rtn instanceof SearchIndex)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

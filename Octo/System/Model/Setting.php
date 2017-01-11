@@ -38,7 +38,7 @@ class Setting extends Base\SettingBase
      * @param $key
      * @return mixed
      */
-    public static function get($scope, $key)
+    public static function getSetting($scope, $key)
     {
         if (!count(self::$settings)) {
             self::load();

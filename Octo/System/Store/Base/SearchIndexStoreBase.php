@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\SearchIndex;
 use Octo\System\Model\SearchIndexCollection;
+use Octo\System\Store\SearchIndexStore;
 
 /**
  * SearchIndex Base Store
  */
 class SearchIndexStoreBase extends Store
 {
+    /** @var SearchIndexStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'search_index';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\SearchIndex';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return SearchIndexStore
+     */
+    public static function load() : SearchIndexStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new SearchIndexStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value

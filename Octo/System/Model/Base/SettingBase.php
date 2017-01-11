@@ -11,44 +11,80 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Setting;
+use Octo\System\Store\SettingStore;
 
 /**
  * Setting Base Model
  */
 abstract class SettingBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'setting';
-        $this->model = 'Setting';
+    protected $table = 'setting';
+    protected $model = 'Setting';
+    protected $data = [
+        'id' => null,
+        'key' => null,
+        'value' => null,
+        'scope' => null,
+        'hidden' => 0,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['key'] = null;
-        $this->getters['key'] = 'getKey';
-        $this->setters['key'] = 'setKey';
-        
-        $this->data['value'] = null;
-        $this->getters['value'] = 'getValue';
-        $this->setters['value'] = 'setValue';
-        
-        $this->data['scope'] = null;
-        $this->getters['scope'] = 'getScope';
-        $this->setters['scope'] = 'setScope';
-        
-        $this->data['hidden'] = null;
-        $this->getters['hidden'] = 'getHidden';
-        $this->setters['hidden'] = 'setHidden';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'id' => 'getId',
+        'key' => 'getKey',
+        'value' => 'getValue',
+        'scope' => 'getScope',
+        'hidden' => 'getHidden',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'key' => 'setKey',
+        'value' => 'setValue',
+        'scope' => 'setScope',
+        'hidden' => 'setHidden',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return SettingStore
+     */
+    public static function Store() : SettingStore
+    {
+        return SettingStore::load();
     }
 
-    
+    /**
+     * Get Setting by primary key: id
+     * @param int $id
+     * @return Setting|null
+     */
+    public static function get(int $id) : ?Setting
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return Setting
+     */
+    public function save() : Setting
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save Setting');
+        }
+
+        if (!($rtn instanceof Setting)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

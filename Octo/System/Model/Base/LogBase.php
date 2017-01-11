@@ -11,59 +11,91 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\Log;
+use Octo\System\Store\LogStore;
 
 /**
  * Log Base Model
  */
 abstract class LogBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'log';
-        $this->model = 'Log';
+    protected $table = 'log';
+    protected $model = 'Log';
+    protected $data = [
+        'id' => null,
+        'type' => null,
+        'scope' => null,
+        'scope_id' => null,
+        'user_id' => null,
+        'message' => null,
+        'log_date' => null,
+        'link' => null,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['type'] = null;
-        $this->getters['type'] = 'getType';
-        $this->setters['type'] = 'setType';
-        
-        $this->data['scope'] = null;
-        $this->getters['scope'] = 'getScope';
-        $this->setters['scope'] = 'setScope';
-        
-        $this->data['scope_id'] = null;
-        $this->getters['scope_id'] = 'getScopeId';
-        $this->setters['scope_id'] = 'setScopeId';
-        
-        $this->data['user_id'] = null;
-        $this->getters['user_id'] = 'getUserId';
-        $this->setters['user_id'] = 'setUserId';
-        
-        $this->data['message'] = null;
-        $this->getters['message'] = 'getMessage';
-        $this->setters['message'] = 'setMessage';
-        
-        $this->data['log_date'] = null;
-        $this->getters['log_date'] = 'getLogDate';
-        $this->setters['log_date'] = 'setLogDate';
-        
-        $this->data['link'] = null;
-        $this->getters['link'] = 'getLink';
-        $this->setters['link'] = 'setLink';
-        
-        // Foreign keys:
-        
-        $this->getters['User'] = 'getUser';
-        $this->setters['User'] = 'setUser';
-        
+    protected $getters = [
+        'id' => 'getId',
+        'type' => 'getType',
+        'scope' => 'getScope',
+        'scope_id' => 'getScopeId',
+        'user_id' => 'getUserId',
+        'message' => 'getMessage',
+        'log_date' => 'getLogDate',
+        'link' => 'getLink',
+        'User' => 'getUser',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'type' => 'setType',
+        'scope' => 'setScope',
+        'scope_id' => 'setScopeId',
+        'user_id' => 'setUserId',
+        'message' => 'setMessage',
+        'log_date' => 'setLogDate',
+        'link' => 'setLink',
+        'User' => 'setUser',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return LogStore
+     */
+    public static function Store() : LogStore
+    {
+        return LogStore::load();
     }
 
-    
+    /**
+     * Get Log by primary key: id
+     * @param int $id
+     * @return Log|null
+     */
+    public static function get(int $id) : ?Log
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return Log
+     */
+    public function save() : Log
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save Log');
+        }
+
+        if (!($rtn instanceof Log)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

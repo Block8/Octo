@@ -11,60 +11,92 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use Octo\System\Model\User;
+use Octo\System\Store\UserStore;
 
 /**
  * User Base Model
  */
 abstract class UserBase extends Model
 {
-    protected function init()
-    {
-        $this->table = 'user';
-        $this->model = 'User';
+    protected $table = 'user';
+    protected $model = 'User';
+    protected $data = [
+        'id' => null,
+        'email' => null,
+        'hash' => null,
+        'name' => null,
+        'is_admin' => 0,
+        'is_hidden' => 0,
+        'date_added' => null,
+        'date_active' => null,
+        'active' => 1,
+    ];
 
-        // Columns:
-        
-        $this->data['id'] = null;
-        $this->getters['id'] = 'getId';
-        $this->setters['id'] = 'setId';
-        
-        $this->data['email'] = null;
-        $this->getters['email'] = 'getEmail';
-        $this->setters['email'] = 'setEmail';
-        
-        $this->data['hash'] = null;
-        $this->getters['hash'] = 'getHash';
-        $this->setters['hash'] = 'setHash';
-        
-        $this->data['name'] = null;
-        $this->getters['name'] = 'getName';
-        $this->setters['name'] = 'setName';
-        
-        $this->data['is_admin'] = null;
-        $this->getters['is_admin'] = 'getIsAdmin';
-        $this->setters['is_admin'] = 'setIsAdmin';
-        
-        $this->data['is_hidden'] = null;
-        $this->getters['is_hidden'] = 'getIsHidden';
-        $this->setters['is_hidden'] = 'setIsHidden';
-        
-        $this->data['date_added'] = null;
-        $this->getters['date_added'] = 'getDateAdded';
-        $this->setters['date_added'] = 'setDateAdded';
-        
-        $this->data['date_active'] = null;
-        $this->getters['date_active'] = 'getDateActive';
-        $this->setters['date_active'] = 'setDateActive';
-        
-        $this->data['active'] = null;
-        $this->getters['active'] = 'getActive';
-        $this->setters['active'] = 'setActive';
-        
-        // Foreign keys:
-        
+    protected $getters = [
+        'id' => 'getId',
+        'email' => 'getEmail',
+        'hash' => 'getHash',
+        'name' => 'getName',
+        'is_admin' => 'getIsAdmin',
+        'is_hidden' => 'getIsHidden',
+        'date_added' => 'getDateAdded',
+        'date_active' => 'getDateActive',
+        'active' => 'getActive',
+    ];
+
+    protected $setters = [
+        'id' => 'setId',
+        'email' => 'setEmail',
+        'hash' => 'setHash',
+        'name' => 'setName',
+        'is_admin' => 'setIsAdmin',
+        'is_hidden' => 'setIsHidden',
+        'date_added' => 'setDateAdded',
+        'date_active' => 'setDateActive',
+        'active' => 'setActive',
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return UserStore
+     */
+    public static function Store() : UserStore
+    {
+        return UserStore::load();
     }
 
-    
+    /**
+     * Get User by primary key: id
+     * @param int $id
+     * @return User|null
+     */
+    public static function get(int $id) : ?User
+    {
+        return self::Store()->getById($id);
+    }
+
+    /**
+     * @throws \Exception
+     * @return User
+     */
+    public function save() : User
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save User');
+        }
+
+        if (!($rtn instanceof User)) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+
     /**
      * Get the value of Id / id
      * @return int

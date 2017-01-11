@@ -47,7 +47,40 @@ abstract class {{ table.php_name }}Base extends Model
         return {{ table.php_name }}Store::load();
     }
 
-    {% for column in table.columns %}
+{% if table.primary_key %}
+    /**
+     * Get {{ table.php_name }} by primary key: {{ table.primary_key.name }}
+     * @param {{ table.primary_key.php_type }} ${{ table.primary_key.name }}
+     * @return {{ table.php_name }}|null
+     */
+    public static function get({{ table.primary_key.php_type }} ${{ table.primary_key.name }}) : ?{{ table.php_name }}
+    {
+        return self::Store()->getBy{{ table.primary_key.php_name }}(${{ table.primary_key.name }});
+    }
+
+{% endif %}
+    /**
+     * @throws \Exception
+     * @return {{ table.php_name }}
+     */
+    public function save() : {{ table.php_name }}
+    {
+        $rtn = self::Store()->save($this);
+
+        if (empty($rtn)) {
+            throw new \Exception('Failed to save {{ table.php_name }}');
+        }
+
+        if (!($rtn instanceof {{ table.php_name }})) {
+            throw new \Exception('Unexpected ' . get_class($rtn) . ' received from save.');
+        }
+
+        $this->data = $rtn->toArray();
+
+        return $this;
+    }
+
+{% for column in table.columns %}
 
     /**
      * Get the value of {{ column.php_name }} / {{ column.name }}

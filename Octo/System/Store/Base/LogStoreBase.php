@@ -7,18 +7,41 @@
 
 namespace Octo\System\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use Octo\System\Model\Log;
 use Octo\System\Model\LogCollection;
+use Octo\System\Store\LogStore;
 
 /**
  * Log Base Store
  */
 class LogStoreBase extends Store
 {
+    /** @var LogStore $instance */
+    protected static $instance = null;
+
+    /** @var string */
     protected $table = 'log';
+
+    /** @var string */
     protected $model = 'Octo\System\Model\Log';
+
+    /** @var string */
     protected $key = 'id';
+
+    /**
+     * Return the database store for this model.
+     * @return LogStore
+     */
+    public static function load() : LogStore
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new LogStore(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
     /**
     * @param $value
