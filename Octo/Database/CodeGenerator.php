@@ -30,6 +30,24 @@ class CodeGenerator extends \Block8\Database\CodeGenerator
             if (isset($column['validate_date']) && $column['validate_date']) {
                 $column['param_type'] = null;
             }
+
+            $column['default_formatted'] = 'null';
+
+            if (!empty($column['default'])) {
+                if (is_numeric($column['default'])) {
+                    $column['default_formatted'] = $column['default'];
+                } elseif ($column['default'] != 'CURRENT_TIMESTAMP') {
+                    $column['default_formatted'] = '\''.$column['default'].'\'';
+                }
+            }
+
+            $methods[$column['name']] = $column['php_name'];
+        }
+
+        if (isset($table['relationships']['toOne'])) {
+            foreach ($table['relationships']['toOne'] as $fk) {
+                $methods[$fk['php_name']] = $fk['php_name'];
+            }
         }
 
         $template = new Template($template, 'db');
@@ -37,6 +55,7 @@ class CodeGenerator extends \Block8\Database\CodeGenerator
         $template->name = $tableName;
         $template->table = $table;
         $template->counts = $this->counts;
+        $template->methods = $methods;
 
         return $template->render();
     }

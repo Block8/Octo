@@ -11,32 +11,40 @@ use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
 use {{ itemNamespace }}\Model\{{ table.php_name }};
+use {{ itemNamespace }}\Store\{{ table.php_name }}Store;
 
 /**
  * {{ table.php_name }} Base Model
  */
 abstract class {{ table.php_name }}Base extends Model
 {
-    protected function init()
+    protected $table = '{{ name }}';
+    protected $model = '{{ table.php_name }}';
+    protected $data = [
+{% for column in table.columns %}
+        '{{ column.name }}' => {{ column.default_formatted|raw }},
+{% endfor %}
+    ];
+
+    protected $getters = [
+{% for column, method in methods %}
+        '{{ column }}' => 'get{{ method }}',
+{% endfor %}
+    ];
+
+    protected $setters = [
+{% for column, method in methods %}
+        '{{ column }}' => 'set{{ method }}',
+{% endfor %}
+    ];
+
+    /**
+     * Return the database store for this model.
+     * @return {{ table.php_name }}Store
+     */
+    public static function Store() : {{ table.php_name }}Store
     {
-        $this->table = '{{ name }}';
-        $this->model = '{{ table.php_name }}';
-
-        // Columns:
-        {% for column in table.columns %}
-
-        $this->data['{{ column.name }}'] = null;
-        $this->getters['{{ column.name }}'] = 'get{{ column.php_name }}';
-        $this->setters['{{ column.name }}'] = 'set{{ column.php_name }}';
-        {% endfor %}
-
-        // Foreign keys:
-        {% for fk in table.relationships.toOne %}
-
-        $this->getters['{{ fk.php_name }}'] = 'get{{ fk.php_name }}';
-        $this->setters['{{ fk.php_name }}'] = 'set{{ fk.php_name }}';
-        {% endfor %}
-
+        return {{ table.php_name }}Store::load();
     }
 
     {% for column in table.columns %}

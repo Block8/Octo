@@ -7,9 +7,11 @@
 
 namespace {{ itemNamespace }}\Store\Base;
 
+use Block8\Database\Connection;
 use Octo\Store;
 use {{ itemNamespace }}\Model\{{ table.php_name }};
 use {{ itemNamespace }}\Model\{{ table.php_name }}Collection;
+use {{ itemNamespace }}\Store\{{ table.php_name }}Store;
 
 /**
  * {{ table.php_name }} Base Store
@@ -19,6 +21,19 @@ class {{ table.php_name }}StoreBase extends Store
     protected $table = '{{ name }}';
     protected $model = '{{ itemNamespace }}\Model\{{ table.php_name }}';
     protected $key = '{{ table.primary_key.name }}';
+
+    /**
+     * Return the database store for this model.
+     * @return {{ table.php_name }}Store
+     */
+    public static function load() : {{ table.php_name }}Store
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new {{ table.php_name }}Store(Connection::get());
+        }
+
+        return self::$instance;
+    }
 
 {% if table.primary_key %}
     /**
