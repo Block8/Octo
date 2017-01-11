@@ -49,9 +49,4 @@ class Log extends Base\LogBase
 
         return $rtn;
     }
-
-    public function save()
-    {
-        Store::get('Log')->save($this);
-    }
 }
