@@ -100,7 +100,6 @@ abstract class LogBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -112,7 +111,6 @@ abstract class LogBase extends Model
      * Get the value of Type / type
      * @return int
      */
-
      public function getType() : ?int
      {
         $rtn = $this->data['type'];
@@ -124,7 +122,6 @@ abstract class LogBase extends Model
      * Get the value of Scope / scope
      * @return string
      */
-
      public function getScope() : ?string
      {
         $rtn = $this->data['scope'];
@@ -136,7 +133,6 @@ abstract class LogBase extends Model
      * Get the value of ScopeId / scope_id
      * @return string
      */
-
      public function getScopeId() : ?string
      {
         $rtn = $this->data['scope_id'];
@@ -148,7 +144,6 @@ abstract class LogBase extends Model
      * Get the value of UserId / user_id
      * @return int
      */
-
      public function getUserId() : ?int
      {
         $rtn = $this->data['user_id'];
@@ -160,7 +155,6 @@ abstract class LogBase extends Model
      * Get the value of Message / message
      * @return string
      */
-
      public function getMessage() : string
      {
         $rtn = $this->data['message'];
@@ -172,7 +166,6 @@ abstract class LogBase extends Model
      * Get the value of LogDate / log_date
      * @return DateTime
      */
-
      public function getLogDate() : DateTime
      {
         $rtn = $this->data['log_date'];
@@ -188,7 +181,6 @@ abstract class LogBase extends Model
      * Get the value of Link / link
      * @return string
      */
-
      public function getLink() : ?string
      {
         $rtn = $this->data['link'];

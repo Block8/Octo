@@ -88,7 +88,6 @@ abstract class PermissionBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -100,7 +99,6 @@ abstract class PermissionBase extends Model
      * Get the value of UserId / user_id
      * @return int
      */
-
      public function getUserId() : int
      {
         $rtn = $this->data['user_id'];
@@ -112,7 +110,6 @@ abstract class PermissionBase extends Model
      * Get the value of Uri / uri
      * @return string
      */
-
      public function getUri() : string
      {
         $rtn = $this->data['uri'];
@@ -124,7 +121,6 @@ abstract class PermissionBase extends Model
      * Get the value of CanAccess / can_access
      * @return int
      */
-
      public function getCanAccess() : int
      {
         $rtn = $this->data['can_access'];

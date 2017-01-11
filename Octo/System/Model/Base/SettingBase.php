@@ -89,7 +89,6 @@ abstract class SettingBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -101,7 +100,6 @@ abstract class SettingBase extends Model
      * Get the value of Key / key
      * @return string
      */
-
      public function getKey() : string
      {
         $rtn = $this->data['key'];
@@ -113,7 +111,6 @@ abstract class SettingBase extends Model
      * Get the value of Value / value
      * @return string
      */
-
      public function getValue() : ?string
      {
         $rtn = $this->data['value'];
@@ -125,7 +122,6 @@ abstract class SettingBase extends Model
      * Get the value of Scope / scope
      * @return string
      */
-
      public function getScope() : string
      {
         $rtn = $this->data['scope'];
@@ -137,7 +133,6 @@ abstract class SettingBase extends Model
      * Get the value of Hidden / hidden
      * @return int
      */
-
      public function getHidden() : ?int
      {
         $rtn = $this->data['hidden'];

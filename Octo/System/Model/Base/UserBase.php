@@ -101,7 +101,6 @@ abstract class UserBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -113,7 +112,6 @@ abstract class UserBase extends Model
      * Get the value of Email / email
      * @return string
      */
-
      public function getEmail() : string
      {
         $rtn = $this->data['email'];
@@ -125,7 +123,6 @@ abstract class UserBase extends Model
      * Get the value of Hash / hash
      * @return string
      */
-
      public function getHash() : string
      {
         $rtn = $this->data['hash'];
@@ -137,7 +134,6 @@ abstract class UserBase extends Model
      * Get the value of Name / name
      * @return string
      */
-
      public function getName() : ?string
      {
         $rtn = $this->data['name'];
@@ -149,7 +145,6 @@ abstract class UserBase extends Model
      * Get the value of IsAdmin / is_admin
      * @return int
      */
-
      public function getIsAdmin() : int
      {
         $rtn = $this->data['is_admin'];
@@ -161,7 +156,6 @@ abstract class UserBase extends Model
      * Get the value of IsHidden / is_hidden
      * @return int
      */
-
      public function getIsHidden() : int
      {
         $rtn = $this->data['is_hidden'];
@@ -173,7 +167,6 @@ abstract class UserBase extends Model
      * Get the value of DateAdded / date_added
      * @return DateTime
      */
-
      public function getDateAdded() : ?DateTime
      {
         $rtn = $this->data['date_added'];
@@ -189,7 +182,6 @@ abstract class UserBase extends Model
      * Get the value of DateActive / date_active
      * @return DateTime
      */
-
      public function getDateActive() : ?DateTime
      {
         $rtn = $this->data['date_active'];
@@ -205,7 +197,6 @@ abstract class UserBase extends Model
      * Get the value of Active / active
      * @return int
      */
-
      public function getActive() : int
      {
         $rtn = $this->data['active'];

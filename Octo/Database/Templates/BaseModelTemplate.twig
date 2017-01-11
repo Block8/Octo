@@ -86,7 +86,6 @@ abstract class {{ table.php_name }}Base extends Model
      * Get the value of {{ column.php_name }} / {{ column.name }}
      * @return {{ column.php_type }}
      */
-
      public function get{{ column.php_name }}() : {{ column.validate_null ? column.php_type : "?" ~ column.php_type }}
      {
         $rtn = $this->data['{{ column.name }}'];

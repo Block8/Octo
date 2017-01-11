@@ -80,7 +80,6 @@ abstract class ContentItemBase extends Model
      * Get the value of Id / id
      * @return string
      */
-
      public function getId() : string
      {
         $rtn = $this->data['id'];
@@ -92,7 +91,6 @@ abstract class ContentItemBase extends Model
      * Get the value of Content / content
      * @return array
      */
-
      public function getContent() : ?array
      {
         $rtn = $this->data['content'];

@@ -119,7 +119,6 @@ abstract class ContactBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -131,7 +130,6 @@ abstract class ContactBase extends Model
      * Get the value of Email / email
      * @return string
      */
-
      public function getEmail() : ?string
      {
         $rtn = $this->data['email'];
@@ -143,7 +141,6 @@ abstract class ContactBase extends Model
      * Get the value of PasswordHash / password_hash
      * @return string
      */
-
      public function getPasswordHash() : ?string
      {
         $rtn = $this->data['password_hash'];
@@ -155,7 +152,6 @@ abstract class ContactBase extends Model
      * Get the value of Phone / phone
      * @return string
      */
-
      public function getPhone() : ?string
      {
         $rtn = $this->data['phone'];
@@ -167,7 +163,6 @@ abstract class ContactBase extends Model
      * Get the value of Mobile / mobile
      * @return string
      */
-
      public function getMobile() : ?string
      {
         $rtn = $this->data['mobile'];
@@ -179,7 +174,6 @@ abstract class ContactBase extends Model
      * Get the value of Title / title
      * @return string
      */
-
      public function getTitle() : ?string
      {
         $rtn = $this->data['title'];
@@ -191,7 +185,6 @@ abstract class ContactBase extends Model
      * Get the value of Gender / gender
      * @return string
      */
-
      public function getGender() : ?string
      {
         $rtn = $this->data['gender'];
@@ -203,7 +196,6 @@ abstract class ContactBase extends Model
      * Get the value of FirstName / first_name
      * @return string
      */
-
      public function getFirstName() : ?string
      {
         $rtn = $this->data['first_name'];
@@ -215,7 +207,6 @@ abstract class ContactBase extends Model
      * Get the value of LastName / last_name
      * @return string
      */
-
      public function getLastName() : ?string
      {
         $rtn = $this->data['last_name'];
@@ -227,7 +218,6 @@ abstract class ContactBase extends Model
      * Get the value of Address / address
      * @return array
      */
-
      public function getAddress() : ?array
      {
         $rtn = $this->data['address'];
@@ -245,7 +235,6 @@ abstract class ContactBase extends Model
      * Get the value of Postcode / postcode
      * @return string
      */
-
      public function getPostcode() : ?string
      {
         $rtn = $this->data['postcode'];
@@ -257,7 +246,6 @@ abstract class ContactBase extends Model
      * Get the value of DateOfBirth / date_of_birth
      * @return DateTime
      */
-
      public function getDateOfBirth() : ?DateTime
      {
         $rtn = $this->data['date_of_birth'];
@@ -273,7 +261,6 @@ abstract class ContactBase extends Model
      * Get the value of Company / company
      * @return string
      */
-
      public function getCompany() : ?string
      {
         $rtn = $this->data['company'];
@@ -285,7 +272,6 @@ abstract class ContactBase extends Model
      * Get the value of MarketingOptin / marketing_optin
      * @return int
      */
-
      public function getMarketingOptin() : int
      {
         $rtn = $this->data['marketing_optin'];
@@ -297,7 +283,6 @@ abstract class ContactBase extends Model
      * Get the value of IsBlocked / is_blocked
      * @return int
      */
-
      public function getIsBlocked() : int
      {
         $rtn = $this->data['is_blocked'];

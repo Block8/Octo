@@ -91,7 +91,6 @@ abstract class ScheduledJobBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -103,7 +102,6 @@ abstract class ScheduledJobBase extends Model
      * Get the value of Type / type
      * @return string
      */
-
      public function getType() : string
      {
         $rtn = $this->data['type'];
@@ -115,7 +113,6 @@ abstract class ScheduledJobBase extends Model
      * Get the value of Data / data
      * @return array
      */
-
      public function getData() : ?array
      {
         $rtn = $this->data['data'];
@@ -133,7 +130,6 @@ abstract class ScheduledJobBase extends Model
      * Get the value of Frequency / frequency
      * @return int
      */
-
      public function getFrequency() : int
      {
         $rtn = $this->data['frequency'];
@@ -145,7 +141,6 @@ abstract class ScheduledJobBase extends Model
      * Get the value of CurrentJobId / current_job_id
      * @return int
      */
-
      public function getCurrentJobId() : ?int
      {
         $rtn = $this->data['current_job_id'];

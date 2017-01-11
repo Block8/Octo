@@ -89,7 +89,6 @@ abstract class SearchIndexBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -101,7 +100,6 @@ abstract class SearchIndexBase extends Model
      * Get the value of Word / word
      * @return string
      */
-
      public function getWord() : string
      {
         $rtn = $this->data['word'];
@@ -113,7 +111,6 @@ abstract class SearchIndexBase extends Model
      * Get the value of Model / model
      * @return string
      */
-
      public function getModel() : string
      {
         $rtn = $this->data['model'];
@@ -125,7 +122,6 @@ abstract class SearchIndexBase extends Model
      * Get the value of ContentId / content_id
      * @return string
      */
-
      public function getContentId() : string
      {
         $rtn = $this->data['content_id'];
@@ -137,7 +133,6 @@ abstract class SearchIndexBase extends Model
      * Get the value of Instances / instances
      * @return int
      */
-
      public function getInstances() : int
      {
         $rtn = $this->data['instances'];

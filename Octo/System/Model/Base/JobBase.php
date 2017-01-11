@@ -98,7 +98,6 @@ abstract class JobBase extends Model
      * Get the value of Id / id
      * @return int
      */
-
      public function getId() : int
      {
         $rtn = $this->data['id'];
@@ -110,7 +109,6 @@ abstract class JobBase extends Model
      * Get the value of Type / type
      * @return string
      */
-
      public function getType() : string
      {
         $rtn = $this->data['type'];
@@ -122,7 +120,6 @@ abstract class JobBase extends Model
      * Get the value of Status / status
      * @return int
      */
-
      public function getStatus() : int
      {
         $rtn = $this->data['status'];
@@ -134,7 +131,6 @@ abstract class JobBase extends Model
      * Get the value of DateCreated / date_created
      * @return DateTime
      */
-
      public function getDateCreated() : DateTime
      {
         $rtn = $this->data['date_created'];
@@ -150,7 +146,6 @@ abstract class JobBase extends Model
      * Get the value of DateUpdated / date_updated
      * @return DateTime
      */
-
      public function getDateUpdated() : DateTime
      {
         $rtn = $this->data['date_updated'];
@@ -166,7 +161,6 @@ abstract class JobBase extends Model
      * Get the value of Data / data
      * @return array
      */
-
      public function getData() : ?array
      {
         $rtn = $this->data['data'];
@@ -184,7 +178,6 @@ abstract class JobBase extends Model
      * Get the value of Message / message
      * @return string
      */
-
      public function getMessage() : ?string
      {
         $rtn = $this->data['message'];
@@ -196,7 +189,6 @@ abstract class JobBase extends Model
      * Get the value of QueueId / queue_id
      * @return int
      */
-
      public function getQueueId() : ?int
      {
         $rtn = $this->data['queue_id'];

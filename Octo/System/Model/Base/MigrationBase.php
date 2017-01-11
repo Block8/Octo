@@ -79,7 +79,6 @@ abstract class MigrationBase extends Model
      * Get the value of Version / version
      * @return int
      */
-
      public function getVersion() : int
      {
         $rtn = $this->data['version'];
@@ -91,7 +90,6 @@ abstract class MigrationBase extends Model
      * Get the value of MigrationName / migration_name
      * @return string
      */
-
      public function getMigrationName() : ?string
      {
         $rtn = $this->data['migration_name'];
@@ -103,7 +101,6 @@ abstract class MigrationBase extends Model
      * Get the value of StartTime / start_time
      * @return string
      */
-
      public function getStartTime() : string
      {
         $rtn = $this->data['start_time'];
@@ -115,7 +112,6 @@ abstract class MigrationBase extends Model
      * Get the value of EndTime / end_time
      * @return string
      */
-
      public function getEndTime() : ?string
      {
         $rtn = $this->data['end_time'];
@@ -127,7 +123,6 @@ abstract class MigrationBase extends Model
      * Get the value of Breakpoint / breakpoint
      * @return int
      */
-
      public function getBreakpoint() : int
      {
         $rtn = $this->data['breakpoint'];
