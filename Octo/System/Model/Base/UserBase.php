@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\User;
+
 use Octo\System\Store\UserStore;
+use Octo\System\Model\User;
 
 /**
  * User Base Model

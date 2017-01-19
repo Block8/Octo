@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\Contact;
+
 use Octo\System\Store\ContactStore;
+use Octo\System\Model\Contact;
 
 /**
  * Contact Base Model

@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\SearchIndex;
+
 use Octo\System\Store\SearchIndexStore;
+use Octo\System\Model\SearchIndex;
 
 /**
  * SearchIndex Base Model

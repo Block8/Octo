@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\Permission;
+
 use Octo\System\Store\PermissionStore;
+use Octo\System\Model\Permission;
 use Octo\System\Model\User;
 
 /**

@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\ContentItem;
+
 use Octo\System\Store\ContentItemStore;
+use Octo\System\Model\ContentItem;
 
 /**
  * ContentItem Base Model

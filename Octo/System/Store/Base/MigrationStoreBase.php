@@ -28,7 +28,7 @@ class MigrationStoreBase extends Store
     protected $model = 'Octo\System\Model\Migration';
 
     /** @var string */
-    protected $key = 'version';
+    protected $key = '';
 
     /**
      * Return the database store for this model.
@@ -43,33 +43,4 @@ class MigrationStoreBase extends Store
         return self::$instance;
     }
 
-    /**
-    * @param $value
-    * @return Migration|null
-    */
-    public function getByPrimaryKey($value)
-    {
-        return $this->getByVersion($value);
-    }
-
-
-    /**
-     * Get a Migration object by Version.
-     * @param $value
-     * @return Migration|null
-     */
-    public function getByVersion(int $value)
-    {
-        // This is the primary key, so try and get from cache:
-        $cacheResult = $this->cacheGet($value);
-
-        if (!empty($cacheResult)) {
-            return $cacheResult;
-        }
-
-        $rtn = $this->where('version', $value)->first();
-        $this->cacheSet($value, $rtn);
-
-        return $rtn;
-    }
 }

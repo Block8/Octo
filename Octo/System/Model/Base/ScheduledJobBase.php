@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\ScheduledJob;
+
 use Octo\System\Store\ScheduledJobStore;
+use Octo\System\Model\ScheduledJob;
 use Octo\System\Model\Job;
 
 /**

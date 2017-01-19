@@ -10,8 +10,9 @@ use DateTime;
 use Block8\Database\Query;
 use Octo\Model;
 use Octo\Store;
-use Octo\System\Model\Migration;
+
 use Octo\System\Store\MigrationStore;
+use Octo\System\Model\Migration;
 
 /**
  * Migration Base Model
@@ -51,16 +52,6 @@ abstract class MigrationBase extends Model
     public static function Store() : MigrationStore
     {
         return MigrationStore::load();
-    }
-
-    /**
-     * Get Migration by primary key: version
-     * @param int $version
-     * @return Migration|null
-     */
-    public static function get(int $version) : ?Migration
-    {
-        return self::Store()->getByVersion($version);
     }
 
     /**
@@ -122,7 +113,7 @@ abstract class MigrationBase extends Model
      * Get the value of EndTime / end_time
      * @return string
      */
-     public function getEndTime() : string
+     public function getEndTime() : ?string
      {
         $rtn = $this->data['end_time'];
 
@@ -194,7 +185,7 @@ abstract class MigrationBase extends Model
      * @param $value string
      * @return Migration
      */
-    public function setEndTime(string $value) : Migration
+    public function setEndTime(?string $value) : Migration
     {
 
         if ($this->data['end_time'] !== $value) {
