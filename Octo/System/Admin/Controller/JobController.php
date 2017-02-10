@@ -96,7 +96,7 @@ class JobController extends Controller
         $job->setStatus(0);
         $job->setDateUpdated(new \DateTime());
         Manager::queue($job);
-        
+
         return $this->redirect('/job')->success('Job resubmitted to the queue.');
     }
 

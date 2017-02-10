@@ -38,7 +38,7 @@
         "google/apiclient": "*",
         "twig/twig": "~1.0",
         "pda/pheanstalk": "~3.1",
-        "robmorgan/phinx": "dev-0.7.x-dev"
+        "robmorgan/phinx": "~0.7"
     },
 
     "autoload": {
