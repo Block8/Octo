@@ -8,6 +8,7 @@
                 <th>Last Status</th>
                 <th>Last Message</th>
                 <th>Last Run</th>
+                <th width="1"></th>
             </tr>
             </thead>
             <tbody>
@@ -58,7 +59,7 @@
                 <td>{job_name type: value.type}</td>
                 <td width="150">
                     {ifnot value.CurrentJob.id}
-                    <span class="label label-danger">Not Yet Run</span>
+                    <span class="label label-info">Pending</span>
                     {/ifnot}
 
                     {if value.CurrentJob.id}
@@ -81,6 +82,7 @@
                 </td>
                 <td>{@value.CurrentJob.message}</td>
                 <td>{date_format date: value.CurrentJob.date_updated; format: "friendly"}</td>
+                <td><a class="btn btn-default btn-sm" href="{@adminUri}/job/run-scheduled/{@value.id}"><i class="fa fa-cogs"></i> Run now</a></td>
             </tr>
             {/for}
             </tbody>

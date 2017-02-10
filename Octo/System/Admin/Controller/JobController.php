@@ -93,11 +93,10 @@ class JobController extends Controller
     public function retry($jobId)
     {
         $job = $this->jobStore->getById($jobId);
-        Manager::queue($job);
-
+        $job->setStatus(0);
         $job->setDateUpdated(new \DateTime());
-        $this->jobStore->save($job);
-
+        Manager::queue($job);
+        
         return $this->redirect('/job')->success('Job resubmitted to the queue.');
     }
 
@@ -111,5 +110,14 @@ class JobController extends Controller
             return $this->redirect('/job')
                         ->error('Job could not be deleted, it is likely that it is associated with a scheduled job.');
         }
+    }
+
+    public function runScheduled(int $scheduleId)
+    {
+        $scheduled = ScheduledJob::get($scheduleId);
+        $scheduled->setCurrentJobId(null);
+        $scheduled->save();
+
+        return $this->redirect('/job/schedule')->success('Job scheduled to run immediately.');
     }
 }

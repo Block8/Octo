@@ -34,11 +34,11 @@
                     <td>{{ job.date_updated|date("Y-m-d H:i:s") }}</td>
                     <td>
                         {% if user.canAccess("/job/delete") %}
-                        <a class="btn btn-danger btn-sm" href="{{ adminUri }}/job/delete/{{ job.id }}">Delete</a>
+                        <a class="btn btn-danger btn-sm" href="{{ adminUri }}/job/delete/{{ job.id }}"><i class="fa fa-trash"></i> Delete</a>
                         {% endif %}
 
-                        {% if job.status == 0 and user.canAccess("/job/queue") %}
-                        <a class="btn btn-info btn-sm" href="{{ adminUri }}/job/retry/{{ job.id }}">Retry</a>
+                        {% if (job.status == 0 or job.status > 1) and user.canAccess("/job/queue") %}
+                        <a class="btn btn-default btn-sm" href="{{ adminUri }}/job/retry/{{ job.id }}"><i class="fa fa-cogs"></i> Retry</a>
                         {% endif %}
                     </td>
                 </tr>

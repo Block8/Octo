@@ -46,6 +46,10 @@ class MemberController extends Controller
 
     public function logout()
     {
+        if (!session_id()) {
+            session_start();
+        }
+
         unset($_SESSION[Member::getSessionKey()]);
 
         $this->response->setResponseCode(302);
