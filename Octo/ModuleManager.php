@@ -81,6 +81,10 @@ class ModuleManager
     protected function autoloadComposerModule($package)
     {
         foreach ($package['autoload']['psr-4'] as $namespace => $path) {
+            if (is_array($path)) {
+                continue;
+            }
+            
             if (file_exists(APP_PATH . 'vendor/'. $package['name'] . '/' . $path . 'Module.php')) {
                 if (class_exists($namespace . 'Module')) {
                     $parts = explode('\\', $namespace);
