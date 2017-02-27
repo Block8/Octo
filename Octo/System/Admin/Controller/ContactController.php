@@ -166,6 +166,7 @@ class ContactController extends Controller
 
         if ($this->request->getMethod() == 'POST') {
             $contact = new Contact();
+            $contact->setAddress([]);
             $contact->setValues($this->getParams());
             $contact = $this->contactStore->save($contact);
 
