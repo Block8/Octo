@@ -27,14 +27,14 @@ class FileUpload extends Upload
      *
      * @return bool
      */
-    public function validate()
+    public function validate(&$errors = [])
     {
-        if (!$this->checkValue()) {
+        if (!$this->checkValue($errors)) {
             return false;
         }
 
         $validator = $this->getValidator();
-        $this->callValidator($validator);
+        $this->callValidator($validator, $errors);
 
         if ($this->customError) {
             return false;
@@ -48,9 +48,10 @@ class FileUpload extends Upload
      *
      * @return bool
      */
-    protected function checkValue()
+    protected function checkValue(&$errors = [])
     {
         if ($this->getRequired() && !array_key_exists($this->getName(), $_FILES)) {
+            $errors[] = $this->getLabel() . ' is required.';
             $this->error = $this->getLabel() . ' is required.';
             return false;
         }
@@ -82,12 +83,13 @@ class FileUpload extends Upload
      * @param $validator
      * @return bool
      */
-    protected function callValidator($validator)
+    protected function callValidator($validator, &$errors = [])
     {
         if (is_callable($validator)) {
             try {
                 call_user_func_array($validator, array($this->value));
             } catch (\Exception $ex) {
+                $errors[] = $ex->getMessage();
                 $this->error = $ex->getMessage();
                 return false;
             }
