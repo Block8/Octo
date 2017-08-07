@@ -3,7 +3,7 @@ window.basicCkEditor = {
         [ 'Source' ],
         [ 'Styles' ],
         [ 'Bold', 'Italic' ],
-        [ 'Link', 'Unlink', 'octo.link' ],
+        [ 'Link', 'Unlink', 'octo.link', 'octo.image' ],
         [ 'Undo', 'Redo', '-', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
@@ -20,7 +20,7 @@ window.smallCkEditor = {
         [ 'Source' ],
         [ 'Styles' ],
         [ 'Bold', 'Italic' ],
-        [ 'Link', 'Unlink', 'octo.link' ],
+        [ 'Link', 'Unlink', 'octo.link', 'octo.image' ],
         [ 'Undo', 'Redo', '-', 'PasteText', 'PasteFromWord' ],
         [ 'Scayt' ]
     ],
